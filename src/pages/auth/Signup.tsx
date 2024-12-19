@@ -66,7 +66,7 @@ const SignUp: React.FC = () => {
     <SignUpContainer>
       <Container>
         <LeftChild>
-          <img src="./images/logo_light.png" alt="logo_light" />
+          <img src="./images/logo_dark.png" alt="logo_light" />
           <h1>Welcome Back !</h1>
           <p>To keep connected with us please login with your personal info</p>
           <Button>Sign Up</Button>
