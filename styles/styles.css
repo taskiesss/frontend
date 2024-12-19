@@ -16,8 +16,13 @@
   --background-color: var(--clr-background-primary);
   --btn-color: var(--clr-btn-primary);
   --button-hover-background-color: rgb(255, 212.2474226804, 183.5);
-  --border-circle:50%;
+  --border-circle: 50%;
   font-weight: 400;
+  --spacing-1: 0.5rem;
+  --spacing-1_5: 0.75rem;
+  --spacing-2: 1rem;
+  --spacing-3: 1.5rem;
+  --spacing-4: 2rem;
   color-scheme: light dark;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -62,7 +67,14 @@ html {
     --button-hover-background-color: rgb(247.8992805755, 162.690647482, 97.6007194245);
   }
 }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 body {
+  font-family: "Helvetica", "Arial", sans-serif;
   color: var(--accent-color);
   background-color: var(--background-color);
   line-height: 1.5;
@@ -108,7 +120,7 @@ h4,
 h5,
 h6 {
   color: var(--accent-color);
-  font-family: "Georgia", "Times", serif;
+  font-family: "Roboto", sans-serif;
   text-wrap: balance;
 }
 
@@ -129,14 +141,6 @@ button:focus-visible,
 textarea:focus-visible,
 select:focus-visible {
   outline: 0.5rem solid var(--hover-color);
-}
-
-button {
-  background-color: var(--btn-color);
-  transition: background-color 0.2s;
-}
-button:hover {
-  background-color: var(--button-hover-background-color);
 }
 
 .main-nav {

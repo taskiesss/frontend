@@ -1,9 +1,11 @@
 // import "./App.css";
 
+import SignUp from "./pages/auth/Signup";
+
 function App() {
   return (
     <>
-      <h1>Hello Taskaya!</h1>
+      <SignUp />
     </>
   );
 }

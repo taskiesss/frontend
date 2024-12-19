@@ -1,79 +1,88 @@
+@use "sass:color";
 @tailwind utilities;
-
+$btn-dark: #f9b17a;
+$btn-primary: #ffc59e;
 :root {
- // Light mode variables
- --clr-text-primary: #000000;
- --clr-hover-primary: #8690c2;
- --clr-foreground-primary: #bdc3e7;
- --clr-background-primary: #e6e9f5;
- --clr-btn-primary: #ffc59e;
- --clr-text-dark: #ffffff;
- --clr-hover-dark: #676f9d;
- --clr-foreground-dark: #424769;
- --clr-background-dark: #2d3250;
- --clr-btn-dark: #f9b17a;
- 
- // Light mode color scheme
- --accent-color: var(--clr-text-primary);
- --hover-color: var(--clr-hover-primary);
- --foreground-color: var(--clr-foreground-primary);
- --background-color: var(--clr-background-primary);
- --btn-color: var(--clr-btn-primary);
- --button-hover-background-color: #{lighten(#ffc59e, 5%)};
+  // Light mode variables
+  --clr-text-primary: #000000;
+  --clr-hover-primary: #8690c2;
+  --clr-foreground-primary: #bdc3e7;
+  --clr-background-primary: #e6e9f5;
+  --clr-btn-primary: #ffc59e;
+  --clr-text-dark: #ffffff;
+  --clr-hover-dark: #676f9d;
+  --clr-foreground-dark: #424769;
+  --clr-background-dark: #2d3250;
+  --clr-btn-dark: #f9b17a;
 
- //border
- --border-circle:50%;
+  // Light mode color scheme
+  --accent-color: var(--clr-text-primary);
+  --hover-color: var(--clr-hover-primary);
+  --foreground-color: var(--clr-foreground-primary);
+  --background-color: var(--clr-background-primary);
+  --btn-color: var(--clr-btn-primary);
+  --button-hover-background-color: #{color.adjust($btn-primary, $lightness: 5%)};
 
- font-weight: 400;
+  //border
+  --border-circle: 50%;
 
- color-scheme: light dark;
+  font-weight: 400;
 
- font-synthesis: none;
- text-rendering: optimizeLegibility;
- -moz-osx-font-smoothing: grayscale;
+  --spacing-1: 0.5rem;
+  --spacing-1_5: 0.75rem;
+  --spacing-2: 1rem;
+  --spacing-3: 1.5rem;
+  --spacing-4: 2rem;
+
+  color-scheme: light dark;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 html {
-    font-size: 62.5%; /* Default font size for small screens (1rem = 10px) */
+  font-size: 62.5%; /* Default font size for small screens (1rem = 10px) */
+}
+
+@media screen and (min-width: 30em) {
+  /* 480px and up */
+  html {
+    font-size: 56.25%;
   }
-  
-  @media screen and (min-width: 30em) {
-    /* 480px and up */
-    html {
-      font-size: 56.25%;
-    }
+}
+
+@media screen and (min-width: 48em) {
+  /* 768px and up */
+  html {
+    font-size: 62.5%;
   }
-  
-  @media screen and (min-width: 48em) {
-    /* 768px and up */
-    html {
-      font-size: 62.5%;
-    }
+}
+
+@media screen and (min-width: 64em) {
+  /* 1024px and up */
+  html {
+    font-size: 75%;
   }
-  
-  @media screen and (min-width: 64em) {
-    /* 1024px and up */
-    html {
-      font-size: 75%;
-    }
+}
+
+@media screen and (max-width: 30em) {
+  /* 480px and below */
+  html {
+    font-size: 50%;
   }
-  
-  @media screen and (max-width: 30em) {
-    /* 480px and below */
-    html {
-      font-size: 50%;
-    }
-  }
+}
 
 @media (prefers-color-scheme: dark) {
- :root {
-   --accent-color: var(--clr-text-dark);
-   --hover-color: var(--clr-hover-dark);
-   --foreground-color: var(--clr-foreground-dark);
-   --background-color: var(--clr-background-dark);
-   --btn-color: var(--clr-btn-dark);
-   --button-hover-background-color: #{darken(#f9b17a, 5%)};
- }
+  :root {
+    --accent-color: var(--clr-text-dark);
+    --hover-color: var(--clr-hover-dark);
+    --foreground-color: var(--clr-foreground-dark);
+    --background-color: var(--clr-background-dark);
+    --btn-color: var(--clr-btn-dark);
+    // --button-hover-background-color: #{darken(#f9b17a, 5%)};
+    --button-hover-background-color: #{color.adjust($btn-dark, $lightness: -5%)};
+  }
 }
 
 // Static Sass variables for other parts of the app
@@ -87,14 +96,22 @@ $border-color-200: #d3d3d3;
 $border-color-300: #808080;
 $border-color-400: #333333;
 $body-font: "Helvetica", "Arial", sans-serif;
-$heading-font: "Georgia", "Times", serif;
+$heading-font: "Roboto", sans-serif;
 $border-radius: 0.25rem;
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 body {
- color: var(--accent-color);
- background-color: var(--background-color);
- line-height: 1.5;
- -webkit-font-smoothing: antialiased;
+  font-family: $body-font;
+  color: var(--accent-color);
+  background-color: var(--background-color);
+  line-height: 1.5;
+  // box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
 }
 
 img,
@@ -102,17 +119,17 @@ picture,
 video,
 canvas,
 svg {
- display: block;
- max-width: 100%;
+  display: block;
+  max-width: 100%;
 }
 
 input,
 button,
 textarea,
 select {
-    font: inherit;
-    border: 0;
-    outline: none;
+  font: inherit;
+  border: 0;
+  outline: none;
 }
 
 p,
@@ -122,11 +139,11 @@ h3,
 h4,
 h5,
 h6 {
- overflow-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 p {
- text-wrap: pretty;
+  text-wrap: pretty;
 }
 
 h1,
@@ -135,47 +152,46 @@ h3,
 h4,
 h5,
 h6 {
- color: var(--accent-color);
- font-family: $heading-font;
- text-wrap: balance;
+  color: var(--accent-color);
+  font-family: $heading-font;
+  text-wrap: balance;
 }
 
 a {
- color: var(--accent-color);
- &:hover {
-   color: var(--hover-color);
- }
+  color: var(--accent-color);
+  &:hover {
+    color: var(--hover-color);
+  }
 }
 
 #root,
 #__next {
- isolation: isolate;
+  isolation: isolate;
 }
 
 input:focus-visible,
 button:focus-visible,
 textarea:focus-visible,
 select:focus-visible {
- outline: $spacing-1 solid var(--hover-color);
+  outline: $spacing-1 solid var(--hover-color);
 }
 
-button {
- background-color: var(--btn-color);
- transition: background-color 0.2s;
- &:hover {
-   background-color: var(--button-hover-background-color);
- }
-}
+// button {
+//   // background-color: var(--btn-color);
+//   // transition: background-color 0.2s;
+//   // &:hover {
+//   //   background-color: var(--button-hover-background-color);
+//   // }
+// }
 
 .main-nav {
- padding-block-start: $spacing-2;
- padding-block-end: $spacing-2;
- border-bottom: 1px solid $border-color-200;
- box-shadow: 0 0 0 $spacing-1 $border-color-200;
- padding: $spacing-2 $spacing-3;
- gap: $spacing-2;
+  padding-block-start: $spacing-2;
+  padding-block-end: $spacing-2;
+  border-bottom: 1px solid $border-color-200;
+  box-shadow: 0 0 0 $spacing-1 $border-color-200;
+  padding: $spacing-2 $spacing-3;
+  gap: $spacing-2;
 }
-
 
 /* a {
   font-weight: 500;
