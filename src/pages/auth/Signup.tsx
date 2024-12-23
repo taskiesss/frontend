@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Button from "../../components/common/button";
+import Input from "../../components/common/input";
 
 const SignUpContainer = styled.div`
   display: flex;
@@ -41,8 +42,8 @@ const LeftChild = styled.div`
       content: "";
       position: absolute;
       bottom: -2rem;
-      left: -25%;
-      width: 150%;
+      left: -12.5%;
+      width: 125%;
       height: 0.1rem;
       background-color: currentColor;
     }
@@ -58,7 +59,37 @@ const LeftChild = styled.div`
 const RightChild = styled.div`
   grid-column: 2/-1;
   background-color: white;
-  color: var(--clr-text-primary);
+  color: var(--foreground-color);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3rem 3.5rem;
+
+  h1 {
+    position: relative;
+    margin-top: 5rem;
+    font-size: 3rem;
+    font-weight: bold;
+    color: black;
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: -1rem;
+      left: -12.5%;
+      width: 125%;
+      height: 0.1rem;
+      background-color: currentColor;
+    }
+  }
+
+  form {
+    width: min(29rem, 35vw);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
 `;
 
 const SignUp: React.FC = () => {
@@ -69,9 +100,18 @@ const SignUp: React.FC = () => {
           <img src="./images/logo_dark.png" alt="logo_light" />
           <h1>Welcome Back !</h1>
           <p>To keep connected with us please login with your personal info</p>
-          <Button>Sign Up</Button>
+          <Button>Sign in</Button>
         </LeftChild>
-        <RightChild>SFSDF</RightChild>
+        <RightChild>
+          <h1>Create Account</h1>
+          <form action="">
+            <Input type="text" id="name" name="name" />
+            <Input type="email" id="email" name="email" />
+            <Input type="password" id="password" name="password" />
+
+            <Button>Sign up</Button>
+          </form>
+        </RightChild>
       </Container>
     </SignUpContainer>
   );
