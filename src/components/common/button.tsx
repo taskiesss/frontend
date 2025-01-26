@@ -27,7 +27,7 @@ const StyledButton = styled.button`
     opacity: 1;
   } */
 
-  font-size: 2rem;
+  font-size: 1.5rem;
   display: inline-block;
   cursor: pointer;
   text-decoration: none;
@@ -61,11 +61,15 @@ const StyledButton = styled.button`
   }
 `;
 
-interface ButtonProps {
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
 }
 
-const Button: React.FC<ButtonProps> = ({ children }) => {
-  return <StyledButton>{children}</StyledButton>;
+const Button: React.FC<ButtonProps> = ({ children, type, onClick }) => {
+  return (
+    <StyledButton type={type || "button"} onClick={onClick}>
+      {children}
+    </StyledButton>
+  );
 };
 export default Button;
