@@ -14,18 +14,18 @@ const router = createBrowserRouter([
     element: <SignUp />,
     children: [
       {
-        path: "/signup/client-role",
+        path: "/signup/choose-role",
         element: <ClientRole />,
       },
       {
         path: "/signup/create-account",
         element: <CreateAccount />,
       },
-      {
-        path: "/signup/verify",
-        element: <VerificationOTP />,
-      },
     ],
+  },
+  {
+    path: "/signup/verify",
+    element: <VerificationOTP />,
   },
   {
     path: "/login",

@@ -1,10 +1,13 @@
+import CryptoJS from "crypto-js";
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import Button from "../../components/common/button";
 import Input from "../../components/common/Input";
 import { otpVerify, sendOTP } from "../../services/Auth/Auth";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
+import { useLocation } from "react-router-dom";
+import { updateAuthInfo } from "../../contexts/userSlice";
 
 const OTPContainer = styled.div`
   display: flex;
@@ -31,12 +34,17 @@ const LeftChild = styled.div`
   align-items: center;
   padding: 7rem 3.5rem;
   background-color: var(--foreground-color);
-  justify-content: center;
-
-  img {
-    max-width: 15rem;
-  }
+  justify-content: flex-start;
 `;
+
+const Image = styled.img<{ animate: boolean; moveDistance: number }>`
+  max-width: 15rem; /* Set image size */
+  height: auto;
+  transition: transform 2s ease-in-out; /* Smooth transition for the animation */
+  transform: ${({ animate, moveDistance }) =>
+    animate ? `translateY(${moveDistance}px)` : "translateY(0)"};
+`;
+
 const RightChild = styled.div`
   grid-column: 2/-1;
   background-color: white;
@@ -81,11 +89,19 @@ const RightChild = styled.div`
 
 const VerificationOTP: React.FC = () => {
   const [values, setValues] = useState(["", "", "", "", "", ""]);
-
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [seconds, setSeconds] = useState(0);
+  const [animate, setAnimate] = React.useState(false);
+  const [moveDistance, setMoveDistance] = React.useState(0); // State to store the calculated distance
+  const location = useLocation();
+  const dispatch = useDispatch();
   const inputRefs = useRef<HTMLInputElement[]>([]);
+  const imageRef = useRef<HTMLImageElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const otpVal = values.join("");
-  const user = useSelector((state: RootState) => state.user.currentUser);
+  const currentUser = useSelector((state: RootState) => state.user.currentUser);
+
   const goToNext = (
     index: number,
     event: React.ChangeEvent<HTMLInputElement>
@@ -100,11 +116,66 @@ const VerificationOTP: React.FC = () => {
       }
     }
   };
+
+  // useEffect(() => {
+  //   // Calculate the distance to center the image vertically
+  //   if (imageRef.current && containerRef.current) {
+  //     const containerHeight = containerRef.current.offsetHeight;
+  //     const imageHeight = imageRef.current.offsetHeight;
+  //     const distance = (containerHeight - imageHeight) / 2; // Calculate distance to center
+  //     setMoveDistance(distance); // Store the distance in state
+  //   }
+  // }, []);
+
+  useEffect(() => {
+    // Calculate the distance to center the image vertically, accounting for padding
+    if (imageRef.current && containerRef.current) {
+      const containerHeight = containerRef.current.offsetHeight;
+      const containerPaddingTop = parseFloat(
+        window.getComputedStyle(containerRef.current).paddingTop
+      );
+      const containerPaddingBottom = parseFloat(
+        window.getComputedStyle(containerRef.current).paddingBottom
+      );
+      const imageHeight = imageRef.current.offsetHeight;
+
+      // Subtract padding from the container height
+      const effectiveContainerHeight =
+        containerHeight - containerPaddingTop - containerPaddingBottom;
+
+      // Calculate the distance to center the image
+      const distance = (effectiveContainerHeight - imageHeight) / 2;
+      setMoveDistance(distance); // Store the distance in state
+    }
+  }, []);
+
+  useEffect(() => {
+    // Trigger the animation after a delay (e.g., 1 second)
+    const timer = setTimeout(() => {
+      setAnimate(true);
+    }, 1000); // 1 second delay
+
+    // Cleanup the timer on component unmount
+    return () => clearTimeout(timer);
+  }, []);
+
+  const onClick = async () => {
+    try {
+      setIsSubmitting(true);
+      setSeconds(30);
+      const res = await sendOTP(currentUser);
+      console.log("SendOTP response", res);
+    } catch (error) {
+      // handle or log error
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     // Define an inner async function
     const sendOtp = async () => {
       try {
-        const res = await sendOTP(user);
+        const res = await sendOTP(currentUser);
         console.log("SendOTP response", res);
       } catch (error) {
         // handle or log error
@@ -113,7 +184,21 @@ const VerificationOTP: React.FC = () => {
     };
     // Invoke it right away
     sendOtp();
-  }, []);
+  }, [currentUser]);
+
+  useEffect(() => {
+    let timer: number;
+
+    if (isSubmitting && seconds > 0) {
+      timer = setInterval(() => {
+        setSeconds((prevSeconds) => prevSeconds - 1);
+      }, 1000);
+    } else if (seconds === 0) {
+      setIsSubmitting(false); // Enable the button when the countdown ends
+    }
+
+    return () => clearInterval(timer); // Cleanup timer on component unmount
+  }, [isSubmitting, seconds]);
 
   useEffect(() => {
     // Define an inner async function
@@ -121,7 +206,7 @@ const VerificationOTP: React.FC = () => {
       // Only proceed if the length is 6
       if (otpVal.length === 6) {
         try {
-          const res = await otpVerify(user, otpVal);
+          const res = await otpVerify(currentUser, otpVal);
           console.log("OTP response", res);
         } catch (error) {
           // handle or log error
@@ -132,13 +217,42 @@ const VerificationOTP: React.FC = () => {
 
     // Invoke it right away
     verifyOtp();
-  }, [otpVal, user]);
+  }, [otpVal, currentUser]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const encryptedUser = params.get("user");
+
+    if (encryptedUser) {
+      try {
+        // Decrypt the user object
+        const bytes = CryptoJS.AES.decrypt(
+          decodeURIComponent(encryptedUser),
+          "S3cr3tK3y@2023!ThisIsMySecureKey#"
+        );
+        const decryptedUser = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+
+        console.log("Decrypted User:", decryptedUser);
+
+        // Dispatch the decrypted user to Redux
+        dispatch(updateAuthInfo(decryptedUser));
+      } catch (error) {
+        console.error("Error decrypting user:", error);
+      }
+    }
+  }, [location, dispatch]);
 
   return (
     <OTPContainer>
       <Container>
-        <LeftChild>
-          <img src="/images/logo_dark.png" alt="logo_light" />
+        <LeftChild ref={containerRef}>
+          <Image
+            ref={imageRef}
+            src="/images/logo_dark.png"
+            alt="logo_light"
+            animate={animate}
+            moveDistance={moveDistance}
+          />
         </LeftChild>
         <RightChild>
           <h1>Verify with OTP</h1>
@@ -152,7 +266,7 @@ const VerificationOTP: React.FC = () => {
                 <Input
                   type="text"
                   id={"op" + index}
-                  className={"text-center"}
+                  className={"text-center "}
                   fontSize="2rem"
                   onChange={(e) => goToNext(index, e)}
                   inputValue={value}
@@ -163,7 +277,9 @@ const VerificationOTP: React.FC = () => {
               ))}
             </div>
 
-            <Button>Sign up</Button>
+            <Button onClick={onClick} disabled={isSubmitting}>
+              {isSubmitting ? `Resend OTP in ${seconds}s` : "Resend OTP"}
+            </Button>
           </form>
         </RightChild>
       </Container>

@@ -2,15 +2,10 @@
 import { ApiErrorResponse, ErrorResponse } from '../../types/Error';
 import { User } from '../../types/User';
 
-/**
- * Verifies the given OTP by sending it to the server's /api/signup/verify endpoint.
- *
- * @param otpVal - The numeric OTP value to verify.
- * @returns A promise that resolves to `true` if verification is successful, otherwise throws an error.
- */
+const BASE_URL = 'https://localhost:8080';
 export async function registerUser(user: User): Promise<boolean> {
   try {
-    const res = await fetch('/api/signup/verify', {
+    const res = await fetch(`${BASE_URL}/api/signup`, {
       method: 'POST',
       body: JSON.stringify(user),
       headers: {
@@ -55,7 +50,7 @@ export async function registerUser(user: User): Promise<boolean> {
 
 export async function otpVerify(user: User, otp: string): Promise<boolean> {
   try {
-    const res = await fetch('/api/signup', {
+    const res = await fetch(`${BASE_URL}/api/signup/verify`, {
       method: 'POST',
       body: JSON.stringify({ ...user, otp: otp }),
       headers: {
@@ -81,7 +76,7 @@ export async function otpVerify(user: User, otp: string): Promise<boolean> {
 
 export async function sendOTP(user: User): Promise<boolean> {
   try {
-    const res = await fetch('/api/signup/send-otp', {
+    const res = await fetch(`${BASE_URL}/api/signup/send-otp`, {
       method: 'POST',
       body: JSON.stringify({ user }),
       headers: {

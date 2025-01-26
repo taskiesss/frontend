@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { updateAuthInfo } from "../../contexts/userSlice";
+import { useNavigate } from "react-router-dom";
+import Button from "../../components/common/button";
 
 const RightChild = styled.div`
   grid-column: 2/-1;
@@ -130,11 +132,18 @@ const RightChild = styled.div`
     text-align: center;
     margin-top: 1.5rem;
   }
+  .checkbox-group {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 3rem;
+  }
 
   form {
     width: min(29rem, 35vw);
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     margin-top: 3rem;
@@ -143,68 +152,71 @@ const RightChild = styled.div`
 `;
 export default function ClientRole() {
   const [isChecked, setIsChecked] = useState([false, false]);
+  const [role, setRole] = useState("");
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const toggleCheck = (e: React.ChangeEvent<HTMLInputElement>, i: number) => {
-    if (!isChecked[i]) {
-      const newIsChecked = isChecked.map((value, index) => {
-        if (index === i) {
-          return true;
-        } else {
-          return false;
-        }
-      });
-      setIsChecked(newIsChecked);
-    }
-    dispatch(updateAuthInfo({ role: e.target.dataset.role }));
-    // console.log(e.target.dataset.role);
+    setIsChecked([i === 0, i === 1]);
+    setRole(e.target.dataset.role || "");
   };
 
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    dispatch(updateAuthInfo({ role: role }));
+
+    navigate(`/signup/create-account?role=${role}`);
+  };
   return (
     <RightChild>
       <h2>Choose your role!</h2>
-      <form action="">
-        <div className="checkbox">
-          <label className="checkbox-wrapper">
-            <input
-              type="checkbox"
-              className="checkbox-input"
-              data-role="freelancer"
-              checked={isChecked[0]}
-              onChange={(e) => toggleCheck(e, 0)}
-            />
-            <span className="checkbox-tile">
-              <span className="checkbox-icon">
-                <img
-                  src="/images/freelancer.png"
-                  alt="Freelancer"
-                  className="checkbox-img"
-                />
+      <form onSubmit={handleSubmit} action="">
+        <div className="checkbox-group">
+          <div className="checkbox">
+            <label className="checkbox-wrapper">
+              <input
+                type="checkbox"
+                className="checkbox-input"
+                data-role="freelancer"
+                checked={isChecked[0]}
+                onChange={(e) => toggleCheck(e, 0)}
+              />
+              <span className="checkbox-tile">
+                <span className="checkbox-icon">
+                  <img
+                    src="/images/freelancer.png"
+                    alt="Freelancer"
+                    className="checkbox-img"
+                  />
+                </span>
+                <span className="checkbox-label">Freelancer</span>
               </span>
-              <span className="checkbox-label">Freelancer</span>
-            </span>
-          </label>
-        </div>
-        <div className="checkbox">
-          <label className="checkbox-wrapper">
-            <input
-              type="checkbox"
-              className="checkbox-input"
-              checked={isChecked[1]}
-              data-role="client"
-              onChange={(e) => toggleCheck(e, 1)}
-            />
-            <span className="checkbox-tile">
-              <span className="checkbox-icon">
-                <img
-                  src="/images/cheer.png"
-                  alt="Cheer"
-                  className="checkbox-img"
-                />
+            </label>
+          </div>
+          <div className="checkbox">
+            <label className="checkbox-wrapper">
+              <input
+                type="checkbox"
+                className="checkbox-input"
+                checked={isChecked[1]}
+                data-role="client"
+                onChange={(e) => toggleCheck(e, 1)}
+              />
+              <span className="checkbox-tile">
+                <span className="checkbox-icon">
+                  <img
+                    src="/images/cheer.png"
+                    alt="Cheer"
+                    className="checkbox-img"
+                  />
+                </span>
+                <span className="checkbox-label">Client</span>
               </span>
-              <span className="checkbox-label">Client</span>
-            </span>
-          </label>
+            </label>
+          </div>
         </div>
+        <Button type="submit" disabled={!(isChecked[0] || isChecked[1])}>
+          Submit
+        </Button>
       </form>
     </RightChild>
   );

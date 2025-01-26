@@ -59,15 +59,38 @@ const StyledButton = styled.button`
   &:hover::after {
     opacity: 1; /* Make it visible on hover */
   }
+
+  &:disabled {
+    cursor: not-allowed; /* Change cursor to indicate it's disabled */
+    opacity: 0.6; /* Reduce opacity to give a "disabled" look */
+    border-color: var(
+      --button-disabled-border-color,
+      #ccc
+    ); /* Muted border color */
+    background-color: var(
+      --button-disabled-background-color,
+      #f2f2f2
+    ); /* Muted background */
+    color: var(--button-disabled-text-color, #aaa); /* Muted text color */
+    box-shadow: none; /* Remove shadow effects */
+    &:disabled::after {
+      display: none; /* Remove hover effects for disabled buttons */
+    }
+  }
 `;
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
 }
 
-const Button: React.FC<ButtonProps> = ({ children, type, onClick }) => {
+const Button: React.FC<ButtonProps> = ({
+  children,
+  type,
+  onClick,
+  disabled,
+}) => {
   return (
-    <StyledButton type={type || "button"} onClick={onClick}>
+    <StyledButton type={type || "button"} onClick={onClick} disabled={disabled}>
       {children}
     </StyledButton>
   );

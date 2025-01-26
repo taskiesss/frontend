@@ -1,15 +1,18 @@
-import React, { useState } from "react";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import CryptoJS from "crypto-js";
+import React, { useEffect, useState } from "react";
 import Input from "../../components/common/Input";
 import Button from "../../components/common/button";
 import styled from "styled-components";
 
-import { registerUser } from "../../services/Auth/Auth";
-
 import { useDispatch, useSelector } from "react-redux";
 import { updateAuthInfo } from "../../contexts/userSlice";
 import { RootState } from "../../store";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { ErrorResponse } from "../../types/Error";
+import { registerUser } from "../../services/Auth/Auth";
+
+const secretKey = "S3cr3tK3y@2023!ThisIsMySecureKey#";
 
 const RightChild = styled.div`
   grid-column: 2/-1;
@@ -55,7 +58,7 @@ const CreateAccount: React.FC = () => {
   const [errors, setErrors] = useState<ErrorResponse[]>([]);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const role = useSelector((state: RootState) => state.user.currentUser.role);
+  const user = useSelector((state: RootState) => state.user.currentUser);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -91,13 +94,23 @@ const CreateAccount: React.FC = () => {
         username,
         email,
         password,
-        role,
+        role: user.role,
       });
 
-      console.log(res);
+      // console.log(res);
       dispatch(updateAuthInfo({ username, email, password }));
 
-      navigate("/signup/verify");
+      // Encryption
+      const encryptedUser = CryptoJS.AES.encrypt(
+        JSON.stringify({ username, email, password, role: user.role }),
+        secretKey
+      ).toString();
+
+      // Encode the encrypted string to make it URL-safe
+      const encodedUser = encodeURIComponent(encryptedUser);
+
+      // Navigate to the next page with the encrypted user in the URL
+      navigate(`/signup/verify?user=${encodedUser}`);
     } catch (err) {
       if (err instanceof Error) {
         try {
@@ -113,6 +126,17 @@ const CreateAccount: React.FC = () => {
       setIsSubmitting(false);
     }
   }
+
+  const location = useLocation();
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const role = params.get("role");
+    if (role) {
+      dispatch(updateAuthInfo({ role }));
+    }
+  }, [location, dispatch]);
+
   return (
     <RightChild>
       <h2>Create Account</h2>
