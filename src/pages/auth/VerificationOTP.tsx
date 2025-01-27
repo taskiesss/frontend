@@ -6,7 +6,7 @@ import Input from "../../components/common/Input";
 import { otpVerify, sendOTP } from "../../services/Auth/Auth";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { updateAuthInfo } from "../../contexts/userSlice";
 
 const OTPContainer = styled.div`
@@ -113,6 +113,7 @@ const VerificationOTP: React.FC = () => {
   const [seconds, setSeconds] = useState(0);
   const [animate, setAnimate] = useState(false);
   const [moveDistance, setMoveDistance] = useState(0);
+  const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
   const inputRefs = useRef<HTMLInputElement[]>([]);
@@ -191,7 +192,7 @@ const VerificationOTP: React.FC = () => {
         console.log("Sending OTP");
         const res = await sendOTP(currentUser);
         console.log("SendOTP response", res);
-        document.cookie = "hasSentOtp=true; path=/; max-age=900"; // Mark as sent (expires in 1 hour)
+        document.cookie = "hasSentOtp=true; path=/; max-age=900";
       } catch (error) {
         console.error(error);
       }
@@ -221,6 +222,10 @@ const VerificationOTP: React.FC = () => {
       if (otpVal.length === 6) {
         try {
           const res = await otpVerify(currentUser, otpVal);
+          if (res) {
+            navigate("/home");
+          }
+
           console.log("OTP response", res);
         } catch (error) {
           // handle or log error
@@ -231,7 +236,7 @@ const VerificationOTP: React.FC = () => {
 
     // Invoke it right away
     verifyOtp();
-  }, [otpVal, currentUser]);
+  }, [otpVal, currentUser, navigate]);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);

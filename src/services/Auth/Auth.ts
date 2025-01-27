@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ApiErrorResponse, ErrorResponse } from '../../types/Error';
-import { User } from '../../types/User';
+import { ApiErrorResponse, ErrorResponse } from "../../types/Error";
+import { User } from "../../types/User";
 
-const BASE_URL = 'http://localhost:8080';
+const BASE_URL = "http://localhost:8080";
 export async function registerUser(user: User): Promise<boolean> {
   try {
     const res = await fetch(`${BASE_URL}/api/signup`, {
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify(user),
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     });
 
@@ -18,7 +18,7 @@ export async function registerUser(user: User): Promise<boolean> {
     if (!res.ok) {
       // Extract the array of errors from the response
       const errors = data.errors || [
-        { type: 'unknown', message: 'Registration failed' },
+        { type: "unknown", message: "Registration failed" },
       ];
       throw new Error(JSON.stringify(errors));
     }
@@ -32,15 +32,15 @@ export async function registerUser(user: User): Promise<boolean> {
       } catch (e: any) {
         // If parsing fails, throw a generic error
         throw new Error(
-          JSON.stringify([{ type: 'unknown', message: e.message }])
+          JSON.stringify([{ type: "unknown", message: e.message }])
         );
       }
     } else {
       throw new Error(
         JSON.stringify([
           {
-            type: 'unknown',
-            message: 'An unknown error occurred during Registering.',
+            type: "unknown",
+            message: "An unknown error occurred during Registering.",
           },
         ])
       );
@@ -51,17 +51,17 @@ export async function registerUser(user: User): Promise<boolean> {
 export async function otpVerify(user: User, otp: string): Promise<boolean> {
   try {
     const res = await fetch(`${BASE_URL}/api/signup/verify`, {
-      method: 'POST',
-      body: JSON.stringify({ ...user, otp: otp }),
+      method: "POST",
+      body: JSON.stringify({ ...user, otp }),
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     });
 
-    const { data } = await res.json();
+    const data = await res.json();
 
     if (!res.ok) {
-      throw new Error(data || 'Registeration failed');
+      throw new Error(data || "Registeration failed");
     }
 
     return true;
@@ -69,7 +69,7 @@ export async function otpVerify(user: User, otp: string): Promise<boolean> {
     if (error instanceof Error) {
       throw new Error(error.message);
     } else {
-      throw new Error('An unknown error occurred during Registering.');
+      throw new Error("An unknown error occurred during Registering.");
     }
   }
 }
@@ -77,17 +77,17 @@ export async function otpVerify(user: User, otp: string): Promise<boolean> {
 export async function sendOTP(user: User): Promise<boolean> {
   try {
     const res = await fetch(`${BASE_URL}/api/signup/send-otp`, {
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify({ ...user }),
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     });
 
-    const { data } = await res.json();
+    const data = await res.json();
 
     if (!res.ok) {
-      throw new Error(data || 'Failed sending OTP');
+      throw new Error(data || "Failed sending OTP");
     }
 
     return true;
@@ -95,7 +95,7 @@ export async function sendOTP(user: User): Promise<boolean> {
     if (error instanceof Error) {
       throw new Error(error.message);
     } else {
-      throw new Error('An unknown error occurred during sending OTP.');
+      throw new Error("An unknown error occurred during sending OTP.");
     }
   }
 }
