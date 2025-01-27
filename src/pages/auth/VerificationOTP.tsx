@@ -11,11 +11,11 @@ import { updateAuthInfo } from "../../contexts/userSlice";
 
 const OTPContainer = styled.div`
   display: flex;
-  flex-direction: column; /* Align items vertically */
-  align-items: center; /* Center items horizontally */
-  justify-content: center; /* Center items vertically */
-  margin: 6rem auto 0 auto; /* Center the container on the page with auto margins */
-  width: clamp(10rem, 94rem, 85vw); /* Limit the width of the container */
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 6rem auto 0 auto;
+  width: clamp(10rem, 94rem, 85vw);
 `;
 
 const Container = styled.div`
@@ -23,7 +23,7 @@ const Container = styled.div`
   width: 100%;
   grid-template-columns: 1fr 1fr;
   border-radius: 2rem;
-  box-shadow: 0rem 0.4rem 0.6rem rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+  box-shadow: 0rem 0.4rem 0.6rem rgba(0, 0, 0, 0.1);
   overflow: hidden;
 `;
 
@@ -37,19 +37,23 @@ const LeftChild = styled.div`
   justify-content: flex-start;
 `;
 
-const Image = styled.img<{ animate: boolean; moveDistance: number }>`
-  max-width: 15rem; /* Set image size */
+const StyledImage = styled.img<{
+  $shouldAnimate: boolean;
+  $moveDistance: number;
+}>`
+  max-width: 15rem;
   height: auto;
-  transition: transform 2s ease-in-out; /* Smooth transition for the animation */
-  transform: ${({ animate, moveDistance }) =>
-    animate ? `translateY(${moveDistance}px)` : "translateY(0)"};
+  transition: transform 2s ease-in-out;
+  transform: ${(props) =>
+    props.$shouldAnimate
+      ? `translateY(${props.$moveDistance}px)`
+      : "translateY(0)"};
 `;
 
 const RightChild = styled.div`
   grid-column: 2/-1;
   background-color: white;
   color: var(--foreground-color);
-
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -72,6 +76,21 @@ const RightChild = styled.div`
     }
   }
 
+  p {
+    text-align: center;
+    color: #666666;
+    font-size: 1.2rem;
+    line-height: 1.6;
+    margin: 2rem 0 1.5rem 0;
+    max-width: 30rem;
+
+    /* Highlight the email reference */
+    strong {
+      color: #333333;
+      font-weight: 500;
+    }
+  }
+
   form {
     width: min(29rem, 35vw);
     display: flex;
@@ -83,6 +102,7 @@ const RightChild = styled.div`
       display: flex;
       flex-direction: row;
       gap: 1.5rem;
+      margin-bottom: 1rem;
     }
   }
 `;
@@ -91,8 +111,8 @@ const VerificationOTP: React.FC = () => {
   const [values, setValues] = useState(["", "", "", "", "", ""]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [seconds, setSeconds] = useState(0);
-  const [animate, setAnimate] = React.useState(false);
-  const [moveDistance, setMoveDistance] = React.useState(0); // State to store the calculated distance
+  const [animate, setAnimate] = useState(false);
+  const [moveDistance, setMoveDistance] = useState(0);
   const location = useLocation();
   const dispatch = useDispatch();
   const inputRefs = useRef<HTMLInputElement[]>([]);
@@ -116,16 +136,6 @@ const VerificationOTP: React.FC = () => {
       }
     }
   };
-
-  // useEffect(() => {
-  //   // Calculate the distance to center the image vertically
-  //   if (imageRef.current && containerRef.current) {
-  //     const containerHeight = containerRef.current.offsetHeight;
-  //     const imageHeight = imageRef.current.offsetHeight;
-  //     const distance = (containerHeight - imageHeight) / 2; // Calculate distance to center
-  //     setMoveDistance(distance); // Store the distance in state
-  //   }
-  // }, []);
 
   useEffect(() => {
     // Calculate the distance to center the image vertically, accounting for padding
@@ -172,17 +182,21 @@ const VerificationOTP: React.FC = () => {
   };
 
   useEffect(() => {
-    // Define an inner async function
+    const hasSentOtp = document.cookie.includes("hasSentOtp=true");
+
+    if (hasSentOtp) return; // Skip if OTP has already been sent
+
     const sendOtp = async () => {
       try {
+        console.log("Sending OTP");
         const res = await sendOTP(currentUser);
         console.log("SendOTP response", res);
+        document.cookie = "hasSentOtp=true; path=/; max-age=900"; // Mark as sent (expires in 1 hour)
       } catch (error) {
-        // handle or log error
         console.error(error);
       }
     };
-    // Invoke it right away
+
     sendOtp();
   }, [currentUser]);
 
@@ -246,27 +260,28 @@ const VerificationOTP: React.FC = () => {
     <OTPContainer>
       <Container>
         <LeftChild ref={containerRef}>
-          <Image
+          <StyledImage
             ref={imageRef}
             src="/images/logo_dark.png"
             alt="logo_light"
-            animate={animate}
-            moveDistance={moveDistance}
+            $shouldAnimate={animate}
+            $moveDistance={moveDistance}
           />
         </LeftChild>
         <RightChild>
           <h1>Verify with OTP</h1>
           <p>
-            To ensure your security, please enter the One-Time Password(OTP)
-            sent to your registered email below
+            To ensure your security, please enter the One-Time Password (OTP)
+            sent to your <strong>registered email</strong> below
           </p>
           <form action="">
             <div className="otp-input">
               {values.map((value, index) => (
                 <Input
+                  key={index}
                   type="text"
-                  id={"op" + index}
-                  className={"text-center "}
+                  id={`otp${index}`}
+                  className="text-center"
                   fontSize="2rem"
                   onChange={(e) => goToNext(index, e)}
                   inputValue={value}
@@ -276,7 +291,6 @@ const VerificationOTP: React.FC = () => {
                 />
               ))}
             </div>
-
             <Button onClick={onClick} disabled={isSubmitting}>
               {isSubmitting ? `Resend OTP in ${seconds}s` : "Resend OTP"}
             </Button>
@@ -286,5 +300,4 @@ const VerificationOTP: React.FC = () => {
     </OTPContainer>
   );
 };
-
 export default VerificationOTP;

@@ -2,7 +2,7 @@
 import { ApiErrorResponse, ErrorResponse } from '../../types/Error';
 import { User } from '../../types/User';
 
-const BASE_URL = 'https://localhost:8080';
+const BASE_URL = 'http://localhost:8080';
 export async function registerUser(user: User): Promise<boolean> {
   try {
     const res = await fetch(`${BASE_URL}/api/signup`, {
@@ -78,7 +78,7 @@ export async function sendOTP(user: User): Promise<boolean> {
   try {
     const res = await fetch(`${BASE_URL}/api/signup/send-otp`, {
       method: 'POST',
-      body: JSON.stringify({ user }),
+      body: JSON.stringify({ ...user }),
       headers: {
         'Content-Type': 'application/json',
       },
