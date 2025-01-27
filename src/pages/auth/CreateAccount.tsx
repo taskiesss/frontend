@@ -115,6 +115,7 @@ const CreateAccount: React.FC = () => {
       if (err instanceof Error) {
         try {
           const errorData: ErrorResponse[] = JSON.parse(err.message);
+          console.log(errorData);
           setErrors(errorData);
         } catch (e) {
           setErrors([{ type: "unknown", message: err.message }]);

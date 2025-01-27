@@ -8,7 +8,7 @@ import Login from "./pages/auth/Login";
 import VerificationOTP from "./pages/auth/VerificationOTP";
 import CreateAccount from "./pages/auth/CreateAccount";
 import ClientRole from "./pages/auth/ClientRole";
-import ClientHome from "./pages/client/clientHome";
+import ClientHome from "./pages/client/ClientHome";
 
 const router = createBrowserRouter([
   {

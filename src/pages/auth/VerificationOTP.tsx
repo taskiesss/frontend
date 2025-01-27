@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { useLocation, useNavigate } from "react-router-dom";
 import { updateAuthInfo } from "../../contexts/userSlice";
+import { ErrorResponse } from "../../types/Error";
 
 const OTPContainer = styled.div`
   display: flex;
@@ -119,6 +120,7 @@ const VerificationOTP: React.FC = () => {
   const inputRefs = useRef<HTMLInputElement[]>([]);
   const imageRef = useRef<HTMLImageElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const hasInitialized = useRef(false);
 
   const otpVal = values.join("");
   const currentUser = useSelector((state: RootState) => state.user.currentUser);
@@ -183,22 +185,26 @@ const VerificationOTP: React.FC = () => {
   };
 
   useEffect(() => {
-    const hasSentOtp = document.cookie.includes("hasSentOtp=true");
+    if (hasInitialized.current) return;
 
-    if (hasSentOtp) return; // Skip if OTP has already been sent
+    const hasSentOtp = document.cookie.includes("hasSentOtp=true");
+    if (hasSentOtp) return;
 
     const sendOtp = async () => {
       try {
         console.log("Sending OTP");
         const res = await sendOTP(currentUser);
         console.log("SendOTP response", res);
-        document.cookie = "hasSentOtp=true; path=/; max-age=900";
+        document.cookie = "hasSentOtp=true; path=/; max-age=300";
       } catch (error) {
         console.error(error);
       }
     };
 
-    sendOtp();
+    if (currentUser) {
+      hasInitialized.current = true;
+      sendOtp();
+    }
   }, [currentUser]);
 
   useEffect(() => {
@@ -216,25 +222,32 @@ const VerificationOTP: React.FC = () => {
   }, [isSubmitting, seconds]);
 
   useEffect(() => {
-    // Define an inner async function
     const verifyOtp = async () => {
-      // Only proceed if the length is 6
       if (otpVal.length === 6) {
         try {
-          const res = await otpVerify(currentUser, otpVal);
+          const res = await otpVerify(currentUser, otpVal); // API call
           if (res) {
+            console.log("OTP verified successfully:", res);
             navigate("/home");
           }
+        } catch (error: any) {
+          if (error.response && error.response.data) {
+            // Log the specific fields in the error response
+            const errorBody = error.response.data;
 
-          console.log("OTP response", res);
-        } catch (error) {
-          // handle or log error
-          console.error(error);
+            console.error("Error Type:", errorBody.type);
+            console.error("Error Message:", errorBody.message);
+
+            // Optionally handle or display the error
+          } else if (error.request) {
+            console.error("No response received:", error.request);
+          } else {
+            console.error("Unexpected error:", error.message);
+          }
         }
       }
     };
 
-    // Invoke it right away
     verifyOtp();
   }, [otpVal, currentUser, navigate]);
 
