@@ -140,7 +140,7 @@ const CreateAccount: React.FC = () => {
 
   return (
     <RightChild>
-      <h2>Create Account</h2>
+      <h2 className="mb-6">Create Account</h2>
 
       <form onSubmit={handleSubmit}>
         <Input

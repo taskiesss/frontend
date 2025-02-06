@@ -31,15 +31,16 @@ const StyledButton = styled.button`
   display: inline-block;
   cursor: pointer;
   text-decoration: none;
-  border: var(--button-hover-background-color) 0.125em solid;
-  padding: 0.25em 1em;
-  border-radius: 0.25em;
+  border: var(--button-hover-background-color) 0.125rem solid;
+  padding: 0.25rem 1rem;
+  border-radius: 0.25rem;
 
   box-shadow: inset 0 0 0.5em 0 var(--button-hover-background-color),
     0 0 0.5em 0 var(--button-hover-background-color);
 
   position: relative;
   z-index: 1;
+  width: max-content;
 
   /* Ensure ::after respects button's position */
   &::after {
@@ -88,9 +89,15 @@ const Button: React.FC<ButtonProps> = ({
   type,
   onClick,
   disabled,
+  className,
 }) => {
   return (
-    <StyledButton type={type || "button"} onClick={onClick} disabled={disabled}>
+    <StyledButton
+      type={type || "button"}
+      onClick={onClick}
+      disabled={disabled}
+      className={className}
+    >
       {children}
     </StyledButton>
   );

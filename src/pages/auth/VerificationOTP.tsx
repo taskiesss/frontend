@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import CryptoJS from "crypto-js";
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
@@ -8,7 +9,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { useLocation, useNavigate } from "react-router-dom";
 import { updateAuthInfo } from "../../contexts/userSlice";
-import { ErrorResponse } from "../../types/Error";
 
 const OTPContainer = styled.div`
   display: flex;

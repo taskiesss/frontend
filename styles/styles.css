@@ -64,7 +64,11 @@ html {
     --foreground-color: var(--clr-foreground-dark);
     --background-color: var(--clr-background-dark);
     --btn-color: var(--clr-btn-dark);
-    --button-hover-background-color: rgb(247.8992805755, 162.690647482, 97.6007194245);
+    --button-hover-background-color: rgb(
+      247.8992805755,
+      162.690647482,
+      97.6007194245
+    );
   }
 }
 *,
@@ -136,6 +140,10 @@ a:hover {
   isolation: isolate;
 }
 
+#root {
+  width: 100%;
+}
+
 input:focus-visible,
 button:focus-visible,
 textarea:focus-visible,
@@ -150,6 +158,12 @@ select:focus-visible {
   box-shadow: 0 0 0 0.5rem #d3d3d3;
   padding: 1rem 1.5rem;
   gap: 1rem;
+}
+
+ul,
+* {
+  padding: 0;
+  margin: 0;
 }
 
 /* a {

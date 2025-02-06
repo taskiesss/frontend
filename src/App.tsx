@@ -2,13 +2,15 @@
 
 // import ReactLoading from "react-loading";
 // import Login from "./pages/auth/Login";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import SignUp from "./pages/auth/Signup";
-import Login from "./pages/auth/Login";
-import VerificationOTP from "./pages/auth/VerificationOTP";
-import CreateAccount from "./pages/auth/CreateAccount";
+import { createBrowserRouter } from "react-router-dom";
+import JobCard from "./components/common/JobCard";
 import ClientRole from "./pages/auth/ClientRole";
+import CreateAccount from "./pages/auth/CreateAccount";
+import Login from "./pages/auth/Login";
+import SignUp from "./pages/auth/Signup";
+import VerificationOTP from "./pages/auth/VerificationOTP";
 import ClientHome from "./pages/client/ClientHome";
+import NavBar from "./components/common/NavBar";
 
 const router = createBrowserRouter([
   {
@@ -39,7 +41,9 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  return <RouterProvider router={router} />;
+  // return <RouterProvider router={router} />;
+  // return <NavBar />;
+  return <NavBar />;
 }
 
 export default App;

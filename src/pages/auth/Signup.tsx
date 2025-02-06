@@ -41,7 +41,7 @@ const LeftChild = styled.div`
     &::after {
       content: "";
       position: absolute;
-      bottom: -2rem;
+      bottom: -0.5rem;
       left: -12.5%;
       width: 125%;
       height: 0.1rem;
