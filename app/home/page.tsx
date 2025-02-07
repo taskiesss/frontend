@@ -5,6 +5,15 @@ import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import StarRating from "../_components/common/StarRating";
+import JobCard from "@/app/_components/common/JobCard";
+
+// Define union types for the keys
+type ExperienceLevelKey = "Entry Level" | "Intermediate" | "Expert";
+type ProjectLengthKey =
+  | "Less than one month"
+  | "1 to 3 months"
+  | "3 to 6 months"
+  | "More than 6 months";
 
 const Home: React.FC = () => {
   const searchParams = useSearchParams();
@@ -13,6 +22,44 @@ const Home: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<string>("Newest");
   const [userRating, setUserRating] = useState<number>(0);
+
+  // Controlled inputs states
+  const [skillsSearch, setSkillsSearch] = useState("");
+
+  // Options for experience levels with proper typing
+  const experienceOptions: { label: ExperienceLevelKey; count: number }[] = [
+    { label: "Entry Level", count: 275 },
+    { label: "Intermediate", count: 4558 },
+    { label: "Expert", count: 2589 },
+  ];
+  const [experienceLevels, setExperienceLevels] = useState<
+    Record<ExperienceLevelKey, boolean>
+  >({
+    "Entry Level": false,
+    Intermediate: false,
+    Expert: false,
+  });
+
+  // Job type and hourly rate states
+  const [jobTypeHourly, setJobTypeHourly] = useState(false);
+  const [hourlyRateMin, setHourlyRateMin] = useState("");
+  const [hourlyRateMax, setHourlyRateMax] = useState("");
+
+  // Options for project lengths with proper typing
+  const projectLengthOptions: { label: ProjectLengthKey; count: number }[] = [
+    { label: "Less than one month", count: 4264 },
+    { label: "1 to 3 months", count: 4992 },
+    { label: "3 to 6 months", count: 3748 },
+    { label: "More than 6 months", count: 4123 },
+  ];
+  const [projectLengths, setProjectLengths] = useState<
+    Record<ProjectLengthKey, boolean>
+  >({
+    "Less than one month": false,
+    "1 to 3 months": false,
+    "3 to 6 months": false,
+    "More than 6 months": false,
+  });
 
   const options = [
     { label: "Newest", value: "newest" },
@@ -120,6 +167,8 @@ const Home: React.FC = () => {
           <input
             type="text"
             placeholder="Search"
+            value={skillsSearch}
+            onChange={(e) => setSkillsSearch(e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--hover-color)]"
           />
         </div>
@@ -128,15 +177,18 @@ const Home: React.FC = () => {
         <div className="mb-4">
           <h3 className="text-md font-bold">Experience level</h3>
           <div className="space-y-2">
-            {[
-              { label: "Entry Level", count: 275 },
-              { label: "Intermediate", count: 4558 },
-              { label: "Expert", count: 2589 },
-            ].map((exp) => (
+            {experienceOptions.map((exp) => (
               <label key={exp.label} className="flex items-center space-x-2">
                 <input
                   type="checkbox"
                   className="form-checkbox text-[var(--btn-color)]"
+                  checked={experienceLevels[exp.label]}
+                  onChange={(e) =>
+                    setExperienceLevels((prev) => ({
+                      ...prev,
+                      [exp.label]: e.target.checked,
+                    }))
+                  }
                 />
                 <span>
                   {exp.label}{" "}
@@ -154,6 +206,8 @@ const Home: React.FC = () => {
             <input
               type="checkbox"
               className="form-checkbox text-[var(--btn-color)]"
+              checked={jobTypeHourly}
+              onChange={(e) => setJobTypeHourly(e.target.checked)}
             />
             <span>
               Hourly <span className="text-gray-500">(4,187)</span>
@@ -165,11 +219,15 @@ const Home: React.FC = () => {
             <input
               type="number"
               placeholder="Min"
+              value={hourlyRateMin}
+              onChange={(e) => setHourlyRateMin(e.target.value)}
               className="w-1/2 px-3 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--hover-color)]"
             />
             <input
               type="number"
               placeholder="Max"
+              value={hourlyRateMax}
+              onChange={(e) => setHourlyRateMax(e.target.value)}
               className="w-1/2 px-3 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--hover-color)]"
             />
           </div>
@@ -179,16 +237,18 @@ const Home: React.FC = () => {
         <div className="mb-4">
           <h3 className="text-md font-bold">Project length</h3>
           <div className="space-y-2">
-            {[
-              { label: "Less than one month", count: 4264 },
-              { label: "1 to 3 months", count: 4992 },
-              { label: "3 to 6 months", count: 3748 },
-              { label: "More than 6 months", count: 4123 },
-            ].map((proj) => (
+            {projectLengthOptions.map((proj) => (
               <label key={proj.label} className="flex items-center space-x-2">
                 <input
                   type="checkbox"
                   className="form-checkbox text-[var(--btn-color)]"
+                  checked={projectLengths[proj.label]}
+                  onChange={(e) =>
+                    setProjectLengths((prev) => ({
+                      ...prev,
+                      [proj.label]: e.target.checked,
+                    }))
+                  }
                 />
                 <span>
                   {proj.label}{" "}
@@ -201,7 +261,9 @@ const Home: React.FC = () => {
       </aside>
 
       <section className="row-start-3 col-start-2 bg-[var(--btn-color)] p-4">
-        wooork
+        <JobCard></JobCard>
+        <JobCard></JobCard>
+        <JobCard></JobCard>
       </section>
     </div>
   );
