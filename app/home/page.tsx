@@ -108,9 +108,98 @@ const Home: React.FC = () => {
       </div>
 
       {/* Row 3: Aside and Section */}
-      <aside className="row-start-3 bg-[var(--button-hover-background-color)] p-4">
-        <StarRating maxRating={5} size={24} onSetRating={setUserRating} />
+      <aside className="row-start-3 bg-[var(--foreground-color)] p-4 rounded-lg shadow-md">
+        <div className="mb-4">
+          <h2 className="text-lg font-bold">Rating</h2>
+          <StarRating maxRating={5} size={24} onSetRating={setUserRating} />
+        </div>
+
+        {/* Skills Search */}
+        <div className="mb-4">
+          <h3 className="text-md font-bold">Skills</h3>
+          <input
+            type="text"
+            placeholder="Search"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--hover-color)]"
+          />
+        </div>
+
+        {/* Experience Level */}
+        <div className="mb-4">
+          <h3 className="text-md font-bold">Experience level</h3>
+          <div className="space-y-2">
+            {[
+              { label: "Entry Level", count: 275 },
+              { label: "Intermediate", count: 4558 },
+              { label: "Expert", count: 2589 },
+            ].map((exp) => (
+              <label key={exp.label} className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  className="form-checkbox text-[var(--btn-color)]"
+                />
+                <span>
+                  {exp.label}{" "}
+                  <span className="text-gray-500">({exp.count})</span>
+                </span>
+              </label>
+            ))}
+          </div>
+        </div>
+
+        {/* Job Type */}
+        <div className="mb-4">
+          <h3 className="text-md font-bold">Job type</h3>
+          <label className="flex items-center space-x-2">
+            <input
+              type="checkbox"
+              className="form-checkbox text-[var(--btn-color)]"
+            />
+            <span>
+              Hourly <span className="text-gray-500">(4,187)</span>
+            </span>
+          </label>
+
+          {/* Hourly Rate Input */}
+          <div className="mt-2 flex space-x-2">
+            <input
+              type="number"
+              placeholder="Min"
+              className="w-1/2 px-3 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--hover-color)]"
+            />
+            <input
+              type="number"
+              placeholder="Max"
+              className="w-1/2 px-3 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--hover-color)]"
+            />
+          </div>
+        </div>
+
+        {/* Project Length */}
+        <div className="mb-4">
+          <h3 className="text-md font-bold">Project length</h3>
+          <div className="space-y-2">
+            {[
+              { label: "Less than one month", count: 4264 },
+              { label: "1 to 3 months", count: 4992 },
+              { label: "3 to 6 months", count: 3748 },
+              { label: "More than 6 months", count: 4123 },
+            ].map((proj) => (
+              <label key={proj.label} className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  className="form-checkbox text-[var(--btn-color)]"
+                />
+                <span>
+                  {proj.label}{" "}
+                  <span className="text-gray-500">({proj.count})</span>
+                </span>
+              </label>
+            ))}
+          </div>
+        </div>
       </aside>
+
       <section className="row-start-3 col-start-2 bg-[var(--btn-color)] p-4">
         wooork
       </section>
