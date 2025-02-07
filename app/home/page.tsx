@@ -166,15 +166,19 @@ const Page = async ({ searchParams }: PageProps) => {
       </div>
 
       <Aside />
-      <Suspense fallback={<Spinner />}>
-        {type === "jobs" ? (
-          <JobList jobs={paginations} />
-        ) : type === "freelancer" ? (
-          <span>Freelancers</span>
-        ) : (
-          <span>Community</span>
-        )}
-      </Suspense>
+      {paginations ? (
+        <Suspense fallback={<Spinner />}>
+          {type === "jobs" ? (
+            <JobList jobs={paginations} />
+          ) : type === "freelancer" ? (
+            <span>Freelancers</span>
+          ) : (
+            <span>Community</span>
+          )}
+        </Suspense>
+      ) : (
+        ""
+      )}
     </div>
   );
 };
