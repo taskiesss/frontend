@@ -117,7 +117,7 @@ const LoginPage: React.FC = () => {
       document.cookie = `jwtToken=${token}; Path=/; Secure; HttpOnly; SameSite=Strict`;
 
       // Navigate to the next page with the encrypted user in the URL
-      router.push(`/home?role=${role}`);
+      router.push(`/home?type=${role}`);
     } catch (err) {
       if (err instanceof Error) {
         try {

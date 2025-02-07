@@ -80,8 +80,35 @@ html {
   box-sizing: border-box;
 }
 
+@layer components {
+  .spinner {
+    margin: 3.2rem auto 1.6rem;
+    width: 60px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    border: 8px solid var(--hover-color);
+    border-right-color: var(--foreground-color);
+    animation: rotate 1s infinite linear;
+  }
+
+  .spinner-mini {
+    margin: 0;
+    width: 20px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    border: 2px solid var(--hover-color);
+    border-right-color: transparent;
+    animation: rotate 1s infinite linear;
+  }
+
+  @keyframes rotate {
+    to {
+      transform: rotate(1turn);
+    }
+  }
+}
+
 body {
-  font-family: "Helvetica", "Arial", sans-serif;
   color: var(--accent-color);
   background-color: var(--background-color);
   line-height: 1.5;
@@ -127,7 +154,7 @@ h4,
 h5,
 h6 {
   color: var(--accent-color);
-  font-family: "Roboto", sans-serif;
+
   text-wrap: balance;
 }
 

@@ -1,6 +1,12 @@
+"use client";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Button from "./button";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import React from "react";
+import logo_dark from "@/public/images/logo_dark.png";
+import Image from "next/image";
 
 interface NavBarProps {
   onLogin?: () => void;
@@ -8,19 +14,36 @@ interface NavBarProps {
 }
 
 const NavBar: React.FC<NavBarProps> = ({ onLogin, onSignup }) => {
+  const router = useRouter();
+
+  // This function handles search form submission.
+  // It prevents the default action, retrieves the search term,
+  // and updates the URL with the search query (or could call an API).
+  const handleSearch = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    // Create a FormData object to easily extract form values.
+    const formData = new FormData(e.currentTarget);
+    const searchTerm = formData.get("search") as string;
+
+    // For demonstration, we'll log the search term.
+    console.log("Search query:", searchTerm);
+
+    // Update the URL query parameter for search.
+    // You can also call your API (for example, searchJobs({ search: searchTerm, ... }) here).
+    router.push(
+      `${window.location.pathname}?search=${encodeURIComponent(searchTerm)}`
+    );
+  };
+
   return (
-    <nav className="bg-[var(--foreground-color)] h-20  grid grid-rows-1 grid-cols-[min-content,1fr,1fr] place-items-center">
+    <nav className="bg-[var(--foreground-color)] h-20 grid grid-rows-1 grid-cols-[min-content,1fr,1fr] place-items-center">
       {/* Logo Section */}
-      <div className="flex w-[10rem] h-auto justify-center flex-col mx-0 col-sp">
-        <img
-          src="/images/logo_dark.png"
-          alt="Taskaya Logo"
-          className="h-auto w-auto"
-        />
+      <div className="flex w-[10rem] h-auto justify-center flex-col ml-5">
+        <Image src={logo_dark} alt="Taskaya Logo" className="h-auto w-auto" />
       </div>
 
       {/* Navigation Links */}
-      <div className="flex flex-col justify-center ">
+      <div className="flex flex-col justify-center">
         <ul className="list-none flex gap-10 w-auto h-auto items-center">
           {["Freelancer", "Jobs", "About us"].map((item) => (
             <li key={item}>
@@ -34,10 +57,10 @@ const NavBar: React.FC<NavBarProps> = ({ onLogin, onSignup }) => {
 
       {/* Search & Authentication Buttons */}
       <div className="flex flex-col justify-center w-full">
-        <ul className="list-none  items-center justify-between flex mr-5 gap-7">
+        <ul className="list-none flex items-center justify-between mr-5 gap-7">
           {/* Search Form */}
           <li>
-            <form action="">
+            <form onSubmit={handleSearch}>
               <div className="relative">
                 {/* Search Icon Button */}
                 <div className="absolute inset-y-0 left-0 flex items-center pl-3">
@@ -65,17 +88,16 @@ const NavBar: React.FC<NavBarProps> = ({ onLogin, onSignup }) => {
           </li>
 
           {/* Login & Sign Up Buttons */}
-
           <li>
             <div className="flex gap-7">
               <button
-                className=" px-4 text-xl cursor-pointer bg-transparent whitespace-nowrap"
+                className="px-4 text-xl cursor-pointer bg-transparent whitespace-nowrap"
                 onClick={onLogin}
               >
-                Log in
+                <Link href="/login">Log in</Link>
               </button>
               <Button className="whitespace-nowrap" onClick={onSignup}>
-                Sign Up
+                <Link href="/signup">Sign Up</Link>
               </Button>
             </div>
           </li>
