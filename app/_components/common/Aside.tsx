@@ -21,9 +21,9 @@ export default function Aside() {
   const [resetKey, setResetKey] = useState<number>(0);
 
   const experienceOptions: { label: ExperienceLevelKey; count: number }[] = [
-    { label: "Entry Level", count: 275 },
-    { label: "Intermediate", count: 4558 },
-    { label: "Expert", count: 2589 },
+    { label: "Entry Level" },
+    { label: "Intermediate" },
+    { label: "Expert" },
   ];
   const [experienceLevels, setExperienceLevels] = useState<
     Record<ExperienceLevelKey, boolean>
@@ -136,20 +136,20 @@ export default function Aside() {
   return (
     <div className="sticky top-[2.5rem] left-0">
       <Link href="/jobs">
-        <button className="px-4 py-2 bg-blue-500 text-white rounded-md">
+        <button className="px-4 py-2  bg-[var(--btn-color)] text-[var(--accent-color)] rounded-md">
           Advanced Search
         </button>
       </Link>
       <aside className=" row-start-3 bg-[var(--background-color)] rounded-lg shadow-s">
-        <div className="mb-4">
-          <h2 className="text-lg font-bold">Rating</h2>
+        <div className="py-4 ">
+          <h2 className="py-3 text-xl font-bold">Rating</h2>
           <StarRating maxRating={5} size={24} onSetRating={setUserRating} />
         </div>
 
         <form onSubmit={handleSubmit}>
           {/* Skills Search Component */}
-          <div className="mb-4">
-            <h3 className="text-md font-bold">Skills</h3>
+          <div className="py-4">
+            <h3 className="py-3 text-xl font-bold">Skills</h3>
             <SkillsSearchInput
               key={resetKey}
               selectedSkills={selectedSkills}
@@ -162,9 +162,9 @@ export default function Aside() {
           </div>
 
           {/* Experience Level */}
-          <div className="mb-4">
-            <h3 className="text-md font-bold">Experience level</h3>
-            <div className="space-y-2">
+          <div className="py-4">
+            <h3 className="text-xl py-3 font-bold">Experience level</h3>
+            <div className="space-y-2 py-3">
               {experienceOptions.map((exp) => (
                 <label key={exp.label} className="flex items-center space-x-2">
                   <input
@@ -178,18 +178,15 @@ export default function Aside() {
                       }))
                     }
                   />
-                  <span>
-                    {exp.label}
-                    <span className="text-gray-500">({exp.count})</span>
-                  </span>
+                  <span className="text-lg">{exp.label}</span>
                 </label>
               ))}
             </div>
           </div>
 
           {/* Job Type */}
-          <div className="mb-4">
-            <h3 className="text-md font-bold">Job type</h3>
+          <div className="py-4">
+            <h3 className="text-xl py-3 font-bold">Job type</h3>
             <label className="flex items-center space-x-2">
               <input
                 type="checkbox"
@@ -197,34 +194,39 @@ export default function Aside() {
                 checked={jobTypeHourly}
                 onChange={(e) => setJobTypeHourly(e.target.checked)}
               />
-              <span>
-                Hourly <span className="text-gray-500">(4,187)</span>
-              </span>
+              <span className="text-lg">Hourly</span>
             </label>
 
             {/* Hourly Rate Input */}
-            <div className="mt-2 flex space-x-2">
+            <div className="py-4 flex space-x-2">
               <input
                 type="number"
                 placeholder="Min"
                 value={hourlyRateMin}
-                onChange={(e) => setHourlyRateMin(e.target.value)}
-                className="w-1/2 px-3 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--hover-color)]"
+                onChange={(e) => {
+                  if (Number(e.target.value) > 0)
+                    setHourlyRateMin(e.target.value);
+                }}
+                className="w-1/2 px-3 py-2 border border-[var(--border-color)] border-solid rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--hover-color)]"
               />
               <input
                 type="number"
                 placeholder="Max"
                 value={hourlyRateMax}
-                onChange={(e) => setHourlyRateMax(e.target.value)}
-                className="w-1/2 px-3 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--hover-color)]"
+                onChange={(e) => {
+                  if (Number(e.target.value) > Number(hourlyRateMin))
+                    setHourlyRateMax(e.target.value);
+                  else setHourlyRateMax((Number(hourlyRateMin) + 1).toString());
+                }}
+                className="w-1/2 px-3 py-2 border border-[var(--border-color)]  border-solid rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--hover-color)]"
               />
             </div>
           </div>
 
           {/* Project Length */}
-          <div className="mb-4">
-            <h3 className="text-md font-bold">Project length</h3>
-            <div className="space-y-2">
+          <div className="py-4">
+            <h3 className="text-xl py-3 font-bold">Project length</h3>
+            <div className="space-y-2 py-3">
               {projectLengthOptions.map((proj) => (
                 <label key={proj.label} className="flex items-center space-x-2">
                   <input
@@ -238,9 +240,8 @@ export default function Aside() {
                       }))
                     }
                   />
-                  <span>
-                    {proj.label}{" "}
-                    <span className="text-gray-500">({proj.count})</span>
+                  <span className="text-lg text-[var(--accent-color)]">
+                    {proj.label}
                   </span>
                 </label>
               ))}
@@ -250,7 +251,7 @@ export default function Aside() {
           {/* Submit button */}
           <button
             type="submit"
-            className="px-4 py-2 bg-[var(--btn-color)] rounded-md text-white"
+            className="px-4 py-2 bg-[var(--btn-color)] rounded-lg text-[var(--accent-color)]"
           >
             Apply Filters
           </button>

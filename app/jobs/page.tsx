@@ -215,9 +215,9 @@ const Page = async ({ searchParams }: PageProps) => {
             <Aside />
           </div>
         ) : (
-          <div className="p-4">
+          <div className="">
             <Link href="?advanced=true">
-              <button className="px-4 py-2 bg-blue-500 text-white rounded-md">
+              <button className="px-4 py-2 bg-[var(--btn-color)] text-[var(--accent-color)] rounded-md">
                 Advanced Search
               </button>
             </Link>

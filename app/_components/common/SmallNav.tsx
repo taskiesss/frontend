@@ -10,9 +10,9 @@ export default function SmallNav({ pathname }: Props) {
         <li>
           <Link
             href={{ pathname: "/jobs", query: { page: "0" } }}
-            className={`text-[var(--accent-color)]${
+            className={`text-lg text-[var(--accent-color)]${
               pathname === "/jobs"
-                ? " text-xl text-[var(--hover-color)] font-extrabold hover:text-[var(--hover-color)]"
+                ? " text-2xl text-[var(--hover-color)] font-extrabold hover:text-[var(--hover-color)]"
                 : " hover:text-[var(--hover-color)]"
             }`}
           >
@@ -22,9 +22,9 @@ export default function SmallNav({ pathname }: Props) {
         <li>
           <Link
             href={{ pathname: "/communities", query: { page: "0" } }}
-            className={` text-[var(--accent-color)] ${
+            className={`text-lg text-[var(--accent-color)] ${
               pathname === "/communities"
-                ? "text-xl text-[var(--hover-color)] font-extrabold hover:text-[var(--hover-color)]"
+                ? "text-2xl text-[var(--hover-color)] font-extrabold hover:text-[var(--hover-color)]"
                 : "hover:text-[var(--hover-color)]"
             }`}
           >
@@ -34,9 +34,9 @@ export default function SmallNav({ pathname }: Props) {
         <li>
           <Link
             href={{ pathname: "/freelancer", query: { page: "0" } }}
-            className={` text-[var(--accent-color)] ${
+            className={`text-lg text-[var(--accent-color)] ${
               pathname === "/freelancer"
-                ? "text-xl text-[var(--hover-color)] font-extrabold hover:text-[var(--hover-color)]"
+                ? "text-2xl text-[var(--hover-color)] font-extrabold hover:text-[var(--hover-color)]"
                 : "hover:text-[var(--hover-color)]"
             }`}
           >

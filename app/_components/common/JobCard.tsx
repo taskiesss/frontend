@@ -124,7 +124,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
         {/* Job Title */}
         <a
           href="#"
-          className="block text-4xl text-[--btn-color] no-underline hover:text-[--btn-color] hover:underline"
+          className="block text-4xl text-[--accent-color] no-underline hover:text-[--btn-color] hover:underline"
         >
           {title}
         </a>

@@ -167,10 +167,10 @@ export const Pagination: React.FC<PaginationProps> = ({
       pointerEvents: "none",
     },
     selected: {
-      backgroundColor: "#007bff",
+      backgroundColor: "var(--btn-color)",
       borderWidth: "1px",
       borderStyle: "solid",
-      borderColor: "#007bff",
+      borderColor: "var(--border-color)",
       color: "#fff",
     },
   };
