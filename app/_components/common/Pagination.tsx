@@ -136,13 +136,13 @@ export const Pagination: React.FC<PaginationProps> = ({
 
   const onNext = () => {
     if (currentPage < totalPageCount) {
-      handlePageChange(currentPage + 1);
+      handlePageChange(currentPage);
     }
   };
 
   const onPrevious = () => {
     if (currentPage > 1) {
-      handlePageChange(currentPage - 1);
+      handlePageChange(currentPage);
     }
   };
 
