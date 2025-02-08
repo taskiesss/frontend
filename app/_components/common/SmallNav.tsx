@@ -1,17 +1,17 @@
 import Link from "next/link";
 import React from "react";
 
-type Props = { currentType: string };
+type Props = { pathname?: string };
 
-export default function SmallNav({ currentType }: Props) {
+export default function SmallNav({ pathname }: Props) {
   return (
     <nav className="col-span-2 bg-[var(--background-color)] p-4 flex items-center justify-center">
       <ul className="flex gap-44">
         <li>
           <Link
-            href={{ pathname: "/home", query: { type: "jobs" } }}
+            href={{ pathname: "/jobs", query: { page: "0" } }}
             className={`${
-              currentType === "jobs"
+              pathname === "/jobs"
                 ? "text-[var(--accent-color)] font-bold hover:text-[var(--hover-color)]"
                 : "text-[var(--foreground-color)] hover:text-[var(--hover-color)]"
             }`}
@@ -21,9 +21,9 @@ export default function SmallNav({ currentType }: Props) {
         </li>
         <li>
           <Link
-            href={{ pathname: "/home", query: { type: "communities" } }}
+            href={{ pathname: "/communities", query: { page: "0" } }}
             className={`${
-              currentType === "communities"
+              pathname === "/communities"
                 ? "text-[var(--accent-color)] font-bold hover:text-[var(--hover-color)]"
                 : "text-[var(--foreground-color)] hover:text-[var(--hover-color)]"
             }`}
@@ -33,9 +33,9 @@ export default function SmallNav({ currentType }: Props) {
         </li>
         <li>
           <Link
-            href={{ pathname: "/home", query: { type: "freelancer" } }}
+            href={{ pathname: "/freelancer", query: { page: "0" } }}
             className={`${
-              currentType === "freelancer"
+              pathname === "/freelancer"
                 ? "text-[var(--accent-color)] font-bold hover:text-[var(--hover-color)]"
                 : "text-[var(--foreground-color)] hover:text-[var(--hover-color)]"
             }`}

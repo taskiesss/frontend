@@ -6,10 +6,12 @@ import SmallNav from "../_components/common/SmallNav";
 import Spinner from "../_components/common/Spinner";
 import { searchJobs } from "../_lib/Search/Search";
 import { PageJobResponse } from "../_types/JobSearch";
+import Link from "next/link";
 
 export const revalidate = 3600;
 
 export interface PageProps {
+  pathName?: string;
   searchParams: Promise<{
     type?: string;
     skills?: string;
@@ -21,17 +23,30 @@ export interface PageProps {
     search?: string;
     page?: string | "0";
     rate?: string;
-
+    advanced?: string; // Controls whether advanced filters are shown
     "Sort by"?: string;
     "Sort direction"?: "ASC" | "DESC";
   }>;
 }
+
 let paginations: PageJobResponse;
 
 // paginations = {
 //   content: [
 //     {
 //       id: "887dda4d-c986-44c9-bba8-d1bef62d1c91",
+//       title: "Full Stack Developer",
+//       description: "Seeking a skilled React developer...",
+//       experienceLevel: "Intermediate",
+//       skills: ["React", "HTML", "CSS", "JavaScript"],
+//       pricePerHour: 29.99,
+//       postedDate: "2024-02-02",
+//       projectLength: "_1_to_3_months",
+//       rate: 4,
+//       isSaved: false,
+//     },
+//     {
+//       id: "884dda4d-c986-44c9-bba8-d1bef62d1c91",
 //       title: "Full Stack Developer",
 //       description: "Seeking a skilled React developer...",
 //       experienceLevel: "Intermediate",
@@ -86,14 +101,10 @@ const getProjectLength = (length: string): string => {
 };
 
 const Page = async ({ searchParams }: PageProps) => {
-  // Await the promise to get the actual query parameters object
+  // Await the promise to get the query parameters.
   const params = await searchParams;
-  const currentType = params?.type || "";
-
-  // Destructure the awaited object (params) instead of the promise
   const {
     search,
-    type,
     skills,
     experience,
     page,
@@ -101,23 +112,26 @@ const Page = async ({ searchParams }: PageProps) => {
     minRate,
     maxRate,
     projectLength,
-    "Sort by": sortBy, // Using the decoded key with space
+    advanced,
+    "Sort by": sortBy,
     "Sort direction": sortDirection,
   } = params;
 
+  // Show advanced filters if advanced=true in the query.
+  const showAdvanced = advanced === "true";
+
   const decodedSearch = search ? decodeURIComponent(search) : "";
 
-  // If some values are comma-separated, convert them into arrays
+  // Convert comma‑separated filter strings to arrays.
   const experienceArr = experience ? experience.split(",") : [];
   const projectLengthArr = projectLength ? projectLength.split(",") : [];
   const skillArr = skills ? skills.split(",") : [];
 
-  let ResProjectLength = projectLengthArr?.map((length: string) =>
+  const ResProjectLength = projectLengthArr.map((length) =>
     getProjectLength(length)
   );
 
   try {
-    // Convert string values to numbers. If the conversion fails, fallback to undefined.
     const hourlyRateMinNumber = minRate ? Number(minRate) : undefined;
     const hourlyRateMaxNumber = maxRate ? Number(maxRate) : undefined;
     const pageNumber = page ? Number(page) : 0;
@@ -136,17 +150,18 @@ const Page = async ({ searchParams }: PageProps) => {
       sortDirection: sortDirection,
       rate: rating,
     };
+
     console.log(request);
     const res = await searchJobs(request);
     paginations = res;
   } catch (error) {
-    // console.error("Job search failed:", error);
+    console.error("Job search failed:", error);
   }
 
   const SortByOptions = [
     { label: "Rate", value: "Rate" },
-    { label: "price Per Hour", value: "pricePerHour" },
-    { label: "Posted at", value: "postedAt" },
+    { label: "Price Per Hour", value: "pricePerHour" },
+    { label: "Posted At", value: "postedAt" },
   ];
   const DirectionOptions = [
     { label: "Ascending", value: "ASC" },
@@ -155,7 +170,10 @@ const Page = async ({ searchParams }: PageProps) => {
 
   return (
     <div className="h-screen grid grid-cols-[0.75fr_3fr] grid-rows-[min-content_min-content_1fr]">
-      <SmallNav currentType={currentType} />
+      {/* Top navigation */}
+      <SmallNav pathname="/jobs" />
+
+      {/* Sorting controls */}
       <div className="col-span-2 bg-[var(--foreground-color)] p-4 flex justify-end">
         <Suspense fallback={<Spinner />}>
           <CustomeSelection options={SortByOptions}>Sort by</CustomeSelection>
@@ -165,16 +183,30 @@ const Page = async ({ searchParams }: PageProps) => {
         </Suspense>
       </div>
 
-      <Aside />
+      {/* Advanced search panel or button */}
+      {showAdvanced ? (
+        <div className="p-4">
+          <Link href="/jobs">
+            <button className="px-4 py-2 bg-blue-500 text-white rounded-md">
+              Advanced Search
+            </button>
+          </Link>
+          <Aside />
+        </div>
+      ) : (
+        <div className="p-4">
+          <Link href="?advanced=true">
+            <button className="px-4 py-2 bg-blue-500 text-white rounded-md">
+              Advanced Search
+            </button>
+          </Link>
+        </div>
+      )}
+
+      {/* Job results */}
       {paginations ? (
         <Suspense fallback={<Spinner />}>
-          {type === "jobs" ? (
-            <JobList jobs={paginations} />
-          ) : type === "freelancer" ? (
-            <span>Freelancers</span>
-          ) : (
-            <span>Community</span>
-          )}
+          <JobList jobs={paginations} />
         </Suspense>
       ) : (
         ""
