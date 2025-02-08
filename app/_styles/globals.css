@@ -3,22 +3,33 @@
 @tailwind utilities;
 
 :root {
-  --clr-text-primary: #000000;
-  --clr-hover-primary: #8690c2;
-  --clr-foreground-primary: #bdc3e7;
-  --clr-background-primary: #e6e9f5;
-  --clr-btn-primary: #ffc59e;
-  --clr-text-dark: #ffffff;
-  --clr-hover-dark: #676f9d;
-  --clr-foreground-dark: #424769;
-  --clr-background-dark: #2d3250;
-  --clr-btn-dark: #f9b17a;
+  /* Light mode color palette */
+  --clr-text-primary: #1a1a1a; /* a dark, near-black text color */
+  --clr-hover-primary: #317389; /* 10% darker than the button color (#368098) for hover effects */
+  --clr-foreground-primary: #f0f4f8; /* a very light bluish-gray for cards or other foreground elements */
+  --clr-background-primary: #ffffff; /* a clean white background */
+  --clr-btn-primary: #368098; /* primary interactive color (Upwork green replaced by #368098) */
+  --clr-border-primary: #e9e9e9;
+
+  /* Dark mode “base” colors – note that these are still defined in :root so that aliases exist */
+  --clr-text-dark: #ffffff; /* white text in dark mode */
+  --clr-hover-dark: #4a8da2; /* about 10% lighter than #368098 for hover contrast on dark backgrounds */
+  --clr-foreground-dark: #2c3e50; /* a dark blue–gray for element foregrounds */
+  --clr-background-dark: #1c1c1c; /* a deep dark background */
+  --clr-btn-dark: #368098; /* keep the same brand color for buttons in dark mode */
+  --clr-border-dark: #252525;
+
+  /* Aliases used throughout the site – these change with the color scheme */
   --accent-color: var(--clr-text-primary);
   --hover-color: var(--clr-hover-primary);
   --foreground-color: var(--clr-foreground-primary);
   --background-color: var(--clr-background-primary);
   --btn-color: var(--clr-btn-primary);
-  --button-hover-background-color: rgb(255, 212.2474226804, 183.5);
+  --border-color: var(--clr-border-primary);
+
+  /* Button hover background color: in light mode use a darker variant */
+  --button-hover-background-color: #317389;
+
   --border-circle: 50%;
   font-weight: 400;
   --spacing-1: 0.5rem;
@@ -60,6 +71,8 @@ html {
     font-size: 50%;
   }
 }
+
+/* In dark mode we override the alias values – note that the base “dark” variables remain unchanged */
 @media (prefers-color-scheme: dark) {
   :root {
     --accent-color: var(--clr-text-dark);
@@ -67,13 +80,12 @@ html {
     --foreground-color: var(--clr-foreground-dark);
     --background-color: var(--clr-background-dark);
     --btn-color: var(--clr-btn-dark);
-    --button-hover-background-color: rgb(
-      247.8992805755,
-      162.690647482,
-      97.6007194245
-    );
+    /* In dark mode the button hover color is a lighter variant for contrast */
+    --button-hover-background-color: #4a8da2;
+    --border-color: var(--clr-border-dark);
   }
 }
+
 *,
 *::before,
 *::after {
@@ -154,16 +166,15 @@ h4,
 h5,
 h6 {
   color: var(--accent-color);
-
   text-wrap: balance;
 }
 
-a {
+/* a {
   color: var(--accent-color);
 }
 a:hover {
   color: var(--hover-color);
-}
+} */
 
 #root,
 #__next {
@@ -195,59 +206,5 @@ ul,
   padding: 0;
   margin: 0;
 }
-
-/* a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
-} */
 
 /*# sourceMappingURL=styles.css.map */

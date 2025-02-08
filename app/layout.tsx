@@ -2,11 +2,12 @@ import type { Metadata } from "next";
 import { Providers } from "./_store/_providers/Providers";
 
 import "./_styles/globals.css";
-import { Josefin_Sans } from "next/font/google";
+import { Inter } from "next/font/google";
 
-const josefin = Josefin_Sans({
+const inter = Inter({
   subsets: ["latin"],
   display: "swap",
+  weight: ["400", "700"],
 });
 
 export const metadata: Metadata = {
@@ -21,7 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={josefin.className}>
+      <body className={inter.className}>
         <Providers>{children}</Providers>
       </body>
     </html>

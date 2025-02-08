@@ -172,7 +172,7 @@ export default function Aside() {
                   }
                 />
                 <span>
-                  {exp.label}{" "}
+                  {exp.label}
                   <span className="text-gray-500">({exp.count})</span>
                 </span>
               </label>

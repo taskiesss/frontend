@@ -53,7 +53,7 @@ export default function SkillsSearchInput({
           placeholder="Search"
           value={skillsSearch}
           onChange={(e) => setSkillsSearch(e.target.value)}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--hover-color)]"
+          className="w-full px-3 py-2 border-solid border border-[var(--border-color)] rounded-md focus:outline-none focus:ring-2 "
         />
         {isLoadingSuggestions && (
           <div className="mt-2 text-sm text-gray-500">Loading...</div>

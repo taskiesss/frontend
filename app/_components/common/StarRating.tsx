@@ -13,7 +13,7 @@ interface StarRatingProps {
 const StarRating: React.FC<StarRatingProps> = ({
   maxRating = 5,
   defaultRating = 0,
-  color = "#fcc419",
+  color = "var(--accent-color)",
   size = 48,
   messages = [],
   className = "",
