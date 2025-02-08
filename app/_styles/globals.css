@@ -5,19 +5,23 @@
 :root {
   /* Light mode color palette */
   --clr-text-primary: #1a1a1a; /* a dark, near-black text color */
-  --clr-hover-primary: #317389; /* 10% darker than the button color (#368098) for hover effects */
+  --clr-hover-primary: #70a3b4; /* 10% darker than the button color (#368098) for hover effects */
   --clr-foreground-primary: #f0f4f8; /* a very light bluish-gray for cards or other foreground elements */
   --clr-background-primary: #ffffff; /* a clean white background */
-  --clr-btn-primary: #368098; /* primary interactive color (Upwork green replaced by #368098) */
+  --clr-btn-primary: #9ec7d4; /* primary interactive color (Upwork green replaced by #368098) */
   --clr-border-primary: #e9e9e9;
+
+  --bg-skill-primary: #bcc1c9;
 
   /* Dark mode “base” colors – note that these are still defined in :root so that aliases exist */
   --clr-text-dark: #ffffff; /* white text in dark mode */
-  --clr-hover-dark: #4a8da2; /* about 10% lighter than #368098 for hover contrast on dark backgrounds */
+  --clr-hover-dark: #6b9dac; /* about 10% lighter than #368098 for hover contrast on dark backgrounds */
   --clr-foreground-dark: #2c3e50; /* a dark blue–gray for element foregrounds */
   --clr-background-dark: #1c1c1c; /* a deep dark background */
   --clr-btn-dark: #368098; /* keep the same brand color for buttons in dark mode */
-  --clr-border-dark: #252525;
+  --clr-border-dark: #272727fd;
+
+  --bg-skill-dark: #475569;
 
   /* Aliases used throughout the site – these change with the color scheme */
   --accent-color: var(--clr-text-primary);
@@ -26,9 +30,10 @@
   --background-color: var(--clr-background-primary);
   --btn-color: var(--clr-btn-primary);
   --border-color: var(--clr-border-primary);
+  --bg-skill: var(--bg-skill-primary);
 
   /* Button hover background color: in light mode use a darker variant */
-  --button-hover-background-color: #317389;
+  --button-hover-background-color: #83adbb;
 
   --border-circle: 50%;
   font-weight: 400;
@@ -83,6 +88,8 @@ html {
     /* In dark mode the button hover color is a lighter variant for contrast */
     --button-hover-background-color: #4a8da2;
     --border-color: var(--clr-border-dark);
+
+    --bg-skill: var(--bg-skill-dark);
   }
 }
 

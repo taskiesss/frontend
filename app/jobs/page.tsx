@@ -7,6 +7,7 @@ import Spinner from "../_components/common/Spinner";
 import { searchJobs } from "../_lib/Search/Search";
 import { PageJobResponse } from "../_types/JobSearch";
 import Link from "next/link";
+import Container from "@/app/_components/common/Container";
 
 export const revalidate = 3600;
 
@@ -47,6 +48,30 @@ paginations = {
     },
     {
       id: "884dda4d-c986-44c9-bba8-d1bef62d1c91",
+      title: "Full Stack Developer",
+      description: "Seeking a skilled React developer...",
+      experienceLevel: "Intermediate",
+      skills: ["React", "HTML", "CSS", "JavaScript"],
+      pricePerHour: 29.99,
+      postedDate: "2024-02-02",
+      projectLength: "_1_to_3_months",
+      rate: 4,
+      isSaved: false,
+    },
+    {
+      id: "884dfa4d-c986-44c9-bba8-d1bef62d1c91",
+      title: "Full Stack Developer",
+      description: "Seeking a skilled React developer...",
+      experienceLevel: "Intermediate",
+      skills: ["React", "HTML", "CSS", "JavaScript"],
+      pricePerHour: 29.99,
+      postedDate: "2024-02-02",
+      projectLength: "_1_to_3_months",
+      rate: 4,
+      isSaved: false,
+    },
+    {
+      id: "884dda4d-c986-44k9-bba8-d1bef62d1c91",
       title: "Full Stack Developer",
       description: "Seeking a skilled React developer...",
       experienceLevel: "Intermediate",
@@ -169,49 +194,46 @@ const Page = async ({ searchParams }: PageProps) => {
   ];
 
   return (
-    <div className="h-screen grid grid-cols-[0.75fr_3fr] grid-rows-[min-content_min-content_1fr]">
-      {/* Top navigation */}
-      <SmallNav pathname="/jobs" />
+    <Container>
+      <div className="h-screen grid grid-cols-[0.75fr_3fr] grid-rows-[min-content_min-content_1fr]">
+        {/* Top navigation */}
+        <SmallNav pathname="/jobs" />
 
-      {/* Sorting controls */}
-      <div className="col-span-2 bg-[var(--foreground-color)] p-4 flex justify-end">
-        <Suspense fallback={<Spinner />}>
-          <CustomeSelection options={SortByOptions}>Sort by</CustomeSelection>
-          <CustomeSelection options={DirectionOptions}>
-            Sort direction
-          </CustomeSelection>
-        </Suspense>
+        {/* Sorting controls */}
+        <div className="col-span-2 bg-[var(--background-color)]  flex gap-10 py-4 justify-end">
+          <Suspense fallback={<Spinner />}>
+            <CustomeSelection options={SortByOptions}>Sort by</CustomeSelection>
+            <CustomeSelection options={DirectionOptions}>
+              Sort direction
+            </CustomeSelection>
+          </Suspense>
+        </div>
+
+        {/* Advanced search panel or button */}
+        {showAdvanced ? (
+          <div className="relative">
+            <Aside />
+          </div>
+        ) : (
+          <div className="p-4">
+            <Link href="?advanced=true">
+              <button className="px-4 py-2 bg-blue-500 text-white rounded-md">
+                Advanced Search
+              </button>
+            </Link>
+          </div>
+        )}
+
+        {/* Job results */}
+        {paginations ? (
+          <Suspense fallback={<Spinner />}>
+            <JobList jobs={paginations} />
+          </Suspense>
+        ) : (
+          ""
+        )}
       </div>
-
-      {/* Advanced search panel or button */}
-      {showAdvanced ? (
-        <div className="p-4">
-          <Link href="/jobs">
-            <button className="px-4 py-2 bg-blue-500 text-white rounded-md">
-              Advanced Search
-            </button>
-          </Link>
-          <Aside />
-        </div>
-      ) : (
-        <div className="p-4">
-          <Link href="?advanced=true">
-            <button className="px-4 py-2 bg-blue-500 text-white rounded-md">
-              Advanced Search
-            </button>
-          </Link>
-        </div>
-      )}
-
-      {/* Job results */}
-      {paginations ? (
-        <Suspense fallback={<Spinner />}>
-          <JobList jobs={paginations} />
-        </Suspense>
-      ) : (
-        ""
-      )}
-    </div>
+    </Container>
   );
 };
 

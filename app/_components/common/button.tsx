@@ -23,8 +23,8 @@ const Button: React.FC<ButtonProps> = ({
         no-underline
         border-2
         border-[var(--button-hover-background-color)]
-        px-4
-        py-1
+        px-6
+        py-3
         rounded
         shadow-[inset_0_0_0.5em_0_var(--button-hover-background-color),_0_0_0.5em_0_var(--button-hover-background-color)]
         relative

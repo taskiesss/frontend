@@ -5,15 +5,15 @@ type Props = { pathname?: string };
 
 export default function SmallNav({ pathname }: Props) {
   return (
-    <nav className="col-span-2 bg-[var(--background-color)] p-4 flex items-center justify-center">
+    <nav className="col-span-2 bg-[var(--background-color)] pt-20 pb-3 flex items-center border-solid  border-gray-600 border-b-[0.03rem]  ">
       <ul className="flex gap-44">
         <li>
           <Link
             href={{ pathname: "/jobs", query: { page: "0" } }}
-            className={`${
+            className={`text-[var(--accent-color)]${
               pathname === "/jobs"
-                ? "text-[var(--accent-color)] font-bold hover:text-[var(--hover-color)]"
-                : "text-[var(--foreground-color)] hover:text-[var(--hover-color)]"
+                ? " text-xl text-[var(--hover-color)] font-extrabold hover:text-[var(--hover-color)]"
+                : " hover:text-[var(--hover-color)]"
             }`}
           >
             Jobs
@@ -22,10 +22,10 @@ export default function SmallNav({ pathname }: Props) {
         <li>
           <Link
             href={{ pathname: "/communities", query: { page: "0" } }}
-            className={`${
+            className={` text-[var(--accent-color)] ${
               pathname === "/communities"
-                ? "text-[var(--accent-color)] font-bold hover:text-[var(--hover-color)]"
-                : "text-[var(--foreground-color)] hover:text-[var(--hover-color)]"
+                ? "text-xl text-[var(--hover-color)] font-extrabold hover:text-[var(--hover-color)]"
+                : "hover:text-[var(--hover-color)]"
             }`}
           >
             Communities
@@ -34,10 +34,10 @@ export default function SmallNav({ pathname }: Props) {
         <li>
           <Link
             href={{ pathname: "/freelancer", query: { page: "0" } }}
-            className={`${
+            className={` text-[var(--accent-color)] ${
               pathname === "/freelancer"
-                ? "text-[var(--accent-color)] font-bold hover:text-[var(--hover-color)]"
-                : "text-[var(--foreground-color)] hover:text-[var(--hover-color)]"
+                ? "text-xl text-[var(--hover-color)] font-extrabold hover:text-[var(--hover-color)]"
+                : "hover:text-[var(--hover-color)]"
             }`}
           >
             Freelancers

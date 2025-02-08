@@ -111,6 +111,9 @@ export const Pagination: React.FC<PaginationProps> = ({
     currentPage,
   });
 
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
   // If there are not enough pages to paginate, return null.
   if (currentPage === 0 || paginationRange.length < 2) {
     return null;
@@ -118,9 +121,6 @@ export const Pagination: React.FC<PaginationProps> = ({
 
   const totalPageCount = Math.ceil(totalCount / pageSize);
   const lastPage = paginationRange[paginationRange.length - 1] as number;
-
-  const router = useRouter();
-  const searchParams = useSearchParams();
 
   // This function handles page changes by calling the passed-in onPageChange
   // callback and then pushing the new page number into the URL.
@@ -151,7 +151,7 @@ export const Pagination: React.FC<PaginationProps> = ({
     paginationContainer: {
       listStyleType: "none",
       display: "flex",
-      padding: 0,
+      padding: "2.5rem 0",
     },
     paginationItem: {
       margin: "0 4px",

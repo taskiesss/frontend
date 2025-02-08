@@ -33,6 +33,7 @@ const LeftChild = styled.div`
   grid-column: 1 / span 1;
   background-color: white;
   color: var(--foreground-color);
+  background-color: var(--border-color);
 
   display: flex;
   flex-direction: column;
@@ -44,7 +45,7 @@ const LeftChild = styled.div`
     margin-top: 5rem;
     font-size: 3rem;
     font-weight: bold;
-    color: black;
+    color: var(--accent-color);
     &::after {
       content: "";
       position: absolute;
@@ -140,7 +141,7 @@ const LoginPage: React.FC = () => {
     <LoginContainer>
       <Container>
         <LeftChild>
-          <h1 className="mb-6">Sign in</h1>
+          <h1 className=" mb-6">Sign in</h1>
           <form onSubmit={handleSubmit}>
             <Input
               isRequired={true}
@@ -160,7 +161,11 @@ const LoginPage: React.FC = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
 
-            <Button type={"submit"} disabled={isSubmitting}>
+            <Button
+              className="text-[var(--accent-color)]"
+              type={"submit"}
+              disabled={isSubmitting}
+            >
               {isSubmitting ? "Wait..." : "Sign in"}
             </Button>
           </form>

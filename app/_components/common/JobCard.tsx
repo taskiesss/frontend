@@ -102,21 +102,21 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
   };
 
   return (
-    <div className="group relative overflow-hidden bg-[var(--background-color)] h-auto border-l-0 border-r-0 border-solid border-[0.3rem] border-gray-600 w-11/12 p-5 px-8">
+    <div className="group relative overflow-hidden bg-[var(--background-color)] border-solid border-t-[0.1rem] border-gray-600 w-11/12 ">
       {/* This wrapper adds a before pseudo-element that animates on group hover */}
       <div className="absolute inset-0 bg-[var(--foreground-color)] scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300" />
 
       {/* Ensure content stays above the pseudo-element */}
-      <div className="relative z-10">
+      <div className="relative z-10 py-5">
         {/* Posted Date */}
         <span className="text-slate-500">{postedDate}</span>
 
         {/* Star Rating (Non-Interactive) */}
-        <div style={{ pointerEvents: "none" }}>
+        <div className="pointer-events-none py-[0.2rem]">
           <StarRating
             maxRating={5}
             defaultRating={rate}
-            color="var(--hover-color)"
+            color="#64748b"
             size={18}
           />
         </div>
@@ -153,7 +153,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
           {/* Skills List (Scrollable) */}
           <div
             ref={scrollRef}
-            className="flex gap-4 px-8 overflow-hidden scroll-smooth whitespace-nowrap w-full"
+            className="flex gap-4 overflow-hidden scroll-smooth whitespace-nowrap w-full"
           >
             {skills.map((skill, index) => (
               <Skill skill={skill} index={index} key={index} />

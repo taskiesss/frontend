@@ -38,7 +38,7 @@ const NavBar: React.FC<NavBarProps> = ({ onLogin, onSignup }) => {
 
   return (
     <Container>
-      <nav className="bg-[var(--background-color)] h-20 grid grid-rows-1 grid-cols-[min-content,1fr,1fr] place-items-center">
+      <nav className="bg-[var(--background-color)] py-10 grid grid-rows-1 grid-cols-[min-content,1fr,1fr] place-items-center ">
         {/* Logo Section */}
         <div className="flex w-[10rem] h-auto justify-center flex-col ">
           <Image src={logo_dark} alt="Taskaya Logo" className="h-auto w-auto" />

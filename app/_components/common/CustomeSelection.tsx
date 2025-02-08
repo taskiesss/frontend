@@ -17,7 +17,7 @@ export default function CustomeSelection({ options, children }: Props) {
   );
 
   return (
-    <div className="relative mx-4">
+    <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="bg-[var(--btn-color)] text-[var(--accent-color)] px-4 py-2 rounded border border-[var(--hover-color)] flex items-center gap-2 min-w-[160px] justify-between hover:bg-[var(--button-hover-background-color)]"

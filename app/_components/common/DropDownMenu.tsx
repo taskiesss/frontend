@@ -36,7 +36,7 @@ export function DropdownMenu({
 
   return (
     <div
-      className={`absolute top-full right-0 mt-1 w-full bg-[var(--background-color)] border border-[var(--hover-color)] rounded shadow-lg transition-all duration-200 origin-top ${
+      className={`absolute top-full right-0 mt-1 w-full bg-[var(--background-color)] border border-[var(--hover-color)] rounded shadow-lg transition-all duration-200 origin-top z-10 ${
         isOpen
           ? "opacity-100 scale-y-100 translate-y-0"
           : "opacity-0 scale-y-0 -translate-y-2 pointer-events-none"
