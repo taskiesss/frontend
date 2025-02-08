@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import StarRating from "./StarRating";
 import { useRouter } from "next/navigation";
+import SkillsSearchInput from "./SkillsSearchInput";
 
 type ExperienceLevelKey = "Entry Level" | "Intermediate" | "Expert";
 type ProjectLengthKey =
@@ -14,7 +15,9 @@ export default function Aside() {
   const router = useRouter();
 
   const [userRating, setUserRating] = useState<number>(0);
-  const [skillsSearch, setSkillsSearch] = useState("");
+  const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
+  // Use a key to force re-mounting of the SkillsSearchInput (resetting its local state)
+  const [resetKey, setResetKey] = useState<number>(0);
 
   const experienceOptions: { label: ExperienceLevelKey; count: number }[] = [
     { label: "Entry Level", count: 275 },
@@ -48,15 +51,14 @@ export default function Aside() {
     "More than 6 months": false,
   });
 
-  // This function will be called when the user submits the form.
-  // Calling event.preventDefault() prevents the default form submission.
+  // Handle form submission: update URL query parameters and then reset all filters.
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); // Prevent the form from causing a page reload
+    e.preventDefault();
     const params = new URLSearchParams(window.location.search);
 
-    // Set or delete parameters based on your form state
-    if (skillsSearch.trim() !== "") {
-      params.set("skills", skillsSearch);
+    // Set "skills" from the selected skills array.
+    if (selectedSkills.length > 0) {
+      params.set("skills", selectedSkills.join(","));
     } else {
       params.delete("skills");
     }
@@ -96,40 +98,59 @@ export default function Aside() {
       params.delete("projectLength");
     }
 
-    // Include additional parameters (e.g., rating) if needed
     if (userRating > 0) {
       params.set("rate", userRating.toString());
     } else {
       params.delete("rate");
     }
 
-    // Get the current query string and new query string.
     const currentQuery = new URLSearchParams(window.location.search).toString();
     const newQuery = params.toString();
 
-    // Only update the URL if the new query is different.
     if (currentQuery !== newQuery) {
       router.push(`${window.location.pathname}?${newQuery}`);
     }
+
+    // Reset all filter states after submission.
+    setUserRating(0);
+    setSelectedSkills([]);
+    setExperienceLevels({
+      "Entry Level": false,
+      Intermediate: false,
+      Expert: false,
+    });
+    setJobTypeHourly(false);
+    setHourlyRateMin("");
+    setHourlyRateMax("");
+    setProjectLengths({
+      "Less than one month": false,
+      "1 to 3 months": false,
+      "3 to 6 months": false,
+      "More than 6 months": false,
+    });
+    // Update the resetKey to force re-mounting of SkillsSearchInput.
+    setResetKey((prev) => prev + 1);
   };
 
   return (
-    <aside className="row-start-3 bg-[var(--foreground-color)] p-4 rounded-lg shadow-md">
+    <aside className="row-start-3 bg-[var(--background-color)] p-4 rounded-lg shadow-s">
       <div className="mb-4">
         <h2 className="text-lg font-bold">Rating</h2>
         <StarRating maxRating={5} size={24} onSetRating={setUserRating} />
       </div>
 
       <form onSubmit={handleSubmit}>
-        {/* Skills Search */}
+        {/* Skills Search Component */}
         <div className="mb-4">
           <h3 className="text-md font-bold">Skills</h3>
-          <input
-            type="text"
-            placeholder="Search"
-            value={skillsSearch}
-            onChange={(e) => setSkillsSearch(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--hover-color)]"
+          <SkillsSearchInput
+            key={resetKey}
+            selectedSkills={selectedSkills}
+            onSelectSkill={(skill: string) => {
+              if (!selectedSkills.includes(skill)) {
+                setSelectedSkills((prev) => [...prev, skill]);
+              }
+            }}
           />
         </div>
 

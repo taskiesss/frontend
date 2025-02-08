@@ -1,6 +1,7 @@
 import Image from "next/image";
 import logo_dark from "@/public/images/logo_dark.png";
 import Button from "@/app/_components/common/button";
+import Link from "next/link";
 
 interface SignUpProps {
   children: React.ReactNode;
@@ -21,7 +22,9 @@ const SignUp: React.FC<SignUpProps> = ({ children }) => {
           <p className="text-xl mt-6 text-center font-bold mb-10">
             To keep connected with us please login with your personal info
           </p>
-          <Button>Sign in</Button>
+          <Button>
+            <Link href="/login">Sign in</Link>
+          </Button>
         </div>
         {children}
       </div>

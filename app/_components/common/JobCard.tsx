@@ -1,6 +1,7 @@
 "use client";
 import React, { useRef, useState, useEffect } from "react";
 import StarRating from "./StarRating";
+import Skill from "./Skill";
 
 // Define TypeScript interface for Job
 interface Job {
@@ -101,7 +102,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
   };
 
   return (
-    <div className="group relative overflow-hidden bg-[var(--background-color)] h-auto border-solid border-[0.3rem] border-[var(--btn-color)] w-[50rem] p-5 px-8">
+    <div className="group relative overflow-hidden bg-[var(--background-color)] h-auto border-l-0 border-r-0 border-solid border-[0.3rem] border-gray-600 w-11/12 p-5 px-8">
       {/* This wrapper adds a before pseudo-element that animates on group hover */}
       <div className="absolute inset-0 bg-[var(--foreground-color)] scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300" />
 
@@ -155,12 +156,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
             className="flex gap-4 px-8 overflow-hidden scroll-smooth whitespace-nowrap w-full"
           >
             {skills.map((skill, index) => (
-              <span
-                key={index}
-                className="bg-[--hover-color] rounded-2xl py-1 px-2 text-base whitespace-nowrap"
-              >
-                {skill}
-              </span>
+              <Skill skill={skill} index={index} key={index} />
             ))}
           </div>
 

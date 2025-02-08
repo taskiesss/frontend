@@ -134,7 +134,7 @@ const CreateAccount: React.FC = () => {
   }
 
   useEffect(() => {
-    const role = searchParams.get("role"); // Use the `get` method to access query parameters
+    const role = searchParams?.get("role"); // Use the `get` method to access query parameters
     if (role) {
       dispatch(updateAuthInfo({ role }));
     }

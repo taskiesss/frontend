@@ -237,7 +237,7 @@ const VerificationOTP: React.FC = () => {
   }, [otpVal, currentUser, router]);
 
   useEffect(() => {
-    const encryptedUser = searchParams.get("user");
+    const encryptedUser = searchParams?.get("user");
 
     if (encryptedUser) {
       try {

@@ -1,26 +1,25 @@
 import Aside from "@/app/_components/common/Aside";
-import Link from "next/link";
 import { Suspense } from "react";
 import CustomeSelection from "../_components/common/CustomeSelection";
 import JobList from "../_components/common/JobList";
+import SmallNav from "../_components/common/SmallNav";
 import Spinner from "../_components/common/Spinner";
 import { searchJobs } from "../_lib/Search/Search";
 import { PageJobResponse } from "../_types/JobSearch";
-import SmallNav from "../_components/common/SmallNav";
 
 export const revalidate = 3600;
 
 export interface PageProps {
   searchParams: Promise<{
     type?: string;
-    skills?: string[];
+    skills?: string;
     experience?: string;
     jobType?: string;
     minRate?: string;
     maxRate?: string;
     projectLength?: string;
     search?: string;
-    page?: string;
+    page?: string | "0";
     rate?: string;
 
     "Sort by"?: string;
@@ -111,6 +110,7 @@ const Page = async ({ searchParams }: PageProps) => {
   // If some values are comma-separated, convert them into arrays
   const experienceArr = experience ? experience.split(",") : [];
   const projectLengthArr = projectLength ? projectLength.split(",") : [];
+  const skillArr = skills ? skills.split(",") : [];
 
   let ResProjectLength = projectLengthArr?.map((length: string) =>
     getProjectLength(length)
@@ -125,7 +125,7 @@ const Page = async ({ searchParams }: PageProps) => {
 
     const request = {
       search: decodedSearch,
-      skills: skills,
+      skills: skillArr,
       experienceLevel: experienceArr,
       hourlyRateMin: hourlyRateMinNumber,
       hourlyRateMax: hourlyRateMaxNumber,
@@ -140,13 +140,13 @@ const Page = async ({ searchParams }: PageProps) => {
     const res = await searchJobs(request);
     paginations = res;
   } catch (error) {
-    console.error("Job search failed:", error);
+    // console.error("Job search failed:", error);
   }
 
   const SortByOptions = [
-    { label: "Newest", value: "newest" },
-    { label: "title", value: "title" },
-    { label: "Client Rating", value: "client_rating" },
+    { label: "Rate", value: "Rate" },
+    { label: "price Per Hour", value: "pricePerHour" },
+    { label: "Posted at", value: "postedAt" },
   ];
   const DirectionOptions = [
     { label: "Ascending", value: "ASC" },
@@ -154,7 +154,7 @@ const Page = async ({ searchParams }: PageProps) => {
   ];
 
   return (
-    <div className="h-screen grid grid-cols-[1fr_3fr] grid-rows-[min-content_min-content_1fr]">
+    <div className="h-screen grid grid-cols-[0.75fr_3fr] grid-rows-[min-content_min-content_1fr]">
       <SmallNav currentType={currentType} />
       <div className="col-span-2 bg-[var(--foreground-color)] p-4 flex justify-end">
         <Suspense fallback={<Spinner />}>

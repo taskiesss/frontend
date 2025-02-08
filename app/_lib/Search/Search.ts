@@ -45,3 +45,30 @@ export async function searchJobs(
     throw error;
   }
 }
+
+const API_KEY = 'CQvnnrzKabdKSOSUjihZUu18kdY2kpQu';
+
+export async function fetchSuggestions(query: string) {
+  // Return an empty array if the query is empty.
+  if (!query.trim()) return [];
+
+  const myHeaders = new Headers();
+  myHeaders.append('apikey', API_KEY);
+
+  try {
+    const response = await fetch(
+      `https://api.apilayer.com/skills?q=${encodeURIComponent(query)}`,
+      {
+        method: 'GET',
+        redirect: 'follow',
+        headers: myHeaders,
+      }
+    );
+    const result = await response.json();
+    // Adjust this based on the API's actual response structure.
+    return result || [];
+  } catch (error) {
+    console.error('Error fetching suggestions:', error);
+    return [];
+  }
+}
