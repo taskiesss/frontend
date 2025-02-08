@@ -147,6 +147,7 @@ const CreateAccount: React.FC = () => {
 
         <form onSubmit={handleSubmit}>
           <Input
+            isRequired={true}
             type="text"
             id="name"
             name="name"
@@ -155,6 +156,7 @@ const CreateAccount: React.FC = () => {
           />
 
           <Input
+            isRequired={true}
             type="email"
             id="email"
             name="email"
@@ -163,6 +165,7 @@ const CreateAccount: React.FC = () => {
           />
 
           <Input
+            isRequired={true}
             type="password"
             id="password"
             name="password"

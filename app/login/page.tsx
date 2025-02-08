@@ -9,6 +9,7 @@ import Image from "next/image";
 import { ErrorResponse } from "../_types/Error";
 import { Login } from "@/app/_lib/Auth/Auth";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const LoginContainer = styled.div`
   display: flex;
@@ -125,7 +126,7 @@ const LoginPage: React.FC = () => {
           console.log(errorData);
           setErrors(errorData);
         } catch (e) {
-          setErrors([{ type: "unknown", message: err.message }]);
+          setErrors([{ type: "unknown", message: e.message }]);
         }
       } else {
         setErrors([{ type: "unknown", message: "An unknown error occurred." }]);
@@ -142,6 +143,7 @@ const LoginPage: React.FC = () => {
           <h1 className="mb-6">Sign in</h1>
           <form onSubmit={handleSubmit}>
             <Input
+              isRequired={true}
               type="email"
               id="email"
               name="email"
@@ -149,10 +151,12 @@ const LoginPage: React.FC = () => {
               onChange={(e) => setEmail(e.target.value)}
             />
             <Input
+              isRequired={true}
               type="password"
               id="password"
               name="password"
               inputValue={password}
+              useStrength={false}
               onChange={(e) => setPassword(e.target.value)}
             />
 
@@ -165,7 +169,9 @@ const LoginPage: React.FC = () => {
           <Image src={logo_dark} alt="logo_light" />
           <h1>Hello, Friend!</h1>
           <p>To keep connected with us please login with your personal info</p>
-          <Button>Sign up</Button>
+          <Button>
+            <Link href="/signup">Sign up</Link>
+          </Button>
         </RightChild>
       </Container>
     </LoginContainer>

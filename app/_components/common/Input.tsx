@@ -63,6 +63,8 @@ const StyledInputContainer = styled.div<{ fontSize?: string }>`
 `;
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  useStrength?: boolean;
+  isRequired: boolean;
   type: string;
   id: string;
   name?: string;
@@ -107,7 +109,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       className = "",
       fontSize,
       inputValue,
+      isRequired,
       onChange,
+      useStrength,
       ...rest
     },
     ref
@@ -121,7 +125,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     const togglePasswordVisibility = () => {
       setPassVisible((prev) => !prev);
     };
-
+    useStrength = useStrength ? true : false;
     // Custom onChange handler to intercept password input changes
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       // If the parent also passed an onChange, call it
@@ -139,6 +143,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     return (
       <StyledInputContainer fontSize={fontSize}>
         <input
+          required={isRequired}
           ref={ref}
           className={className}
           type={passVisible ? "text" : type}
@@ -174,7 +179,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           </>
         )}
         {/* Strength indicator only if user typed something */}
-        {strength && (
+        {strength && useStrength && (
           <div className={`strength-indicator ${strength}`}>
             Password strength: {strength}
           </div>
