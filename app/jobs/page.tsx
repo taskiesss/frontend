@@ -134,7 +134,7 @@ const Page = async ({ searchParams }: PageProps) => {
   try {
     const hourlyRateMinNumber = minRate ? Number(minRate) : undefined;
     const hourlyRateMaxNumber = maxRate ? Number(maxRate) : undefined;
-    const pageNumber = page ? Number(page) : 0;
+    const pageNumber = page ? Number(page) : 1;
     const rating = rate ? Number(rate) : undefined;
 
     const request = {
