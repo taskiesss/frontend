@@ -15,7 +15,7 @@ interface NavBarProps {
 
 const NavBar: React.FC<NavBarProps> = ({ onLogin, onSignup }) => {
   const router = useRouter();
-
+  console.log(window.location.pathname);
   // This function handles search form submission.
   // It prevents the default action, retrieves the search term,
   // and updates the URL with the search query (or could call an API).
@@ -26,7 +26,7 @@ const NavBar: React.FC<NavBarProps> = ({ onLogin, onSignup }) => {
     const searchTerm = formData.get("search") as string;
 
     // For demonstration, we'll log the search term.
-    console.log("Search query:", searchTerm);
+    // console.log("Search query:", searchTerm);
 
     // Update the URL query parameter for search.
     // You can also call your API (for example, searchJobs({ search: searchTerm, ... }) here).
@@ -45,11 +45,14 @@ const NavBar: React.FC<NavBarProps> = ({ onLogin, onSignup }) => {
       {/* Navigation Links */}
       <div className="flex flex-col justify-center">
         <ul className="list-none flex gap-10 w-auto h-auto items-center">
-          {["Freelancer", "Jobs", "About us"].map((item) => (
+          {["Freelancers", "Jobs", "About us"].map((item) => (
             <li key={item}>
-              <button className="w-[8rem] h-10 bg-inherit cursor-pointer">
+              <Link
+                href={`/${item.toLowerCase()}`}
+                className="w-[8rem] h-10 bg-inherit cursor-pointer"
+              >
                 <span className="font-semibold text-xl">{item}</span>
-              </button>
+              </Link>
             </li>
           ))}
         </ul>
