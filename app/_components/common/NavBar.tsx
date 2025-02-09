@@ -16,7 +16,7 @@ interface NavBarProps {
 
 const NavBar: React.FC<NavBarProps> = ({ onLogin, onSignup }) => {
   const router = useRouter();
-  console.log(window.location.pathname);
+  // console.log(window.location.pathname);
   // This function handles search form submission.
   // It prevents the default action, retrieves the search term,
   // and updates the URL with the search query (or could call an API).
@@ -32,7 +32,9 @@ const NavBar: React.FC<NavBarProps> = ({ onLogin, onSignup }) => {
     // Update the URL query parameter for search.
     // You can also call your API (for example, searchJobs({ search: searchTerm, ... }) here).
     router.push(
-      `${window.location.pathname}?search=${encodeURIComponent(searchTerm)}`
+      `${window.location.pathname}/search?query=${encodeURIComponent(
+        searchTerm
+      )}`
     );
   };
 
@@ -41,7 +43,13 @@ const NavBar: React.FC<NavBarProps> = ({ onLogin, onSignup }) => {
       <nav className="bg-[var(--background-color)] py-10 grid grid-rows-1 grid-cols-[min-content,1fr,1fr] place-items-center ">
         {/* Logo Section */}
         <div className="flex w-[10rem] h-auto justify-center flex-col ">
-          <Image src={logo_dark} alt="Taskaya Logo" className="h-auto w-auto" />
+          <Link href="/">
+            <Image
+              src={logo_dark}
+              alt="Taskaya Logo"
+              className="h-auto w-auto"
+            />
+          </Link>
         </div>
 
         {/* Navigation Links */}

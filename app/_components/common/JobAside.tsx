@@ -20,7 +20,7 @@ export default function Aside() {
   // Use a key to force re-mounting of the SkillsSearchInput (resetting its local state)
   const [resetKey, setResetKey] = useState<number>(0);
 
-  const experienceOptions: { label: ExperienceLevelKey; count: number }[] = [
+  const experienceOptions: { label: ExperienceLevelKey }[] = [
     { label: "Entry Level" },
     { label: "Intermediate" },
     { label: "Expert" },
@@ -135,7 +135,7 @@ export default function Aside() {
 
   return (
     <div className="sticky top-[2.5rem] left-0">
-      <Link href="/jobs">
+      <Link href="/jobs/search">
         <button className="px-4 py-2  bg-[var(--btn-color)] text-[var(--accent-color)] rounded-md">
           Advanced Search
         </button>
@@ -146,7 +146,7 @@ export default function Aside() {
           <StarRating maxRating={5} size={24} onSetRating={setUserRating} />
         </div>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="py-10">
           {/* Skills Search Component */}
           <div className="py-4">
             <h3 className="py-3 text-xl font-bold">Skills</h3>
