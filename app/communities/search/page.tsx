@@ -1,86 +1,61 @@
+import CommunitiyAside from "@/app/_components/common/CommunityAside";
 import Container from "@/app/_components/common/Container";
-import Aside from "@/app/_components/common/JobAside";
+import { PageCommunityResponse } from "@/app/_types/CommunitySearch";
 import Link from "next/link";
 import { Suspense } from "react";
 import CustomeSelection from "../../_components/common/CustomeSelection";
-import JobList from "../../_components/common/JobList";
 import SmallNav from "../../_components/common/SmallNav";
 import Spinner from "../../_components/common/Spinner";
-import { searchJobs } from "../../_lib/Search/Search";
-import { PageJobResponse } from "../../_types/JobSearch";
 
 export const revalidate = 3600;
-
+// {
+//   "search": "Data Science",
+//   "skills": [
+//     "Data Science",
+//     "Machine Learning"
+//   ],
+//   "experienceLevel": "intermediate",
+//   "hourlyRateMin": 20,
+//   "hourlyRateMax": 50,
+//   "rate": 4,
+//   "isFull": true,
+//   "page": 0,
+//   "size": 10,
+//   "sortBy": "name",
+//   "sortDirection": "ASC"
+// }
 export interface PageProps {
   pathName?: string;
   searchParams: Promise<{
-    type?: string;
     skills?: string;
-    experience?: string;
     jobType?: string;
     minRate?: string;
     maxRate?: string;
-    projectLength?: string;
     query?: string;
     page?: string | "1";
     rate?: string;
-    advanced?: string; // Controls whether advanced filters are shown
+    isFull?: boolean;
+    advanced?: string;
     "Sort by"?: string;
     "Sort direction"?: "ASC" | "DESC";
   }>;
 }
 
-let paginations: PageJobResponse;
+let paginations: PageCommunityResponse;
 
 paginations = {
   content: [
     {
       id: "887dda4d-c986-44c9-bba8-d1bef62d1c91",
-      title: "Full Stack Developer",
-      description: "Seeking a skilled React developer...",
+      isFull: true,
+      name: "Data Science Enthusiasts",
       experienceLevel: "Intermediate",
-      skills: ["React", "HTML", "CSS", "JavaScript"],
+      description: "A community for data science enthusiasts...",
+      skills: ["Data Science", "Machine Learning"],
+      memberCount: 500,
+      rating: 4.7,
       pricePerHour: 29.99,
-      postedDate: "2024-02-02",
-      projectLength: "_1_to_3_months",
-      rate: 4,
-      isSaved: false,
-    },
-    {
-      id: "884dda4d-c986-44c9-bba8-d1bef62d1c91",
-      title: "Full Stack Developer",
-      description: "Seeking a skilled React developer...",
-      experienceLevel: "Intermediate",
-      skills: ["React", "HTML", "CSS", "JavaScript"],
-      pricePerHour: 29.99,
-      postedDate: "2024-02-02",
-      projectLength: "_1_to_3_months",
-      rate: 4,
-      isSaved: false,
-    },
-    {
-      id: "884dfa4d-c986-44c9-bba8-d1bef62d1c91",
-      title: "Full Stack Developer",
-      description: "Seeking a skilled React developer...",
-      experienceLevel: "Intermediate",
-      skills: ["React", "HTML", "CSS", "JavaScript"],
-      pricePerHour: 29.99,
-      postedDate: "2024-02-02",
-      projectLength: "_1_to_3_months",
-      rate: 4,
-      isSaved: false,
-    },
-    {
-      id: "884dda4d-c986-44k9-bba8-d1bef62d1c91",
-      title: "Full Stack Developer",
-      description: "Seeking a skilled React developer...",
-      experienceLevel: "Intermediate",
-      skills: ["React", "HTML", "CSS", "JavaScript"],
-      pricePerHour: 29.99,
-      postedDate: "2024-02-02",
-      projectLength: "_1_to_3_months",
-      rate: 4,
-      isSaved: false,
+      profilePicture: "https://example.com/community.jpg",
     },
   ],
   pageable: {
@@ -95,8 +70,8 @@ paginations = {
     paged: true,
     unpaged: false,
   },
-  totalElements: 50,
-  totalPages: 5,
+  totalElements: 100,
+  totalPages: 10,
   last: false,
   size: 10,
   number: 0,
@@ -110,20 +85,20 @@ paginations = {
   empty: false,
 };
 
-const getProjectLength = (length: string): string => {
-  switch (length) {
-    case "Less than one month":
-      return "_less_than_1_month";
-    case "1 to 3 months":
-      return "_1_to_3_months";
-    case "3 to 6 months":
-      return "_3_to_6_months";
-    case "More than 6 months":
-      return "_more_than_6_months";
-    default:
-      return "Unknown duration";
-  }
-};
+// const getProjectLength = (length: string): string => {
+//   switch (length) {
+//     case "Less than one month":
+//       return "_less_than_1_month";
+//     case "1 to 3 months":
+//       return "_1_to_3_months";
+//     case "3 to 6 months":
+//       return "_3_to_6_months";
+//     case "More than 6 months":
+//       return "_more_than_6_months";
+//     default:
+//       return "Unknown duration";
+//   }
+// };
 
 const Page = async ({ searchParams }: PageProps) => {
   // Await the promise to get the query parameters.
@@ -131,12 +106,12 @@ const Page = async ({ searchParams }: PageProps) => {
   const {
     query,
     skills,
-    experience,
+    isFull,
     page,
     rate,
     minRate,
     maxRate,
-    projectLength,
+
     advanced,
     "Sort by": sortBy,
     "Sort direction": sortDirection,
@@ -148,13 +123,13 @@ const Page = async ({ searchParams }: PageProps) => {
   const decodedSearch = query ? decodeURIComponent(query) : "";
 
   // Convert comma‑separated filter strings to arrays.
-  const experienceArr = experience ? experience.split(",") : [];
-  const projectLengthArr = projectLength ? projectLength.split(",") : [];
+  // const experienceArr = experience ? experience.split(",") : [];
+  // const projectLengthArr = projectLength ? projectLength.split(",") : [];
   const skillArr = skills ? skills.split(",") : [];
 
-  const ResProjectLength = projectLengthArr.map((length) =>
-    getProjectLength(length)
-  );
+  // const ResProjectLength = projectLengthArr.map((length) =>
+  //   getProjectLength(length)
+  // );
 
   try {
     const hourlyRateMinNumber = minRate ? Number(minRate) : undefined;
@@ -165,10 +140,9 @@ const Page = async ({ searchParams }: PageProps) => {
     const request = {
       search: decodedSearch,
       skills: skillArr,
-      experienceLevel: experienceArr,
+      isFull: isFull,
       hourlyRateMin: hourlyRateMinNumber,
       hourlyRateMax: hourlyRateMaxNumber,
-      projectLength: ResProjectLength,
       page: pageNumber - 1,
       size: 10,
       sortBy: sortBy,
@@ -177,10 +151,10 @@ const Page = async ({ searchParams }: PageProps) => {
     };
 
     console.log(request);
-    const res = await searchJobs(request);
-    paginations = res;
+    // const res = await searchJobs(request);
+    // paginations = res;
   } catch (error) {
-    console.error("Job search failed:", error);
+    console.error("Community search failed:", error);
   }
 
   const SortByOptions = [
@@ -197,7 +171,7 @@ const Page = async ({ searchParams }: PageProps) => {
     <Container>
       <div className="h-screen grid grid-cols-[0.75fr_3fr] grid-rows-[min-content_min-content_1fr]">
         {/* Top navigation */}
-        <SmallNav pathname="/jobs/search" />
+        <SmallNav pathname="/communities/search" />
 
         {/* Sorting controls */}
         <div className="col-span-2 bg-[var(--background-color)]  flex gap-10 py-4 justify-end">
@@ -212,7 +186,7 @@ const Page = async ({ searchParams }: PageProps) => {
         {/* Advanced search panel or button */}
         {showAdvanced ? (
           <div className="relative">
-            <Aside />
+            <CommunitiyAside />
           </div>
         ) : (
           <div className="">
@@ -227,7 +201,7 @@ const Page = async ({ searchParams }: PageProps) => {
         {/* Job results */}
         {paginations ? (
           <Suspense fallback={<Spinner />}>
-            <JobList jobs={paginations} />
+            {/* <JobList jobs={paginations} /> */}
           </Suspense>
         ) : (
           ""
