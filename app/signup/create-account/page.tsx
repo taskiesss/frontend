@@ -173,7 +173,7 @@ const CreateAccount: React.FC = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
 
-          <Button type={"submit"} disabled={isSubmitting}>
+          <Button className="text-xl" type={"submit"} disabled={isSubmitting}>
             {isSubmitting ? "Registering..." : "Register"}
           </Button>
         </form>

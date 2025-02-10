@@ -114,12 +114,16 @@ const LoginPage: React.FC = () => {
     setErrors([]);
 
     try {
-      const { token, role } = await Login(email, password);
+      const res = await Login(email, password);
 
-      document.cookie = `jwtToken=${token}; Path=/; Secure; HttpOnly; SameSite=Strict`;
+      document.cookie = `jwtToken=${res.token}; Path=/; Secure; HttpOnly; SameSite=Strict`;
 
       // Navigate to the next page with the encrypted user in the URL
-      router.push(`/home?type=${role}`);
+      if (res.isFirst) {
+        router.push(`/freelancer-form`);
+      } else {
+        router.push(`/home?type=${res.role}`);
+      }
     } catch (err) {
       if (err instanceof Error) {
         try {
@@ -174,7 +178,7 @@ const LoginPage: React.FC = () => {
           <Image src={logo_dark} alt="logo_light" />
           <h1>Hello, Friend!</h1>
           <p>To keep connected with us please login with your personal info</p>
-          <Button>
+          <Button className="text-xl">
             <Link href="/signup">Sign up</Link>
           </Button>
         </RightChild>

@@ -112,7 +112,10 @@ const NavBar: React.FC<NavBarProps> = ({ onLogin, onSignup }) => {
                 >
                   <Link href="/login">Log in</Link>
                 </button>
-                <Button className="whitespace-nowrap" onClick={onSignup}>
+                <Button
+                  className="whitespace-nowrap text-xl"
+                  onClick={onSignup}
+                >
                   <Link className="text-[var(--accent-color)]" href="/signup">
                     Sign Up
                   </Link>

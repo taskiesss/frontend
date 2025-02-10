@@ -50,7 +50,7 @@ export default function SkillsSearchInput({
       <div className="relative">
         <input
           type="text"
-          placeholder="Search"
+          placeholder="ex: JavaScript, Python,..."
           value={skillsSearch}
           onChange={(e) => setSkillsSearch(e.target.value)}
           className="w-full px-3 py-2 border-solid border border-[var(--border-color)] rounded-md focus:outline-none focus:ring-2 "

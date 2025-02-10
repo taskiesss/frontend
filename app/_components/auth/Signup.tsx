@@ -22,7 +22,7 @@ const SignUp: React.FC<SignUpProps> = ({ children }) => {
           <p className="text-xl mt-6 text-center font-bold mb-10">
             To keep connected with us please login with your personal info
           </p>
-          <Button>
+          <Button className="text-xl">
             <Link href="/login">Sign in</Link>
           </Button>
         </div>
