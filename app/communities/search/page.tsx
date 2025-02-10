@@ -57,8 +57,7 @@ let paginations: PageCommunityResponse;
 //       memberCount: 500,
 //       rating: 4.7,
 //       pricePerHour: 29.99,
-//       profilePicture:
-//         "https://res.cloudinary.com/dvds6blan/image/upload/v1739139229/samples/imagecon-group.jpg",
+//       profilePicture: "",
 //     },
 //     {
 //       id: "887sda4d-c986-44c9-bba8-d1bef62d1c91",
@@ -114,21 +113,6 @@ let paginations: PageCommunityResponse;
 //   empty: false,
 // };
 
-// const getProjectLength = (length: string): string => {
-//   switch (length) {
-//     case "Less than one month":
-//       return "_less_than_1_month";
-//     case "1 to 3 months":
-//       return "_1_to_3_months";
-//     case "3 to 6 months":
-//       return "_3_to_6_months";
-//     case "More than 6 months":
-//       return "_more_than_6_months";
-//     default:
-//       return "Unknown duration";
-//   }
-// };
-
 const Page = async ({ searchParams }: PageProps) => {
   // Await the promise to get the query parameters.
   const params = await searchParams;
@@ -140,7 +124,6 @@ const Page = async ({ searchParams }: PageProps) => {
     rate,
     minRate,
     maxRate,
-
     advanced,
     "Sort by": sortBy,
     "Sort direction": sortDirection,
