@@ -102,33 +102,13 @@ export default function JobAside() {
     } else {
       params.delete("rate");
     }
-
+    params.set("page", "0");
     const currentQuery = new URLSearchParams(window.location.search).toString();
     const newQuery = params.toString();
 
     if (currentQuery !== newQuery) {
       router.push(`${window.location.pathname}?${newQuery}`);
     }
-
-    // Reset all filter states after submission.
-    setUserRating(0);
-    setSelectedSkills([]);
-    setExperienceLevels({
-      entry_level: false,
-      intermediate: false,
-      expert: false,
-    });
-
-    setHourlyRateMin("");
-    setHourlyRateMax("");
-    setProjectLengths({
-      "Less than one month": false,
-      "1 to 3 months": false,
-      "3 to 6 months": false,
-      "More than 6 months": false,
-    });
-    // Update the resetKey to force re-mounting of SkillsSearchInput.
-    setResetKey((prev) => prev + 1);
   };
 
   return (

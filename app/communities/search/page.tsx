@@ -10,26 +10,12 @@ import CommunityList from "@/app/_components/Community/CommunityList";
 import { searchCommunities } from "@/app/_lib/Search/Search";
 
 export const revalidate = 3600;
-// {
-//   "search": "Data Science",
-//   "skills": [
-//     "Data Science",
-//     "Machine Learning"
-//   ],
-//   "experienceLevel": "intermediate",
-//   "hourlyRateMin": 20,
-//   "hourlyRateMax": 50,
-//   "rate": 4,
-//   "isFull": true,
-//   "page": 0,
-//   "size": 10,
-//   "sortBy": "name",
-//   "sortDirection": "ASC"
-// }
+
 export interface PageProps {
   pathName?: string;
   searchParams: Promise<{
     skills?: string;
+    experience?: string[];
     jobType?: string;
     minRate?: string;
     maxRate?: string;
@@ -117,6 +103,7 @@ const Page = async ({ searchParams }: PageProps) => {
   // Await the promise to get the query parameters.
   const params = await searchParams;
   const {
+    experience,
     query,
     skills,
     isFull,
@@ -153,6 +140,7 @@ const Page = async ({ searchParams }: PageProps) => {
       search: decodedSearch,
       skills: skillArr,
       isFull: isFull,
+      experienceLevel: experience,
       hourlyRateMin: hourlyRateMinNumber,
       hourlyRateMax: hourlyRateMaxNumber,
       page: pageNumber - 1,
@@ -172,7 +160,6 @@ const Page = async ({ searchParams }: PageProps) => {
   const SortByOptions = [
     { label: "Rate", value: "Rate" },
     { label: "Price Per Hour", value: "pricePerHour" },
-    { label: "Posted At", value: "postedAt" },
   ];
   const DirectionOptions = [
     { label: "Ascending", value: "ASC" },
@@ -211,12 +198,16 @@ const Page = async ({ searchParams }: PageProps) => {
         )}
 
         {/* Job results */}
-        {paginations ? (
+        {paginations?.content ? (
           <Suspense fallback={<Spinner />}>
             <CommunityList communities={paginations} />
           </Suspense>
         ) : (
-          ""
+          <div className="flex flex-row py-8 place-content-center justify-center">
+            <span className="text-[var(--accent-color)] text-3xl text-center">
+              There is no Communities...
+            </span>
+          </div>
         )}
       </div>
     </Container>

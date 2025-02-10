@@ -29,7 +29,7 @@ export function DropdownMenu({
 
     // Update the "sortby" query parameter.
     params.set(String(children), option.value);
-
+    params.set("page", "0");
     // Push the new URL with updated query params, without a full page reload.
     router.push(`${window.location.pathname}?${params.toString()}`);
   };
