@@ -4,11 +4,13 @@ import { fetchSuggestions } from "@/app/_lib/Search/Search";
 import Skill from "./Skill";
 
 type SkillsSearchInputProps = {
+  className: string;
   selectedSkills: string[];
   onSelectSkill: (skill: string) => void;
 };
 
 export default function SkillsSearchInput({
+  className = "",
   selectedSkills,
   onSelectSkill,
 }: SkillsSearchInputProps) {
@@ -53,7 +55,7 @@ export default function SkillsSearchInput({
           placeholder="ex: JavaScript, Python,..."
           value={skillsSearch}
           onChange={(e) => setSkillsSearch(e.target.value)}
-          className="w-full px-3 py-2 border-solid border border-[var(--border-color)] rounded-md focus:outline-none focus:ring-2 "
+          className={`w-full px-3 py-2 border-solid border border-[var(--border-color)] rounded-md focus:outline-none focus:ring-2 ${className} `}
         />
         {isLoadingSuggestions && (
           <div className="mt-2 text-sm text-gray-500">Loading...</div>
