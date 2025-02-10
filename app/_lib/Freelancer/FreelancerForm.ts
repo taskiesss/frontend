@@ -1,63 +1,41 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-// freelancerFormApi.ts
-import Cookies from "js-cookie";
-import {
-  FreelancerFormErrorResponse,
-  FreelancerFormPayload,
-  FreelancerFormSuccessResponse,
-} from "@/app/_types/FreelancerForm";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
+// freelancerFormApi.ts
+import { invariant } from '@/app/_helpers/invariant';
+import { FreelancerFormPayload } from '@/app/_types/FreelancerForm';
+import Cookies from 'js-cookie';
+const BASE_URL = 'http://localhost:8080';
 /**
  * Submits the freelancer form data to the API endpoint.
  * @param data - The freelancer profile data.
- * @param token - Bearer token for authorization.
  * @returns A promise that resolves to a FreelancerFormSuccessResponse if the profile is submitted successfully.
  * @throws An error with an appropriate message if the submission fails.
  */
 export async function submitFreelancerForm(
   data: FreelancerFormPayload
-): Promise<FreelancerFormSuccessResponse> {
+): Promise<any> {
   try {
-    const token = Cookies.get("token");
-    const response = await fetch("/freelancer-form", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(data),
-    });
+    const token = Cookies.get('token');
+    invariant(!token, 'unauthorized user');
 
-    if (!response.ok) {
-      let errorData: FreelancerFormErrorResponse;
-      try {
-        errorData = await response.json();
-      } catch (jsonError) {
-        throw new Error(
-          "An error occurred while submitting the freelancer profile."
-        );
-      }
+    try {
+      const res = await fetch(`${BASE_URL}/freelancer-form`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
+      });
 
-      // Check status to provide a more specific error message
-      if (errorData.error.type === "unauthorized") {
-        throw new Error(`Unauthorized: ${errorData.error.message}`);
-      } else if (errorData.error.type === "forbidden") {
-        throw new Error(`Forbidden: ${errorData.error.message}`);
-      } else if (response.status === 500) {
-        throw new Error(`Server Error: ${errorData.error.message}`);
-      } else {
-        throw new Error(
-          errorData.error.message ||
-            "An error occurred while submitting the freelancer profile."
-        );
-      }
+      const output = await res.json();
+
+      return output;
+    } catch (e: any) {
+      console.error('Interal error :(');
     }
-
-    // Parse and return the success response
-    const result = (await response.json()) as FreelancerFormSuccessResponse;
-    return result;
-  } catch (error) {
-    console.error("Error submitting freelancer form:", error);
-    throw error;
+  } catch (error: any) {
+    throw new Error(error.message);
   }
 }

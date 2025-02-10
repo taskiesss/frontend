@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Container from "@/app/_components/common/Container";
 import Aside from "@/app/_components/Job/JobAside";
 import Link from "next/link";
@@ -179,8 +180,8 @@ const Page = async ({ searchParams }: PageProps) => {
     console.log(request);
     const res = await searchJobs(request);
     paginations = res;
-  } catch (error) {
-    console.error("Job search failed:", error);
+  } catch (error: any) {
+    console.error("Job search failed:", error.message);
   }
 
   const SortByOptions = [
@@ -225,7 +226,7 @@ const Page = async ({ searchParams }: PageProps) => {
         )}
 
         {/* Job results */}
-        {paginations ? (
+        {paginations?.content && paginations?.content.length > 0 ? (
           <Suspense fallback={<Spinner />}>
             <JobList jobs={paginations} />
           </Suspense>

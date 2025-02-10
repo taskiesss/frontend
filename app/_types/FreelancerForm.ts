@@ -10,18 +10,6 @@ export interface FreelancerFormPayload {
   hoursPerWeek?: number;
 }
 
-// Response type for a successful submission (HTTP 201)
-export interface FreelancerFormSuccessResponse {
-  message: boolean;
-}
-
-// Response type for error responses (HTTP 401, 403, 500, etc.)
-export interface FreelancerFormErrorResponse {
-  error: {
-    type: string;
-    message: string;
-  };
-}
 export interface Education {
   degree: string;
   institution: string;

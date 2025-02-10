@@ -8,7 +8,7 @@ import styled from "styled-components";
 const StyledInputContainer = styled.div<{ fontSize?: string }>`
   position: relative;
   width: 100%;
-  margin: 1.1rem 0 1.3rem 0;
+  margin: 0.5rem 0 0.7rem 0;
 
   & > input {
     background-color: var(--hover-color);
@@ -65,6 +65,7 @@ const StyledInputContainer = styled.div<{ fontSize?: string }>`
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   useStrength?: boolean;
   isRequired: boolean;
+  message?: string[] | string;
   type: string;
   id: string;
   name?: string;
@@ -104,6 +105,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     {
       type,
       id,
+      message,
       name = "",
       placeholder = " ",
       className = "",
@@ -126,6 +128,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       setPassVisible((prev) => !prev);
     };
     useStrength = useStrength ? true : false;
+
     // Custom onChange handler to intercept password input changes
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       // If the parent also passed an onChange, call it
@@ -158,31 +161,34 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           {name.charAt(0).toUpperCase() + name.slice(1)}
         </label>
 
-        {/* If this is a password field, render the toggle and strength meter */}
+        {/* If this is a password field, render the toggle button */}
         {type === "password" && (
-          <>
-            <button
-              type="button"
-              onClick={togglePasswordVisibility}
-              style={{
-                position: "absolute",
-                right: "1rem",
-                top: "2rem",
-                transform: "translateY(-50%)",
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-              }}
-            >
-              <FontAwesomeIcon icon={passVisible ? faEyeSlash : faEye} />
-            </button>
-          </>
+          <button
+            type="button"
+            onClick={togglePasswordVisibility}
+            style={{
+              position: "absolute",
+              right: "1rem",
+              top: "2rem",
+              transform: "translateY(-50%)",
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+            }}
+          >
+            <FontAwesomeIcon icon={passVisible ? faEyeSlash : faEye} />
+          </button>
         )}
-        {/* Strength indicator only if user typed something */}
-        {strength && useStrength && (
+
+        {/* Render either the strength indicator OR the message */}
+        {type === "password" && useStrength && strength ? (
           <div className={`strength-indicator ${strength}`}>
             Password strength: {strength}
           </div>
+        ) : (
+          message && (
+            <div className="text-red-400 mt-[0.45rem] text-sm">{message}</div>
+          )
         )}
       </StyledInputContainer>
     );

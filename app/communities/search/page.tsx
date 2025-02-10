@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import CommunitiyAside from "@/app/_components/Community/CommunityAside";
 import Container from "@/app/_components/common/Container";
 import { PageCommunityResponse } from "@/app/_types/CommunitySearch";
@@ -153,8 +154,8 @@ const Page = async ({ searchParams }: PageProps) => {
     console.log(request);
     const res = await searchCommunities(request);
     paginations = res;
-  } catch (error) {
-    console.error("Community search failed:", error);
+  } catch (error: any) {
+    console.error("Community search failed:", error.message);
   }
 
   const SortByOptions = [
@@ -198,7 +199,7 @@ const Page = async ({ searchParams }: PageProps) => {
         )}
 
         {/* Job results */}
-        {paginations?.content ? (
+        {paginations?.content && paginations?.content.length > 0 ? (
           <Suspense fallback={<Spinner />}>
             <CommunityList communities={paginations} />
           </Suspense>

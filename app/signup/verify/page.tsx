@@ -3,9 +3,11 @@
 
 import Button from "@/app/_components/common/button";
 import Input from "@/app/_components/common/Input";
+import { invariant } from "@/app/_helpers/invariant";
 import { otpVerify, sendOTP } from "@/app/_lib/Auth/Auth";
 import { updateAuthInfo } from "@/app/_store/_contexts/userSlice";
 import { RootState } from "@/app/_store/store";
+import { ErrorResponse } from "@/app/_types/Error";
 import CryptoJS from "crypto-js";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
@@ -117,6 +119,7 @@ const VerificationOTP: React.FC = () => {
   const [seconds, setSeconds] = useState(0);
   const [animate, setAnimate] = useState(false);
   const [moveDistance, setMoveDistance] = useState(0);
+  const [errors, setErrors] = useState<ErrorResponse>();
   const router = useRouter();
   const searchParams = useSearchParams();
   const dispatch = useDispatch();
@@ -176,8 +179,8 @@ const VerificationOTP: React.FC = () => {
       setSeconds(30);
       const res = await sendOTP(currentUser);
       console.log("SendOTP response", res);
-    } catch (error) {
-      console.error(error);
+    } catch (error: any) {
+      console.error(error.message);
     }
   };
 
@@ -193,8 +196,8 @@ const VerificationOTP: React.FC = () => {
         const res = await sendOTP(currentUser);
         console.log("SendOTP response", res);
         document.cookie = "hasSentOtp=true; path=/; max-age=300";
-      } catch (error) {
-        console.error(error);
+      } catch (error: any) {
+        console.error(error.message);
       }
     };
 
@@ -223,12 +226,21 @@ const VerificationOTP: React.FC = () => {
       if (otpVal.length === 6) {
         try {
           const res = await otpVerify(currentUser, otpVal);
-          if (res) {
-            console.log("OTP verified successfully:", res);
-            router.push("/home");
+          if (res.message === "OTP sent successfully") {
+            // console.log("OTP verified successfully:", res);
+            router.push("/login");
+          } else {
+            try {
+              invariant(
+                res?.error?.type === "invalid_otp",
+                res?.error?.message
+              );
+            } catch (error: any) {
+              setErrors({ type: "invalid_otp", message: error.message });
+            }
           }
         } catch (error: any) {
-          console.error("Error verifying OTP:", error);
+          console.error(error.message);
         }
       }
     };
@@ -282,6 +294,7 @@ const VerificationOTP: React.FC = () => {
                   key={index}
                   type="text"
                   id={`otp${index}`}
+                  message={errors?.message}
                   className="text-center"
                   fontSize="2rem"
                   onChange={(e) => goToNext(index, e)}
@@ -295,7 +308,7 @@ const VerificationOTP: React.FC = () => {
               ))}
             </div>
             <Button
-              className="text-xl "
+              className="text-xl"
               onClick={onClick}
               disabled={isSubmitting}
             >

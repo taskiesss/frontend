@@ -1,5 +1,5 @@
 export interface ErrorResponse {
-  type: 'username' | 'email' | 'password' | 'unknown';
+  type: string | 'unknown';
   message: string;
 }
 export interface ApiErrorResponse {

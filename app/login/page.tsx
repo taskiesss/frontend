@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React, { useState } from "react";
 import styled from "styled-components";
@@ -12,6 +14,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 import Cookies from "js-cookie";
+import { invariant } from "../_helpers/invariant";
 
 const LoginContainer = styled.div`
   display: flex;
@@ -118,16 +121,30 @@ const LoginPage: React.FC = () => {
     try {
       const res = await Login(email, password);
 
+      // Error handling from API
+      try {
+        invariant(res?.type === "email");
+      } catch (error: any) {
+        setErrors([...errors, { type: "email", message: error.message }]);
+      }
+      try {
+        invariant(res?.type === "password");
+      } catch (error: any) {
+        setErrors([...errors, { type: "password", message: error.message }]);
+      }
+      if (errors.length > 0) {
+        setIsSubmitting(false);
+        return;
+      }
       if (res.token)
         Cookies.set("token", res.token, {
-          expires: 1 / 48, // 30 minutes expiry
+          // expires: 1 / 48, // 30 minutes expiry
+          expires: 1, // 1 day expiry
           secure: true, // Send cookie over HTTPS only
           sameSite: "strict", // Restrict cookie to same-site requests
           path: "/", // Available on the entire site
           // domain: 'yourdomain.com' // Optionally restrict to a specific domain
         });
-
-      // document.cookie = `jwtToken=${res.token}; Path=/; Secure; HttpOnly; SameSite=Strict`;
 
       // Navigate to the next page with the encrypted user in the URL
       if (res.isFirst) {
@@ -135,18 +152,8 @@ const LoginPage: React.FC = () => {
       } else {
         router.push(`/home?type=${res.role}`);
       }
-    } catch (err) {
-      if (err instanceof Error) {
-        try {
-          const errorData: ErrorResponse[] = JSON.parse(err.message);
-          console.log(errorData);
-          setErrors(errorData);
-        } catch (e) {
-          setErrors([{ type: "unknown", message: e.message }]);
-        }
-      } else {
-        setErrors([{ type: "unknown", message: "An unknown error occurred." }]);
-      }
+    } catch (err: any) {
+      console.error(err.message);
     } finally {
       setIsSubmitting(false);
     }
@@ -159,6 +166,9 @@ const LoginPage: React.FC = () => {
           <h1 className=" mb-6">Sign in</h1>
           <form onSubmit={handleSubmit}>
             <Input
+              message={errors
+                .filter((err) => err.type === "email")
+                .map((err, idx) => err.message)}
               isRequired={true}
               type="email"
               id="email"
@@ -167,6 +177,9 @@ const LoginPage: React.FC = () => {
               onChange={(e) => setEmail(e.target.value)}
             />
             <Input
+              message={errors
+                .filter((err) => err.type === "password")
+                .map((err, idx) => err.message)}
               isRequired={true}
               type="password"
               id="password"

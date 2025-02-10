@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import FreelancerAside from "@/app/_components/Freelancer/FreelancerAside";
 import Container from "@/app/_components/common/Container";
 import { PageFreelancerResponse } from "@/app/_types/FreelancerSearch";
@@ -76,8 +77,8 @@ const Page = async ({ searchParams }: PageProps) => {
     console.log("Freelancer search request:", request);
     const res = await searchFreelancers(request);
     paginations = res;
-  } catch (error) {
-    console.error("Freelancer search failed:", error);
+  } catch (error: any) {
+    console.error("Freelancer search failed:", error.message);
   }
 
   const SortByOptions = [
@@ -122,7 +123,7 @@ const Page = async ({ searchParams }: PageProps) => {
         )}
 
         {/* Freelancer results */}
-        {paginations ? (
+        {paginations?.content && paginations?.content.length > 0 ? (
           <Suspense fallback={<Spinner />}>
             <FreelancerList freelancers={paginations} />
           </Suspense>

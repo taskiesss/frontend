@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
@@ -14,6 +15,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { ErrorResponse } from "@/app/_types/Error";
 import { registerUser } from "@/app/_lib/Auth/Auth";
 import SignUp from "@/app/_components/auth/Signup";
+import { invariant } from "@/app/_helpers/invariant";
 
 const secretKey = "S3cr3tK3y@2023!ThisIsMySecureKey#";
 
@@ -70,26 +72,22 @@ const CreateAccount: React.FC = () => {
     setIsSubmitting(true);
     setErrors([]);
 
-    // Basic validation checks
-    if (username.length < 5) {
-      setErrors((errors) => [
-        ...errors,
-        {
-          type: "username",
-          message: "Username must be at least 5 characters.",
-        },
-      ]);
-      setIsSubmitting(false);
-      return;
+    // Validation using invariant for special types (username, email, password)
+    try {
+      invariant(username.length < 5, "Username must be at least 5 characters.");
+    } catch (err: any) {
+      setErrors([...errors, { type: "username", message: err.message }]);
     }
-    if (password.length < 10) {
-      setErrors((errors) => [
-        ...errors,
-        {
-          type: "password",
-          message: "Password must be at least 10 characters.",
-        },
-      ]);
+
+    try {
+      invariant(
+        password.length < 10,
+        "Password must be at least 10 characters."
+      );
+    } catch (err: any) {
+      setErrors([...errors, { type: "password", message: err.message }]);
+    }
+    if (errors.length > 0) {
       setIsSubmitting(false);
       return;
     }
@@ -102,7 +100,30 @@ const CreateAccount: React.FC = () => {
         role: user.role,
       });
 
-      console.log(res);
+      // Error handling from api
+      if (res.status === "BAD_REQUEST") {
+        try {
+          invariant(res?.type === "email", res.message);
+        } catch (err: any) {
+          setErrors([...errors, { type: "email", message: err.message }]);
+        }
+        try {
+          invariant(res?.type === "username", res.message);
+        } catch (err: any) {
+          setErrors([...errors, { type: "username", message: err.message }]);
+        }
+        try {
+          invariant(res?.type === "password", res.message);
+        } catch (err: any) {
+          setErrors([...errors, { type: "password", message: err.message }]);
+        }
+      }
+      if (errors.length > 0) {
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Rsponse is Ok
       dispatch(updateAuthInfo({ username, email, password }));
 
       // Encryption
@@ -116,18 +137,8 @@ const CreateAccount: React.FC = () => {
 
       // Navigate to the next page with the encrypted user in the URL
       router.push(`/signup/verify?user=${encodedUser}`);
-    } catch (err) {
-      if (err instanceof Error) {
-        try {
-          const errorData: ErrorResponse[] = JSON.parse(err.message);
-          console.log(errorData);
-          setErrors(errorData);
-        } catch (e) {
-          setErrors([{ type: "unknown", message: err.message }]);
-        }
-      } else {
-        setErrors([{ type: "unknown", message: "An unknown error occurred." }]);
-      }
+    } catch (err: any) {
+      console.error(err.message);
     } finally {
       setIsSubmitting(false);
     }
@@ -137,8 +148,10 @@ const CreateAccount: React.FC = () => {
     const role = searchParams?.get("role"); // Use the `get` method to access query parameters
     if (role) {
       dispatch(updateAuthInfo({ role }));
+    } else {
+      router.push("/signup/choose-role");
     }
-  }, [searchParams, dispatch]);
+  }, [searchParams, dispatch, router]);
 
   return (
     <SignUp>
@@ -151,6 +164,9 @@ const CreateAccount: React.FC = () => {
             type="text"
             id="username"
             name="username"
+            message={errors
+              .filter((err) => err.type === "username")
+              .map((err, idx) => err.message)}
             inputValue={username}
             className=""
             onChange={(e) => setUsername(e.target.value)}
@@ -161,14 +177,28 @@ const CreateAccount: React.FC = () => {
             type="email"
             id="email"
             name="email"
+            message={errors
+              .filter((err) => err.type === "email")
+              .map((err, idx) => err.message)}
             inputValue={email}
             onChange={(e) => setEmail(e.target.value)}
           />
+          {/* Render email validation errors */}
+          {errors
+            .filter((err) => err.type === "email")
+            .map((err, idx) => (
+              <p key={idx} className="text-red-500 text-sm ">
+                {err.message}
+              </p>
+            ))}
 
           <Input
             isRequired={true}
             type="password"
             id="password"
+            message={errors
+              .filter((err) => err.type === "password")
+              .map((err, idx) => err.message)}
             name="password"
             useStrength={true}
             inputValue={password}

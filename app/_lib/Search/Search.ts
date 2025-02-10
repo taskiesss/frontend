@@ -1,16 +1,17 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 import {
   PageCommunityResponse,
   SearchCommunitiesRequest,
-} from "@/app/_types/CommunitySearch";
-import { PageJobResponse, SearchJobsRequest } from "@/app/_types/JobSearch";
+} from '@/app/_types/CommunitySearch';
+import { PageJobResponse, SearchJobsRequest } from '@/app/_types/JobSearch';
 import {
   SearchFreelancersRequest,
   PageFreelancerResponse,
-} from "@/app/_types/FreelancerSearch";
+} from '@/app/_types/FreelancerSearch';
 
-const BASE_URL = "http://localhost:8080";
+const BASE_URL = 'http://localhost:8080';
 
 /**
  * Retrieves the API key from the environment variable.
@@ -32,36 +33,20 @@ const BASE_URL = "http://localhost:8080";
 /**
  * Calls the /jobs/search API endpoint.
  */
-export async function searchJobs(
-  request: SearchJobsRequest
-): Promise<PageJobResponse> {
+export async function searchJobs(request: SearchJobsRequest): Promise<any> {
   try {
     const response = await fetch(`${BASE_URL}/jobs/search`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(request),
     });
 
-    if (!response.ok) {
-      let errorMessage = `Error ${response.status}: ${response.statusText}`;
-      try {
-        const errorData = await response.json();
-        if (errorData && errorData.error && errorData.error.message) {
-          errorMessage = errorData.error.message;
-        }
-      } catch (parseError) {
-        // If parsing fails, retain the default error message.
-      }
-      throw new Error(errorMessage);
-    }
-
     const data = await response.json();
     return data as PageJobResponse;
   } catch (error) {
-    console.error("Error in searchJobs:", error);
-    throw error;
+    throw new Error('Internal Error :(');
   }
 }
 
@@ -70,33 +55,20 @@ export async function searchJobs(
  */
 export async function searchCommunities(
   request: SearchCommunitiesRequest
-): Promise<PageCommunityResponse> {
+): Promise<any> {
   try {
     const response = await fetch(`${BASE_URL}/communities/search`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(request),
     });
 
-    if (!response.ok) {
-      let errorMessage = `Error ${response.status}: ${response.statusText}`;
-      try {
-        const errorData = await response.json();
-        if (errorData && errorData.error && errorData.error.message) {
-          errorMessage = errorData.error.message;
-        }
-      } catch (parseError) {
-        // If parsing fails, retain the default error message.
-      }
-      throw new Error(errorMessage);
-    }
-
     const data = await response.json();
     return data as PageCommunityResponse;
   } catch (error) {
-    throw error;
+    throw new Error('Internal Error :(');
   }
 }
 
@@ -105,33 +77,20 @@ export async function searchCommunities(
  */
 export async function searchFreelancers(
   request: SearchFreelancersRequest
-): Promise<PageFreelancerResponse> {
+): Promise<any> {
   try {
     const response = await fetch(`${BASE_URL}/freelancers/search`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(request),
     });
 
-    if (!response.ok) {
-      let errorMessage = `Error ${response.status}: ${response.statusText}`;
-      try {
-        const errorData = await response.json();
-        if (errorData && errorData.error && errorData.error.message) {
-          errorMessage = errorData.error.message;
-        }
-      } catch (parseError) {
-        // If parsing fails, retain the default error message.
-      }
-      throw new Error(errorMessage);
-    }
-
     const data = await response.json();
     return data as PageFreelancerResponse;
   } catch (error) {
-    throw error;
+    throw new Error('Internal Error :(');
   }
 }
 

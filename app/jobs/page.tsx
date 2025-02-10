@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import JobList from "../_components/Job/JobList";
 import Container from "../_components/common/Container";
 import { PageJobResponse } from "../_types/JobSearch";
+import { searchJobs } from "../_lib/Search/Search";
 
 let paginations: PageJobResponse;
 
@@ -85,10 +87,15 @@ paginations = {
 
 type Props = { searchParams: string };
 
-export default function page({}: Props) {
+export default async function page({}: Props) {
+  try {
+    paginations = await searchJobs({ page: 0, size: 10 });
+  } catch (e: any) {
+    console.error(e.message);
+  }
   return (
     <Container className="py-6">
-      {paginations?.content ? (
+      {paginations?.content && paginations?.content.length > 0 ? (
         <JobList jobs={paginations} />
       ) : (
         <div className=" grid place-items-center min-h-screen">

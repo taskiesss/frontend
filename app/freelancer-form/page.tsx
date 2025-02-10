@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React, { useState } from "react";
 import Button from "../_components/common/button";
@@ -5,6 +7,8 @@ import Container from "../_components/common/Container";
 import SkillsSearchInput from "../_components/common/SkillsSearchInput";
 import { submitFreelancerForm } from "../_lib/Freelancer/FreelancerForm";
 import { FreelancerFormPayload } from "../_types/FreelancerForm";
+import { invariant } from "../_helpers/invariant";
+import { useRouter } from "next/navigation";
 
 type Props = { params: string };
 
@@ -25,9 +29,11 @@ export default function Page({}: Props) {
   const [languagesSpoken, setLanguagesSpoken] = useState("");
   const [averageWorkHours, setAverageWorkHours] = useState(0);
   const [professionalTitle, setProfessionalTitle] = useState("");
+  const [professionalSummary, setProfessionalSummary] = useState("");
 
   // Education: Allow multiple entries
   const [educationList, setEducationList] = useState<Education[]>([]);
+  const router = useRouter();
 
   const addEducation = () => {
     setEducationList([
@@ -63,23 +69,42 @@ export default function Page({}: Props) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const languages = languagesSpoken.split(",");
+    const languages = languagesSpoken.split(",").map((l) => l.trim());
     const formData: FreelancerFormPayload = {
-      firstName,
-      lastName,
+      firstName: firstName,
+      lastName: lastName,
       hourlyRate: expectedHourlyRate,
       skills: selectedSkills,
-      languages,
+      professionalSummary: professionalSummary,
+      languages: languages,
       hoursPerWeek: averageWorkHours,
       professionalTitle,
       education: educationList,
     };
     console.log("Form submitted: ", formData);
-    try {
-      await submitFreelancerForm(formData);
-    } catch {}
 
-    // Place your submission logic here (e.g., call submitFreelancerForm)
+    try {
+      const res = await submitFreelancerForm(formData);
+
+      try {
+        invariant(res?.error?.type === "unauthorized", "unauthorized user");
+      } catch (error: any) {
+        router.push("/login");
+      }
+      try {
+        invariant(res?.error?.type === "forbidden", "forbidden user");
+      } catch (error: any) {
+        // he should be at his home page
+        if (error.message === "unauthorized token") router.push("/login");
+
+        router.push("/ux/Freelancer/home");
+      }
+      if (res === true) {
+        router.push("/ux/Freelancer/home");
+      }
+    } catch (error: any) {
+      console.error(error);
+    }
   };
 
   return (
@@ -146,7 +171,7 @@ export default function Page({}: Props) {
               <div className="flex flex-col gap-3">
                 <span className="text-lg">Skills</span>
                 <SkillsSearchInput
-                  className="py-4"
+                  className="py-4 border border-solid border-gray-600 rounded-lg"
                   selectedSkills={selectedSkills}
                   onSelectSkill={handleSelectSkill}
                 />
@@ -182,6 +207,16 @@ export default function Page({}: Props) {
                   type="text"
                   value={professionalTitle}
                   onChange={(e) => setProfessionalTitle(e.target.value)}
+                  className="px-3 py-4 text-lg border border-solid border-gray-600 rounded-lg focus:outline-none"
+                />
+              </div>
+              <div className="flex flex-col gap-3">
+                <span className="text-lg">Professional Summary</span>
+                <input
+                  required
+                  type="text"
+                  value={professionalSummary}
+                  onChange={(e) => setProfessionalSummary(e.target.value)}
                   className="px-3 py-4 text-lg border border-solid border-gray-600 rounded-lg focus:outline-none"
                 />
               </div>
