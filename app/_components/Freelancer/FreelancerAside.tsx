@@ -27,9 +27,13 @@ export default function FreelancerAside() {
     { label: "Intermediate", value: "intermediate" },
     { label: "Expert", value: "expert" },
   ];
-  const [experienceLevel, setExperienceLevel] = useState<
-    ExperienceLevelKey | ""
-  >("");
+  const [experienceLevels, setExperienceLevels] = useState<
+    Record<ExperienceLevelKey, boolean>
+  >({
+    entry_level: false,
+    intermediate: false,
+    expert: false,
+  });
 
   const [hourlyRateMin, setHourlyRateMin] = useState("");
   const [hourlyRateMax, setHourlyRateMax] = useState("");
@@ -51,8 +55,11 @@ export default function FreelancerAside() {
       params.delete("skills");
     }
 
-    if (experienceLevel !== "") {
-      params.set("experience", experienceLevel);
+    const selectedExperience = Object.keys(experienceLevels).filter(
+      (key) => experienceLevels[key as ExperienceLevelKey]
+    );
+    if (selectedExperience.length > 0) {
+      params.set("experience", selectedExperience.join(","));
     } else {
       params.delete("experience");
     }
@@ -81,13 +88,6 @@ export default function FreelancerAside() {
       router.push(`${window.location.pathname}?${newQuery}`);
     }
 
-    // Reset all filter states after submission.
-    setSearchText("");
-    setUserRating(0);
-    setSelectedSkills([]);
-    setExperienceLevel("");
-    setHourlyRateMin("");
-    setHourlyRateMax("");
     // Update the resetKey to force a re-mount of the SkillsSearchInput component.
     setResetKey((prev) => prev + 1);
   };
@@ -134,36 +134,27 @@ export default function FreelancerAside() {
           </div>
 
           {/* Experience Level (Radio Buttons) */}
-          <div className="mb-4">
-            <h3 className="text-xl py-3 font-bold">Experience Level</h3>
-            <div className="space-y-2">
+          <div className="py-2">
+            <h3 className="text-xl py-3 font-bold">Experience level</h3>
+            <div className="space-y-2 py-3">
               {experienceOptions.map((exp) => (
-                <label key={exp.value} className="flex items-center space-x-2">
+                <label key={exp.label} className="flex items-center space-x-2">
                   <input
-                    type="radio"
-                    name="experience"
-                    className="form-radio text-[var(--btn-color)]"
-                    value={exp.value}
-                    checked={experienceLevel === exp.value}
-                    onChange={() => setExperienceLevel(exp.value)}
+                    type="checkbox"
+                    className="form-checkbox text-[var(--btn-color)]"
+                    checked={experienceLevels[exp.value]}
+                    onChange={(e) =>
+                      setExperienceLevels((prev) => ({
+                        ...prev,
+                        [exp.value]: e.target.checked,
+                      }))
+                    }
                   />
                   <span className="text-lg">{exp.label}</span>
                 </label>
               ))}
-              <label className="flex items-center space-x-2">
-                <input
-                  type="radio"
-                  name="experience"
-                  className="form-radio text-[var(--btn-color)]"
-                  value=""
-                  checked={experienceLevel === ""}
-                  onChange={() => setExperienceLevel("")}
-                />
-                <span className="text-lg">Any</span>
-              </label>
             </div>
           </div>
-
           {/* Hourly Rate Range */}
           <div className="mb-4">
             <h3 className="text-xl py-3 font-bold">Hourly Rate Range</h3>
@@ -198,7 +189,7 @@ export default function FreelancerAside() {
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full px-4 py-2 bg-[var(--btn-color)] text-[var(--accent-color)] rounded-lg"
+            className=" px-4 py-2 bg-[var(--btn-color)] text-[var(--accent-color)] rounded-lg"
           >
             Apply Filters
           </button>

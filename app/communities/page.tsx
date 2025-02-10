@@ -82,8 +82,8 @@ export default function page({}: Props) {
       {paginations?.content ? (
         <CommunityList communities={paginations} />
       ) : (
-        <div className="flex flex-row place-content-center justify-center">
-          <span className="text-[var(--accent-color)] text-3xl text-center">
+        <div className=" grid place-items-center min-h-screen">
+          <span className="text-[var(--accent-color)] text-3xl">
             There is no Communities...
           </span>
         </div>

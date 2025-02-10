@@ -4,7 +4,7 @@ import { fetchSuggestionsServer } from "@/app/_actions/skillsActions";
 import Skill from "./Skill";
 
 type SkillsSearchInputProps = {
-  className: string;
+  className?: string;
   selectedSkills: string[];
   onSelectSkill: (skill: string) => void;
 };
@@ -17,6 +17,7 @@ export default function SkillsSearchInput({
   const [skillsSearch, setSkillsSearch] = useState("");
   const [skillSuggestions, setSkillSuggestions] = useState<string[]>([]);
   const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
+  const [isInputFocused, setIsInputFocused] = useState(false);
 
   // Fetch suggestions when the input changes (debounced by 300ms)
   useEffect(() => {
@@ -55,24 +56,31 @@ export default function SkillsSearchInput({
           placeholder="ex: JavaScript, Python,..."
           value={skillsSearch}
           onChange={(e) => setSkillsSearch(e.target.value)}
-          className={`w-full px-3 py-2 border-solid border border-[var(--border-color)] rounded-md focus:outline-none focus:ring-2 ${className} `}
+          onFocus={() => setIsInputFocused(true)}
+          onBlur={() => setIsInputFocused(false)}
+          className={`w-full px-3 py-2 border-solid border border-[var(--border-color)] rounded-md focus:outline-none focus:ring-2 ${className}`}
         />
         {isLoadingSuggestions && (
           <div className="mt-2 text-sm text-gray-500">Loading...</div>
         )}
-        {skillSuggestions.length > 0 && (
-          <ul className="absolute left-0 right-0 bg-[var(--background-color)] border border-gray-300 mt-1 rounded shadow">
-            {skillSuggestions.map((suggestion, index) => (
-              <li
-                key={index}
-                className="p-2 hover:bg-gray-200 cursor-pointer"
-                onClick={() => handleSelectSkill(suggestion)}
-              >
-                {suggestion}
-              </li>
-            ))}
-          </ul>
-        )}
+        {/* Only show suggestions if the input has focus */}
+        {skillSuggestions.length > 0 &&
+          skillsSearch.length > 2 &&
+          isInputFocused && (
+            <ul className="absolute left-0 right-0 bg-[var(--background-color)] border border-gray-300 mt-1 rounded shadow">
+              {skillSuggestions.map((suggestion, index) => (
+                <li
+                  key={index}
+                  className="p-2 hover:bg-[var(--hover-color)] cursor-pointer"
+                  // Prevent the input from losing focus when clicking a suggestion
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={() => handleSelectSkill(suggestion)}
+                >
+                  {suggestion}
+                </li>
+              ))}
+            </ul>
+          )}
       </div>
       <div className="flex flex-wrap gap-2 mt-3">
         {selectedSkills.map((skill, index) => (

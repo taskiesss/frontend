@@ -30,7 +30,10 @@
   --background-color: var(--clr-background-primary);
   --btn-color: var(--clr-btn-primary);
   --border-color: var(--clr-border-primary);
+  --border-secondary: #4b5563;
   --bg-skill: var(--bg-skill-primary);
+
+  --star: #64748b;
 
   /* Button hover background color: in light mode use a darker variant */
   --button-hover-background-color: #83adbb;

@@ -102,7 +102,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
   };
 
   return (
-    <div className="group relative overflow-hidden bg-[var(--background-color)] border-solid border-t-[0.1rem] border-gray-600 w-11/12 ">
+    <div className="group relative overflow-hidden bg-[var(--background-color)] border-solid border-t-[0.1rem] border-[var(--border-secondary)] w-11/12 ">
       {/* This wrapper adds a before pseudo-element that animates on group hover */}
       <div className="absolute inset-0 bg-[var(--foreground-color)] scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300" />
 
@@ -116,7 +116,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
           <StarRating
             maxRating={5}
             defaultRating={rate}
-            color="#64748b"
+            color="var(--star)"
             size={18}
           />
         </div>

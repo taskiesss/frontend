@@ -112,7 +112,7 @@ export default function JobAside() {
   };
 
   return (
-    <div className="sticky top-[2.5rem] left-0">
+    <div className="sticky top-[2.5rem] left-0 ">
       <Link href="/jobs/search">
         <button className="px-4 py-2  bg-[var(--btn-color)] text-[var(--accent-color)] rounded-md">
           Advanced Search

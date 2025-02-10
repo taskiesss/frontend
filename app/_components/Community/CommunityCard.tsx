@@ -83,7 +83,7 @@ const CommunityCard: React.FC<JobCardProps> = ({ community }) => {
   };
 
   return (
-    <div className="group relative overflow-hidden bg-[var(--background-color)] border-solid border-t-[0.1rem] border-gray-600 w-11/12 transform transition-all duration-300">
+    <div className="group relative overflow-hidden bg-[var(--background-color)] border-solid border-t-[0.1rem] border-[var(--border-secondary)] w-11/12 transform transition-all duration-300">
       {/* Pseudo-element for hover animation */}
       <div className="absolute inset-0 bg-[var(--foreground-color)] scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300"></div>
 
@@ -125,7 +125,7 @@ const CommunityCard: React.FC<JobCardProps> = ({ community }) => {
               <StarRating
                 maxRating={5}
                 defaultRating={rating}
-                color="#64748b"
+                color="var(--star)"
                 size={18}
               />
             </div>
