@@ -1,7 +1,6 @@
 "use client";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { DropdownMenu } from "./DropDownMenu";
 
@@ -12,9 +11,7 @@ interface Option {
 type Props = { options: Option[]; children?: React.ReactNode };
 export default function CustomeSelection({ options, children }: Props) {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState<string>(
-    options[0].value
-  );
+  const [selectedOption, setSelectedOption] = useState<string>("");
 
   return (
     <div className="relative">

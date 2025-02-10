@@ -9,9 +9,9 @@ export default function SmallNav({ pathname }: Props) {
       <ul className="flex gap-44">
         <li>
           <Link
-            href={{ pathname: "/jobs", query: { page: "0" } }}
+            href={{ pathname: "/jobs/search", query: { page: "0" } }}
             className={`text-lg text-[var(--accent-color)]${
-              pathname === "/jobs"
+              pathname === "/jobs/search"
                 ? " text-2xl text-[var(--hover-color)] font-extrabold hover:text-[var(--hover-color)]"
                 : " hover:text-[var(--hover-color)]"
             }`}
@@ -21,9 +21,9 @@ export default function SmallNav({ pathname }: Props) {
         </li>
         <li>
           <Link
-            href={{ pathname: "/communities", query: { page: "0" } }}
+            href={{ pathname: "/communities/search", query: { page: "0" } }}
             className={`text-lg text-[var(--accent-color)] ${
-              pathname === "/communities"
+              pathname === "/communities/search"
                 ? "text-2xl text-[var(--hover-color)] font-extrabold hover:text-[var(--hover-color)]"
                 : "hover:text-[var(--hover-color)]"
             }`}
@@ -33,9 +33,9 @@ export default function SmallNav({ pathname }: Props) {
         </li>
         <li>
           <Link
-            href={{ pathname: "/freelancer", query: { page: "0" } }}
+            href={{ pathname: "/freelancers/search", query: { page: "0" } }}
             className={`text-lg text-[var(--accent-color)] ${
-              pathname === "/freelancer"
+              pathname === "/freelancers/search"
                 ? "text-2xl text-[var(--hover-color)] font-extrabold hover:text-[var(--hover-color)]"
                 : "hover:text-[var(--hover-color)]"
             }`}

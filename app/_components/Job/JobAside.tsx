@@ -1,18 +1,20 @@
 "use client";
 import React, { useState } from "react";
-import StarRating from "./StarRating";
+import StarRating from "../common/StarRating";
 import { useRouter } from "next/navigation";
-import SkillsSearchInput from "./SkillsSearchInput";
+import SkillsSearchInput from "../common/SkillsSearchInput";
 import Link from "next/link";
 
-type ExperienceLevelKey = "Entry Level" | "Intermediate" | "Expert";
+type ExperienceLevelKey = "entry_level" | "intermediate" | "expert";
+type ExperienceLevelLabel = "Entry Level" | "Intermediate" | "Expert";
+
 type ProjectLengthKey =
   | "Less than one month"
   | "1 to 3 months"
   | "3 to 6 months"
   | "More than 6 months";
 
-export default function Aside() {
+export default function JobAside() {
   const router = useRouter();
 
   const [userRating, setUserRating] = useState<number>(0);
@@ -20,20 +22,22 @@ export default function Aside() {
   // Use a key to force re-mounting of the SkillsSearchInput (resetting its local state)
   const [resetKey, setResetKey] = useState<number>(0);
 
-  const experienceOptions: { label: ExperienceLevelKey }[] = [
-    { label: "Entry Level" },
-    { label: "Intermediate" },
-    { label: "Expert" },
+  const experienceOptions: {
+    label: ExperienceLevelLabel;
+    value: ExperienceLevelKey;
+  }[] = [
+    { label: "Entry Level", value: "entry_level" },
+    { label: "Intermediate", value: "intermediate" },
+    { label: "Expert", value: "expert" },
   ];
   const [experienceLevels, setExperienceLevels] = useState<
     Record<ExperienceLevelKey, boolean>
   >({
-    "Entry Level": false,
-    Intermediate: false,
-    Expert: false,
+    entry_level: false,
+    intermediate: false,
+    expert: false,
   });
 
-  const [jobTypeHourly, setJobTypeHourly] = useState(false);
   const [hourlyRateMin, setHourlyRateMin] = useState("");
   const [hourlyRateMax, setHourlyRateMax] = useState("");
 
@@ -73,12 +77,6 @@ export default function Aside() {
       params.delete("experience");
     }
 
-    if (jobTypeHourly) {
-      params.set("jobType", "hourly");
-    } else {
-      params.delete("jobType");
-    }
-
     if (hourlyRateMin !== "") {
       params.set("minRate", hourlyRateMin);
     } else {
@@ -116,11 +114,11 @@ export default function Aside() {
     setUserRating(0);
     setSelectedSkills([]);
     setExperienceLevels({
-      "Entry Level": false,
-      Intermediate: false,
-      Expert: false,
+      entry_level: false,
+      intermediate: false,
+      expert: false,
     });
-    setJobTypeHourly(false);
+
     setHourlyRateMin("");
     setHourlyRateMax("");
     setProjectLengths({
@@ -146,7 +144,7 @@ export default function Aside() {
           <StarRating maxRating={5} size={24} onSetRating={setUserRating} />
         </div>
 
-        <form onSubmit={handleSubmit} className="py-10">
+        <form onSubmit={handleSubmit} className="py-4">
           {/* Skills Search Component */}
           <div className="py-4">
             <h3 className="py-3 text-xl font-bold">Skills</h3>
@@ -170,11 +168,11 @@ export default function Aside() {
                   <input
                     type="checkbox"
                     className="form-checkbox text-[var(--btn-color)]"
-                    checked={experienceLevels[exp.label]}
+                    checked={experienceLevels[exp.value]}
                     onChange={(e) =>
                       setExperienceLevels((prev) => ({
                         ...prev,
-                        [exp.label]: e.target.checked,
+                        [exp.value]: e.target.checked,
                       }))
                     }
                   />
@@ -186,19 +184,10 @@ export default function Aside() {
 
           {/* Job Type */}
           <div className="py-4">
-            <h3 className="text-xl py-3 font-bold">Job type</h3>
-            <label className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                className="form-checkbox text-[var(--btn-color)]"
-                checked={jobTypeHourly}
-                onChange={(e) => setJobTypeHourly(e.target.checked)}
-              />
-              <span className="text-lg">Hourly</span>
-            </label>
+            <h3 className="text-xl py-3 font-bold">Hourly Rate range</h3>
 
             {/* Hourly Rate Input */}
-            <div className="py-4 flex space-x-2">
+            <div className="py-3 flex space-x-2">
               <input
                 type="number"
                 placeholder="Min"
