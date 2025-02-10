@@ -11,6 +11,8 @@ import { Login } from "@/app/_lib/Auth/Auth";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
+import Cookies from "js-cookie";
+
 const LoginContainer = styled.div`
   display: flex;
   flex-direction: column; /* Align items vertically */
@@ -116,7 +118,16 @@ const LoginPage: React.FC = () => {
     try {
       const res = await Login(email, password);
 
-      document.cookie = `jwtToken=${res.token}; Path=/; Secure; HttpOnly; SameSite=Strict`;
+      if (res.token)
+        Cookies.set("token", res.token, {
+          expires: 1 / 48, // 30 minutes expiry
+          secure: true, // Send cookie over HTTPS only
+          sameSite: "strict", // Restrict cookie to same-site requests
+          path: "/", // Available on the entire site
+          // domain: 'yourdomain.com' // Optionally restrict to a specific domain
+        });
+
+      // document.cookie = `jwtToken=${res.token}; Path=/; Secure; HttpOnly; SameSite=Strict`;
 
       // Navigate to the next page with the encrypted user in the URL
       if (res.isFirst) {

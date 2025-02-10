@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import Button from "../_components/common/button";
 import Container from "../_components/common/Container";
 import SkillsSearchInput from "../_components/common/SkillsSearchInput";
+import { submitFreelancerForm } from "../_lib/Freelancer/FreelancerForm";
+import { FreelancerFormPayload } from "../_types/FreelancerForm";
 
 type Props = { params: string };
 
@@ -59,20 +61,24 @@ export default function Page({}: Props) {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const languages = languagesSpoken.split(",");
-    const formData = {
+    const formData: FreelancerFormPayload = {
       firstName,
       lastName,
-      expectedHourlyRate,
-      selectedSkills,
+      hourlyRate: expectedHourlyRate,
+      skills: selectedSkills,
       languages,
-      averageWorkHours,
+      hoursPerWeek: averageWorkHours,
       professionalTitle,
       education: educationList,
     };
     console.log("Form submitted: ", formData);
+    try {
+      await submitFreelancerForm(formData);
+    } catch {}
+
     // Place your submission logic here (e.g., call submitFreelancerForm)
   };
 

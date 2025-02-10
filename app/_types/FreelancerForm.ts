@@ -4,7 +4,7 @@ export interface FreelancerFormPayload {
   professionalTitle: string;
   skills: string[];
   hourlyRate: number;
-  professionalSummary: string;
+  professionalSummary?: string;
   education?: Education[];
   languages?: string[];
   hoursPerWeek?: number;
