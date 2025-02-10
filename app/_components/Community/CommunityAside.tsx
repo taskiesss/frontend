@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import React, { useState } from "react";
 import StarRating from "../common/StarRating";
@@ -81,28 +82,28 @@ export default function CommunitiyAside() {
       params.delete("rate");
     }
 
+    params.set("page", "0");
     const currentQuery = new URLSearchParams(window.location.search).toString();
     const newQuery = params.toString();
-
     if (currentQuery !== newQuery) {
       router.push(`${window.location.pathname}?${newQuery}`);
     }
 
     // Reset all filter states after submission.
-    setIsFull(false);
-    setUserRating(0);
-    setSelectedSkills([]);
-    setExperienceLevels({
-      entry_level: false,
-      intermediate: false,
-      expert: false,
-    });
+    // setIsFull(false);
+    // setUserRating(0);
+    // setSelectedSkills([]);
+    // setExperienceLevels({
+    //   entry_level: false,
+    //   intermediate: false,
+    //   expert: false,
+    // });
 
-    setHourlyRateMin("");
-    setHourlyRateMax("");
+    // setHourlyRateMin("");
+    // setHourlyRateMax("");
 
-    // Update the resetKey to force re-mounting of SkillsSearchInput.
-    setResetKey((prev) => prev + 1);
+    // // Update the resetKey to force re-mounting of SkillsSearchInput.
+    // setResetKey((prev) => prev + 1);
   };
 
   return (

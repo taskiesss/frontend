@@ -102,7 +102,7 @@ const CreateAccount: React.FC = () => {
         role: user.role,
       });
 
-      // console.log(res);
+      console.log(res);
       dispatch(updateAuthInfo({ username, email, password }));
 
       // Encryption
@@ -149,9 +149,10 @@ const CreateAccount: React.FC = () => {
           <Input
             isRequired={true}
             type="text"
-            id="name"
-            name="name"
+            id="username"
+            name="username"
             inputValue={username}
+            className=""
             onChange={(e) => setUsername(e.target.value)}
           />
 
@@ -169,11 +170,16 @@ const CreateAccount: React.FC = () => {
             type="password"
             id="password"
             name="password"
+            useStrength={true}
             inputValue={password}
             onChange={(e) => setPassword(e.target.value)}
           />
 
-          <Button className="text-xl" type={"submit"} disabled={isSubmitting}>
+          <Button
+            className="text-xl text-[var(--accent-color)]"
+            type={"submit"}
+            disabled={isSubmitting}
+          >
             {isSubmitting ? "Registering..." : "Register"}
           </Button>
         </form>

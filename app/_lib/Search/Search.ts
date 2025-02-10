@@ -1,4 +1,6 @@
-// searchApi.ts
+
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import {
   PageCommunityResponse,
   SearchCommunitiesRequest,

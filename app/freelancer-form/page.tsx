@@ -1,11 +1,16 @@
 "use client";
 import React, { useState } from "react";
-import Container from "../_components/common/Container";
 import Button from "../_components/common/button";
+import Container from "../_components/common/Container";
 import SkillsSearchInput from "../_components/common/SkillsSearchInput";
-import { submitFreelancerForm } from "../_lib/Freelancer/FreelancerForm";
 
 type Props = { params: string };
+
+interface Education {
+  degree: string;
+  institution: string;
+  graduationYear: number;
+}
 
 export default function Page({}: Props) {
   // Personal Information
@@ -19,10 +24,33 @@ export default function Page({}: Props) {
   const [averageWorkHours, setAverageWorkHours] = useState(0);
   const [professionalTitle, setProfessionalTitle] = useState("");
 
-  // Education
-  const [degree, setDegree] = useState("");
-  const [institution, setInstitution] = useState("");
-  const [graduationYear, setGraduationYear] = useState(0);
+  // Education: Allow multiple entries
+  const [educationList, setEducationList] = useState<Education[]>([]);
+
+  const addEducation = () => {
+    setEducationList([
+      ...educationList,
+      { degree: "", institution: "", graduationYear: 0 },
+    ]);
+  };
+
+  const updateEducation = (
+    index: number,
+    field: keyof Education,
+    value: string | number
+  ) => {
+    const updated = educationList.map((edu, i) => {
+      if (i === index) {
+        return { ...edu, [field]: value };
+      }
+      return edu;
+    });
+    setEducationList(updated);
+  };
+
+  const removeEducation = (index: number) => {
+    setEducationList(educationList.filter((_, i) => i !== index));
+  };
 
   const handleSelectSkill = (skill: string) => {
     // Avoid duplicate skills
@@ -33,20 +61,19 @@ export default function Page({}: Props) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const languages = languagesSpoken.split(",");
     const formData = {
       firstName,
       lastName,
       expectedHourlyRate,
       selectedSkills,
-      languagesSpoken,
+      languages,
       averageWorkHours,
       professionalTitle,
-      degree,
-      institution,
-      graduationYear,
+      education: educationList,
     };
     console.log("Form submitted: ", formData);
-    // Place your submission logic here (e.g., server action call)
+    // Place your submission logic here (e.g., call submitFreelancerForm)
   };
 
   return (
@@ -71,6 +98,7 @@ export default function Page({}: Props) {
               <div className="flex flex-col gap-3 w-full">
                 <span className="text-lg">First Name</span>
                 <input
+                  required
                   type="text"
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
@@ -80,6 +108,7 @@ export default function Page({}: Props) {
               <div className="flex flex-col gap-3 w-full">
                 <span className="text-lg">Last Name</span>
                 <input
+                  required
                   type="text"
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
@@ -98,6 +127,7 @@ export default function Page({}: Props) {
               <div className="flex flex-col gap-3">
                 <span className="text-lg">Expected Hourly Rate ($)</span>
                 <input
+                  required
                   type="number"
                   min="1"
                   value={expectedHourlyRate}
@@ -110,6 +140,7 @@ export default function Page({}: Props) {
               <div className="flex flex-col gap-3">
                 <span className="text-lg">Skills</span>
                 <SkillsSearchInput
+                  className="py-4"
                   selectedSkills={selectedSkills}
                   onSelectSkill={handleSelectSkill}
                 />
@@ -117,7 +148,9 @@ export default function Page({}: Props) {
               <div className="flex flex-col gap-3">
                 <span className="text-lg">Languages Spoken</span>
                 <input
+                  required
                   type="text"
+                  placeholder="Separated by comma (ex. English,French)"
                   value={languagesSpoken}
                   onChange={(e) => setLanguagesSpoken(e.target.value)}
                   className="px-3 py-4 text-lg border border-solid border-gray-600 rounded-lg focus:outline-none"
@@ -126,6 +159,7 @@ export default function Page({}: Props) {
               <div className="flex flex-col gap-3">
                 <span className="text-lg">Average Work Hours/Week</span>
                 <input
+                  required
                   type="number"
                   min="1"
                   value={averageWorkHours}
@@ -138,6 +172,7 @@ export default function Page({}: Props) {
               <div className="flex flex-col gap-3">
                 <span className="text-lg">Professional Title</span>
                 <input
+                  required
                   type="text"
                   value={professionalTitle}
                   onChange={(e) => setProfessionalTitle(e.target.value)}
@@ -152,37 +187,63 @@ export default function Page({}: Props) {
             <span className="text-2xl py-6 text-[var(--accent-color)]">
               Education
             </span>
-            <div className="flex flex-col gap-6">
-              <div className="flex flex-col gap-3">
-                <span className="text-lg">Degree</span>
-                <input
-                  type="text"
-                  value={degree}
-                  onChange={(e) => setDegree(e.target.value)}
-                  className="px-3 py-4 text-lg border border-solid border-gray-600 rounded-lg focus:outline-none"
-                />
+            {educationList.map((edu, index) => (
+              <div key={index} className="flex flex-col gap-6  p-4 rounded">
+                <div className="flex flex-col gap-3">
+                  <span className="text-lg">Degree</span>
+                  <input
+                    type="text"
+                    value={edu.degree}
+                    onChange={(e) =>
+                      updateEducation(index, "degree", e.target.value)
+                    }
+                    className="px-3 py-4 text-lg border border-solid border-gray-600 rounded-lg focus:outline-none"
+                  />
+                </div>
+                <div className="flex flex-col gap-3">
+                  <span className="text-lg">Institution</span>
+                  <input
+                    type="text"
+                    value={edu.institution}
+                    onChange={(e) =>
+                      updateEducation(index, "institution", e.target.value)
+                    }
+                    className="px-3 py-4 text-lg border border-solid border-gray-600 rounded-lg focus:outline-none"
+                  />
+                </div>
+                <div className="flex flex-col gap-3">
+                  <span className="text-lg">Graduation Year</span>
+                  <input
+                    type="number"
+                    min="1"
+                    value={edu.graduationYear}
+                    onChange={(e) =>
+                      updateEducation(
+                        index,
+                        "graduationYear",
+                        Math.max(Number(e.target.value), 1)
+                      )
+                    }
+                    className="px-3 py-4 text-lg border border-solid border-gray-600 rounded-lg focus:outline-none"
+                  />
+                </div>
+                <button
+                  type="button"
+                  onClick={() => removeEducation(index)}
+                  className="text-red-500 mt-2"
+                >
+                  Remove
+                </button>
               </div>
-              <div className="flex flex-col gap-3">
-                <span className="text-lg">Institution</span>
-                <input
-                  type="text"
-                  value={institution}
-                  onChange={(e) => setInstitution(e.target.value)}
-                  className="px-3 py-4 text-lg border border-solid border-gray-600 rounded-lg focus:outline-none"
-                />
-              </div>
-              <div className="flex flex-col gap-3">
-                <span className="text-lg">Graduation Year</span>
-                <input
-                  type="number"
-                  min="1"
-                  value={graduationYear}
-                  onChange={(e) =>
-                    setGraduationYear(Math.max(Number(e.target.value), 1))
-                  }
-                  className="px-3 py-4 text-lg border border-solid border-gray-600 rounded-lg focus:outline-none"
-                />
-              </div>
+            ))}
+            <div>
+              <button
+                type="button"
+                onClick={addEducation}
+                className=" bg-[var(--btn-color)] text-[var(--accent-color)] px-4 py-2 rounded-full"
+              >
+                +
+              </button>
             </div>
           </div>
           <div className="flex justify-end">

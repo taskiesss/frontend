@@ -295,7 +295,7 @@ const VerificationOTP: React.FC = () => {
               ))}
             </div>
             <Button
-              className="text-xl"
+              className="text-xl "
               onClick={onClick}
               disabled={isSubmitting}
             >

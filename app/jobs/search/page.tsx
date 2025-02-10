@@ -230,7 +230,11 @@ const Page = async ({ searchParams }: PageProps) => {
             <JobList jobs={paginations} />
           </Suspense>
         ) : (
-          ""
+          <div className="flex flex-row py-8 place-content-center justify-center">
+            <span className="text-[var(--accent-color)] text-3xl text-center">
+              There is no Jobs...
+            </span>
+          </div>
         )}
       </div>
     </Container>
