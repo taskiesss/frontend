@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import Skill from "./Skill";
 import { fetchSuggestionsServer } from "@/app/_actions/skillsActions";
+import Skill from "./Skill";
 
 type SkillsSearchInputProps = {
   className: string;
@@ -18,21 +18,24 @@ export default function SkillsSearchInput({
   const [skillSuggestions, setSkillSuggestions] = useState<string[]>([]);
   const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
 
+  // Fetch suggestions when the input changes (debounced by 300ms)
   useEffect(() => {
     if (skillsSearch.trim() === "") {
       setSkillSuggestions([]);
       return;
     }
 
-    const timer = setTimeout(async () => {
+    const timer = setTimeout(() => {
       setIsLoadingSuggestions(true);
-      try {
-        const suggestions = await fetchSuggestionsServer(skillsSearch);
-        setSkillSuggestions(suggestions);
-      } catch (error) {
-        console.error("Error:", error);
-      }
-      setIsLoadingSuggestions(false);
+      fetchSuggestionsServer(skillsSearch)
+        .then((suggestions) => {
+          setSkillSuggestions(suggestions);
+          setIsLoadingSuggestions(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching suggestions:", error);
+          setIsLoadingSuggestions(false);
+        });
     }, 300);
 
     return () => clearTimeout(timer);
@@ -52,7 +55,7 @@ export default function SkillsSearchInput({
           placeholder="ex: JavaScript, Python,..."
           value={skillsSearch}
           onChange={(e) => setSkillsSearch(e.target.value)}
-          className={`w-full px-3 py-2 border-solid border border-[var(--border-color)] rounded-md focus:outline-none focus:ring-2 ${className}`}
+          className={`w-full px-3 py-2 border-solid border border-[var(--border-color)] rounded-md focus:outline-none focus:ring-2 ${className} `}
         />
         {isLoadingSuggestions && (
           <div className="mt-2 text-sm text-gray-500">Loading...</div>

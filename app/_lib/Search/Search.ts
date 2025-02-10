@@ -16,18 +16,18 @@ const BASE_URL = "http://localhost:8080";
  * Retrieves the API key from the environment variable.
  * Throws an error if the key is not defined.
  */
-function getApiKey(): string {
-  const key = process.env.SKILLS_API_KEY;
-  if (!key) {
-    throw new Error(
-      "Missing API key. Please set SKILLS_API_KEY in your environment variables."
-    );
-  }
-  return key;
-}
+// function getApiKey(): string {
+//   const key = process.env.SKILLS_API_KEY;
+//   if (!key) {
+//     throw new Error(
+//       "Missing API key. Please set SKILLS_API_KEY in your environment variables."
+//     );
+//   }
+//   return key;
+// }
 
 // Use the helper function to guarantee that API_KEY is a string.
-const API_KEY = getApiKey();
+// const API_KEY = getApiKey();
 
 /**
  * Calls the /jobs/search API endpoint.
@@ -138,27 +138,27 @@ export async function searchFreelancers(
 /**
  * Fetches skill suggestions from the external API.
  */
-export async function fetchSuggestions(query: string) {
-  // Return an empty array if the query is empty.
-  if (!query.trim()) return [];
+// export async function fetchSuggestions(query: string) {
+//   // Return an empty array if the query is empty.
+//   if (!query.trim()) return [];
 
-  const myHeaders = new Headers();
-  myHeaders.append("apikey", API_KEY); // API_KEY is now guaranteed to be a string.
+//   const myHeaders = new Headers();
+//   myHeaders.append("apikey", API_KEY); // API_KEY is now guaranteed to be a string.
 
-  try {
-    const response = await fetch(
-      `https://api.apilayer.com/skills?q=${encodeURIComponent(query)}`,
-      {
-        method: "GET",
-        redirect: "follow",
-        headers: myHeaders,
-      }
-    );
-    const result = await response.json();
-    // Adjust this based on the API's actual response structure.
-    return result || [];
-  } catch (error) {
-    console.error("Error fetching suggestions:", error);
-    return [];
-  }
-}
+//   try {
+//     const response = await fetch(
+//       `https://api.apilayer.com/skills?q=${encodeURIComponent(query)}`,
+//       {
+//         method: "GET",
+//         redirect: "follow",
+//         headers: myHeaders,
+//       }
+//     );
+//     const result = await response.json();
+//     // Adjust this based on the API's actual response structure.
+//     return result || [];
+//   } catch (error) {
+//     console.error("Error fetching suggestions:", error);
+//     return [];
+//   }
+// }

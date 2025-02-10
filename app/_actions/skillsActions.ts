@@ -1,19 +1,24 @@
 "use server";
 
-export async function fetchSuggestionsServer(search: string) {
+export async function fetchSuggestionsServer(query: string) {
+  if (!query.trim()) return [];
+
+  const key = process.env.SKILLS_API_KEY;
+  if (!key) throw new Error("Missing API key");
+
   try {
     const response = await fetch(
-      `https://api.example.com/skills/suggest?q=${search}`,
+      `https://api.apilayer.com/skills?q=${encodeURIComponent(query)}`,
       {
-        headers: {
-          Authorization: `Bearer ${process.env.SKILLS_API_KEY}`,
-        },
+        headers: { apikey: key },
+        method: "GET",
+        redirect: "follow",
       }
     );
-    if (!response.ok) throw new Error("Failed to fetch");
-    return response.json();
+    const result = await response.json();
+    return result || [];
   } catch (error) {
-    console.error(error);
+    console.error("Error:", error);
     return [];
   }
 }
