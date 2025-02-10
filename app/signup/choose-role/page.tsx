@@ -218,7 +218,11 @@ export default function ClientRole() {
               </label>
             </div>
           </div>
-          <Button type="submit" disabled={!(isChecked[0] || isChecked[1])}>
+          <Button
+            className="text-xl"
+            type="submit"
+            disabled={!(isChecked[0] || isChecked[1])}
+          >
             Submit
           </Button>
         </form>

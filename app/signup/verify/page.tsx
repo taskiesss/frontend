@@ -278,6 +278,7 @@ const VerificationOTP: React.FC = () => {
             <div className="otp-input">
               {values.map((value, index) => (
                 <Input
+                  isRequired={true}
                   key={index}
                   type="text"
                   id={`otp${index}`}
@@ -293,7 +294,11 @@ const VerificationOTP: React.FC = () => {
                 />
               ))}
             </div>
-            <Button onClick={onClick} disabled={isSubmitting}>
+            <Button
+              className="text-xl"
+              onClick={onClick}
+              disabled={isSubmitting}
+            >
               {isSubmitting ? `Resend OTP in ${seconds}s` : "Resend OTP"}
             </Button>
           </form>

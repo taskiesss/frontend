@@ -1,9 +1,8 @@
 "use client";
-import React, { useState } from "react";
-import JobCard from "../Job/JobCard";
-import { Pagination } from "../common/Pagination";
-import Container from "../common/Container";
 import { CommunityResponse } from "@/app/_types/CommunitySearch";
+import { useState } from "react";
+import Container from "../common/Container";
+import { Pagination } from "../common/Pagination";
 import CommunityCard from "./CommunityCard";
 
 interface Props {

@@ -5,6 +5,7 @@ import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
 import Skill from "../common/Skill";
 import StarRating from "../common/StarRating";
+import userprofile from "@/public/images/userprofile.jpg";
 
 interface JobCardProps {
   community: CommunityResponse;
@@ -92,14 +93,25 @@ const CommunityCard: React.FC<JobCardProps> = ({ community }) => {
         <div className="flex flex-row items-start py-5 gap-5">
           {/* Profile Image Container */}
           <div className="w-36 rounded-xl">
-            <Image
-              src={profilePicture}
-              alt="Community Profile"
-              width={100}
-              quality={100}
-              height={100}
-              className="object-cover w-full rounded-xl"
-            />
+            {community.profilePicture ? (
+              <Image
+                src={profilePicture}
+                alt="Community Profile"
+                width={100}
+                quality={100}
+                height={100}
+                className="object-cover w-full rounded-xl"
+              />
+            ) : (
+              <Image
+                src={userprofile}
+                alt="Community Profile"
+                width={100}
+                quality={100}
+                height={100}
+                className="object-cover w-full rounded-xl"
+              />
+            )}
           </div>
           {/* Community Details */}
           <div className="flex-1">
