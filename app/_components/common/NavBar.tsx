@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Button from "./button";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useState } from "react";
 import logo_dark from "@/public/images/logo_dark.png";
 import Image from "next/image";
 import Container from "./Container";
@@ -16,33 +16,34 @@ interface NavBarProps {
 
 const NavBar: React.FC<NavBarProps> = ({ onLogin, onSignup }) => {
   const router = useRouter();
-  // console.log(window.location.pathname);
+  const [query, setQuery] = useState("");
+
   // This function handles search form submission.
-  // It prevents the default action, retrieves the search term,
-  // and updates the URL with the search query (or could call an API).
   const handleSearch = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Create a FormData object to easily extract form values.
     const formData = new FormData(e.currentTarget);
     const searchTerm = formData.get("search") as string;
 
-    // For demonstration, we'll log the search term.
-    // console.log("Search query:", searchTerm);
+    const currentPath = window.location.pathname;
+    // Regular expression to check if current path is one of /jobs/search, /freelancers/search, or /communities/search.
+    const searchRegex = /^\/(jobs|freelancers|communities)\/search(\/)?$/i;
 
-    // Update the URL query parameter for search.
-    // You can also call your API (for example, searchJobs({ search: searchTerm, ... }) here).
-    router.push(
-      `${window.location.pathname}/search?query=${encodeURIComponent(
-        searchTerm
-      )}`
-    );
+    if (searchRegex.test(currentPath)) {
+      // Already in a search route—update query.
+      router.push(`${currentPath}?query=${encodeURIComponent(searchTerm)}`);
+    } else {
+      // Not in a search route—append /search.
+      router.push(
+        `${currentPath}/search?query=${encodeURIComponent(searchTerm)}`
+      );
+    }
   };
 
   return (
     <Container>
-      <nav className="bg-[var(--background-color)] py-10 grid grid-rows-1 grid-cols-[min-content,1fr,1fr] place-items-center ">
+      <nav className="bg-[var(--background-color)] py-10 grid grid-rows-1 grid-cols-[min-content,1fr,1fr] place-items-center">
         {/* Logo Section */}
-        <div className="flex w-[10rem] h-auto justify-center flex-col ">
+        <div className="flex w-[10rem] h-auto justify-center flex-col">
           <Link href="/">
             <Image
               src={logo_dark}
@@ -53,13 +54,13 @@ const NavBar: React.FC<NavBarProps> = ({ onLogin, onSignup }) => {
         </div>
 
         {/* Navigation Links */}
-        <div className="flex flex-col justify-center">
-          <ul className="list-none flex gap-10 w-auto h-auto items-center">
-            {["Freelancers", "Jobs", "About us"].map((item) => (
+        <div className="flex flex-col  justify-center">
+          <ul className="list-none flex gap-20 w-auto h-auto items-center">
+            {["Freelancers", "Jobs", "Communities", "About us"].map((item) => (
               <li key={item}>
                 <Link
                   href={`/${item.toLowerCase()}`}
-                  className="w-[8rem] h-10 bg-inherit cursor-pointer"
+                  className="w-[8rem]  bg-inherit cursor-pointer"
                 >
                   <span className="font-semibold text-xl">{item}</span>
                 </Link>
@@ -79,7 +80,7 @@ const NavBar: React.FC<NavBarProps> = ({ onLogin, onSignup }) => {
                   <div className="absolute inset-y-0 left-0 flex items-center pl-3">
                     <button
                       aria-label="Search"
-                      className="bg-inherit p-0 cursor-pointer flex "
+                      className="bg-inherit p-0 cursor-pointer flex"
                       type="submit"
                     >
                       <FontAwesomeIcon
@@ -93,8 +94,10 @@ const NavBar: React.FC<NavBarProps> = ({ onLogin, onSignup }) => {
                   <input
                     type="text"
                     name="search"
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
                     placeholder="What are you looking for?"
-                    className="bg-[var(--background-color)]   placeholder:text-gray-400 pl-[3rem] p-2 w-[28rem] rounded-2xl border-solid border border-[var(--border-color)] focus:outline-none focus:ring-2 "
+                    className="bg-[var(--background-color)] placeholder:text-gray-400 pl-[3rem] p-2 w-[28rem] rounded-2xl border-solid border border-[var(--border-color)] focus:outline-none focus:ring-2"
                   />
                 </div>
               </form>

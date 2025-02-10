@@ -28,7 +28,7 @@ export interface CommunityResponse {
   name: string;
   description: string;
   skills: string[];
-  experienceLevel: 'Entry Level' | 'Intermediate' | 'Expert';
+  experienceLevel: 'entry_level' | 'intermediate' | 'expert';
   memberCount: number;
   pricePerHour: number;
   rating: number;

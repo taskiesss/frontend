@@ -1,8 +1,8 @@
 "use client";
 import React, { useState } from "react";
 import JobCard from "./JobCard";
-import { Pagination } from "./Pagination";
-import Container from "./Container";
+import { Pagination } from "../common/Pagination";
+import Container from "../common/Container";
 
 interface Job {
   id: string;

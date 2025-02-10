@@ -1,8 +1,11 @@
 import React from "react";
-import JobList from "../_components/common/JobList";
+import JobList from "../_components/Job/JobList";
 import Container from "../_components/common/Container";
+import { PageJobResponse } from "../_types/JobSearch";
 
-const paginations = {
+let paginations: PageJobResponse;
+
+paginations = {
   content: [
     {
       id: "887dda4d-c986-44c9-bba8-d1bef62d1c91",
@@ -85,7 +88,15 @@ type Props = { searchParams: string };
 export default function page({}: Props) {
   return (
     <Container className="py-6">
-      <JobList jobs={paginations} />;
+      {paginations?.content ? (
+        <JobList jobs={paginations} />
+      ) : (
+        <div className="flex flex-row place-content-center justify-center">
+          <span className="text-[var(--accent-color)] text-3xl text-center">
+            There is no Jobs...
+          </span>
+        </div>
+      )}
     </Container>
   );
 }

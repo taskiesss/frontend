@@ -1,3 +1,7 @@
+import {
+  PageCommunityResponse,
+  SearchCommunitiesRequest,
+} from '@/app/_types/CommunitySearch';
 import { PageJobResponse, SearchJobsRequest } from '@/app/_types/JobSearch';
 
 const BASE_URL = 'http://localhost:8080';
@@ -33,6 +37,7 @@ export async function searchJobs(
         }
       } catch (parseError) {
         // If parsing fails, use the default error message.
+        // throw new Error(`Error parsing error response: ${parseError}`);
       }
       throw new Error(errorMessage);
     }
@@ -42,6 +47,40 @@ export async function searchJobs(
   } catch (error) {
     console.error('Error in searchJobs:', error);
     // Rethrow the error so that calling code can handle it.
+    throw error;
+  }
+}
+
+export async function searchCommunities(
+  request: SearchCommunitiesRequest
+): Promise<PageCommunityResponse> {
+  try {
+    const response = await fetch(`${BASE_URL}/communities/search`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(request),
+    });
+
+    if (!response.ok) {
+      let errorMessage = `Error ${response.status}: ${response.statusText}`;
+      try {
+        // Try to parse the error response based on your API's schema
+        const errorData = await response.json();
+        if (errorData && errorData.error && errorData.error.message) {
+          errorMessage = errorData.error.message;
+        }
+      } catch (parseError) {
+        // If parsing fails, retain the default error message.
+        // throw new Error(`Error parsing error response: ${parseError}`);
+      }
+      throw new Error(errorMessage);
+    }
+
+    const data = await response.json();
+    return data as PageCommunityResponse;
+  } catch (error) {
     throw error;
   }
 }

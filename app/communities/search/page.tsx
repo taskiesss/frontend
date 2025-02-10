@@ -1,4 +1,4 @@
-import CommunitiyAside from "@/app/_components/common/CommunityAside";
+import CommunitiyAside from "@/app/_components/Community/CommunityAside";
 import Container from "@/app/_components/common/Container";
 import { PageCommunityResponse } from "@/app/_types/CommunitySearch";
 import Link from "next/link";
@@ -6,6 +6,8 @@ import { Suspense } from "react";
 import CustomeSelection from "../../_components/common/CustomeSelection";
 import SmallNav from "../../_components/common/SmallNav";
 import Spinner from "../../_components/common/Spinner";
+import CommunityList from "@/app/_components/Community/CommunityList";
+import { searchCommunities } from "@/app/_lib/Search/Search";
 
 export const revalidate = 3600;
 // {
@@ -43,47 +45,74 @@ export interface PageProps {
 
 let paginations: PageCommunityResponse;
 
-paginations = {
-  content: [
-    {
-      id: "887dda4d-c986-44c9-bba8-d1bef62d1c91",
-      isFull: true,
-      name: "Data Science Enthusiasts",
-      experienceLevel: "Intermediate",
-      description: "A community for data science enthusiasts...",
-      skills: ["Data Science", "Machine Learning"],
-      memberCount: 500,
-      rating: 4.7,
-      pricePerHour: 29.99,
-      profilePicture: "https://example.com/community.jpg",
-    },
-  ],
-  pageable: {
-    sort: {
-      sorted: false,
-      unsorted: true,
-      empty: false,
-    },
-    offset: 0,
-    pageNumber: 0,
-    pageSize: 10,
-    paged: true,
-    unpaged: false,
-  },
-  totalElements: 100,
-  totalPages: 10,
-  last: false,
-  size: 10,
-  number: 0,
-  sort: {
-    sorted: false,
-    unsorted: true,
-    empty: false,
-  },
-  numberOfElements: 10,
-  first: true,
-  empty: false,
-};
+// paginations = {
+//   content: [
+//     {
+//       id: "887dda4d-c986-44c9-bba8-d1bef62d1c91",
+//       isFull: true,
+//       name: "Data Science Enthusiasts",
+//       experienceLevel: "intermediate",
+//       description: "A community for data science enthusiasts...",
+//       skills: ["Data Science", "Machine Learning"],
+//       memberCount: 500,
+//       rating: 4.7,
+//       pricePerHour: 29.99,
+//       profilePicture:
+//         "https://res.cloudinary.com/dvds6blan/image/upload/v1739139229/samples/imagecon-group.jpg",
+//     },
+//     {
+//       id: "887sda4d-c986-44c9-bba8-d1bef62d1c91",
+//       isFull: true,
+//       name: "Data Science Enthusiasts",
+//       experienceLevel: "intermediate",
+//       description: "A community for data science enthusiasts...",
+//       skills: ["Data Science", "Machine Learning"],
+//       memberCount: 500,
+//       rating: 4.7,
+//       pricePerHour: 29.99,
+//       profilePicture:
+//         "https://res.cloudinary.com/dvds6blan/image/upload/v1739139229/samples/imagecon-group.jpg",
+//     },
+//     {
+//       id: "887ada4d-c986-44c9-bba8-d1bef62d1c91",
+//       isFull: true,
+//       name: "Data Science Enthusiasts",
+//       experienceLevel: "intermediate",
+//       description: "A community for data science enthusiasts...",
+//       skills: ["Data Science", "Machine Learning"],
+//       memberCount: 500,
+//       rating: 4.7,
+//       pricePerHour: 29.99,
+//       profilePicture:
+//         "https://res.cloudinary.com/dvds6blan/image/upload/v1739139229/samples/imagecon-group.jpg",
+//     },
+//   ],
+//   pageable: {
+//     sort: {
+//       sorted: false,
+//       unsorted: true,
+//       empty: false,
+//     },
+//     offset: 0,
+//     pageNumber: 0,
+//     pageSize: 10,
+//     paged: true,
+//     unpaged: false,
+//   },
+//   totalElements: 100,
+//   totalPages: 10,
+//   last: false,
+//   size: 10,
+//   number: 0,
+//   sort: {
+//     sorted: false,
+//     unsorted: true,
+//     empty: false,
+//   },
+//   numberOfElements: 10,
+//   first: true,
+//   empty: false,
+// };
 
 // const getProjectLength = (length: string): string => {
 //   switch (length) {
@@ -151,8 +180,8 @@ const Page = async ({ searchParams }: PageProps) => {
     };
 
     console.log(request);
-    // const res = await searchJobs(request);
-    // paginations = res;
+    const res = await searchCommunities(request);
+    paginations = res;
   } catch (error) {
     console.error("Community search failed:", error);
   }
@@ -201,7 +230,7 @@ const Page = async ({ searchParams }: PageProps) => {
         {/* Job results */}
         {paginations ? (
           <Suspense fallback={<Spinner />}>
-            {/* <JobList jobs={paginations} /> */}
+            <CommunityList communities={paginations} />
           </Suspense>
         ) : (
           ""

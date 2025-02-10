@@ -1,7 +1,7 @@
 "use client";
 import React, { useRef, useState, useEffect } from "react";
-import StarRating from "./StarRating";
-import Skill from "./Skill";
+import StarRating from "../common/StarRating";
+import Skill from "../common/Skill";
 
 // Define TypeScript interface for Job
 interface Job {
