@@ -15,7 +15,7 @@ export interface PageProps {
   pathName?: string;
   searchParams: Promise<{
     skills?: string;
-    experienceLevel?: string;
+    experience?: string;
     minRate?: string;
     maxRate?: string;
     query?: string;
@@ -35,7 +35,7 @@ const Page = async ({ searchParams }: PageProps) => {
   const {
     query,
     skills,
-    experienceLevel,
+    experience,
     page,
     rate,
     minRate,
@@ -45,6 +45,7 @@ const Page = async ({ searchParams }: PageProps) => {
     "Sort direction": sortDirection,
   } = params;
 
+  const experienceArr = experience?.split(",");
   // Show advanced filters if advanced=true in the query.
   const showAdvanced = advanced === "true";
 
@@ -56,13 +57,13 @@ const Page = async ({ searchParams }: PageProps) => {
   try {
     const hourlyRateMinNumber = minRate ? Number(minRate) : undefined;
     const hourlyRateMaxNumber = maxRate ? Number(maxRate) : undefined;
-    const pageNumber = page ? Number(page) : 1;
+    const pageNumber = Number(page) ? Number(page) : 1;
     const rating = rate ? Number(rate) : undefined;
 
     const request = {
       search: decodedSearch,
       skills: skillArr,
-      experienceLevel: experienceLevel || undefined,
+      experienceLevel: experienceArr,
       hourlyRateMin: hourlyRateMinNumber,
       hourlyRateMax: hourlyRateMaxNumber,
       page: pageNumber - 1,

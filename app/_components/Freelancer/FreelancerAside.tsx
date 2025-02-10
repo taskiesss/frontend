@@ -43,12 +43,6 @@ export default function FreelancerAside() {
     e.preventDefault();
     const params = new URLSearchParams(window.location.search);
 
-    if (searchText.trim() !== "") {
-      params.set("search", searchText.trim());
-    } else {
-      params.delete("search");
-    }
-
     if (selectedSkills.length > 0) {
       params.set("skills", selectedSkills.join(","));
     } else {
@@ -100,18 +94,6 @@ export default function FreelancerAside() {
         </button>
       </Link>
       <aside className="bg-[var(--background-color)] rounded-lg shadow-s mt-4 p-4">
-        {/* Search Text Input */}
-        <div className="mb-4">
-          <h2 className="text-xl font-bold mb-2">Search</h2>
-          <input
-            type="text"
-            placeholder="Search freelancers..."
-            value={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
-            className="w-full px-3 py-2 border border-[var(--border-color)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--hover-color)]"
-          />
-        </div>
-
         {/* Rating Filter */}
         <div className="mb-4">
           <h2 className="py-3 text-xl font-bold">Rating</h2>

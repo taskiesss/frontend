@@ -15,7 +15,7 @@ export interface PageProps {
   pathName?: string;
   searchParams: Promise<{
     skills?: string;
-    experience?: string[];
+    experience?: string;
     jobType?: string;
     minRate?: string;
     maxRate?: string;
@@ -122,7 +122,7 @@ const Page = async ({ searchParams }: PageProps) => {
   const decodedSearch = query ? decodeURIComponent(query) : "";
 
   // Convert comma‑separated filter strings to arrays.
-  // const experienceArr = experience ? experience.split(",") : [];
+  const experienceArr = experience ? experience.split(",") : [];
   // const projectLengthArr = projectLength ? projectLength.split(",") : [];
   const skillArr = skills ? skills.split(",") : [];
 
@@ -140,7 +140,7 @@ const Page = async ({ searchParams }: PageProps) => {
       search: decodedSearch,
       skills: skillArr,
       isFull: isFull,
-      experienceLevel: experience,
+      experienceLevel: experienceArr,
       hourlyRateMin: hourlyRateMinNumber,
       hourlyRateMax: hourlyRateMaxNumber,
       page: pageNumber - 1,
