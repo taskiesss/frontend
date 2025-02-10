@@ -1,43 +1,57 @@
+// searchApi.ts
 import {
   PageCommunityResponse,
   SearchCommunitiesRequest,
-} from '@/app/_types/CommunitySearch';
-import { PageJobResponse, SearchJobsRequest } from '@/app/_types/JobSearch';
+} from "@/app/_types/CommunitySearch";
+import { PageJobResponse, SearchJobsRequest } from "@/app/_types/JobSearch";
+import {
+  SearchFreelancersRequest,
+  PageFreelancerResponse,
+} from "@/app/_types/FreelancerSearch";
 
-const BASE_URL = 'http://localhost:8080';
+const BASE_URL = "http://localhost:8080";
 
-// Assuming these interfaces have been defined elsewhere:
+/**
+ * Retrieves the API key from the environment variable.
+ * Throws an error if the key is not defined.
+ */
+function getApiKey(): string {
+  const key = process.env.SKILLS_API_KEY;
+  if (!key) {
+    throw new Error(
+      "Missing API key. Please set SKILLS_API_KEY in your environment variables."
+    );
+  }
+  return key;
+}
+
+// Use the helper function to guarantee that API_KEY is a string.
+const API_KEY = getApiKey();
 
 /**
  * Calls the /jobs/search API endpoint.
- * @param request - The search parameters for querying jobs.
- * @returns A promise that resolves to a PageJobResponse.
- * @throws An error if the API call fails.
  */
 export async function searchJobs(
   request: SearchJobsRequest
 ): Promise<PageJobResponse> {
   try {
     const response = await fetch(`${BASE_URL}/jobs/search`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(request),
     });
 
     if (!response.ok) {
-      // Try to parse the error response body (if available)
       let errorMessage = `Error ${response.status}: ${response.statusText}`;
       try {
         const errorData = await response.json();
-        // Customize this based on your error response schema.
         if (errorData && errorData.error && errorData.error.message) {
           errorMessage = errorData.error.message;
         }
       } catch (parseError) {
-        // If parsing fails, use the default error message.
-        // throw new Error(`Error parsing error response: ${parseError}`);
+        // If parsing fails, retain the default error message.
       }
       throw new Error(errorMessage);
     }
@@ -45,20 +59,22 @@ export async function searchJobs(
     const data = await response.json();
     return data as PageJobResponse;
   } catch (error) {
-    console.error('Error in searchJobs:', error);
-    // Rethrow the error so that calling code can handle it.
+    console.error("Error in searchJobs:", error);
     throw error;
   }
 }
 
+/**
+ * Calls the /communities/search API endpoint.
+ */
 export async function searchCommunities(
   request: SearchCommunitiesRequest
 ): Promise<PageCommunityResponse> {
   try {
     const response = await fetch(`${BASE_URL}/communities/search`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(request),
     });
@@ -66,14 +82,12 @@ export async function searchCommunities(
     if (!response.ok) {
       let errorMessage = `Error ${response.status}: ${response.statusText}`;
       try {
-        // Try to parse the error response based on your API's schema
         const errorData = await response.json();
         if (errorData && errorData.error && errorData.error.message) {
           errorMessage = errorData.error.message;
         }
       } catch (parseError) {
         // If parsing fails, retain the default error message.
-        // throw new Error(`Error parsing error response: ${parseError}`);
       }
       throw new Error(errorMessage);
     }
@@ -85,21 +99,57 @@ export async function searchCommunities(
   }
 }
 
-const API_KEY = 'CQvnnrzKabdKSOSUjihZUu18kdY2kpQu';
+/**
+ * Calls the /freelancers/search API endpoint.
+ */
+export async function searchFreelancers(
+  request: SearchFreelancersRequest
+): Promise<PageFreelancerResponse> {
+  try {
+    const response = await fetch(`${BASE_URL}/freelancers/search`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(request),
+    });
 
+    if (!response.ok) {
+      let errorMessage = `Error ${response.status}: ${response.statusText}`;
+      try {
+        const errorData = await response.json();
+        if (errorData && errorData.error && errorData.error.message) {
+          errorMessage = errorData.error.message;
+        }
+      } catch (parseError) {
+        // If parsing fails, retain the default error message.
+      }
+      throw new Error(errorMessage);
+    }
+
+    const data = await response.json();
+    return data as PageFreelancerResponse;
+  } catch (error) {
+    throw error;
+  }
+}
+
+/**
+ * Fetches skill suggestions from the external API.
+ */
 export async function fetchSuggestions(query: string) {
   // Return an empty array if the query is empty.
   if (!query.trim()) return [];
 
   const myHeaders = new Headers();
-  myHeaders.append('apikey', API_KEY);
+  myHeaders.append("apikey", API_KEY); // API_KEY is now guaranteed to be a string.
 
   try {
     const response = await fetch(
       `https://api.apilayer.com/skills?q=${encodeURIComponent(query)}`,
       {
-        method: 'GET',
-        redirect: 'follow',
+        method: "GET",
+        redirect: "follow",
         headers: myHeaders,
       }
     );
@@ -107,7 +157,7 @@ export async function fetchSuggestions(query: string) {
     // Adjust this based on the API's actual response structure.
     return result || [];
   } catch (error) {
-    console.error('Error fetching suggestions:', error);
+    console.error("Error fetching suggestions:", error);
     return [];
   }
 }
