@@ -1,9 +1,10 @@
+// app/layout.tsx
 import type { Metadata } from "next";
 import { Providers } from "./_store/_providers/Providers";
-
 import "./_styles/globals.css";
 import { Inter } from "next/font/google";
 import { DarkModeProvider } from "./_store/_contexts/DarkModeContext";
+import DarkModeToggleButton from "./_components/common/DarkModeButton";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -18,14 +19,13 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
       <body className={inter.className}>
         <DarkModeProvider>
           <Providers>{children}</Providers>
+          <DarkModeToggleButton />
         </DarkModeProvider>
       </body>
     </html>
