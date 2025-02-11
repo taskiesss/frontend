@@ -136,7 +136,7 @@ const LoginPage: React.FC = () => {
         setIsSubmitting(false);
         return;
       }
-      if (res.token)
+      if (res.token) {
         Cookies.set("token", res.token, {
           // expires: 1 / 48, // 30 minutes expiry
           expires: 1, // 1 day expiry
@@ -146,11 +146,12 @@ const LoginPage: React.FC = () => {
           // domain: 'yourdomain.com' // Optionally restrict to a specific domain
         });
 
-      // Navigate to the next page with the encrypted user in the URL
-      if (res.isFirst) {
-        router.push(`/freelancer-form`);
-      } else {
-        router.push(`/home?type=${res.role}`);
+        // Navigate to the next page with the encrypted user in the URL
+        if (res?.isFirst && res?.role === "freelancer") {
+          router.push(`/freelancer-form`);
+        } else {
+          router.push(`/ux/${res?.role}`);
+        }
       }
     } catch (err: any) {
       console.error(err.message);

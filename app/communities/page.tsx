@@ -5,7 +5,11 @@ import CommunityList from "../_components/Community/CommunityList";
 import { PageCommunityResponse } from "../_types/CommunitySearch";
 import { searchCommunities } from "../_lib/Search/Search";
 
-type Props = { pathname: string };
+type Props = {
+  searchParams: Promise<{
+    page?: string | "0";
+  }>;
+};
 
 let paginations: PageCommunityResponse;
 
@@ -78,9 +82,12 @@ let paginations: PageCommunityResponse;
 //   empty: false,
 // };
 
-export default async function page({}: Props) {
+export default async function page({ searchParams }: Props) {
+  const params = await searchParams;
+  const { page } = params;
+  const pageNumber = Number(page) ? Number(page) : 1;
   try {
-    paginations = await searchCommunities({ page: 0, size: 10 });
+    paginations = await searchCommunities({ page: pageNumber, size: 10 });
   } catch (e: any) {
     console.error(e.message);
   }

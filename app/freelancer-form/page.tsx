@@ -97,10 +97,10 @@ export default function Page({}: Props) {
         // he should be at his home page
         if (error.message === "unauthorized token") router.push("/login");
 
-        router.push("/ux/Freelancer/home");
+        router.push("/ux/freelancer");
       }
       if (res === true) {
-        router.push("/ux/Freelancer/home");
+        router.push("/ux/freelancer");
       }
     } catch (error: any) {
       console.error(error);

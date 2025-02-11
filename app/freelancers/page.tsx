@@ -5,7 +5,11 @@ import FreelancerList from "../_components/Freelancer/FreelancerList";
 import { PageFreelancerResponse } from "../_types/FreelancerSearch";
 import { searchFreelancers } from "../_lib/Search/Search";
 
-type Props = { pathname: string };
+type Props = {
+  searchParams: Promise<{
+    page?: string | "0";
+  }>;
+};
 
 let paginations: PageFreelancerResponse;
 
@@ -72,9 +76,12 @@ let paginations: PageFreelancerResponse;
 //   empty: false,
 // };
 
-export default async function Page({}: Props) {
+export default async function Page({ searchParams }: Props) {
+  const params = await searchParams;
+  const { page } = params;
+  const pageNumber = Number(page) ? Number(page) : 1;
   try {
-    paginations = await searchFreelancers({ page: 0, size: 10 });
+    paginations = await searchFreelancers({ page: pageNumber, size: 10 });
   } catch (e: any) {
     console.error(e.message);
   }

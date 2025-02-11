@@ -2,6 +2,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import StarRating from "../common/StarRating";
 import Skill from "../common/Skill";
+import { timeAgo } from "@/app/_helpers/helper";
 
 // Define TypeScript interface for Job
 interface Job {
@@ -109,7 +110,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
       {/* Ensure content stays above the pseudo-element */}
       <div className="relative z-10 py-5">
         {/* Posted Date */}
-        <span className="text-slate-500">{postedDate}</span>
+        <span className="text-slate-500">{timeAgo(postedDate)}</span>
 
         {/* Star Rating (Non-Interactive) */}
         <div className="pointer-events-none py-[0.2rem]">
