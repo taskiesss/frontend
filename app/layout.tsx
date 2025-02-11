@@ -3,6 +3,7 @@ import { Providers } from "./_store/_providers/Providers";
 
 import "./_styles/globals.css";
 import { Inter } from "next/font/google";
+import { DarkModeProvider } from "./_store/_contexts/DarkModeContext";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -23,7 +24,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Providers>{children}</Providers>
+        <DarkModeProvider>
+          <Providers>{children}</Providers>
+        </DarkModeProvider>
       </body>
     </html>
   );
