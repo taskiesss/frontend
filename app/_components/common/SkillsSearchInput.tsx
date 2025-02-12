@@ -38,7 +38,7 @@ export default function SkillsSearchInput({
           console.error("Error fetching suggestions:", error);
           setIsLoadingSuggestions(false);
         });
-    }, 300);
+    }, 20);
 
     return () => clearTimeout(timer);
   }, [skillsSearch]);

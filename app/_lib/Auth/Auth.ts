@@ -17,7 +17,9 @@ export async function registerUser(user: User): Promise<any> {
     if (res.status === 500 || res.status === 404) {
       throw new Error('Internal Error :(');
     }
+
     const data = await res.json();
+    console.log(data);
 
     // For any other status, simply return the response details
     return data;
@@ -64,7 +66,7 @@ export async function sendOTP(user: User): Promise<boolean> {
 
     // Only throw an error if the response status is 500
 
-    const data = await res.json();
+    // const data = await res.json();
 
     return true;
   } catch (e: any) {

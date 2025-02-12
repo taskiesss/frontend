@@ -1,4 +1,5 @@
 // _store/_contexts/DarkModeContext.tsx
+"use client";
 import { createContext, useContext, useEffect, ReactNode } from "react";
 import { useLocalStorageState } from "@/app/_hooks/useLocalStorage";
 

@@ -1,4 +1,5 @@
 // _store/_components/DarkModeToggleButton.tsx
+"use client";
 import React from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

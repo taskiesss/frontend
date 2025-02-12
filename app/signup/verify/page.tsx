@@ -177,6 +177,7 @@ const VerificationOTP: React.FC = () => {
     try {
       setIsSubmitting(true);
       setSeconds(30);
+      setValues(["", "", "", "", "", ""]);
       const res = await sendOTP(currentUser);
       console.log("SendOTP response", res);
     } catch (error: any) {
@@ -226,15 +227,13 @@ const VerificationOTP: React.FC = () => {
       if (otpVal.length === 6) {
         try {
           const res = await otpVerify(currentUser, otpVal);
-          if (res.message === "OTP sent successfully") {
+          console.log(res);
+          if (res?.message == "true") {
             // console.log("OTP verified successfully:", res);
             router.push("/login");
           } else {
             try {
-              invariant(
-                res?.error?.type === "invalid_otp",
-                res?.error?.message
-              );
+              invariant(res?.type === "invalid_otp", res?.message);
             } catch (error: any) {
               setErrors({ type: "invalid_otp", message: error.message });
             }
@@ -294,7 +293,6 @@ const VerificationOTP: React.FC = () => {
                   key={index}
                   type="text"
                   id={`otp${index}`}
-                  message={errors?.message}
                   className="text-center"
                   fontSize="2rem"
                   onChange={(e) => goToNext(index, e)}
@@ -307,6 +305,9 @@ const VerificationOTP: React.FC = () => {
                 />
               ))}
             </div>
+            {errors && (
+              <div className="text-red-400 py-5 text-lg">{errors.message}</div>
+            )}
             <Button
               className="text-xl"
               onClick={onClick}

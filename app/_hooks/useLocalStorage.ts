@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+'use client';
+import { useState, useEffect } from 'react';
 
 export function useLocalStorageState<T>(
   initialState: T,

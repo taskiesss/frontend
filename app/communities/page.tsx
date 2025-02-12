@@ -87,7 +87,7 @@ export default async function page({ searchParams }: Props) {
   const { page } = params;
   const pageNumber = Number(page) ? Number(page) : 1;
   try {
-    paginations = await searchCommunities({ page: pageNumber, size: 10 });
+    paginations = await searchCommunities({ page: pageNumber - 1, size: 10 });
   } catch (e: any) {
     console.error(e.message);
   }

@@ -117,23 +117,25 @@ const LoginPage: React.FC = () => {
     e.preventDefault();
     setIsSubmitting(true);
     setErrors([]);
+    const newErrors: ErrorResponse[] = [];
 
     try {
       const res = await Login(email, password);
 
       // Error handling from API
       try {
-        invariant(res?.type === "email");
+        invariant(res?.type === "email", res?.message);
       } catch (error: any) {
-        setErrors([...errors, { type: "email", message: error.message }]);
+        newErrors.push({ type: "email", message: error.message });
       }
       try {
-        invariant(res?.type === "password");
+        invariant(res?.type === "password", res?.message);
       } catch (error: any) {
-        setErrors([...errors, { type: "password", message: error.message }]);
+        newErrors.push({ type: "password", message: error.message });
       }
-      if (errors.length > 0) {
+      if (newErrors.length > 0) {
         setIsSubmitting(false);
+        setErrors(newErrors);
         return;
       }
       if (res.token) {
@@ -147,10 +149,10 @@ const LoginPage: React.FC = () => {
         });
 
         // Navigate to the next page with the encrypted user in the URL
-        if (res?.isFirst && res?.role === "freelancer") {
+        if (res?.isFirst && res?.role?.toLowerCase() === "freelancer") {
           router.push(`/freelancer-form`);
         } else {
-          router.push(`/ux/${res?.role}`);
+          router.push(`/ux/${res?.role?.toLowerCase()}`);
         }
       }
     } catch (err: any) {
