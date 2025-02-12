@@ -309,7 +309,7 @@ const VerificationOTP: React.FC = () => {
               <div className="text-red-400 py-5 text-lg">{errors.message}</div>
             )}
             <Button
-              className="text-xl"
+              className="text-xl text-[var(--btn-clr-primary)]"
               onClick={onClick}
               disabled={isSubmitting}
             >

@@ -219,7 +219,7 @@ export default function ClientRole() {
             </div>
           </div>
           <Button
-            className="text-xl "
+            className="text-xl text-[var(--btn-clr-primary)]"
             type="submit"
             disabled={!(isChecked[0] || isChecked[1])}
           >

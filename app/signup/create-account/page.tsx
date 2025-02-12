@@ -201,7 +201,7 @@ const CreateAccount: React.FC = () => {
           />
 
           <Button
-            className="text-xl text-[var(--accent-color)]"
+            className="text-xl text-[var(--btn-clr-primary)]"
             type={"submit"}
             disabled={isSubmitting}
           >

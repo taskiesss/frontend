@@ -109,18 +109,17 @@ export default function CommunitiyAside() {
   return (
     <div className="sticky top-[2.5rem] left-0">
       <Link href="/communities/search">
-        <button className="px-4 py-2  bg-[var(--btn-color)] text-[var(--accent-color)] rounded-md">
+        <button className="px-4 py-2 bg-[var(--btn-color)] text-[var(--accent-color)] rounded-md">
           Advanced Search
         </button>
       </Link>
-      <aside className=" row-start-3 bg-[var(--background-color)] rounded-lg shadow-s">
-        <div className="py-2 ">
+      <aside className="row-start-3 bg-[var(--background-color)] rounded-lg shadow-s">
+        <div className="py-2">
           <h2 className="py-3 text-xl font-bold">Rating</h2>
           <StarRating maxRating={5} size={24} onSetRating={setUserRating} />
         </div>
 
         <form onSubmit={handleSubmit} className="py-5">
-          {/* Skills Search Component */}
           <div className="py-2">
             <h3 className="py-3 text-xl font-bold">Skills</h3>
             <SkillsSearchInput
@@ -134,72 +133,85 @@ export default function CommunitiyAside() {
             />
           </div>
 
-          {/* Experience Level */}
           <div className="py-2">
             <h3 className="text-xl py-3 font-bold">Experience level</h3>
             <div className="space-y-2 py-3">
               {experienceOptions.map((exp) => (
-                <label key={exp.label} className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    className="form-checkbox text-[var(--btn-color)]"
-                    checked={experienceLevels[exp.value]}
-                    onChange={(e) =>
-                      setExperienceLevels((prev) => ({
-                        ...prev,
-                        [exp.value]: e.target.checked,
-                      }))
-                    }
-                  />
-                  <span className="text-lg">{exp.label}</span>
-                </label>
+                <div key={exp.value} className="flex items-center">
+                  <label className="container">
+                    <input
+                      type="checkbox"
+                      checked={experienceLevels[exp.value]}
+                      onChange={(e) =>
+                        setExperienceLevels((prev) => ({
+                          ...prev,
+                          [exp.value]: e.target.checked,
+                        }))
+                      }
+                    />
+                    <span className="checkmark"></span>
+                    <span className="text-lg leading-5">{exp.label}</span>
+                  </label>
+                </div>
               ))}
             </div>
           </div>
 
-          {/* Is Full or not */}
           <div className="py-4">
             <h3 className="text-xl py-3 font-bold">Community capacity</h3>
-            <label className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                className="form-checkbox text-[var(--btn-color)]"
-                checked={isFull}
-                onChange={(e) => setIsFull(e.target.checked)}
-              />
-              <span className="text-xl py-3 font-bold">is Full</span>
-            </label>
-          </div>
-
-          {/* Hourly Rate Input */}
-          <div className="py-4">
-            <h3 className="text-xl py-3 font-bold">Hourly Rate range</h3>
-            <div className="py-3 flex space-x-2">
-              <input
-                type="number"
-                placeholder="Min"
-                value={hourlyRateMin}
-                onChange={(e) => {
-                  if (Number(e.target.value) > 0)
-                    setHourlyRateMin(e.target.value);
-                }}
-                className="w-1/2 px-3 py-2 border border-[var(--border-color)] border-solid rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--hover-color)]"
-              />
-              <input
-                type="number"
-                placeholder="Max"
-                value={hourlyRateMax}
-                onChange={(e) => {
-                  if (Number(e.target.value) > Number(hourlyRateMin))
-                    setHourlyRateMax(e.target.value);
-                  else setHourlyRateMax((Number(hourlyRateMin) + 1).toString());
-                }}
-                className="w-1/2 px-3 py-2 border border-[var(--border-color)]  border-solid rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--hover-color)]"
-              />
+            <div className="flex items-center">
+              <label className="container">
+                <input
+                  type="checkbox"
+                  checked={isFull}
+                  onChange={(e) => setIsFull(e.target.checked)}
+                />
+                <span className="checkmark"></span>
+                <span className="text-lg leading-5">Is Full</span>
+              </label>
             </div>
           </div>
 
-          {/* Submit button */}
+          <div className="py-4">
+            <h3 className="text-xl py-3 font-bold">Hourly Rate range</h3>
+            <div className="py-3 flex space-x-2">
+              <div className="w-1/2">
+                <label htmlFor="hourly-min" className="sr-only">
+                  Minimum hourly rate
+                </label>
+                <input
+                  id="hourly-min"
+                  type="number"
+                  placeholder="Min"
+                  value={hourlyRateMin}
+                  onChange={(e) => {
+                    if (Number(e.target.value) > 0)
+                      setHourlyRateMin(e.target.value);
+                  }}
+                  className="w-full px-3 py-2 border border-[var(--border-color)] border-solid rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--hover-color)] bg-[var(--background-color)]"
+                />
+              </div>
+              <div className="w-1/2">
+                <label htmlFor="hourly-max" className="sr-only">
+                  Maximum hourly rate
+                </label>
+                <input
+                  id="hourly-max"
+                  type="number"
+                  placeholder="Max"
+                  value={hourlyRateMax}
+                  onChange={(e) => {
+                    if (Number(e.target.value) > Number(hourlyRateMin))
+                      setHourlyRateMax(e.target.value);
+                    else
+                      setHourlyRateMax((Number(hourlyRateMin) + 1).toString());
+                  }}
+                  className="w-full px-3 py-2 border border-[var(--border-color)] border-solid rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--hover-color)] bg-[var(--background-color)]"
+                />
+              </div>
+            </div>
+          </div>
+
           <button
             type="submit"
             className="px-4 py-2 bg-[var(--btn-color)] rounded-lg text-[var(--accent-color)]"

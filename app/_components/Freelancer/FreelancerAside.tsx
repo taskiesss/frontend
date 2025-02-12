@@ -150,7 +150,7 @@ export default function FreelancerAside() {
                     setHourlyRateMin(e.target.value);
                   }
                 }}
-                className="w-1/2 px-3 py-2 border border-[var(--border-color)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--hover-color)]"
+                className="w-1/2 px-3 py-2 border border-[var(--border-color)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--hover-color)] bg-[var(--background-color)]"
               />
               <input
                 type="number"
@@ -163,7 +163,7 @@ export default function FreelancerAside() {
                     setHourlyRateMax((Number(hourlyRateMin) + 1).toString());
                   }
                 }}
-                className="w-1/2 px-3 py-2 border border-[var(--border-color)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--hover-color)]"
+                className="w-1/2 px-3 py-2 border border-[var(--border-color)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--hover-color)] bg-[var(--background-color)]"
               />
             </div>
           </div>
