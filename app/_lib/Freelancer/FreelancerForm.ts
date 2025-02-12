@@ -20,7 +20,7 @@ export async function submitFreelancerForm(
     invariant(!token, 'unauthorized user');
 
     try {
-      const res = await fetch(`${BASE_URL}/freelancer-form`, {
+      const res = await fetch(`${BASE_URL}/freelancers/freelancer-form`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
