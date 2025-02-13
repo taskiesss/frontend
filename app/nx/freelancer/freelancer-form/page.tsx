@@ -2,12 +2,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React, { useState } from "react";
-import Button from "../_components/common/button";
-import Container from "../_components/common/Container";
-import SkillsSearchInput from "../_components/common/SkillsSearchInput";
-import { submitFreelancerForm } from "../_lib/Freelancer/FreelancerForm";
-import { FreelancerFormPayload } from "../_types/FreelancerForm";
-import { invariant } from "../_helpers/invariant";
+import Button from "../../../_components/common/button";
+import Container from "../../../_components/common/Container";
+import SkillsSearchInput from "../../../_components/common/SkillsSearchInput";
+import { submitFreelancerForm } from "../../../_lib/Freelancer/FreelancerForm";
+import { FreelancerFormPayload } from "../../../_types/FreelancerForm";
+import { invariant } from "../../../_helpers/invariant";
 import { useRouter } from "next/navigation";
 
 type Props = { params: string };
@@ -87,23 +87,19 @@ export default function Page({}: Props) {
       const res = await submitFreelancerForm(formData);
 
       try {
-        invariant(res?.error?.type === "unauthorized", "unauthorized user");
+        invariant(res === "unauthorized", "unauthorized user");
       } catch (error: any) {
         router.push("/login");
       }
-      try {
-        invariant(res?.error?.type === "forbidden", "forbidden user");
-      } catch (error: any) {
-        // he should be at his home page
-        if (error.message === "unauthorized token") router.push("/login");
 
-        router.push("/ux/freelancer");
-      }
       if (res === true) {
         router.push("/ux/freelancer");
       }
     } catch (error: any) {
-      console.error(error);
+      if (error.messaage === "Forbidden") router.push("/login");
+      if (error.message === "unauthorized user") router.push("/login");
+
+      console.error(error.message);
     }
   };
 

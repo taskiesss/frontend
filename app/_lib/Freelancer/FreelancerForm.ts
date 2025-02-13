@@ -28,7 +28,12 @@ export async function submitFreelancerForm(
         },
         body: JSON.stringify(data),
       });
-
+      if (res.ok) {
+        return true;
+      }
+      if (res.status === 403) {
+        throw new Error('Forbidden');
+      }
       const output = await res.json();
 
       return output;

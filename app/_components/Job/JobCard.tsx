@@ -3,6 +3,7 @@ import React, { useRef, useState, useEffect } from "react";
 import StarRating from "../common/StarRating";
 import Skill from "../common/Skill";
 import { timeAgo } from "@/app/_helpers/helper";
+import Link from "next/link";
 
 // Define TypeScript interface for Job
 interface Job {
@@ -25,6 +26,7 @@ interface JobCardProps {
 
 const JobCard: React.FC<JobCardProps> = ({ job }) => {
   const {
+    id,
     title,
     description,
     skills,
@@ -34,6 +36,9 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
     rate,
     projectLength,
   } = job;
+
+  const newpath =
+    window.location.pathname === "/jobs" ? "/jobs" : "/nx/freelancer/find-work";
 
   // Mapping project length to human-readable format
   const getProjectLength = (length: string): string => {
@@ -123,12 +128,12 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
         </div>
 
         {/* Job Title */}
-        <a
-          href="#"
+        <Link
+          href={`${newpath}/${id}`}
           className="block text-4xl text-[--accent-color] no-underline hover:text-[--btn-color] hover:underline"
         >
           {title}
-        </a>
+        </Link>
 
         {/* Job Details */}
         <span className="text-slate-500">
