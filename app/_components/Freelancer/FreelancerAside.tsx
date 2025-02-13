@@ -18,7 +18,7 @@ export default function FreelancerAside() {
   // A key to force re-mounting of SkillsSearchInput for resetting its local state
   const [resetKey, setResetKey] = useState<number>(0);
 
-  // Experience options as radio buttons (freelancer API accepts a single value)
+  // Experience options as checkboxes (freelancer API accepts a single value)
   const experienceOptions: {
     label: ExperienceLevelLabel;
     value: ExperienceLevelKey;
@@ -115,28 +115,31 @@ export default function FreelancerAside() {
             />
           </div>
 
-          {/* Experience Level (Radio Buttons) */}
+          {/* Experience Level */}
           <div className="py-2">
             <h3 className="text-xl py-3 font-bold">Experience level</h3>
             <div className="space-y-2 py-3">
               {experienceOptions.map((exp) => (
-                <label key={exp.label} className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    className="form-checkbox text-[var(--btn-color)]"
-                    checked={experienceLevels[exp.value]}
-                    onChange={(e) =>
-                      setExperienceLevels((prev) => ({
-                        ...prev,
-                        [exp.value]: e.target.checked,
-                      }))
-                    }
-                  />
-                  <span className="text-lg">{exp.label}</span>
-                </label>
+                <div key={exp.value} className="flex items-center">
+                  <label className="container">
+                    <input
+                      type="checkbox"
+                      checked={experienceLevels[exp.value]}
+                      onChange={(e) =>
+                        setExperienceLevels((prev) => ({
+                          ...prev,
+                          [exp.value]: e.target.checked,
+                        }))
+                      }
+                    />
+                    <span className="checkmark"></span>
+                    <span className="text-lg leading-5">{exp.label}</span>
+                  </label>
+                </div>
               ))}
             </div>
           </div>
+
           {/* Hourly Rate Range */}
           <div className="mb-4">
             <h3 className="text-xl py-3 font-bold">Hourly Rate Range</h3>
@@ -171,7 +174,7 @@ export default function FreelancerAside() {
           {/* Submit Button */}
           <button
             type="submit"
-            className=" px-4 py-2 bg-[var(--btn-color)] text-[var(--accent-color)] rounded-lg"
+            className="px-4 py-2 bg-[var(--btn-color)] text-[var(--accent-color)] rounded-lg"
           >
             Apply Filters
           </button>

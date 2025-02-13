@@ -73,6 +73,7 @@ html.dark {
   --bg-skill: var(--bg-skill-dark);
 
   --checkbox-bg: #000; /* black in dark mode */
+  --checkbox-hover-bg: #777;
 }
 
 @media screen and (min-width: 30em) {
