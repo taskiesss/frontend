@@ -7,6 +7,7 @@ type Props = {
   };
 };
 
-export default function page({ params }: Props) {
-  return <JobApplication jobid={params.jobid} />;
+export default async function page({ params }: Props) {
+  const { jobid } = await Promise.resolve(params);
+  return <JobApplication jobid={jobid} />;
 }
