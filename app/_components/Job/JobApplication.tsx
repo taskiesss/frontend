@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import React, { useEffect, useState, ChangeEvent, FormEvent } from "react";
@@ -6,6 +7,9 @@ import Image from "next/image";
 import Button from "../common/button";
 import MyUploadWidget from "../common/MyUploadWidget";
 import Link from "next/link";
+import jobApplication from "@/app/_lib/JobApplication/jobApplication";
+import { JobApplicationRequest } from "@/app/_types/JobApplication";
+import { useRouter } from "next/navigation";
 
 type Props = {
   jobid: string;
@@ -25,18 +29,21 @@ const paymentOptions = [
 ];
 
 export default function JobApplication({ jobid }: Props) {
-  const [localCandidateId, setLocalCandidateId] = useState<string | null>(null);
+  const [localCandidateId, setLocalCandidateId] = useState<string>("");
   const [paymentMethod, setPaymentMethod] = useState<string>("");
   const [pricePerHour, setPricePerHour] = useState<string>("");
   const [milestones, setMilestones] = useState<Milestone[]>([
     { title: "", description: "", dueDate: "", expectedHours: "" },
   ]);
   const [coverLetter, setCoverLetter] = useState<string>("");
-  const [attachmentURL, setAttachmentURL] = useState<string>("");
+  const [attachmentURL, setAttachmentURL] = useState<string | undefined>(
+    undefined
+  );
+  const router = useRouter();
 
   useEffect(() => {
     // Get candidateId from localStorage when the component mounts
-    const storedCandidateId = localStorage.getItem("candidateId");
+    const storedCandidateId = localStorage.getItem("candidateId") ?? "";
     setLocalCandidateId(storedCandidateId);
   }, []);
 
@@ -76,7 +83,7 @@ export default function JobApplication({ jobid }: Props) {
     setCoverLetter(e.target.value);
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const milestonesArr = milestones.map((m, index) => {
@@ -88,7 +95,7 @@ export default function JobApplication({ jobid }: Props) {
         expectedHours: Number(m.expectedHours),
       };
     });
-    const request = {
+    const request: JobApplicationRequest = {
       jobId: jobid,
       candidateId: localCandidateId,
       pricePerHour: Number(pricePerHour),
@@ -98,6 +105,17 @@ export default function JobApplication({ jobid }: Props) {
       attachment: attachmentURL,
     };
     console.log(request);
+    try {
+      const response = await jobApplication(request);
+      if (response) {
+        router.back();
+      }
+    } catch (e: any) {
+      if (e === "forbidden" && e === "unauthorized") {
+        router.push("/login");
+      }
+      console.error(e.message);
+    }
   };
 
   const totalPrice = milestones.reduce((acc, m) => {
