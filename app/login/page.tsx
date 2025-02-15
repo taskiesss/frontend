@@ -150,9 +150,9 @@ const LoginPage: React.FC = () => {
 
         // Navigate to the next page with the encrypted user in the URL
         if (res?.isFirst && res?.role?.toLowerCase() === "freelancer") {
-          router.push(`/freelancer-form`);
+          router.push(`/nx/freelancer/freelancer-form`);
         } else {
-          router.push(`/ux/${res?.role?.toLowerCase()}`);
+          router.push(`/nx/${res?.role?.toLowerCase()}`);
         }
       }
     } catch (err: any) {

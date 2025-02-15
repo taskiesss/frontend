@@ -93,7 +93,7 @@ export default function Page({}: Props) {
       }
 
       if (res === true) {
-        router.push("/ux/freelancer");
+        router.push("/nx/freelancer/find-work");
       }
     } catch (error: any) {
       if (error.messaage === "Forbidden") router.push("/login");
