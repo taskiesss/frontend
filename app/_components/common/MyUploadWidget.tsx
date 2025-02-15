@@ -2,12 +2,6 @@
 import React, { useState } from "react";
 import { CldUploadWidget, CldUploadWidgetProps } from "next-cloudinary";
 
-interface CloudinaryUploadWidgetInfo {
-  secure_url: string;
-  original_filename?: string;
-  // Add additional properties if needed.
-}
-
 interface MyUploadWidgetProps {
   onUpload: (url: string, fileName?: string) => void;
   buttonClassName?: string;
@@ -33,7 +27,7 @@ const MyUploadWidget: React.FC<MyUploadWidgetProps> = ({
   };
 
   return (
-    <div>
+    <div className="flex gap-3 items-center">
       <CldUploadWidget
         uploadPreset={
           process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET as string

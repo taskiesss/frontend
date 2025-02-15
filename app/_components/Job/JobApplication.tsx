@@ -10,6 +10,8 @@ import Link from "next/link";
 import jobApplication from "@/app/_lib/JobApplication/jobApplication";
 import { JobApplicationRequest } from "@/app/_types/JobApplication";
 import { useRouter } from "next/navigation";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMoneyCheck } from "@fortawesome/free-solid-svg-icons";
 
 type Props = {
   jobid: string;
@@ -50,7 +52,7 @@ export default function JobApplication({ jobid }: Props) {
   const handleMilestoneChange = (
     index: number,
     field: keyof Milestone,
-    e: ChangeEvent<HTMLInputElement>
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const value = e.target.value;
     setMilestones((prev) => {
@@ -79,7 +81,7 @@ export default function JobApplication({ jobid }: Props) {
     setPricePerHour(e.target.value);
   };
 
-  const handleCoverLetterChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleCoverLetterChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setCoverLetter(e.target.value);
   };
 
@@ -132,7 +134,10 @@ export default function JobApplication({ jobid }: Props) {
           <div className="flex flex-col gap-3">
             <label className="text-lg">How do you want to be paid</label>
             {paymentOptions.map((option) => (
-              <div key={option.key} className="flex items-center">
+              <div
+                key={option.key}
+                className="flex items-start justify-center place-content-center"
+              >
                 <label className="container">
                   <input
                     type="radio"
@@ -140,7 +145,7 @@ export default function JobApplication({ jobid }: Props) {
                     value={option.key}
                     checked={paymentMethod === option.key}
                     onChange={handlePaymentMethodChange}
-                    className="focus:outline-none bg-[var(--background-color)]"
+                    className="focus:outline-none bg-[var(--background-color)] "
                     required
                   />
                   <span className="checkmark"></span>
@@ -158,41 +163,44 @@ export default function JobApplication({ jobid }: Props) {
               value={pricePerHour}
               onChange={handlePricePerHourChange}
               min="0"
-              className="border border-solid w-1/4 border-[var(--border-color)] focus:outline-none bg-[var(--background-color)]"
+              className="border border-solid w-1/4 border-[var(--border-color)] focus:outline-none bg-[var(--background-color)] py-2 px-2 rounded-lg"
               required
             />
           </div>
           <div className="flex flex-col gap-4 items-start">
-            <span>How many milestones do you want to include</span>
+            <span className="text-lg">
+              How many milestones do you want to include
+            </span>
             {milestones.map((m, index) => (
-              <div key={index} className="flex gap-7 ">
-                <div className="flex flex-col">
-                  <label htmlFor={`title-${index}`}>Title</label>
+              <div key={index} className="flex gap-7 items-start py-3">
+                <div className="flex flex-col gap-3">
+                  <label htmlFor={`title-${index}`} className="text-lg">
+                    Title
+                  </label>
                   <input
                     type="text"
                     name={`title-${index}`}
                     id={`title-${index}`}
                     value={m.title}
                     onChange={(e) => handleMilestoneChange(index, "title", e)}
-                    className="border border-solid border-[var(--border-color)] focus:outline-none bg-[var(--background-color)]"
+                    className="border border-solid border-[var(--border-color)] focus:outline-none bg-[var(--background-color)] py-2 px-2 rounded-lg"
                     required
                   />
                 </div>
-                <div className="flex flex-col">
+                <div className="flex flex-col gap-3">
                   <label htmlFor={`description-${index}`}>Description</label>
-                  <input
-                    type="text"
+                  <textarea
                     name={`description-${index}`}
                     id={`description-${index}`}
                     value={m.description}
                     onChange={(e) =>
                       handleMilestoneChange(index, "description", e)
                     }
-                    className="border border-solid border-[var(--border-color)] focus:outline-none bg-[var(--background-color)]"
+                    className="border border-solid border-[var(--border-color)] focus:outline-none bg-[var(--background-color)] py-2 px-2 rounded-lg resize-none"
                     required
                   />
                 </div>
-                <div className="flex flex-col">
+                <div className="flex flex-col gap-3">
                   <label htmlFor={`duedate-${index}`}>Due Date</label>
                   <input
                     type="date"
@@ -200,11 +208,11 @@ export default function JobApplication({ jobid }: Props) {
                     id={`duedate-${index}`}
                     value={m.dueDate}
                     onChange={(e) => handleMilestoneChange(index, "dueDate", e)}
-                    className="border border-solid border-[var(--border-color)] bg-[var(--background-color)] focus:outline-none"
+                    className="border border-solid border-[var(--border-color)] bg-[var(--background-color)] focus:outline-none py-2 px-2 rounded-lg"
                     required
                   />
                 </div>
-                <div className="flex flex-col">
+                <div className="flex flex-col gap-3">
                   <label htmlFor={`expectedHours-${index}`}>
                     Expected Hours
                   </label>
@@ -217,11 +225,15 @@ export default function JobApplication({ jobid }: Props) {
                       handleMilestoneChange(index, "expectedHours", e)
                     }
                     min="0"
-                    className="border border-solid border-[var(--border-color)] bg-[var(--background-color)] focus:outline-none"
+                    className="border border-solid border-[var(--border-color)] bg-[var(--background-color)] focus:outline-none py-2 px-2 rounded-lg"
                     required
                   />
                 </div>
-                <div className="flex flex-col justify-end">
+                <div
+                  className={`${
+                    !(milestones.length > 1) ? "invisible" : ""
+                  } self-center`}
+                >
                   <button
                     type="button"
                     onClick={() => removeMilestone(index)}
@@ -235,59 +247,75 @@ export default function JobApplication({ jobid }: Props) {
             <button
               type="button"
               onClick={addMilestone}
-              className="text-[var(--btn-color)]  focus:outline-none text-lg"
+              className="text-[var(--btn-color)]  focus:outline-none text-lg hover:text-[var(--hover-color)] "
             >
               + Add Milestone
             </button>
           </div>
-          <div className="border border-gray-600 border-solid border-b-0 border-l-0 border-r-0 flex rounded-lg py-5 ">
-            <div className="flex flex-col w-1/2 gap-5">
-              <div className="flex justify-between">
-                <span>Total Price of Project</span>
-                <span className="text-red-600">${totalPrice.toFixed(2)}</span>
+          <div className="border border-gray-600 border-solid border-b-0 border-l-0 border-r-0 flex py-5 justify-start flex-row-reverse ">
+            <div className="flex flex-col w-1/2 gap-5 ">
+              <div className="flex flex-col gap-3">
+                <div className="flex justify-between ">
+                  <span className="text-lg">Total Price of Project</span>
+                  <span className="text-red-600 text-lg">
+                    ${totalPrice.toFixed(2)}
+                  </span>
+                </div>
+                <span className="text-[var(--bg-skill)] ">
+                  This includes all milestones,and is the amount your client
+                  will see
+                </span>
               </div>
-              <div className="flex justify-between">
+              <div className="flex justify-between border-solid border border-[var(--border-color)] border-b-0 border-l-0 border-r-0 py-3 text-lg">
                 <span>Taskaya Service Fee</span>
                 <span className="text-[var(--bg-skill)]">
                   ${services.toFixed(2)}
                 </span>
               </div>
-              <div className="flex justify-between">
-                <span>You&apos;ll Receive</span>
-                <span className="text-[var(--accent-color)]">
-                  ${discountedTotalPrice.toFixed(2)}
+
+              <div>
+                <div className="flex justify-between border-solid border border-[var(--border-color)] border-b-0 border-l-0 border-r-0 py-3 gap-3 text-lg">
+                  <span>You&apos;ll Receive</span>
+                  <span className="text-[var(--accent-color)]">
+                    ${discountedTotalPrice.toFixed(2)}
+                  </span>
+                </div>
+                <span className="text-[var(--bg-skill)]">
+                  Your estimated payment,after service fees
                 </span>
               </div>
             </div>
-            {/* <Image ref={}></Image> */}
+            <div className="flex items-center justify-center flex-1">
+              <FontAwesomeIcon icon={faMoneyCheck} size="10x" />
+            </div>
           </div>
         </div>
-        <div className="border border-solid border-gray-600">
-          <div className="flex flex-col">
+        <div className="border border-solid border-gray-600 rounded-lg px-6 py-6 flex flex-col gap-5">
+          <div className="flex flex-col gap-3">
             <h1 className="text-3xl">Cover Letter</h1>
-            <input
-              type="text"
+            <textarea
               name="coverLetter"
               id="coverLetter"
               value={coverLetter}
               onChange={handleCoverLetterChange}
-              className="border border-solid border-[var(--border-color)] focus:outline-none bg-[var(--background-color)]"
+              className="border border-solid border-[var(--border-color)] focus:outline-none bg-[var(--background-color)] text-lg box-content resize-none py-2 px-2 rounded-lg"
               required
             />
           </div>
-          <div className="">
+          <div className="flex flex-col gap-3">
             <h3 className="text-2xl">Attachments</h3>
             {/* Replace the file input with the custom upload widget */}
             <MyUploadWidget
               onUpload={(url) => setAttachmentURL(url)}
-              buttonClassName="bg-[var(--btn-color)] rounded-lg py-2 px-2"
+              buttonClassName="bg-[var(--btn-color)] rounded-lg py-2 px-2 "
             />
             {attachmentURL && (
-              <div>
+              <div className="flex">
                 <Link
                   href={attachmentURL}
                   target="_blank"
                   rel="noopener noreferrer"
+                  className="hover:underline text-blue-500"
                 >
                   View Uploaded File
                 </Link>
@@ -295,8 +323,10 @@ export default function JobApplication({ jobid }: Props) {
             )}
           </div>
         </div>
-        <div>
-          <Button type="submit">Submit</Button>
+        <div className="flex justify-end">
+          <Button type="submit" className="text-lg">
+            Submit
+          </Button>
         </div>
       </form>
     </Container>
