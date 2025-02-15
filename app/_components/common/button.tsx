@@ -17,7 +17,7 @@ const Button: React.FC<ButtonProps> = ({
       onClick={onClick}
       disabled={disabled}
       className={`
-        
+        font-semibold
         inline-block
         cursor-pointer
         no-underline

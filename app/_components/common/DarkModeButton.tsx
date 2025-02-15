@@ -1,13 +1,19 @@
-// _store/_components/DarkModeToggleButton.tsx
 "use client";
-import React from "react";
-
+import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSun, faMoon } from "@fortawesome/free-solid-svg-icons";
 import { useDarkMode } from "@/app/_store/_contexts/DarkModeContext";
 
 export default function DarkModeToggleButton() {
   const { isDarkMode, toggleDarkMode } = useDarkMode();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Don't render the button until we're on the client
+  if (!mounted) return null;
 
   return (
     <button
