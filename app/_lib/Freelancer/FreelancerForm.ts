@@ -12,9 +12,7 @@ const BASE_URL = 'http://localhost:8080';
  * @returns A promise that resolves to a FreelancerFormSuccessResponse if the profile is submitted successfully.
  * @throws An error with an appropriate message if the submission fails.
  */
-export async function submitFreelancerForm(
-  data: FreelancerFormPayload
-): Promise<any> {
+export async function submitFreelancerForm(data: FreelancerFormPayload) {
   try {
     const token = Cookies.get('token');
     invariant(!token, 'unauthorized user');
