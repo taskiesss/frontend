@@ -24,8 +24,12 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <DarkModeProvider>
-          <Providers>{children}</Providers>
-          <DarkModeToggleButton />
+          <Providers>
+            {children}
+
+            <DarkModeToggleButton />
+            {/* button should be inside a client component not server component or it will cause hydration error */}
+          </Providers>
         </DarkModeProvider>
       </body>
     </html>
