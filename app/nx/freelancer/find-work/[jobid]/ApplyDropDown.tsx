@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React, { useEffect, useState } from "react";
 import { DropdownMenu } from "@/app/_components/common/DropDownMenu";
@@ -20,40 +21,42 @@ export default function ApplyDropDown({
   children,
   jobid,
 }: ApplyDropDownProps) {
-  const [communities, setCommunities] = useState<OwnedCommunity[]>([]);
+  const [communities, setCommunities] = useState<OwnedCommunity[]>([
+    { name: "", id: "" },
+  ]);
 
-  // useEffect(() => {
-  //   async function fetchCommunities() {
-  //     try {
-  //       const comms = await getOwnedCommunities();
-  //       setCommunities(comms);
-  //     } catch (error) {
-  //       if (error.message == "Forbidden") {
-  //         redirect("/login");
-  //       }
-  //       throw new Error(error.message);
-  //     }
-  //   }
-  //   fetchCommunities();
-  // }, []);
+  useEffect(() => {
+    async function fetchCommunities() {
+      try {
+        const comms = await getOwnedCommunities();
+        setCommunities(comms);
+      } catch (error: any) {
+        if (error.message == "Forbidden") {
+          redirect("/login");
+        }
+        throw new Error(error.message);
+      }
+    }
+    fetchCommunities();
+  }, []);
 
-  const fakeCommunities: OwnedCommunity[] = [
-    { id: "freelancer-1", name: "John Doe" },
-    { id: "comm-1", name: "Tech Innovators" },
-    { id: "comm-2", name: "Creative Minds" },
-    { id: "comm-3", name: "Digital Nomads" },
-  ];
+  // const fakeCommunities: OwnedCommunity[] = [
+  //   { id: "freelancer-1", name: "John Doe" },
+  //   { id: "comm-1", name: "Tech Innovators" },
+  //   { id: "comm-2", name: "Creative Minds" },
+  //   { id: "comm-3", name: "Digital Nomads" },
+  // ];
 
   // Prepare dropdown options:
   // The first element is always the freelancer option.
   const freelancerOption = {
-    label: fakeCommunities[0].name,
-    value: fakeCommunities[0].id,
+    label: communities[0].name,
+    value: communities[0].id,
   };
   // The remaining elements (if any) are the community options.
   const communityOptions =
-    fakeCommunities.length > 1
-      ? fakeCommunities.slice(1).map((community) => ({
+    communities.length > 1
+      ? communities.slice(1).map((community) => ({
           label: community.name,
           value: community.id,
         }))
@@ -64,7 +67,7 @@ export default function ApplyDropDown({
   const handleSelectOption = (option: string) => {
     localStorage.setItem("id", option);
     setSelectedOption(option);
-    redirect(`/nx/freelancer/${jobid}/apply`);
+    redirect(`/nx/freelancer/proposals/${jobid}/apply`);
   };
 
   return (

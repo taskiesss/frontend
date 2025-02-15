@@ -1,32 +1,32 @@
-import { JobDetailsResponse } from "@/app/_types/JobDetailsResponce";
-import { OwnedCommunity } from "@/app/_types/OwnedCommunity";
-import Cookies from "js-cookie";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { JobDetailsResponse } from '@/app/_types/JobDetailsResponce';
+import Cookies from 'js-cookie';
 
-const BASE_URL = "http://localhost:8080";
+const BASE_URL = 'http://localhost:8080';
 
 export async function getJobDetails(
   jobId: string
 ): Promise<JobDetailsResponse> {
   // Check if the token exists; throw an error if not.
-  const token = Cookies.get("token");
+  const token = Cookies.get('token');
   if (!token) {
-    throw new Error("Unauthorized user");
+    throw new Error('Unauthorized user');
   }
 
   const response = await fetch(`${BASE_URL}/freelancers/jobs/${jobId}`, {
-    method: "GET",
+    method: 'GET',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
   });
 
   if (response.status === 403) {
-    throw new Error("Forbidden");
+    throw new Error('Forbidden');
   }
 
   if (!response.ok) {
-    let errorMessage = "Job not found.";
+    let errorMessage = 'Job not found.';
     try {
       const errorData = await response.json();
       errorMessage = errorData.message || errorMessage;
@@ -40,27 +40,28 @@ export async function getJobDetails(
   return response.json() as Promise<JobDetailsResponse>;
 }
 
-export async function getOwnedCommunities(): Promise<OwnedCommunity[]> {
+export async function getOwnedCommunities(): Promise<any> {
   // Check if the token exists; throw an error if not.
-  const token = Cookies.get("token");
+  const token = Cookies.get('token');
   if (!token) {
-    throw new Error("Unauthorized user");
+    throw new Error('Unauthorized user');
   }
 
   const response = await fetch(`${BASE_URL}/freelancers/owned-communities`, {
-    method: "GET",
+    method: 'GET',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
   });
+  // console.log(response);
 
   if (response.status === 403) {
-    throw new Error("Forbidden");
+    throw new Error('Forbidden');
   }
 
   if (!response.ok) {
-    let errorMessage = "Error retrieving communities.";
+    let errorMessage = 'Error retrieving communities.';
     try {
       const errorData = await response.json();
       errorMessage = errorData.message || errorMessage;
@@ -69,7 +70,8 @@ export async function getOwnedCommunities(): Promise<OwnedCommunity[]> {
     }
     throw new Error(errorMessage);
   }
-
+  const output = await response.json();
+  // console.log(output);
   // Parse and return the JSON data as an array of OwnedCommunity.
-  return response.json() as Promise<OwnedCommunity[]>;
+  return output;
 }

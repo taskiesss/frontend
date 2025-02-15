@@ -43,7 +43,7 @@ export default function JobApplication({ jobid }: Props) {
 
   useEffect(() => {
     // Get candidateId from localStorage when the component mounts
-    const storedCandidateId = localStorage.getItem("candidateId") ?? "";
+    const storedCandidateId = localStorage.getItem("id") ?? "";
     setLocalCandidateId(storedCandidateId);
   }, []);
 
