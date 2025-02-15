@@ -1,25 +1,75 @@
 import { JobDetailsResponse } from "@/app/_types/JobDetailsResponce";
+import { OwnedCommunity } from "@/app/_types/OwnedCommunity";
+import Cookies from "js-cookie";
 
 const BASE_URL = "http://localhost:8080";
-
-// The function signature is updated to Promise<JobDetailsResponse>, ensuring that on success, the promise resolves to a JobDetailsResponse object.
 
 export async function getJobDetails(
   jobId: string
 ): Promise<JobDetailsResponse> {
-  try {
-    const response = await fetch(`${BASE_URL}/freelancers/jobs/${jobId}`, {
-      method: "GET",
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || "Job not found.");
-    }
-
-    const data = await response.json();
-    return data as JobDetailsResponse;
-  } catch (error) {
-    throw new Error("Internal Error :(");
+  // Check if the token exists; throw an error if not.
+  const token = Cookies.get("token");
+  if (!token) {
+    throw new Error("Unauthorized user");
   }
+
+  const response = await fetch(`${BASE_URL}/freelancers/jobs/${jobId}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (response.status === 403) {
+    throw new Error("Forbidden");
+  }
+
+  if (!response.ok) {
+    let errorMessage = "Job not found.";
+    try {
+      const errorData = await response.json();
+      errorMessage = errorData.message || errorMessage;
+    } catch {
+      // Fallback in case errorData can't be parsed.
+    }
+    throw new Error(errorMessage);
+  }
+
+  // Parse and return the JSON data.
+  return response.json() as Promise<JobDetailsResponse>;
+}
+
+export async function getOwnedCommunities(): Promise<OwnedCommunity[]> {
+  // Check if the token exists; throw an error if not.
+  const token = Cookies.get("token");
+  if (!token) {
+    throw new Error("Unauthorized user");
+  }
+
+  const response = await fetch(`${BASE_URL}/freelancers/owned-communities`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (response.status === 403) {
+    throw new Error("Forbidden");
+  }
+
+  if (!response.ok) {
+    let errorMessage = "Error retrieving communities.";
+    try {
+      const errorData = await response.json();
+      errorMessage = errorData.message || errorMessage;
+    } catch {
+      // Fallback in case errorData can't be parsed.
+    }
+    throw new Error(errorMessage);
+  }
+
+  // Parse and return the JSON data as an array of OwnedCommunity.
+  return response.json() as Promise<OwnedCommunity[]>;
 }
