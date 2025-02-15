@@ -22,20 +22,20 @@ export default function ApplyDropDown({
 }: ApplyDropDownProps) {
   const [communities, setCommunities] = useState<OwnedCommunity[]>([]);
 
-  // Uncomment the API fetching code below to use real data.
-  /*
-  useEffect(() => {
-    async function fetchCommunities() {
-      try {
-        const comms = await getOwnedCommunities();
-        setCommunities(comms);
-      } catch (error) {
-        console.error("Error fetching communities", error);
-      }
-    }
-    fetchCommunities();
-  }, []);
-  */
+  // useEffect(() => {
+  //   async function fetchCommunities() {
+  //     try {
+  //       const comms = await getOwnedCommunities();
+  //       setCommunities(comms);
+  //     } catch (error) {
+  //       if (error.message == "Forbidden") {
+  //         redirect("/login");
+  //       }
+  //       throw new Error(error.message);
+  //     }
+  //   }
+  //   fetchCommunities();
+  // }, []);
 
   const fakeCommunities: OwnedCommunity[] = [
     { id: "freelancer-1", name: "John Doe" },
