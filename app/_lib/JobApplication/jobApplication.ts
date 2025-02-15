@@ -13,6 +13,7 @@ const jobApplication = async (request: JobApplicationRequest) => {
       `${BASE_URL}/freelancers/proposals/${request.jobId}`,
       {
         method: 'POST',
+        // mode: 'no-cors',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,

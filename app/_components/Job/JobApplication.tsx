@@ -125,12 +125,12 @@ export default function JobApplication({ jobid }: Props) {
   const services = totalPrice * TASKAYA_SERVICE;
   const discountedTotalPrice = totalPrice * (1 - TASKAYA_SERVICE);
   return (
-    <Container>
-      <form onSubmit={handleSubmit} action="">
-        <div className="flex flex-col border border-solid border-gray-600 ">
+    <Container className="flex flex-col items-center">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-10  py-10">
+        <div className="flex flex-col border border-solid border-gray-600 gap-5 px-6 py-6">
           <h1 className="text-3xl">Terms</h1>
-          <div className="flex flex-col">
-            <span>How do you want to be paid</span>
+          <div className="flex flex-col gap-3">
+            <label className="text-lg">How do you want to be paid</label>
             {paymentOptions.map((option) => (
               <div key={option.key} className="flex items-center">
                 <label className="container">
@@ -140,17 +140,17 @@ export default function JobApplication({ jobid }: Props) {
                     value={option.key}
                     checked={paymentMethod === option.key}
                     onChange={handlePaymentMethodChange}
-                    className="focus:outline-none"
+                    className="focus:outline-none bg-[var(--background-color)]"
                     required
                   />
                   <span className="checkmark"></span>
-                  <span className="text-lg leading-5">{option.label}</span>
+                  <span className="text-lg ">{option.label}</span>
                 </label>
               </div>
             ))}
           </div>
-          <div className="flex flex-col w-1/6">
-            <label className="container">Expected price per hour</label>
+          <div className="flex flex-col gap-3 ">
+            <label className="text-lg">Expected price per hour</label>
             <input
               type="number"
               name="pricePerHour"
@@ -158,11 +158,11 @@ export default function JobApplication({ jobid }: Props) {
               value={pricePerHour}
               onChange={handlePricePerHourChange}
               min="0"
-              className="border border-solid border-[var(--border-color)] focus:outline-none"
+              className="border border-solid w-1/4 border-[var(--border-color)] focus:outline-none bg-[var(--background-color)]"
               required
             />
           </div>
-          <div className="mt-4">
+          <div className="">
             <span>How many milestones do you want to include</span>
             {milestones.map((m, index) => (
               <div key={index} className="flex gap-7 ">
@@ -174,7 +174,7 @@ export default function JobApplication({ jobid }: Props) {
                     id={`title-${index}`}
                     value={m.title}
                     onChange={(e) => handleMilestoneChange(index, "title", e)}
-                    className="border border-solid border-[var(--border-color)] focus:outline-none"
+                    className="border border-solid border-[var(--border-color)] focus:outline-none bg-[var(--background-color)]"
                     required
                   />
                 </div>
@@ -188,7 +188,7 @@ export default function JobApplication({ jobid }: Props) {
                     onChange={(e) =>
                       handleMilestoneChange(index, "description", e)
                     }
-                    className="border border-solid border-[var(--border-color)] focus:outline-none"
+                    className="border border-solid border-[var(--border-color)] focus:outline-none bg-[var(--background-color)]"
                     required
                   />
                 </div>

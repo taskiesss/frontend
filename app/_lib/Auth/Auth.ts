@@ -5,7 +5,7 @@ import { User } from '../../_types/User';
 const BASE_URL = 'http://localhost:8080';
 export async function registerUser(user: User): Promise<any> {
   try {
-    const res = await fetch(`${BASE_URL}/signup/create-account`, {
+    const res = await fetch(`${BASE_URL}/public/signup/create-a ccount`, {
       method: 'POST',
       body: JSON.stringify(user),
       headers: {
@@ -30,7 +30,7 @@ export async function registerUser(user: User): Promise<any> {
 
 export async function otpVerify(user: User, otp: string): Promise<any> {
   try {
-    const res = await fetch(`${BASE_URL}/signup/verify`, {
+    const res = await fetch(`${BASE_URL}/public/signup/verify`, {
       method: 'POST',
       body: JSON.stringify({ ...user, otp }),
       headers: {
@@ -76,7 +76,7 @@ export async function sendOTP(user: User): Promise<boolean> {
 
 export async function Login(email: string, password: string) {
   try {
-    const res = await fetch(`${BASE_URL}/login`, {
+    const res = await fetch(`${BASE_URL}/public/login`, {
       method: 'POST',
       body: JSON.stringify({ email, password }),
       headers: {

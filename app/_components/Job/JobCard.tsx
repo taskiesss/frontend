@@ -4,6 +4,7 @@ import StarRating from "../common/StarRating";
 import Skill from "../common/Skill";
 import { timeAgo } from "@/app/_helpers/helper";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 // Define TypeScript interface for Job
 interface Job {
@@ -37,8 +38,8 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
     projectLength,
   } = job;
 
-  const newpath =
-    window.location.pathname === "/jobs" ? "/jobs" : "/nx/freelancer/find-work";
+  const pathname = usePathname();
+  const newpath = pathname === "/jobs" ? "/jobs" : "/nx/freelancer/find-work";
 
   // Mapping project length to human-readable format
   const getProjectLength = (length: string): string => {

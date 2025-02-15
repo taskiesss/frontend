@@ -4,6 +4,7 @@
 // freelancerFormApi.ts
 import { invariant } from '@/app/_helpers/invariant';
 import { FreelancerFormPayload } from '@/app/_types/FreelancerForm';
+import { mode } from 'crypto-js';
 import Cookies from 'js-cookie';
 const BASE_URL = 'http://localhost:8080';
 /**
@@ -18,14 +19,19 @@ export async function submitFreelancerForm(data: FreelancerFormPayload) {
     invariant(!token, 'unauthorized user');
 
     try {
-      const res = await fetch(`${BASE_URL}/freelancers/freelancer-form`, {
+      const request = {
         method: 'POST',
+
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(data),
-      });
+      };
+      const res = await fetch(
+        `${BASE_URL}/freelancers/freelancer-form`,
+        request
+      );
       if (res.ok) {
         return true;
       }
