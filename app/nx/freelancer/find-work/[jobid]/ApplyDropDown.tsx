@@ -3,12 +3,14 @@ import React, { useEffect, useState } from "react";
 import { DropdownMenu } from "@/app/_components/common/DropDownMenu";
 import { getOwnedCommunities } from "@/app/_lib/jobs/JobsSearch";
 import { OwnedCommunity } from "@/app/_types/OwnedCommunity";
+import { redirect } from "next/navigation";
 
 interface ApplyDropDownProps {
   setSelectedOption: (option: string) => void;
   setIsOpen: (open: boolean) => void;
   isOpen: boolean;
   children?: React.ReactNode;
+  jobid: string;
 }
 
 export default function ApplyDropDown({
@@ -16,6 +18,7 @@ export default function ApplyDropDown({
   setIsOpen,
   isOpen,
   children,
+  jobid,
 }: ApplyDropDownProps) {
   const [communities, setCommunities] = useState<OwnedCommunity[]>([]);
 
@@ -61,6 +64,7 @@ export default function ApplyDropDown({
   const handleSelectOption = (option: string) => {
     localStorage.setItem("id", option);
     setSelectedOption(option);
+    redirect(`/nx/freelancer/${jobid}/apply`);
   };
 
   return (

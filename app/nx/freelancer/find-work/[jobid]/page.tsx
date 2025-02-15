@@ -171,6 +171,7 @@ export default function Page({ params }: { params: { jobid: string } }) {
                 setSelectedOption={setSelectedOption}
                 setIsOpen={setIsDropdownOpen}
                 isOpen={isDropdownOpen}
+                jobid={params.jobid}
               >
                 applyOption
               </ApplyDropDown>

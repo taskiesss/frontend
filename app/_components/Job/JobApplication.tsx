@@ -127,7 +127,7 @@ export default function JobApplication({ jobid }: Props) {
   return (
     <Container className="flex flex-col items-center">
       <form onSubmit={handleSubmit} className="flex flex-col gap-10  py-10">
-        <div className="flex flex-col border border-solid border-gray-600 gap-5 px-6 py-6">
+        <div className="flex flex-col border border-solid border-gray-600 gap-5 px-6 py-6 rounded-lg">
           <h1 className="text-3xl">Terms</h1>
           <div className="flex flex-col gap-3">
             <label className="text-lg">How do you want to be paid</label>
@@ -162,7 +162,7 @@ export default function JobApplication({ jobid }: Props) {
               required
             />
           </div>
-          <div className="">
+          <div className="flex flex-col gap-4 items-start">
             <span>How many milestones do you want to include</span>
             {milestones.map((m, index) => (
               <div key={index} className="flex gap-7 ">
@@ -200,7 +200,7 @@ export default function JobApplication({ jobid }: Props) {
                     id={`duedate-${index}`}
                     value={m.dueDate}
                     onChange={(e) => handleMilestoneChange(index, "dueDate", e)}
-                    className="border border-solid border-[var(--border-color)] focus:outline-none"
+                    className="border border-solid border-[var(--border-color)] bg-[var(--background-color)] focus:outline-none"
                     required
                   />
                 </div>
@@ -217,7 +217,7 @@ export default function JobApplication({ jobid }: Props) {
                       handleMilestoneChange(index, "expectedHours", e)
                     }
                     min="0"
-                    className="border border-solid border-[var(--border-color)] focus:outline-none"
+                    className="border border-solid border-[var(--border-color)] bg-[var(--background-color)] focus:outline-none"
                     required
                   />
                 </div>
@@ -225,7 +225,7 @@ export default function JobApplication({ jobid }: Props) {
                   <button
                     type="button"
                     onClick={() => removeMilestone(index)}
-                    className="focus:outline-none"
+                    className="focus:outline-none text-red-600"
                   >
                     Remove
                   </button>
@@ -235,13 +235,13 @@ export default function JobApplication({ jobid }: Props) {
             <button
               type="button"
               onClick={addMilestone}
-              className="text-[var(--btn-color)]  focus:outline-none"
+              className="text-[var(--btn-color)]  focus:outline-none text-lg"
             >
               + Add Milestone
             </button>
           </div>
-          <div className="border border-gray-600 border-solid flex ">
-            <div className="flex flex-col w-1/2">
+          <div className="border border-gray-600 border-solid border-b-0 border-l-0 border-r-0 flex rounded-lg py-5 ">
+            <div className="flex flex-col w-1/2 gap-5">
               <div className="flex justify-between">
                 <span>Total Price of Project</span>
                 <span className="text-red-600">${totalPrice.toFixed(2)}</span>
@@ -271,7 +271,7 @@ export default function JobApplication({ jobid }: Props) {
               id="coverLetter"
               value={coverLetter}
               onChange={handleCoverLetterChange}
-              className="border border-solid border-[var(--border-color)] focus:outline-none"
+              className="border border-solid border-[var(--border-color)] focus:outline-none bg-[var(--background-color)]"
               required
             />
           </div>
