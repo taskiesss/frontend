@@ -24,15 +24,16 @@ export default function Page({}: Props) {
   const [lastName, setLastName] = useState("");
 
   // Professional Information
-  const [expectedHourlyRate, setExpectedHourlyRate] = useState(0);
+  const [expectedHourlyRate, setExpectedHourlyRate] = useState("");
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
   const [languagesSpoken, setLanguagesSpoken] = useState("");
-  const [averageWorkHours, setAverageWorkHours] = useState(0);
+  const [averageWorkHours, setAverageWorkHours] = useState("");
   const [professionalTitle, setProfessionalTitle] = useState("");
   const [professionalSummary, setProfessionalSummary] = useState("");
 
   // Education: Allow multiple entries
   const [educationList, setEducationList] = useState<Education[]>([]);
+  const [error, setError] = useState<string>("");
   const router = useRouter();
 
   const addEducation = () => {
@@ -67,17 +68,26 @@ export default function Page({}: Props) {
     }
   };
 
+  // New: Remove a selected skill
+  const handleRemoveSkill = (skill: string, index: number) => {
+    setSelectedSkills((prev) => prev.filter((_, i) => i !== index));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (selectedSkills.length === 0) {
+      setError("You have to select a skill");
+      return;
+    }
     const languages = languagesSpoken.split(",").map((l) => l.trim());
     const formData: FreelancerFormPayload = {
       firstName: firstName,
       lastName: lastName,
-      hourlyRate: expectedHourlyRate,
+      hourlyRate: Number(expectedHourlyRate),
       skills: selectedSkills,
       professionalSummary: professionalSummary,
       languages: languages,
-      hoursPerWeek: averageWorkHours,
+      hoursPerWeek: Number(averageWorkHours),
       professionalTitle,
       education: educationList,
     };
@@ -96,7 +106,7 @@ export default function Page({}: Props) {
         router.push("/nx/freelancer/find-work");
       }
     } catch (error: any) {
-      if (error.messaage === "Forbidden") router.push("/login");
+      if (error.message === "Forbidden") router.push("/login");
       if (error.message === "unauthorized user") router.push("/login");
 
       console.error(error.message);
@@ -128,8 +138,11 @@ export default function Page({}: Props) {
                   required
                   type="text"
                   value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
-                  className="px-3 py-4 text-lg w-full border border-solid border-gray-600 rounded-lg focus:outline-none"
+                  onChange={(e) => {
+                    e.preventDefault();
+                    setFirstName(e.target.value);
+                  }}
+                  className="px-3 py-4 text-lg w-full border border-solid border-gray-600 rounded-lg focus:outline-none bg-[var(--background-color)]"
                 />
               </div>
               <div className="flex flex-col gap-3 w-full">
@@ -138,8 +151,11 @@ export default function Page({}: Props) {
                   required
                   type="text"
                   value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
-                  className="px-3 py-4 text-lg w-full border border-solid border-gray-600 rounded-lg focus:outline-none"
+                  onChange={(e) => {
+                    e.preventDefault();
+                    setLastName(e.target.value);
+                  }}
+                  className="px-3 py-4 text-lg w-full border border-solid border-gray-600 rounded-lg focus:outline-none bg-[var(--background-color)]"
                 />
               </div>
             </div>
@@ -158,19 +174,24 @@ export default function Page({}: Props) {
                   type="number"
                   min="1"
                   value={expectedHourlyRate}
-                  onChange={(e) =>
-                    setExpectedHourlyRate(Math.max(Number(e.target.value), 1))
-                  }
-                  className="px-3 py-4 text-lg border border-solid border-gray-600 rounded-lg focus:outline-none"
+                  onChange={(e) => {
+                    e.preventDefault();
+                    setExpectedHourlyRate(e.target.value);
+                  }}
+                  className="px-3 py-4 text-lg border border-solid border-gray-600 rounded-lg focus:outline-none bg-[var(--background-color)]"
                 />
               </div>
-              <div className="flex flex-col gap-3">
+              <div className="flex flex-col gap-2">
                 <span className="text-lg">Skills</span>
                 <SkillsSearchInput
                   className="py-4 border border-solid border-gray-600 rounded-lg"
                   selectedSkills={selectedSkills}
                   onSelectSkill={handleSelectSkill}
+                  onRemoveSkill={handleRemoveSkill}
                 />
+                {error === "" ? null : (
+                  <span className="text-red-500 text-lg">{error}</span>
+                )}
               </div>
               <div className="flex flex-col gap-3">
                 <span className="text-lg">Languages Spoken</span>
@@ -179,8 +200,11 @@ export default function Page({}: Props) {
                   type="text"
                   placeholder="Separated by comma (ex. English,French)"
                   value={languagesSpoken}
-                  onChange={(e) => setLanguagesSpoken(e.target.value)}
-                  className="px-3 py-4 text-lg border border-solid border-gray-600 rounded-lg focus:outline-none"
+                  onChange={(e) => {
+                    e.preventDefault();
+                    setLanguagesSpoken(e.target.value);
+                  }}
+                  className="px-3 py-4 text-lg border border-solid border-gray-600 rounded-lg focus:outline-none bg-[var(--background-color)]"
                 />
               </div>
               <div className="flex flex-col gap-3">
@@ -190,10 +214,11 @@ export default function Page({}: Props) {
                   type="number"
                   min="1"
                   value={averageWorkHours}
-                  onChange={(e) =>
-                    setAverageWorkHours(Math.max(Number(e.target.value), 1))
-                  }
-                  className="px-3 py-4 text-lg border border-solid border-gray-600 rounded-lg focus:outline-none"
+                  onChange={(e) => {
+                    e.preventDefault();
+                    setAverageWorkHours(e.target.value);
+                  }}
+                  className="px-3 py-4 text-lg border border-solid border-gray-600 rounded-lg focus:outline-none bg-[var(--background-color)]"
                 />
               </div>
               <div className="flex flex-col gap-3">
@@ -202,18 +227,23 @@ export default function Page({}: Props) {
                   required
                   type="text"
                   value={professionalTitle}
-                  onChange={(e) => setProfessionalTitle(e.target.value)}
-                  className="px-3 py-4 text-lg border border-solid border-gray-600 rounded-lg focus:outline-none"
+                  onChange={(e) => {
+                    e.preventDefault();
+                    setProfessionalTitle(e.target.value);
+                  }}
+                  className="px-3 py-4 text-lg border border-solid border-gray-600 rounded-lg focus:outline-none bg-[var(--background-color)]"
                 />
               </div>
               <div className="flex flex-col gap-3">
                 <span className="text-lg">Professional Summary</span>
-                <input
+                <textarea
                   required
-                  type="text"
                   value={professionalSummary}
-                  onChange={(e) => setProfessionalSummary(e.target.value)}
-                  className="px-3 py-4 text-lg border border-solid border-gray-600 rounded-lg focus:outline-none"
+                  onChange={(e) => {
+                    e.preventDefault();
+                    setProfessionalSummary(e.target.value);
+                  }}
+                  className="px-3 py-4 text-lg border border-solid border-gray-600 rounded-lg focus:outline-none resize-none bg-[var(--background-color)] h-32"
                 />
               </div>
             </div>
@@ -231,10 +261,11 @@ export default function Page({}: Props) {
                   <input
                     type="text"
                     value={edu.degree}
-                    onChange={(e) =>
-                      updateEducation(index, "degree", e.target.value)
-                    }
-                    className="px-3 py-4 text-lg border border-solid border-gray-600 rounded-lg focus:outline-none"
+                    onChange={(e) => {
+                      e.preventDefault();
+                      updateEducation(index, "degree", e.target.value);
+                    }}
+                    className="px-3 py-4 text-lg border border-solid border-gray-600 rounded-lg focus:outline-none bg-[var(--background-color)]"
                   />
                 </div>
                 <div className="flex flex-col gap-3">
@@ -242,10 +273,11 @@ export default function Page({}: Props) {
                   <input
                     type="text"
                     value={edu.institution}
-                    onChange={(e) =>
-                      updateEducation(index, "institution", e.target.value)
-                    }
-                    className="px-3 py-4 text-lg border border-solid border-gray-600 rounded-lg focus:outline-none"
+                    onChange={(e) => {
+                      e.preventDefault();
+                      updateEducation(index, "institution", e.target.value);
+                    }}
+                    className="px-3 py-4 text-lg border border-solid border-gray-600 rounded-lg focus:outline-none bg-[var(--background-color)]"
                   />
                 </div>
                 <div className="flex flex-col gap-3">
@@ -254,14 +286,15 @@ export default function Page({}: Props) {
                     type="number"
                     min="1"
                     value={edu.graduationYear}
-                    onChange={(e) =>
+                    onChange={(e) => {
+                      e.preventDefault();
                       updateEducation(
                         index,
                         "graduationYear",
                         Math.max(Number(e.target.value), 1)
-                      )
-                    }
-                    className="px-3 py-4 text-lg border border-solid border-gray-600 rounded-lg focus:outline-none"
+                      );
+                    }}
+                    className="px-3 py-4 text-lg border border-solid border-gray-600 rounded-lg focus:outline-none bg-[var(--background-color)]"
                   />
                 </div>
                 <button

@@ -1,14 +1,20 @@
 import React from "react";
 
-type Props = { skill: string; index: number };
+type Props = { skill: string; index: number; onRemove?: () => void };
 
-export default function Skill({ index, skill }: Props) {
+export default function Skill({ index, skill, onRemove }: Props) {
   return (
-    <span
-      key={index}
-      className="bg-[var(--bg-skill)] rounded-2xl py-1 px-2 text-base whitespace-nowrap"
-    >
-      {skill}
-    </span>
+    <div className="flex gap-2 justify-center items-center bg-[var(--bg-skill)] rounded-2xl py-1 px-2 whitespace-nowrap text-md">
+      <span key={index}>{skill}</span>
+      {onRemove && (
+        <button
+          onClick={onRemove}
+          className="text-red-500 text-lg transition-transform duration-200 hover:scale-110"
+          type="button"
+        >
+          ✖
+        </button>
+      )}
+    </div>
   );
 }

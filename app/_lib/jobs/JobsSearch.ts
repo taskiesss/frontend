@@ -1,17 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { JobDetailsResponse } from '@/app/_types/JobDetailsResponce';
-import Cookies from 'js-cookie';
 
 const BASE_URL = 'http://localhost:8080';
 
 export async function getJobDetails(
+  token: string | undefined,
   jobId: string
-): Promise<JobDetailsResponse> {
+): Promise<any> {
   // Check if the token exists; throw an error if not.
-  const token = Cookies.get('token');
   if (!token) {
     throw new Error('Unauthorized user');
   }
+  // console.log(token);
 
   const response = await fetch(`${BASE_URL}/freelancers/jobs/${jobId}`, {
     method: 'GET',
@@ -20,6 +19,8 @@ export async function getJobDetails(
       Authorization: `Bearer ${token}`,
     },
   });
+
+  // console.log(response);
 
   if (response.status === 403) {
     throw new Error('Forbidden');
@@ -35,14 +36,18 @@ export async function getJobDetails(
     }
     throw new Error(errorMessage);
   }
-
+  // console.log(response.status);
+  const out = await response.json();
   // Parse and return the JSON data.
-  return response.json() as Promise<JobDetailsResponse>;
+
+  return out;
 }
 
-export async function getOwnedCommunities(): Promise<any> {
+export async function getOwnedCommunities(
+  token: string | undefined
+): Promise<any> {
   // Check if the token exists; throw an error if not.
-  const token = Cookies.get('token');
+
   if (!token) {
     throw new Error('Unauthorized user');
   }

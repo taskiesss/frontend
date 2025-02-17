@@ -6,6 +6,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Skill from "../common/Skill";
 import StarRating from "../common/StarRating";
 import userprofile from "@/public/images/userprofile.jpg";
+import { getExperienceLevel } from "@/app/_helpers/helper";
 
 interface JobCardProps {
   community: CommunityResponse;
@@ -25,18 +26,6 @@ const CommunityCard: React.FC<JobCardProps> = ({ community }) => {
   } = community;
 
   // Map experience levels to human-readable strings.
-  const getExperienceLevel = (level: string): string => {
-    switch (level) {
-      case "entry_level":
-        return "Entry Level";
-      case "intermediate":
-        return "Intermediate";
-      case "expert":
-        return "Expert";
-      default:
-        return "Unknown level";
-    }
-  };
 
   // Reference and state for scrollable skills container.
   const scrollRef = useRef<HTMLDivElement>(null);

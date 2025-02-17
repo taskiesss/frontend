@@ -2,7 +2,11 @@
 import React, { useRef, useState, useEffect } from "react";
 import StarRating from "../common/StarRating";
 import Skill from "../common/Skill";
-import { timeAgo } from "@/app/_helpers/helper";
+import {
+  getExperienceLevel,
+  getProjectLength,
+  timeAgo,
+} from "@/app/_helpers/helper";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -42,20 +46,6 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
   const newpath = pathname === "/jobs" ? "/jobs" : "/nx/freelancer/find-work";
 
   // Mapping project length to human-readable format
-  const getProjectLength = (length: string): string => {
-    switch (length) {
-      case "_less_than_1_month":
-        return "Less than 1 month";
-      case "_1_to_3_months":
-        return "1 to 3 months";
-      case "_3_to_6_months":
-        return "3 to 6 months";
-      case "_more_than_6_months":
-        return "More than 6 months";
-      default:
-        return "Unknown duration";
-    }
-  };
 
   // Reference for scrolling
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -138,7 +128,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
 
         {/* Job Details */}
         <span className="text-slate-500">
-          Hourly: ${pricePerHour} - {experienceLevel} -{" "}
+          Hourly: ${pricePerHour} - {getExperienceLevel(experienceLevel)} -{" "}
           {getProjectLength(projectLength)}
         </span>
 

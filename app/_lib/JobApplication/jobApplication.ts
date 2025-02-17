@@ -8,6 +8,7 @@ const BASE_URL = 'http://localhost:8080';
 const jobApplication = async (request: JobApplicationRequest) => {
   try {
     const token = Cookies.get('token');
+
     invariant(!token, 'unauthorized user');
     const res = await fetch(
       `${BASE_URL}/freelancers/proposals/${request.jobId}`,

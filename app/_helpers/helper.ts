@@ -26,3 +26,31 @@ export function timeAgo(dateString: string): string {
 
   return 'Posted a long time ago';
 }
+
+export const getProjectLength = (length: string): string => {
+  switch (length) {
+    case '_less_than_1_month':
+      return 'Less than 1 month';
+    case '_1_to_3_months':
+      return '1 to 3 months';
+    case '_3_to_6_months':
+      return '3 to 6 months';
+    case '_more_than_6_months':
+      return 'More than 6 months';
+    default:
+      return '';
+  }
+};
+
+export const getExperienceLevel = (level: string): string => {
+  switch (level) {
+    case 'entry_level':
+      return 'Entry Level';
+    case 'intermediate':
+      return 'Intermediate';
+    case 'expert':
+      return 'Expert';
+    default:
+      return '';
+  }
+};

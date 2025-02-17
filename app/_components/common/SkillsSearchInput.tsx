@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, KeyboardEvent } from "react";
+import React, { useEffect, useState, KeyboardEvent } from "react";
 import { fetchSuggestionsServer } from "@/app/_actions/skillsActions";
 import Skill from "./Skill";
 
@@ -7,12 +7,15 @@ type SkillsSearchInputProps = {
   className?: string;
   selectedSkills: string[];
   onSelectSkill: (skill: string) => void;
+  // Optional callback to remove a skill. If not provided, the remove button won’t appear.
+  onRemoveSkill?: (skill: string, index: number) => void;
 };
 
 export default function SkillsSearchInput({
   className = "",
   selectedSkills,
   onSelectSkill,
+  onRemoveSkill,
 }: SkillsSearchInputProps) {
   const [skillsSearch, setSkillsSearch] = useState("");
   const [skillSuggestions, setSkillSuggestions] = useState<string[]>([]);
@@ -20,7 +23,7 @@ export default function SkillsSearchInput({
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(-1);
 
-  // Fetch suggestions when the input changes (debounced by 300ms)
+  // Fetch suggestions when the input changes (debounced)
   useEffect(() => {
     if (skillsSearch.trim() === "") {
       setSkillSuggestions([]);
@@ -38,7 +41,7 @@ export default function SkillsSearchInput({
           console.error("Error fetching suggestions:", error);
           setIsLoadingSuggestions(false);
         });
-    }, 20);
+    }, 300);
 
     return () => clearTimeout(timer);
   }, [skillsSearch]);
@@ -130,7 +133,15 @@ export default function SkillsSearchInput({
       </div>
       <div className="flex flex-wrap gap-2 mt-3">
         {selectedSkills.map((skill, index) => (
-          <Skill key={index} index={index} skill={skill} />
+          <Skill
+            key={index}
+            index={index}
+            skill={skill}
+            // Only pass onRemove if onRemoveSkill is provided
+            onRemove={
+              onRemoveSkill ? () => onRemoveSkill(skill, index) : undefined
+            }
+          />
         ))}
       </div>
     </div>

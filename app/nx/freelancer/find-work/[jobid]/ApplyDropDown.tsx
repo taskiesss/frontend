@@ -5,6 +5,8 @@ import { DropdownMenu } from "@/app/_components/common/DropDownMenu";
 import { getOwnedCommunities } from "@/app/_lib/jobs/JobsSearch";
 import { OwnedCommunity } from "@/app/_types/OwnedCommunity";
 import { redirect } from "next/navigation";
+import Cookies from "js-cookie";
+import ProtectedPage from "@/app/_components/common/ProtectedPage";
 
 interface ApplyDropDownProps {
   setSelectedOption: (option: string) => void;
@@ -28,11 +30,17 @@ export default function ApplyDropDown({
   useEffect(() => {
     async function fetchCommunities() {
       try {
-        const comms = await getOwnedCommunities();
+        const token = Cookies.get("token");
+        const comms = await getOwnedCommunities(token);
         setCommunities(comms);
       } catch (error: any) {
-        if (error.message == "Forbidden") {
-          redirect("/login");
+        if (
+          error.message == "Forbidden" ||
+          error.message === "Unauthorized user"
+        ) {
+          return (
+            <ProtectedPage message="You are not allowed to do this action." />
+          );
         }
         throw new Error(error.message);
       }
@@ -66,18 +74,27 @@ export default function ApplyDropDown({
 
   const handleSelectOption = (option: string) => {
     localStorage.setItem("id", option);
+    const name = dropdownOptions.reduce((acc, o) => {
+      if (o.value === option) return o.label;
+      return acc;
+    }, "");
+    localStorage.setItem("name", name);
     setSelectedOption(option);
     redirect(`/nx/freelancer/proposals/${jobid}/apply`);
   };
 
   return (
-    <DropdownMenu
-      setSelectedOption={handleSelectOption}
-      options={dropdownOptions}
-      setIsOpen={setIsOpen}
-      isOpen={isOpen}
-    >
-      {children}
-    </DropdownMenu>
+    <>
+      {dropdownOptions[0].label !== "" ? (
+        <DropdownMenu
+          setSelectedOption={handleSelectOption}
+          options={dropdownOptions}
+          setIsOpen={setIsOpen}
+          isOpen={isOpen}
+        >
+          {children}
+        </DropdownMenu>
+      ) : null}
+    </>
   );
 }

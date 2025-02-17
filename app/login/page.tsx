@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import Button from "@/app/_components/common/button";
 import Input from "@/app/_components/common/Input";
@@ -15,6 +15,8 @@ import Link from "next/link";
 
 import Cookies from "js-cookie";
 import { invariant } from "../_helpers/invariant";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const LoginContainer = styled.div`
   display: flex;
@@ -162,8 +164,22 @@ const LoginPage: React.FC = () => {
     }
   }
 
+  useEffect(() => {
+    const msg = localStorage.getItem("toastMessage");
+    if (msg) {
+      toast.error(msg, { autoClose: 5000 });
+      // Delay removal of the toast message from localStorage by 1 second
+      setTimeout(() => {
+        localStorage.removeItem("toastMessage");
+      }, 1000);
+    }
+  }, []);
+
   return (
     <LoginContainer>
+      <div>
+        <ToastContainer />
+      </div>
       <Container>
         <LeftChild>
           <h1 className=" mb-6">Sign in</h1>

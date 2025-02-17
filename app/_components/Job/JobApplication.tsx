@@ -32,6 +32,7 @@ const paymentOptions = [
 
 export default function JobApplication({ jobid }: Props) {
   const [localCandidateId, setLocalCandidateId] = useState<string>("");
+  const [localCandidateName, setLocalCandidateName] = useState<string>("");
   const [paymentMethod, setPaymentMethod] = useState<string>("");
   const [pricePerHour, setPricePerHour] = useState<string>("");
   const [milestones, setMilestones] = useState<Milestone[]>([
@@ -46,7 +47,9 @@ export default function JobApplication({ jobid }: Props) {
   useEffect(() => {
     // Get candidateId from localStorage when the component mounts
     const storedCandidateId = localStorage.getItem("id") ?? "";
+    const storedCandidateName = localStorage.getItem("name") ?? "";
     setLocalCandidateId(storedCandidateId);
+    setLocalCandidateName(storedCandidateName);
   }, []);
 
   const handleMilestoneChange = (
@@ -128,7 +131,10 @@ export default function JobApplication({ jobid }: Props) {
   const discountedTotalPrice = totalPrice * (1 - TASKAYA_SERVICE);
   return (
     <Container className="flex flex-col items-center">
-      <form onSubmit={handleSubmit} className="flex flex-col gap-10  py-10">
+      <div className="py-10">
+        <h1 className="text-2xl">You are Applying as {localCandidateName}</h1>
+      </div>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-10  py-5">
         <div className="flex flex-col border border-solid border-gray-600 gap-5 px-6 py-6 rounded-lg">
           <h1 className="text-3xl">Terms</h1>
           <div className="flex flex-col gap-3">
