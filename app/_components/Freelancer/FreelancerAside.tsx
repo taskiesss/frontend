@@ -8,11 +8,11 @@ import Link from "next/link";
 type ExperienceLevelKey = "entry_level" | "intermediate" | "expert";
 type ExperienceLevelLabel = "Entry Level" | "Intermediate" | "Expert";
 
-export default function FreelancerAside() {
+export default function FreelancerAside({ pathname }: { pathname?: string }) {
   const router = useRouter();
 
   // Local state for filter values
-  const [searchText, setSearchText] = useState("");
+
   const [userRating, setUserRating] = useState<number>(0);
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
   // A key to force re-mounting of SkillsSearchInput for resetting its local state
@@ -85,10 +85,10 @@ export default function FreelancerAside() {
     // Update the resetKey to force a re-mount of the SkillsSearchInput component.
     setResetKey((prev) => prev + 1);
   };
-
+  const newPath = pathname ? pathname : "/freelancers/search";
   return (
     <div className="sticky top-[2.5rem] left-0">
-      <Link href="/freelancers/search">
+      <Link href={newPath}>
         <button className="px-4 py-2 bg-[var(--btn-color)] text-[var(--accent-color)] rounded-md">
           Advanced Search
         </button>
@@ -153,7 +153,7 @@ export default function FreelancerAside() {
                     setHourlyRateMin(e.target.value);
                   }
                 }}
-                className="w-1/2 px-3 py-2 border border-[var(--border-color)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--hover-color)] bg-[var(--background-color)]"
+                className="w-1/2 px-3 py-2 border border-solid border-[var(--border-color)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--hover-color)] bg-[var(--background-color)]"
               />
               <input
                 type="number"
@@ -166,7 +166,7 @@ export default function FreelancerAside() {
                     setHourlyRateMax((Number(hourlyRateMin) + 1).toString());
                   }
                 }}
-                className="w-1/2 px-3 py-2 border border-[var(--border-color)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--hover-color)] bg-[var(--background-color)]"
+                className="w-1/2 px-3 py-2 border border-solid border-[var(--border-color)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--hover-color)] bg-[var(--background-color)]"
               />
             </div>
           </div>

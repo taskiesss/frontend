@@ -9,7 +9,7 @@ import Link from "next/link";
 type ExperienceLevelKey = "entry_level" | "intermediate" | "expert";
 type ExperienceLevelLabel = "Entry Level" | "Intermediate" | "Expert";
 
-export default function CommunitiyAside() {
+export default function CommunitiyAside({ pathname }: { pathname?: string }) {
   const router = useRouter();
 
   const [userRating, setUserRating] = useState<number>(0);
@@ -105,10 +105,10 @@ export default function CommunitiyAside() {
     // // Update the resetKey to force re-mounting of SkillsSearchInput.
     // setResetKey((prev) => prev + 1);
   };
-
+  const newPath = pathname ? pathname : "/communities/search";
   return (
     <div className="sticky top-[2.5rem] left-0">
-      <Link href="/communities/search">
+      <Link href={newPath}>
         <button className="px-4 py-2 bg-[var(--btn-color)] text-[var(--accent-color)] rounded-md">
           Advanced Search
         </button>
@@ -188,7 +188,7 @@ export default function CommunitiyAside() {
                     if (Number(e.target.value) > 0)
                       setHourlyRateMin(e.target.value);
                   }}
-                  className="w-full px-3 py-2 border border-[var(--border-color)] border-solid rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--hover-color)] bg-[var(--background-color)]"
+                  className="w-full px-3 py-2 border  border-[var(--border-color)] border-solid rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--hover-color)] bg-[var(--background-color)]"
                 />
               </div>
               <div className="w-1/2">

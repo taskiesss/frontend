@@ -2,6 +2,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { FreelancerResponse } from "@/app/_types/FreelancerSearch"; // Adjust the path as needed
 import Skill from "../common/Skill";
 import StarRating from "../common/StarRating";
@@ -23,6 +24,15 @@ const FreelancerCard: React.FC<FreelancerCardProps> = ({ freelancer }) => {
     profilePicture,
   } = freelancer;
 
+  // Use usePathname to get the current path.
+  const currentPath = usePathname();
+  // Append the freelancer id to create a dynamic detail URL.
+  // console.log(currentPath);
+  const detailUrl =
+    currentPath === "/nx/freelancer/search/freelancers"
+      ? `/nx/freelancer/profile/${id}`
+      : `/freelancers/${id}`;
+
   // Reference and state for the scrollable skills container.
   const scrollRef = useRef<HTMLDivElement>(null);
   const [showLeftArrow, setShowLeftArrow] = useState(false);
@@ -38,15 +48,12 @@ const FreelancerCard: React.FC<FreelancerCardProps> = ({ freelancer }) => {
 
   useEffect(() => {
     updateArrowsVisibility();
-
     const handleResize = () => updateArrowsVisibility();
     window.addEventListener("resize", handleResize);
-
     const scrollElement = scrollRef.current;
     if (scrollElement) {
       scrollElement.addEventListener("scroll", updateArrowsVisibility);
     }
-
     return () => {
       window.removeEventListener("resize", handleResize);
       if (scrollElement) {
@@ -102,7 +109,7 @@ const FreelancerCard: React.FC<FreelancerCardProps> = ({ freelancer }) => {
           {/* Freelancer Details */}
           <div className="flex-1">
             <Link
-              href={`/freelancers/${id}`}
+              href={detailUrl}
               className="block text-4xl text-[var(--accent-color)] no-underline hover:text-[var(--btn-color)] hover:underline"
             >
               {name}

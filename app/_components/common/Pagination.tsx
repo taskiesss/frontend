@@ -88,6 +88,7 @@ export interface PaginationProps {
   pageSize: number;
   onPageChange: (page: number) => void;
   siblingCount?: number;
+  setPageParamter?: boolean;
 }
 
 /**
@@ -102,6 +103,7 @@ export const Pagination: React.FC<PaginationProps> = ({
   totalCount,
   pageSize,
   onPageChange,
+  setPageParamter,
   siblingCount = 1,
 }) => {
   const paginationRange = usePagination({
@@ -129,6 +131,7 @@ export const Pagination: React.FC<PaginationProps> = ({
     onPageChange(page);
 
     // Create a new URLSearchParams object based on the current search params.
+    if (setPageParamter) return;
     const params = new URLSearchParams(searchParams?.toString());
     params.set("page", page.toString());
     router.push(`${window.location.pathname}?${params.toString()}`);
@@ -136,13 +139,13 @@ export const Pagination: React.FC<PaginationProps> = ({
 
   const onNext = () => {
     if (currentPage < totalPageCount) {
-      handlePageChange(currentPage);
+      handlePageChange(currentPage + 1);
     }
   };
 
   const onPrevious = () => {
     if (currentPage > 1) {
-      handlePageChange(currentPage);
+      handlePageChange(currentPage - 1);
     }
   };
 

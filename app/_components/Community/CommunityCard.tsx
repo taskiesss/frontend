@@ -14,6 +14,7 @@ interface JobCardProps {
 
 const CommunityCard: React.FC<JobCardProps> = ({ community }) => {
   const {
+    id,
     name,
     description,
     skills,
@@ -24,7 +25,7 @@ const CommunityCard: React.FC<JobCardProps> = ({ community }) => {
     isFull,
     memberCount,
   } = community;
-
+  console.log(community);
   // Map experience levels to human-readable strings.
 
   // Reference and state for scrollable skills container.
@@ -105,7 +106,7 @@ const CommunityCard: React.FC<JobCardProps> = ({ community }) => {
           {/* Community Details */}
           <div className="flex-1">
             <Link
-              href="#"
+              href={`/communities/${id}`}
               className="block text-4xl text-[var(--accent-color)] no-underline hover:text-[var(--btn-color)] hover:underline"
             >
               {name}

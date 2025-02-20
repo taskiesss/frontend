@@ -14,7 +14,7 @@ type ProjectLengthKey =
   | "3 to 6 months"
   | "More than 6 months";
 
-export default function JobAside() {
+export default function JobAside({ pathname }: { pathname?: string }) {
   const router = useRouter();
 
   const [userRating, setUserRating] = useState<number>(0);
@@ -99,7 +99,7 @@ export default function JobAside() {
     } else {
       params.delete("rate");
     }
-    params.set("page", "0");
+
     const currentQuery = new URLSearchParams(window.location.search).toString();
     const newQuery = params.toString();
 
@@ -107,10 +107,10 @@ export default function JobAside() {
       router.push(`${window.location.pathname}?${newQuery}`);
     }
   };
-
+  const newPath = pathname ? pathname : "/jobs/search";
   return (
     <div className="sticky top-[2.5rem] left-0">
-      <Link href="/jobs/search">
+      <Link href={newPath}>
         <button className="px-4 py-2 bg-[var(--btn-color)] text-[var(--accent-color)] rounded-md">
           Advanced Search
         </button>
@@ -175,7 +175,7 @@ export default function JobAside() {
                     if (Number(e.target.value) > 0)
                       setHourlyRateMin(e.target.value);
                   }}
-                  className="w-full px-3 py-2 border border-[var(--border-color)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--hover-color)] bg-[var(--background-color)]"
+                  className="w-full px-3 py-2 border border-solid border-[var(--border-color)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--hover-color)] bg-[var(--background-color)]"
                 />
               </div>
               <div className="w-1/2">
@@ -193,7 +193,7 @@ export default function JobAside() {
                     else
                       setHourlyRateMax((Number(hourlyRateMin) + 1).toString());
                   }}
-                  className="w-full px-3 py-2 border border-[var(--border-color)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--hover-color)] bg-[var(--background-color)]"
+                  className="w-full px-3 py-2 border border-solid border-[var(--border-color)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--hover-color)] bg-[var(--background-color)]"
                 />
               </div>
             </div>

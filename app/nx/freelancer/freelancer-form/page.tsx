@@ -9,8 +9,14 @@ import { submitFreelancerForm } from "../../../_lib/Freelancer/FreelancerForm";
 import { FreelancerFormPayload } from "../../../_types/FreelancerForm";
 import { invariant } from "../../../_helpers/invariant";
 import { useRouter } from "next/navigation";
+import Select, { MultiValue, ActionMeta } from "react-select";
+import LanguagesData from "@/app/_data/languages.json";
 
 type Props = { params: string };
+interface Option {
+  value: string;
+  label: string;
+}
 
 interface Education {
   degree: string;
@@ -26,7 +32,7 @@ export default function Page({}: Props) {
   // Professional Information
   const [expectedHourlyRate, setExpectedHourlyRate] = useState("");
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
-  const [languagesSpoken, setLanguagesSpoken] = useState("");
+  const [languagesSpoken, setLanguagesSpoken] = useState<string[]>([]);
   const [averageWorkHours, setAverageWorkHours] = useState("");
   const [professionalTitle, setProfessionalTitle] = useState("");
   const [professionalSummary, setProfessionalSummary] = useState("");
@@ -35,7 +41,25 @@ export default function Page({}: Props) {
   const [educationList, setEducationList] = useState<Education[]>([]);
   const [error, setError] = useState<string>("");
   const router = useRouter();
+  // Convert the languages object into an array of options.
+  const options: Option[] = Object.entries(LanguagesData).map(
+    ([code, name]) => ({
+      value: code,
+      label: name,
+    })
+  );
 
+  const handleChange = (
+    newValue: MultiValue<Option>,
+    actionMeta: ActionMeta<Option>
+  ) => {
+    // Extract just the labels from the selected options
+    setLanguagesSpoken(newValue.map((option) => option.label));
+    console.log(
+      "Selected languages:",
+      newValue.map((option) => option.label)
+    );
+  };
   const addEducation = () => {
     setEducationList([
       ...educationList,
@@ -79,14 +103,14 @@ export default function Page({}: Props) {
       setError("You have to select a skill");
       return;
     }
-    const languages = languagesSpoken.split(",").map((l) => l.trim());
+
     const formData: FreelancerFormPayload = {
       firstName: firstName,
       lastName: lastName,
       hourlyRate: Number(expectedHourlyRate),
       skills: selectedSkills,
       professionalSummary: professionalSummary,
-      languages: languages,
+      languages: languagesSpoken,
       hoursPerWeek: Number(averageWorkHours),
       professionalTitle,
       education: educationList,
@@ -195,17 +219,20 @@ export default function Page({}: Props) {
               </div>
               <div className="flex flex-col gap-3">
                 <span className="text-lg">Languages Spoken</span>
-                <input
-                  required
-                  type="text"
-                  placeholder="Separated by comma (ex. English,French)"
-                  value={languagesSpoken}
-                  onChange={(e) => {
-                    e.preventDefault();
-                    setLanguagesSpoken(e.target.value);
-                  }}
-                  className="px-3 py-4 text-lg border border-solid border-gray-600 rounded-lg focus:outline-none bg-[var(--background-color)]"
-                />
+                <div className="w-full">
+                  <Select
+                    isMulti
+                    // The value is computed from the state: only options whose labels are in the state are selected.
+                    value={options.filter((opt) =>
+                      languagesSpoken.includes(opt.label)
+                    )}
+                    options={options}
+                    onChange={handleChange}
+                    placeholder="Select languages..."
+                    className="w-full text-black"
+                    classNamePrefix="react-select"
+                  />
+                </div>
               </div>
               <div className="flex flex-col gap-3">
                 <span className="text-lg">Average Work Hours/Week</span>
