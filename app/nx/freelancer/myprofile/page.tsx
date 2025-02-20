@@ -53,5 +53,5 @@ export default async function page() {
       <ProtectedPage message="You are not allowed to do this action. Please log in" />;
     }
   }
-  return <Profile freelancer={freelancer} editable={true} />;
+  return <Profile id="my_profile" freelancer={freelancer} editable={true} />;
 }

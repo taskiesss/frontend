@@ -5,6 +5,7 @@ import "./_styles/globals.css";
 import { Inter } from "next/font/google";
 import { DarkModeProvider } from "./_store/_contexts/DarkModeContext";
 import DarkModeToggleButton from "./_components/common/DarkModeButton";
+import QueryProvider from "./_store/_providers/QueryProvider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -23,14 +24,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <DarkModeProvider>
-          <Providers>
-            {children}
-
-            <DarkModeToggleButton />
-            {/* button should be inside a client component not server component or it will cause hydration error */}
-          </Providers>
-        </DarkModeProvider>
+        <QueryProvider>
+          <DarkModeProvider>
+            <Providers>
+              {children}
+              <DarkModeToggleButton />
+            </Providers>
+          </DarkModeProvider>
+        </QueryProvider>
       </body>
     </html>
   );

@@ -23,9 +23,10 @@ const skills = ["Spring Boot", "Java", "Python"];
 interface Props {
   editable: boolean;
   freelancer: getfreelancerResponse;
+  id: string;
 }
 
-export default function Profile({ freelancer, editable }: Props) {
+export default function Profile({ freelancer, editable, id }: Props) {
   const [editSkillSection, setEditSkillSection] = useState(false);
   const [editHeaderSection, setEditHeaderSection] = useState(false);
   const [editLanguageSection, setEditLanguageSection] = useState(false);
@@ -78,6 +79,7 @@ export default function Profile({ freelancer, editable }: Props) {
             description: freelancer.description,
             employmentHistory: freelancer.employeeHistory,
           }}
+          id={id}
           editable={editable}
           onEditAbout={() => setEditAboutSection(true)}
           onEditEmpHis={() => setEditEmpHisSection(true)}

@@ -4,13 +4,13 @@ import Spinner from "../common/Spinner";
 import CompletedJobslist from "./CompletedJobslist";
 import { formatYearToString } from "@/app/_helpers/helper";
 import EditButton from "../common/EditButton";
-import { getPortfoliosbyID } from "@/app/_lib/FreelancerProfile/APi";
 
 interface RightPanelProps {
   onEditAbout: () => void;
   onEditPortfolio: () => void;
   onEditEmpHis: () => void;
   editable: boolean;
+  id: string;
   freelancer: {
     description: string;
     employmentHistory: {
@@ -21,18 +21,15 @@ interface RightPanelProps {
     }[];
   };
 }
-let porfolios;
-let completedJobs;
+
 export default function RightPanel({
   freelancer,
   editable,
   onEditAbout,
   onEditPortfolio,
   onEditEmpHis,
+  id,
 }: RightPanelProps) {
-  try {
-    // porfolios = await getPortfoliosbyID();
-  } catch (error: any) {}
   return (
     // About
     <div className="bg-[var(--foreground-color)] rounded-2xl w-2/3 p-8 flex flex-col gap-5">
@@ -55,7 +52,7 @@ export default function RightPanel({
           <h2 className="text-3xl font-bold">Portfolio</h2>
           <div className="flex gap-2 flex-wrap">
             <Suspense fallback={<Spinner />}>
-              <Portfolio />
+              <Portfolio id={id} />
             </Suspense>
           </div>
         </div>
@@ -70,7 +67,7 @@ export default function RightPanel({
         <h2 className="text-3xl font-bold">Completed Jobs</h2>
         <div className="gap-2 ">
           <Suspense fallback={<Spinner />}>
-            <CompletedJobslist />
+            <CompletedJobslist id={id} />
           </Suspense>
         </div>
       </div>
