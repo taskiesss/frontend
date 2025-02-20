@@ -43,16 +43,16 @@ export default function EmpHisForm({
       const token = Cookies.get("token");
       const res = await EducationAction(empHistory, token);
       console.log(res);
+      closeEdit();
     } catch (error: any) {
       if (
         error.message === "Forbidden" ||
         error.message === "Unauthorized user"
       ) {
         setIsForbidden(true);
+        return;
       }
       console.error(error.message);
-    } finally {
-      closeEdit();
     }
   };
 
@@ -62,7 +62,7 @@ export default function EmpHisForm({
     );
   return (
     <Model isOpen={true} onClose={closeEdit}>
-      <h2 className="text-2xl font-bold mb-4">Edit Education</h2>
+      <h2 className="text-2xl font-bold mb-4">Edit Employment History</h2>
       <form
         onSubmit={(e) => handleSubmit(e)}
         className="flex flex-col  w-[60rem] gap-6 pt-3"
@@ -142,9 +142,9 @@ export default function EmpHisForm({
           <button
             type="button"
             onClick={addEmpHistory}
-            className="px-4 py-2 text-lg text-[var(--btn-color)]  "
+            className="px-4 py-2 text-lg font-extrabold text-[var(--hover-color)]  "
           >
-            + Add Education
+            + Add Employment history
           </button>
         </div>
         {/* Submit Button */}

@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 
 const BASE_URL = "http://localhost:8080";
 
-const ProfileSkillApi = async (
+export const ProfileSkillApi = async (
   token: string | undefined,
   requestBody: string[]
 ): Promise<any> => {
@@ -29,11 +29,13 @@ const ProfileSkillApi = async (
   return true;
 };
 
-export default ProfileSkillApi;
 
-export async function AboutAction(request: string, token: string | undefined) {
-  // Send a POST request to the /freelancers/description endpoint
-  invariant(!token, "Unauthorized user");
+export async function AboutAction(
+  request: string,
+  token: string | undefined
+): Promise<any> {
+  invariant(!token, 'Unauthorized user');
+
   const res = await fetch(`${BASE_URL}/freelancers/description`, {
     method: "PATCH",
     headers: {
@@ -53,9 +55,13 @@ export async function AboutAction(request: string, token: string | undefined) {
   revalidatePath("/nx/freelancers/myprofile");
   return true;
 }
-export async function EducationAction(request: any, token: string | undefined) {
-  // Send a POST request to the /freelancers/description endpoint
-  invariant(!token, "Unauthorized user");
+
+export async function EducationAction(
+  request: any,
+  token: string | undefined
+): Promise<any> {
+  invariant(!token, 'Unauthorized user');
+
   const res = await fetch(`${BASE_URL}/freelancers/educations`, {
     method: "PATCH",
     headers: {
@@ -79,9 +85,10 @@ export async function EducationAction(request: any, token: string | undefined) {
 export async function EmpHistoryAction(
   request: any,
   token: string | undefined
-) {
-  // Send a POST request to the /freelancers/description endpoint
-  invariant(!token, "Unauthorized user");
+
+): Promise<any> {
+  invariant(!token, 'Unauthorized user');
+
   const res = await fetch(`${BASE_URL}/freelancers/employement-history`, {
     method: "PATCH",
     headers: {
@@ -102,9 +109,13 @@ export async function EmpHistoryAction(
   return true;
 }
 
-export async function LanguagesAction(request: any, token: string | undefined) {
-  // Send a POST request to the /freelancers/description endpoint
-  invariant(!token, "Unauthorized user");
+
+export async function LanguagesAction(
+  request: any,
+  token: string | undefined
+): Promise<any> {
+  invariant(!token, 'Unauthorized user');
+
   const res = await fetch(`${BASE_URL}/freelancers/languages`, {
     method: "PATCH",
     headers: {
@@ -125,9 +136,13 @@ export async function LanguagesAction(request: any, token: string | undefined) {
   return true;
 }
 
-export async function LinksAction(request: any, token: string | undefined) {
-  // Send a POST request to the /freelancers/description endpoint
-  invariant(!token, "Unauthorized user");
+
+export async function LinksAction(
+  request: any,
+  token: string | undefined
+): Promise<any> {
+  invariant(!token, 'Unauthorized user');
+
   const res = await fetch(`${BASE_URL}/freelancers/linkedin`, {
     method: "PATCH",
     headers: {
@@ -148,9 +163,13 @@ export async function LinksAction(request: any, token: string | undefined) {
   return true;
 }
 
-export async function HPWAction(request: any, token: string | undefined) {
-  // Send a POST request to the /freelancers/description endpoint
-  invariant(!token, "Unauthorized user");
+
+export async function HPWAction(
+  request: any,
+  token: string | undefined
+): Promise<any> {
+  invariant(!token, 'Unauthorized user');
+
   const res = await fetch(`${BASE_URL}/freelancers/avrg-hours-per-week`, {
     method: "PATCH",
     headers: {
@@ -174,7 +193,7 @@ export async function HPWAction(request: any, token: string | undefined) {
 export async function AddPortFolio(
   formData: FormData,
   token: string | undefined
-) {
+): Promise<any> {
   // Send a POST request to the /freelancers/description endpoint
   invariant(!token, "Unauthorized user");
   const res = await fetch(`${BASE_URL}/freelancers/portfolio`, {
@@ -206,7 +225,7 @@ export async function HeaderSectionAction(
     country: string;
   },
   token: string | undefined
-) {
+): Promise<any> {
   invariant(!token, "Unauthorized user");
 
   const res = await fetch(`${BASE_URL}/freelancers/header-section`, {
@@ -235,7 +254,7 @@ export async function HeaderSectionAction(
 export async function ProfilePictureAction(
   request: FormData,
   token: string | undefined
-) {
+): Promise<any> {
   invariant(!token, "Unauthorized user");
 
   const res = await fetch(`${BASE_URL}/freelancers/profile-picture`, {
@@ -263,7 +282,7 @@ export async function ProfilePictureAction(
 export async function CoverPictureAction(
   request: FormData,
   token: string | undefined
-) {
+): Promise<any> {
   invariant(!token, "Unauthorized user");
 
   const res = await fetch(`${BASE_URL}/freelancers/cover-picture`, {

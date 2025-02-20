@@ -43,16 +43,16 @@ export default function EducationForm({
       const token = Cookies.get("token");
       const res = await EducationAction(educations, token);
       console.log(res);
+      closeEdit();
     } catch (error: any) {
       if (
         error.message === "Forbidden" ||
         error.message === "Unauthorized user"
       ) {
         setIsForbidden(true);
+        return;
       }
       console.error(error.message);
-    } finally {
-      closeEdit();
     }
   };
 

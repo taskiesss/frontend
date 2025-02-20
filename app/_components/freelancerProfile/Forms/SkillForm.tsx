@@ -3,8 +3,8 @@ import React, { FormEvent, useState } from "react";
 import Model from "../Model";
 import SkillsSearchInput from "../../common/SkillsSearchInput";
 import Cookies from "js-cookie";
-import ProfileSkillApi from "@/app/_lib/FreelancerProfile/APi";
 import ProtectedPage from "../../common/ProtectedPage";
+import { ProfileSkillApi } from "@/app/_lib/FreelancerProfile/APi";
 
 export default function SkillForm({
   skills,
@@ -34,16 +34,16 @@ export default function SkillForm({
       const token = Cookies.get("token");
       const res = await ProfileSkillApi(token, selectedSkills);
       console.log(res);
+      closeEdit();
     } catch (error: any) {
       if (
         error.message === "Forbidden" ||
         error.message === "Unauthorized user"
       ) {
         setIsForbidden(true);
+        return;
       }
       console.error(error.message);
-    } finally {
-      closeEdit();
     }
   };
 
