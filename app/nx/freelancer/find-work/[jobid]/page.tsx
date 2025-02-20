@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import ProtectedPage from "@/app/_components/common/ProtectedPage";
-import JobDetailsPage from "./JobDetailsPage";
 import { getJobDetails } from "@/app/_lib/jobs/JobsSearch";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+import JobDetailsPage from "./JobDetailsPage";
 
 type Props = { params: { jobid: string } };
 

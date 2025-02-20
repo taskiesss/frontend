@@ -16,45 +16,16 @@ import LanguageForm from "./Forms/LanguageForm";
 import LinksForm from "./Forms/LinksForm";
 import PortfolioForm from "./Forms/PortfolioForm";
 import HeaderForm from "./Forms/HeaderForm";
+import { getfreelancerResponse } from "@/app/_types/ProfileTypes";
 
 const skills = ["Spring Boot", "Java", "Python"];
+
 interface Props {
   editable: boolean;
+  freelancer: getfreelancerResponse;
 }
 
-const freelancer = {
-  uuid: "string",
-  CoverPhoto: "string",
-  profilePicture: "string",
-  jobTitle: "Fullstack",
-  name: "string",
-  experienceLevel: "entry_level",
-  username: "string",
-  country: "string",
-  pricePerHour: 0,
-  rate: 5,
-  skills: ["string"],
-  avrgHoursPerWeek: 0,
-  languages: ["Arabic"],
-  educations: [
-    {
-      degree: "string",
-      institution: "string",
-      graduationYear: 0,
-    },
-  ],
-  linkedIn: "string",
-  description: "string",
-  employeeHistory: [
-    {
-      company: "string",
-      position: "string",
-      startYear: "2025-02-20",
-      endYear: "2025-02-20",
-    },
-  ],
-};
-export default function Profile({ editable }: Props) {
+export default function Profile({ freelancer, editable }: Props) {
   const [editSkillSection, setEditSkillSection] = useState(false);
   const [editHeaderSection, setEditHeaderSection] = useState(false);
   const [editLanguageSection, setEditLanguageSection] = useState(false);
@@ -68,7 +39,10 @@ export default function Profile({ editable }: Props) {
 
   return (
     <div className="relative flex flex-col items-center gap-6">
-      <CoverPhoto freelancer={{ coverPhoto: freelancer.CoverPhoto }} />
+      <CoverPhoto
+        editable={editable}
+        freelancer={{ coverPhoto: freelancer.coverPhoto }}
+      />
       <ProfileHeader
         freelancer={{
           username: freelancer.username,

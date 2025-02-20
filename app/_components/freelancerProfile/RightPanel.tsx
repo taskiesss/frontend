@@ -4,6 +4,7 @@ import Spinner from "../common/Spinner";
 import CompletedJobslist from "./CompletedJobslist";
 import { formatYearToString } from "@/app/_helpers/helper";
 import EditButton from "../common/EditButton";
+import { getPortfoliosbyID } from "@/app/_lib/FreelancerProfile/APi";
 
 interface RightPanelProps {
   onEditAbout: () => void;
@@ -20,6 +21,8 @@ interface RightPanelProps {
     }[];
   };
 }
+let porfolios;
+let completedJobs;
 export default function RightPanel({
   freelancer,
   editable,
@@ -27,6 +30,9 @@ export default function RightPanel({
   onEditPortfolio,
   onEditEmpHis,
 }: RightPanelProps) {
+  try {
+    // porfolios = await getPortfoliosbyID();
+  } catch (error: any) {}
   return (
     // About
     <div className="bg-[var(--foreground-color)] rounded-2xl w-2/3 p-8 flex flex-col gap-5">

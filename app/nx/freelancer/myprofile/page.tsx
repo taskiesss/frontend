@@ -6,7 +6,6 @@ import { getfreelancerResponse } from "@/app/_types/ProfileTypes";
 import { cookies } from "next/headers";
 import React from "react";
 
-type Props = { params: { freelancerid: string } };
 let freelancer: getfreelancerResponse;
 freelancer = {
   uuid: "string",
@@ -40,12 +39,12 @@ freelancer = {
     },
   ],
 };
-export default async function page({ params }: Props) {
-  const { freelancerid } = await Promise.resolve(params);
+
+export default async function page() {
   const token = (await cookies()).get("token")?.value;
 
   try {
-    freelancer = await getFreelancerbyID(freelancerid, token);
+    freelancer = await getFreelancerbyID("my_profile", token);
   } catch (error: any) {
     if (
       error.message === "Forbidden" ||
@@ -54,5 +53,5 @@ export default async function page({ params }: Props) {
       <ProtectedPage message="You are not allowed to do this action. Please log in" />;
     }
   }
-  return <Profile freelancer={freelancer} editable={false} />;
+  return <Profile freelancer={freelancer} editable={true} />;
 }

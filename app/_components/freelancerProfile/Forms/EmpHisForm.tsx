@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import React, { FormEvent, useState } from "react";
-import Model from "../Model";
-import { EducationAction } from "@/app/_lib/FreelancerProfile/APi";
-import ProtectedPage from "../../common/ProtectedPage";
+import { EmpHistoryAction } from "@/app/_lib/FreelancerProfile/APi";
 import Cookies from "js-cookie";
+import { FormEvent, useState } from "react";
+import ProtectedPage from "../../common/ProtectedPage";
+import Model from "../Model";
 
 interface EmpHistory {
   company: string;
@@ -41,7 +41,7 @@ export default function EmpHisForm({
     try {
       console.log(empHistory);
       const token = Cookies.get("token");
-      const res = await EducationAction(empHistory, token);
+      const res = await EmpHistoryAction(empHistory, token);
       console.log(res);
       closeEdit();
     } catch (error: any) {

@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // components/HeaderForm.tsx
 import React, { useState } from "react";
 import Model from "../Model";
 import { HeaderSectionAction } from "@/app/_lib/FreelancerProfile/APi";
 import Cookies from "js-cookie";
+import ProtectedPage from "../../common/ProtectedPage";
 
 interface HeaderFormProps {
   closeEdit: () => void;
@@ -28,6 +30,7 @@ export default function HeaderForm({ closeEdit, freelancer }: HeaderFormProps) {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isForbidden, setIsForbidden] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -52,19 +55,28 @@ export default function HeaderForm({ closeEdit, freelancer }: HeaderFormProps) {
       pricePerHour: formData.pricePerHour,
       country: formData.country,
     };
-
+    console.log(submitData);
     try {
       const success = await HeaderSectionAction(submitData, token);
-      if (success) {
-        closeEdit();
+      console.log(success);
+      closeEdit();
+    } catch (error: any) {
+      if (
+        error.message === "Forbidden" ||
+        error.message === "Unauthorized user"
+      ) {
+        setIsForbidden(true);
+        return;
       }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
+      console.error(error.message);
     } finally {
       setLoading(false);
     }
   };
-
+  if (isForbidden)
+    return (
+      <ProtectedPage message="You are not allowed to do this action. Please log in" />
+    );
   const inputClassName =
     "p-3 focus:outline-none bg-[var(--background-color)] border border-solid border-gray-600";
 
@@ -117,7 +129,7 @@ export default function HeaderForm({ closeEdit, freelancer }: HeaderFormProps) {
 
         <input
           type="text"
-          name="Country"
+          name="country"
           value={formData.country}
           onChange={handleChange}
           placeholder="Country"

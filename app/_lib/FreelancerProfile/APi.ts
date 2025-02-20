@@ -1,58 +1,60 @@
-"use server";
+'use server';
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { invariant } from "@/app/_helpers/invariant";
-import { revalidatePath } from "next/cache";
+import { invariant } from '@/app/_helpers/invariant';
+import { revalidatePath } from 'next/cache';
 
-const BASE_URL = "http://localhost:8080";
+const BASE_URL = 'http://localhost:8080';
 
 export const ProfileSkillApi = async (
   token: string | undefined,
   requestBody: string[]
 ): Promise<any> => {
-  invariant(!token, "Unauthorized user");
+  const reqbody = { skills: requestBody };
+  // console.log(reqbody);
+  invariant(!token, 'Unauthorized user');
   const res = await fetch(`${BASE_URL}/freelancers/skills`, {
-    method: "PATCH",
+    method: 'PATCH',
     headers: {
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(requestBody),
+    body: JSON.stringify(reqbody),
   });
   console.log(res);
   if (res.status === 403) {
-    throw new Error("Forbidden");
+    throw new Error('Forbidden');
   }
   if (!res.ok) {
     // console.log('iam here');
-    throw new Error("SomeThing went Wrong");
+    throw new Error('SomeThing went Wrong');
   }
-  revalidatePath("/nx/freelancers/myprofile");
+  revalidatePath('/nx/freelancers/myprofile');
   return true;
 };
-
 
 export async function AboutAction(
   request: string,
   token: string | undefined
 ): Promise<any> {
+  const reqbody = { description: request };
+  // console.log(reqbody);
   invariant(!token, 'Unauthorized user');
-
   const res = await fetch(`${BASE_URL}/freelancers/description`, {
-    method: "PATCH",
+    method: 'PATCH',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(request),
+    body: JSON.stringify(reqbody),
   });
   console.log(res);
   if (res.status === 403) {
-    throw new Error("Forbidden");
+    throw new Error('Forbidden');
   }
   if (!res.ok) {
     // console.log('iam here');
-    throw new Error("SomeThing went Wrong");
+    throw new Error('SomeThing went Wrong');
   }
-  revalidatePath("/nx/freelancers/myprofile");
+  revalidatePath('/nx/freelancers/myprofile');
   return true;
 }
 
@@ -60,133 +62,134 @@ export async function EducationAction(
   request: any,
   token: string | undefined
 ): Promise<any> {
+  const reqbody = { educations: request };
+  // console.log(reqbody);
   invariant(!token, 'Unauthorized user');
-
   const res = await fetch(`${BASE_URL}/freelancers/educations`, {
-    method: "PATCH",
+    method: 'PATCH',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(request),
+    body: JSON.stringify(reqbody),
   });
   console.log(res);
   if (res.status === 403) {
-    throw new Error("Forbidden");
+    throw new Error('Forbidden');
   }
   if (!res.ok) {
     // console.log('iam here');
-    throw new Error("SomeThing went Wrong");
+    throw new Error('SomeThing went Wrong');
   }
-  revalidatePath("/nx/freelancers/myprofile");
+  revalidatePath('/nx/freelancers/myprofile');
   return true;
 }
 
 export async function EmpHistoryAction(
   request: any,
   token: string | undefined
-
 ): Promise<any> {
+  const reqbody = { employeeHistory: request };
+  // console.log(reqbody);
   invariant(!token, 'Unauthorized user');
-
   const res = await fetch(`${BASE_URL}/freelancers/employement-history`, {
-    method: "PATCH",
+    method: 'PATCH',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(request),
+    body: JSON.stringify(reqbody),
   });
   console.log(res);
   if (res.status === 403) {
-    throw new Error("Forbidden");
+    throw new Error('Forbidden');
   }
   if (!res.ok) {
     // console.log('iam here');
-    throw new Error("SomeThing went Wrong");
+    throw new Error('SomeThing went Wrong');
   }
-  revalidatePath("/nx/freelancers/myprofile");
+  revalidatePath('/nx/freelancers/myprofile');
   return true;
 }
-
 
 export async function LanguagesAction(
   request: any,
   token: string | undefined
 ): Promise<any> {
+  const reqbody = { languages: request };
+  // console.log(reqbody);
   invariant(!token, 'Unauthorized user');
-
   const res = await fetch(`${BASE_URL}/freelancers/languages`, {
-    method: "PATCH",
+    method: 'PATCH',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(request),
+    body: JSON.stringify(reqbody),
   });
   console.log(res);
   if (res.status === 403) {
-    throw new Error("Forbidden");
+    throw new Error('Forbidden');
   }
   if (!res.ok) {
     // console.log('iam here');
-    throw new Error("SomeThing went Wrong");
+    throw new Error('SomeThing went Wrong');
   }
-  revalidatePath("/nx/freelancers/myprofile");
+  revalidatePath('/nx/freelancers/myprofile');
   return true;
 }
-
 
 export async function LinksAction(
   request: any,
   token: string | undefined
 ): Promise<any> {
+  const reqbody = { linkedIn: request };
+  // console.log(reqbody);
   invariant(!token, 'Unauthorized user');
-
   const res = await fetch(`${BASE_URL}/freelancers/linkedin`, {
-    method: "PATCH",
+    method: 'PATCH',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(request),
+    body: JSON.stringify(reqbody),
   });
   console.log(res);
   if (res.status === 403) {
-    throw new Error("Forbidden");
+    throw new Error('Forbidden');
   }
   if (!res.ok) {
     // console.log('iam here');
-    throw new Error("SomeThing went Wrong");
+    throw new Error('SomeThing went Wrong');
   }
-  revalidatePath("/nx/freelancers/myprofile");
+  revalidatePath('/nx/freelancers/myprofile');
   return true;
 }
-
 
 export async function HPWAction(
   request: any,
   token: string | undefined
 ): Promise<any> {
-  invariant(!token, 'Unauthorized user');
+  const reqbody = { avrgHoursPerWeek: request };
 
+  invariant(!token, 'Unauthorized user');
   const res = await fetch(`${BASE_URL}/freelancers/avrg-hours-per-week`, {
-    method: "PATCH",
+    method: 'PATCH',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(request),
+    body: JSON.stringify(reqbody),
   });
   console.log(res);
   if (res.status === 403) {
-    throw new Error("Forbidden");
+    throw new Error('Forbidden');
   }
   if (!res.ok) {
     // console.log('iam here');
-    throw new Error("SomeThing went Wrong");
+    throw new Error('SomeThing went Wrong');
   }
-  revalidatePath("/nx/freelancers/myprofile");
+  revalidatePath('/nx/freelancers/myprofile');
   return true;
 }
 
@@ -195,9 +198,9 @@ export async function AddPortFolio(
   token: string | undefined
 ): Promise<any> {
   // Send a POST request to the /freelancers/description endpoint
-  invariant(!token, "Unauthorized user");
+  invariant(!token, 'Unauthorized user');
   const res = await fetch(`${BASE_URL}/freelancers/portfolio`, {
-    method: "POST",
+    method: 'POST',
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -206,13 +209,13 @@ export async function AddPortFolio(
 
   console.log(res);
   if (res.status === 403) {
-    throw new Error("Forbidden");
+    throw new Error('Forbidden');
   }
   if (!res.ok) {
     // console.log('iam here');
-    throw new Error("SomeThing went Wrong");
+    throw new Error('SomeThing went Wrong');
   }
-  revalidatePath("/nx/freelancers/myprofile");
+  revalidatePath('/nx/freelancers/myprofile');
   return true;
 }
 
@@ -226,12 +229,13 @@ export async function HeaderSectionAction(
   },
   token: string | undefined
 ): Promise<any> {
-  invariant(!token, "Unauthorized user");
+  // console.log(request);
+  invariant(!token, 'Unauthorized user');
 
   const res = await fetch(`${BASE_URL}/freelancers/header-section`, {
-    method: "PATCH",
+    method: 'PATCH',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(request),
@@ -240,14 +244,14 @@ export async function HeaderSectionAction(
   console.log(res);
 
   if (res.status === 403) {
-    throw new Error("Forbidden");
+    throw new Error('Forbidden');
   }
 
   if (!res.ok) {
-    throw new Error("Something went Wrong");
+    throw new Error('Something went Wrong');
   }
 
-  revalidatePath("/nx/freelancers/myprofile");
+  revalidatePath('/nx/freelancers/myprofile');
   return true;
 }
 
@@ -255,10 +259,10 @@ export async function ProfilePictureAction(
   request: FormData,
   token: string | undefined
 ): Promise<any> {
-  invariant(!token, "Unauthorized user");
+  invariant(!token, 'Unauthorized user');
 
   const res = await fetch(`${BASE_URL}/freelancers/profile-picture`, {
-    method: "PATCH",
+    method: 'PATCH',
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -268,25 +272,28 @@ export async function ProfilePictureAction(
   console.log(res);
 
   if (res.status === 403) {
-    throw new Error("Forbidden");
+    throw new Error('Forbidden');
   }
 
   if (!res.ok) {
-    throw new Error("Something went wrong");
+    throw new Error('Something went wrong');
   }
 
-  revalidatePath("/nx/freelancers/myprofile");
-  return await res.json(); // Return the response data (e.g., new image URL)
+  revalidatePath('/nx/freelancers/myprofile');
+  return true;
 }
 
 export async function CoverPictureAction(
   request: FormData,
   token: string | undefined
 ): Promise<any> {
-  invariant(!token, "Unauthorized user");
+  // for (const key of request.keys()) {
+  //   console.log('Key:', key);
+  // }
+  invariant(!token, 'Unauthorized user');
 
   const res = await fetch(`${BASE_URL}/freelancers/cover-picture`, {
-    method: "PATCH",
+    method: 'PATCH',
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -294,13 +301,104 @@ export async function CoverPictureAction(
   });
 
   if (res.status === 403) {
-    throw new Error("Forbidden");
+    throw new Error('Forbidden');
   }
 
   if (!res.ok) {
-    throw new Error("Something went wrong");
+    throw new Error('Something went wrong');
   }
 
-  revalidatePath("/nx/freelancers/myprofile");
-  return await res.json(); // Assuming it returns { coverPhoto: "new-url" }
+  revalidatePath('/nx/freelancers/myprofile');
+  return true;
+}
+
+export async function getFreelancerbyID(
+  id: string,
+  token: string | undefined
+): Promise<any> {
+  // for (const key of request.keys()) {
+  //   console.log('Key:', key);
+  // }
+  invariant(!token, 'Unauthorized user');
+
+  const res = await fetch(`${BASE_URL}/api/freelancers/${id}`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (res.status === 403) {
+    throw new Error('Forbidden');
+  }
+
+  if (!res.ok) {
+    throw new Error('Something went wrong');
+  }
+  const out = await res.json();
+  return out;
+}
+
+export async function getWorkDonebyID(
+  id: string,
+  page: number,
+  size: number,
+  token: string | undefined
+): Promise<any> {
+  // for (const key of request.keys()) {
+  //   console.log('Key:', key);
+  // }
+  invariant(!token, 'Unauthorized user');
+
+  const res = await fetch(
+    `${BASE_URL}/api/freelancers/${id}/workdone?page=${page}&size=${size}`,
+    {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  if (res.status === 403) {
+    throw new Error('Forbidden');
+  }
+
+  if (!res.ok) {
+    throw new Error('Something went wrong');
+  }
+  const out = await res.json();
+  return out;
+}
+
+export async function getPortfoliosbyID(
+  id: string,
+  page: number,
+  size: number,
+  token: string | undefined
+): Promise<any> {
+  // for (const key of request.keys()) {
+  //   console.log('Key:', key);
+  // }
+  invariant(!token, 'Unauthorized user');
+
+  const res = await fetch(
+    `${BASE_URL}/api/freelancers/${id}/portfolios?page=${page}&size=${size}`,
+    {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  if (res.status === 403) {
+    throw new Error('Forbidden');
+  }
+
+  if (!res.ok) {
+    throw new Error('Something went wrong');
+  }
+  const out = await res.json();
+  return out;
 }
