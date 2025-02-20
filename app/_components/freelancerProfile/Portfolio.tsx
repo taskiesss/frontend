@@ -44,7 +44,7 @@ export default function Portfolio() {
   // console.log("current page", currentPage);
   return (
     <div className="flex flex-col">
-      <div className="flex gap-10 flex-wrap">
+      <div className="flex gap-2 flex-wrap">
         {portfolios.content.map((p, i) => (
           <PDFPreviewAuto
             key={i}
