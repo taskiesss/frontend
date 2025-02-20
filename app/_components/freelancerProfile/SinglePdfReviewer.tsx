@@ -31,11 +31,11 @@ export default function PDFPreviewAuto({
         rel="noopener noreferrer"
         className="flex flex-col items-center gap-3"
       >
-        <div className="relative h-[15rem] w-[15rem]">
+        <div className="relative w-40 aspect-square">
           <Image
             src={previewUrl}
             alt="PDF Preview"
-            quality={100}
+            quality={70}
             fill
             priority
             className="object-cover"

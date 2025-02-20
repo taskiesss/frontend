@@ -6,7 +6,6 @@ import LeftPanel from "./LeftPanel";
 import ProfileHeader from "./ProfileHeader";
 import RightPanel from "./RightPanel";
 
-import CoverPhotoForm from "./Forms/CoverPhotoForm";
 import SkillForm from "./Forms/SkillForm";
 import AboutForm from "./Forms/AboutForm";
 import EducationForm from "./Forms/EducationForm";
@@ -16,6 +15,7 @@ import HPWForm from "./Forms/HPWForm";
 import LanguageForm from "./Forms/LanguageForm";
 import LinksForm from "./Forms/LinksForm";
 import PortfolioForm from "./Forms/PortfolioForm";
+import HeaderForm from "./Forms/HeaderForm";
 
 const skills = ["Spring Boot", "Java", "Python"];
 interface Props {
@@ -120,7 +120,15 @@ export default function Profile({ editable }: Props) {
         />
       )}
       {editHeaderSection && (
-        <CoverPhotoForm closeEdit={() => setEditHeaderSection(false)} />
+        <HeaderForm
+          freelancer={{
+            name: freelancer.name,
+            jobTitle: freelancer.jobTitle,
+            pricePerHour: freelancer.pricePerHour,
+            country: freelancer.country,
+          }}
+          closeEdit={() => setEditHeaderSection(false)}
+        />
       )}
       {/* ✅  */}
       {editAboutSection && (
