@@ -15,23 +15,23 @@ export default function AboutForm({
   const [About, setAbout] = useState(description);
   const [isForbidden, setIsForbidden] = useState(false);
 
-  const handleAction = (e: FormEvent<HTMLFormElement>) => {
+  const handleAction = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const token = Cookies.get("token");
     try {
       console.log(About);
-      const res = AboutAction(About, token);
+      const res = await AboutAction(About, token);
       console.log(res);
+      closeEdit();
     } catch (error: any) {
       if (
         error.message === "Forbidden" ||
         error.message === "Unauthorized user"
       ) {
         setIsForbidden(true);
+        return;
       }
       console.error(error.message);
-    } finally {
-      closeEdit();
     }
   };
 

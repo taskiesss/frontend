@@ -45,10 +45,9 @@ export default function PortfolioForm({
         error.message === "Unauthorized user"
       ) {
         setIsForbidden(true);
+        return;
       }
       console.error(error.message);
-    } finally {
-      closeEdit();
     }
   };
 
