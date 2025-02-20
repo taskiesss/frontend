@@ -54,3 +54,22 @@ export const getExperienceLevel = (level: string): string => {
       return '';
   }
 };
+
+export const getReverseExperienceLevel = (level: string): string => {
+  switch (level) {
+    case 'Entry Level':
+      return 'entry_level';
+    case 'Intermediate':
+      return 'intermediate';
+    case 'Expert':
+      return 'expert';
+    default:
+      return '';
+  }
+};
+
+export function formatYearToString(dateString: string): string {
+  const date = new Date(dateString);
+  // Format the date to show the full month name and year
+  return date.toLocaleString('en-US', { month: 'long', year: 'numeric' });
+}
