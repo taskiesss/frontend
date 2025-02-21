@@ -93,7 +93,7 @@ export default function SkillsSearchInput({
   };
 
   return (
-    <div>
+    <div className="z-20">
       <div className="relative">
         <input
           type="text"
@@ -131,7 +131,7 @@ export default function SkillsSearchInput({
             </ul>
           )}
       </div>
-      <div className="flex flex-wrap gap-2 mt-3">
+      <div className="flex flex-wrap gap-2 mt-3 ">
         {selectedSkills.map((skill, index) => (
           <Skill
             key={index}
