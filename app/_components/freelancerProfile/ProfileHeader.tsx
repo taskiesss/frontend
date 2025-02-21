@@ -33,7 +33,7 @@ export default function ProfileHeader({
 
         <div className="relative w-20 md:w-32 lg:w-40 aspect-square rounded-full flex-shrink-0">
           <Image
-            src={userprofile}
+            src={freelancer.profilePicture}
             alt="User Profile"
             fill
             className="object-cover rounded-full"

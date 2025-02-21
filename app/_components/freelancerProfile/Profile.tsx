@@ -109,7 +109,7 @@ export default function Profile({ freelancer, editable, id }: Props) {
       {/* ✅  */}
       {editAboutSection && (
         <AboutForm
-          description="hello there"
+          description={freelancer.description}
           closeEdit={() => setEditAboutSection(false)}
         />
       )}

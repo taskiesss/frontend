@@ -53,7 +53,7 @@ export default function HPWForm({
           name="LinkedIn"
           defaultValue={HPW}
           onChange={(e) => setHPW(Number(e.target.value))}
-          placeholder="Place Your linkedIn account here"
+          placeholder="Place your average hour per week"
           className="p-3 focus:outline-none bg-[var(--background-color)] border border-solid border-gray-600"
         />
         <div className="self-end">

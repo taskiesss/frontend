@@ -83,9 +83,7 @@ export default function MyProposalsPage() {
   const [currentPage, setCurrentPage] = useState<number>(1);
 
   // Proposals data: set default to our fake data
-  const [proposalsData, setProposalsData] = useState<ProposalsPageDTO | null>(
-    null
-  );
+  const [proposalsData, setProposalsData] = useState<ProposalsPageDTO>();
   const [error, setError] = useState<string | null>(null);
 
   // Tabs for "Active" vs. "Archived"
@@ -98,15 +96,15 @@ export default function MyProposalsPage() {
       return;
     }
 
-    getFreelancerProposals(token, currentPage, 10)
+    getFreelancerProposals(token, currentPage - 1, 10)
       .then((data) => {
+        console.log(data);
         setProposalsData(data);
         setError(null);
       })
       .catch((err) => {
         setError(err.message);
         // If the fetch fails, we retain the default fake data
-        setProposalsData(null);
       });
   }, [token, currentPage]);
 
@@ -166,72 +164,81 @@ export default function MyProposalsPage() {
           </nav>
         </div>
 
-        <Suspense fallback={<Spinner />}>
-          <div className="overflow-x-auto bg-[var(--foreground-color)] border border-[var(--border-color)]">
-            <table className="w-full border-collapse text-base">
-              <thead>
-                <tr className="bg-[var(--button-hover-background-color)] text-white">
-                  <th className="px-4 py-2 text-left">Date</th>
-                  <th className="px-4 py-2 text-left">Job Title</th>
-                  <th className="px-4 py-2 text-left">
-                    Income/Outcome (active)
-                  </th>
-                  <th className="px-4 py-2 text-left">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {displayedProposals.map((proposal) => {
-                  const formattedDate = formatDateString(proposal.date);
-                  const relative = timeAgo(proposal.date);
+        {proposalsData?.content.length ? (
+          <>
+            <div className="overflow-x-auto bg-[var(--foreground-color)] border border-[var(--border-color)]">
+              <table className="w-full border-collapse text-base">
+                <thead>
+                  <tr className="bg-[var(--button-hover-background-color)] text-white">
+                    <th className="px-4 py-2 text-left">Date</th>
+                    <th className="px-4 py-2 text-left">Job Title</th>
+                    <th className="px-4 py-2 text-left">
+                      Income/Outcome (active)
+                    </th>
+                    <th className="px-4 py-2 text-left">Status</th>
+                  </tr>
+                </thead>
+                {/* If you need Suspense for asynchronous children, consider placing it around a component that may suspend.
+            Otherwise, if the data is already loaded, Suspense might not be necessary. */}
+                <Suspense fallback={<Spinner />}>
+                  <tbody>
+                    {displayedProposals.map((proposal) => {
+                      const formattedDate = formatDateString(proposal.date);
+                      const relative = timeAgo(proposal.date);
 
-                  // Income/Outcome logic
-                  let incomeOutcome = "";
-                  switch (proposal.status) {
-                    case "DECLINED":
-                      incomeOutcome = "Declined by client";
-                      break;
-                    case "HIRED":
-                      incomeOutcome = "Hired → View";
-                      break;
-                    default:
-                      incomeOutcome = "Pending";
-                  }
+                      // Income/Outcome logic
+                      let incomeOutcome = "";
+                      switch (proposal.status) {
+                        case "DECLINED":
+                          incomeOutcome = "Declined by client";
+                          break;
+                        case "HIRED":
+                          incomeOutcome = "Hired → View";
+                          break;
+                        default:
+                          incomeOutcome = "Pending";
+                      }
 
-                  // Status text
-                  let statusText: string = proposal.status;
-                  if (proposal.status === "HIRED") {
-                    statusText = "Job is closed";
-                  } else if (proposal.status === "PENDING") {
-                    statusText = "Awaiting client response";
-                  }
+                      // Status text
+                      let statusText: string = proposal.status;
+                      if (proposal.status === "HIRED") {
+                        statusText = "Job is closed";
+                      } else if (proposal.status === "PENDING") {
+                        statusText = "Awaiting client response";
+                      }
 
-                  return (
-                    <tr
-                      key={proposal.proposalId}
-                      className="border-b border-[var(--border-color)]"
-                    >
-                      <td className="px-4 py-2 align-top">
-                        <span className="block text-base text-[var(--accent-color)]">
-                          Initiated {formattedDate}
-                        </span>
-                        <span className="block text-sm text-[var(--star)]">
-                          {relative}
-                        </span>
-                      </td>
-                      <td className="px-4 py-2 align-top">
-                        <a href="#" className="text-blue-600 hover:underline">
-                          {proposal.jobTitle}
-                        </a>
-                      </td>
-                      <td className="px-4 py-2 align-top">{incomeOutcome}</td>
-                      <td className="px-4 py-2 align-top">{statusText}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-          {proposalsData && (
+                      return (
+                        <tr
+                          key={proposal.proposalId}
+                          className="border-b border-[var(--border-color)]"
+                        >
+                          <td className="px-4 py-2 align-top">
+                            <span className="block text-base text-[var(--accent-color)]">
+                              Initiated {formattedDate}
+                            </span>
+                            <span className="block text-sm text-[var(--star)]">
+                              {relative}
+                            </span>
+                          </td>
+                          <td className="px-4 py-2 align-top">
+                            <a
+                              href="#"
+                              className="text-blue-600 hover:underline"
+                            >
+                              {proposal.jobTitle}
+                            </a>
+                          </td>
+                          <td className="px-4 py-2 align-top">
+                            {incomeOutcome}
+                          </td>
+                          <td className="px-4 py-2 align-top">{statusText}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </Suspense>
+              </table>
+            </div>
             <div className="flex justify-center py-5">
               <Pagination
                 currentPage={currentPage}
@@ -240,8 +247,12 @@ export default function MyProposalsPage() {
                 onPageChange={handlePageChange}
               />
             </div>
-          )}
-        </Suspense>
+          </>
+        ) : (
+          <div className="flex flex-col">
+            <span className="self-center text-2xl">There are no proposals</span>
+          </div>
+        )}
       </div>
     </Container>
   );

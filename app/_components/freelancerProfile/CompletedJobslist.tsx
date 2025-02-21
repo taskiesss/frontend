@@ -71,7 +71,7 @@ export default function CompletedJobslist({ id }: CompletedJobslistProps) {
   const token = Cookies.get("token");
 
   const { data, isError, error } = useQuery({
-    queryKey: ["portfolios", id, currentPage, size],
+    queryKey: ["workDone", id, currentPage, size],
     queryFn: () => getWorkDonebyID(id, currentPage - 1, size, token),
     placeholderData: () => {
       // Calculate the previous page number
@@ -79,7 +79,7 @@ export default function CompletedJobslist({ id }: CompletedJobslistProps) {
       // Only try to get previous data if prevPage is valid (i.e., >= 1)
       if (prevPage >= 1) {
         // Attempt to retrieve the cached data for the previous page
-        return queryClient.getQueryData(["portfolios", id, prevPage, size]);
+        return queryClient.getQueryData(["workDone", id, prevPage, size]);
       }
       // If there's no previous page (e.g., on page 1), return undefined
       return undefined;
@@ -99,26 +99,26 @@ export default function CompletedJobslist({ id }: CompletedJobslistProps) {
     // Fallback for other errors
     return <div>Error loading jobs list: {errorMessage}</div>;
   }
-  console.log("current page", currentPage);
+  console.log("current page", data);
 
   if (!data) return;
   return (
-    <div className="flex flex-col ">
+    <>
       <div className="flex flex-col  gap-9 flex-wrap">
         {data.content.map((j: any, i: number) => (
           <CompletedJobsCard key={i} job={j} />
         ))}
       </div>
-      <div className="flex self-center">
+      <div className="">
         <Pagination
           currentPage={currentPage}
-          totalCount={jobs.totalElements}
-          pageSize={jobs.size}
+          totalCount={data.totalElements}
+          pageSize={data.size}
           onPageChange={setCurrentPage}
           siblingCount={0}
           setPageParamter={true}
         />
       </div>
-    </div>
+    </>
   );
 }

@@ -1,19 +1,51 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React, { FormEvent, useState } from "react";
+import {
+  useMutation,
+  useQueryClient,
+  UseMutationResult,
+} from "@tanstack/react-query";
 import Model from "../Model";
 import Cookies from "js-cookie";
 import { AddPortFolio } from "@/app/_lib/FreelancerProfile/APi";
 import ProtectedPage from "../../common/ProtectedPage";
 
-export default function PortfolioForm({
-  closeEdit,
-}: {
+interface PortfolioFormProps {
   closeEdit: () => void;
-}) {
+}
+
+export default function PortfolioForm({ closeEdit }: PortfolioFormProps) {
   const [name, setName] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [isForbidden, setIsForbidden] = useState(false);
+  const queryClient = useQueryClient();
+  const token = Cookies.get("token");
+
+  // Mutation for adding a portfolio
+  const addPortfolioMutation: UseMutationResult<any, Error, FormData, unknown> =
+    useMutation({
+      mutationFn: async (formData: FormData) => {
+        const response = await AddPortFolio(formData, token);
+        return response;
+      },
+      onSuccess: (response) => {
+        // Invalidate all portfolios queries so that every paginated query is refetched.
+        queryClient.invalidateQueries({ queryKey: ["portfolios"] });
+        console.log("Portfolio uploaded successfully", response);
+        closeEdit();
+      },
+      onError: (error) => {
+        if (
+          error.message === "Forbidden" ||
+          error.message === "Unauthorized user"
+        ) {
+          setIsForbidden(true);
+          return;
+        }
+        console.error(error.message);
+      },
+    });
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -21,44 +53,27 @@ export default function PortfolioForm({
     }
   };
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const token = Cookies.get("token");
-
     if (!file) {
       console.error("Please select a file to upload.");
       return;
     }
-
     const formData = new FormData();
     formData.append("name", name);
     formData.append("file", file);
-
-    try {
-      console.log(formData);
-      const res = await AddPortFolio(formData, token);
-      console.log("Portfolio uploaded successfully", res);
-      closeEdit();
-    } catch (error: any) {
-      if (
-        error.message === "Forbidden" ||
-        error.message === "Unauthorized user"
-      ) {
-        setIsForbidden(true);
-        return;
-      }
-      console.error(error.message);
-    }
+    addPortfolioMutation.mutate(formData);
   };
 
-  if (isForbidden)
+  if (isForbidden) {
     return (
       <ProtectedPage message="You are not allowed to do this action. Please log in" />
     );
+  }
+
   return (
     <Model isOpen={true} onClose={closeEdit}>
       <h2 className="text-2xl font-bold mb-4">Upload Portfolio</h2>
-
       <form onSubmit={handleSubmit} className="flex flex-col gap-6 w-[30rem]">
         <input
           type="text"
@@ -80,9 +95,10 @@ export default function PortfolioForm({
         <div className="self-end">
           <button
             type="submit"
+            disabled={addPortfolioMutation.isPending}
             className="px-4 py-2 bg-[var(--btn-color)] rounded-lg"
           >
-            Submit
+            {addPortfolioMutation.isPending ? "Submitting..." : "Submit"}
           </button>
         </div>
       </form>

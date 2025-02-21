@@ -10,11 +10,12 @@ export const ProfileSkillApi = async (
   requestBody: string[]
 ): Promise<any> => {
   const reqbody = { skills: requestBody };
-  // console.log(reqbody);
+  console.log(reqbody);
   invariant(!token, 'Unauthorized user');
   const res = await fetch(`${BASE_URL}/freelancers/skills`, {
     method: 'PATCH',
     headers: {
+      'content-type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(reqbody),
@@ -309,6 +310,7 @@ export async function CoverPictureAction(
   }
 
   revalidatePath('/nx/freelancers/myprofile');
+
   return true;
 }
 
@@ -336,6 +338,7 @@ export async function getFreelancerbyID(
     throw new Error('Something went wrong');
   }
   const out = await res.json();
+  // console.log(out);
   return out;
 }
 
@@ -368,6 +371,7 @@ export async function getWorkDonebyID(
     throw new Error('Something went wrong');
   }
   const out = await res.json();
+  console.log('Work done', out);
   return out;
 }
 
@@ -400,5 +404,6 @@ export async function getPortfoliosbyID(
     throw new Error('Something went wrong');
   }
   const out = await res.json();
+  console.log(out);
   return out;
 }

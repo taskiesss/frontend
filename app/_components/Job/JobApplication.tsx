@@ -365,7 +365,6 @@ export default function JobApplication({ jobid }: Props) {
                 ref={fileInputRef}
                 onChange={handleFileChange}
                 className="file:bg-[var(--btn-color)] file:border-0 file:text-lg border-solid border border-[var(--border-color)] py-5 px-5"
-                required
               />
               <button
                 type="button"

@@ -20,12 +20,12 @@ export default function CoverPhoto({
     <div className="flex relative w-full h-[312px] bg-[var(--background-color)] overflow-hidden">
       {/* Blurred background layer */}
       <div
-        className="absolute inset-0 bg-cover bg-center filter blur-[0.1rem]"
-        style={{ backgroundImage: `url(${defaultImageUrl})` }}
+        className="absolute inset-0 bg-cover bg-center filter blur-[0.5rem]"
+        style={{ backgroundImage: `url(${freelancer.coverPhoto})` }}
       />
       <div className="absolute inset-0 z-10 flex items-center justify-center">
         <Image
-          src={defaultImageUrl}
+          src={freelancer.coverPhoto}
           alt="Cover Photo"
           fill
           quality={100}

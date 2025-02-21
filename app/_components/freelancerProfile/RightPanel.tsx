@@ -50,7 +50,7 @@ export default function RightPanel({
       <div className="flex justify-between pb-6 px-6 border-b-4 border-[var(--border-color)]">
         <div className="flex flex-col gap-6 ">
           <h2 className="text-3xl font-bold">Portfolio</h2>
-          <div className="flex gap-2 flex-wrap">
+          <div className="flex flex-col w-full gap-2 flex-wrap">
             <Suspense fallback={<Spinner />}>
               <Portfolio id={id} />
             </Suspense>
@@ -65,7 +65,7 @@ export default function RightPanel({
       {/* Completed Jobs */}
       <div className="flex flex-col gap-6 pb-6 px-6 border-b-4 border-[var(--border-color)] ">
         <h2 className="text-3xl font-bold">Completed Jobs</h2>
-        <div className="gap-2 ">
+        <div className="gap-2  ">
           <Suspense fallback={<Spinner />}>
             <CompletedJobslist id={id} />
           </Suspense>
