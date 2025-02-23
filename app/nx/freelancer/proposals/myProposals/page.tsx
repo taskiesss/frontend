@@ -151,16 +151,6 @@ export default function MyProposalsPage() {
             >
               Active
             </button>
-            <button
-              onClick={() => handleSwitch("ARCHIVED")}
-              className={`relative pb-2 text-base ${
-                activeTab === "ARCHIVED"
-                  ? "font-medium text-[var(--hover-color)] border-solid border-b-2 border-[var(--hover-color)]"
-                  : "text-[var(--star)]"
-              }`}
-            >
-              Archived
-            </button>
           </nav>
         </div>
 

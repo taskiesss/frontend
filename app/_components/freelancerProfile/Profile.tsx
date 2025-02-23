@@ -18,7 +18,7 @@ import PortfolioForm from "./Forms/PortfolioForm";
 import HeaderForm from "./Forms/HeaderForm";
 import { getfreelancerResponse } from "@/app/_types/ProfileTypes";
 
-const skills = ["Spring Boot", "Java", "Python"];
+// const skills = ["Spring Boot", "Java", "Python"];
 
 interface Props {
   editable: boolean;
@@ -91,7 +91,7 @@ export default function Profile({ freelancer, editable, id }: Props) {
       {/* ✅  */}
       {editSkillSection && (
         <SkillForm
-          skills={skills}
+          skills={freelancer.skills}
           closeEdit={() => setEditSkillSection(false)}
         />
       )}
