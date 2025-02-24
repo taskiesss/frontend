@@ -15,6 +15,7 @@ interface jobResponse {
   experienceLevel: string;
   pricePerHour: string;
   skills: string[];
+  canApply: boolean;
   client: {
     completedJobs: number;
     totalSpent: string;

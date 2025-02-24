@@ -3,7 +3,7 @@ export interface ProposalDTO {
   jobTitle: string;
   proposalId: string;
   jobId: string;
-  status: "PENDING" | "DECLINED" | "HIRED";
+  status: 'PENDING' | 'DECLINED' | 'HIRED' | 'ACCEPTED';
   contractId?: string;
 }
 

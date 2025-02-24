@@ -8,54 +8,6 @@ import { getWorkDonebyID } from "@/app/_lib/FreelancerProfile/APi";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Cookies from "js-cookie";
 
-const jobs = {
-  content: [
-    {
-      jobId: "string",
-      jobName: "E-commerce Website",
-      rate: 5,
-      pricePerHour: 10,
-      totalHours: 80,
-    },
-    {
-      jobId: "string",
-      jobName: "E-commerce Website",
-      rate: 5,
-      pricePerHour: 10,
-      totalHours: 80,
-    },
-    {
-      jobId: "string",
-      jobName: "Shopify Website",
-      rate: 5,
-      pricePerHour: 10,
-      totalHours: 80,
-    },
-    {
-      jobId: "string",
-      jobName: "Shopify Website",
-      rate: 5,
-      pricePerHour: 10,
-      totalHours: 80,
-    },
-  ],
-  pageable: {
-    sort: {
-      unsorted: true,
-      sorted: true,
-      empty: true,
-    },
-    pageNumber: 0,
-    pageSize: 0,
-    offset: 0,
-    unpaged: true,
-  },
-  totalElements: 10,
-  totalPages: 0,
-  size: 5,
-  number: 0,
-};
-
 interface CompletedJobslistProps {
   id: string;
 }

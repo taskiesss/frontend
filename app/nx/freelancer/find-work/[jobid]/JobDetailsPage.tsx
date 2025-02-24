@@ -24,6 +24,7 @@ type Props = {
   jobdetails: {
     projectTitle: string;
     postedAt: string;
+    canApply: boolean;
     projectDescription: string;
     projectLength: string;
     experienceLevel: string;
@@ -42,6 +43,7 @@ export default function JobDetailsPage({ jobid, jobdetails }: Props) {
 
   const {
     projectTitle,
+    canApply,
     postedAt,
     projectDescription,
     projectLength,
@@ -164,7 +166,9 @@ export default function JobDetailsPage({ jobid, jobdetails }: Props) {
         <div className="mt-12 relative inline-block" ref={dropdownRef}>
           <button
             onClick={() => setIsDropdownOpen((prev) => !prev)}
-            className="flex items-center gap-3 bg-[var(--btn-color)] text-[var(--btn-clr-primary)] px-8 py-4 rounded hover:bg-[var(--button-hover-background-color)]"
+            className={`flex items-center gap-3 bg-[var(--btn-color)] text-[var(--btn-clr-primary)] px-8 py-4 rounded hover:bg-[var(--button-hover-background-color)] ${
+              canApply ? "" : "invisible"
+            }`}
           >
             <FontAwesomeIcon icon={faPaperPlane} />
             <span className="text-xl">Apply Now</span>
