@@ -24,10 +24,10 @@ interface Contracts {
     contractStatus: "ACTIVE" | "ENDED";
     budget: number;
     activeMilestone: string;
-    clientRateForFreelancer: number;
+    clientRateForFreelancer?: number;
     startDate: string;
-    dueDate: string;
-    endDate: string;
+    dueDate?: string;
+    endDate?: string;
   }[];
   totalElements: number;
   totalPages: number;

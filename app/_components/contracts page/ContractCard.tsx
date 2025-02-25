@@ -15,10 +15,10 @@ type Props = {
     contractStatus: "ACTIVE" | "ENDED";
     budget: number;
     activeMilestone: string;
-    clientRateForFreelancer: number;
+    clientRateForFreelancer?: number;
     startDate: string;
-    dueDate: string;
-    endDate: string;
+    dueDate?: string;
+    endDate?: string;
   };
 };
 
@@ -84,7 +84,8 @@ export default function ContractCard({ contract }: Props) {
             }`}
           >
             <FontAwesomeIcon icon={faCalendarAlt} size="lg" />
-            due {formatDayMonthToString(contract.dueDate)}
+            due{" "}
+            {contract.dueDate ? formatDayMonthToString(contract.dueDate) : ""}
           </div>
         </div>
         <div className="w-1/3"></div>
@@ -93,7 +94,9 @@ export default function ContractCard({ contract }: Props) {
         {formatDayMonthToString(contract.startDate)} -{" "}
         {contract.contractStatus === "ACTIVE"
           ? "Present"
-          : formatDayMonthToString(contract.endDate)}
+          : contract.endDate
+          ? formatDayMonthToString(contract?.endDate)
+          : ""}
       </div>
     </div>
   );
