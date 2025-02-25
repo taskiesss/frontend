@@ -35,9 +35,9 @@ type Props = {
 };
 
 const SortByOptions = [
-  { label: "Due date", value: "DUE_DATE" },
-  { label: "Title", value: "TITLE" },
-  { label: "Start date", value: "START_DATE" },
+  { label: "Due date", value: "dueDate" },
+  { label: "Title", value: "title" },
+  { label: "Start date", value: "startDate" },
 ];
 const DirectionOptions = [
   { label: "Ascending", value: "ASC" },
@@ -77,7 +77,15 @@ function AllContracts({ params, contracts }: Props) {
             </Link>
           </div>
         )}
-        <ContractList contracts={contracts} />
+        {contracts.content.length > 0 ? (
+          <ContractList contracts={contracts} />
+        ) : (
+          <div className="flex flex-col">
+            <span className="self-center text-2xl">
+              There are no contracts yet
+            </span>
+          </div>
+        )}
       </div>
     </Container>
   );

@@ -77,6 +77,7 @@ async function page({ searchParams }: Props) {
       sortedBy: sortBy,
       sortDirection: sortDirection,
     };
+    console.log(reqbody);
     const token = (await cookies()).get("token")?.value;
     contracts = await getMyContracts(reqbody, token);
     return <AllContracts contracts={contracts} params={params} />;

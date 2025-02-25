@@ -86,6 +86,10 @@ export function formatYearToString(dateString: string): string {
 
 export function formatDayMonthToString(dateString: string): string {
   const date = new Date(dateString);
-  // Format the date to show the day and full month name (year omitted)
-  return date.toLocaleString('en-US', { day: 'numeric', month: 'long' });
+  // Format the date to show the day, full month name, and year
+  return date.toLocaleString('en-US', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
 }

@@ -20,7 +20,7 @@ export async function getMyContracts(
     },
     body: JSON.stringify(reqbody),
   });
-
+  console.log(res);
   if (res.status === 403) {
     throw new Error('Forbidden');
   }
