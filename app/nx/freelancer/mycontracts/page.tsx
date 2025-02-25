@@ -24,7 +24,7 @@ interface Contracts {
     contractStatus: "ACTIVE" | "ENDED";
     budget: number;
     activeMilestone: string;
-    rate: number;
+    clientRateForFreelancer: number;
     startDate: string;
     dueDate: string;
     endDate: string;
@@ -45,7 +45,7 @@ let contracts: Contracts = {
       contractStatus: "ACTIVE",
       budget: 140.5,
       activeMilestone: "string",
-      rate: 3,
+      clientRateForFreelancer: 3,
       startDate: "2025-02-24",
       dueDate: "2025-02-24",
       endDate: "present",

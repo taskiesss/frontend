@@ -15,7 +15,7 @@ type Props = {
     contractStatus: "ACTIVE" | "ENDED";
     budget: number;
     activeMilestone: string;
-    rate: number;
+    clientRateForFreelancer: number;
     startDate: string;
     dueDate: string;
     endDate: string;
@@ -64,7 +64,7 @@ export default function ContractCard({ contract }: Props) {
             {contract.contractStatus === "ENDED" ? (
               <div className="pointer-events-none">
                 <StarRating
-                  defaultRating={contract.rate}
+                  defaultRating={contract.clientRateForFreelancer}
                   size={14}
                   color="#FFC107"
                 />

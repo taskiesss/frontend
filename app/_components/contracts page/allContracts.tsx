@@ -22,7 +22,7 @@ type Props = {
       contractStatus: "ACTIVE" | "ENDED";
       budget: number;
       activeMilestone: string;
-      rate: number;
+      clientRateForFreelancer: number;
       startDate: string;
       dueDate: string;
       endDate: string;
