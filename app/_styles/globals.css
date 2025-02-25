@@ -36,6 +36,9 @@
   --bg-skill: var(--bg-skill-primary);
 
   --star: #64748b;
+  --status-active: #16c358;
+  --status-ended: #4c544f;
+  --status-pending: #7f17a8;
 
   /* Button hover background color: in light mode use a darker variant */
   --button-hover-background-color: #83adbb;
@@ -71,6 +74,8 @@ html.dark {
   --button-hover-background-color: #4a8da2;
   --border-color: var(--clr-border-dark);
   --bg-skill: var(--bg-skill-dark);
+
+  --status-active: #0a632c;
 
   --checkbox-bg: #000; /* black in dark mode */
   --checkbox-hover-bg: #777;

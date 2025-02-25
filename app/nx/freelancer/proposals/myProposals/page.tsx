@@ -10,6 +10,7 @@ import Cookies from "js-cookie";
 import Spinner from "@/app/_components/common/Spinner";
 import Container from "@/app/_components/common/Container";
 import { formatDateString, timeAgo } from "@/app/_helpers/helper";
+import Link from "next/link";
 
 // Define sample fake proposals data
 // const defaultProposalsData: ProposalsPageDTO = {
@@ -183,7 +184,10 @@ export default function MyProposalsPage() {
                           incomeOutcome = "Declined by client";
                           break;
                         case "HIRED":
-                          incomeOutcome = "Hired → View";
+                          incomeOutcome = "Hired → View contract";
+                          break;
+                        case "ACCEPTED":
+                          incomeOutcome = "Accepted → contract sent";
                           break;
                         default:
                           incomeOutcome = "Pending";
@@ -192,9 +196,13 @@ export default function MyProposalsPage() {
                       // Status text
                       let statusText: string = proposal.status;
                       if (proposal.status === "HIRED") {
-                        statusText = "Job is closed";
+                        statusText = "Hired";
                       } else if (proposal.status === "PENDING") {
                         statusText = "Awaiting client response";
+                      } else if (proposal.status === "DECLINED") {
+                        statusText = "Rejected";
+                      } else if (proposal.status === "ACCEPTED") {
+                        statusText = "Accept";
                       }
 
                       return (
@@ -211,15 +219,22 @@ export default function MyProposalsPage() {
                             </span>
                           </td>
                           <td className="px-4 py-2 align-top">
-                            <a
-                              href="#"
-                              className="text-blue-600 hover:underline"
+                            <Link
+                              href={`/nx/freelancer/find-work/${proposal.jobId}`}
+                              className="hover:text-[var(--hover-color)] hover:underline"
                             >
                               {proposal.jobTitle}
-                            </a>
+                            </Link>
                           </td>
                           <td className="px-4 py-2 align-top">
-                            {incomeOutcome}
+                            {proposal.status === "ACCEPTED" ||
+                            proposal.status === "HIRED" ? (
+                              <Link href="#" className="hover:underline">
+                                {incomeOutcome}
+                              </Link>
+                            ) : (
+                              incomeOutcome
+                            )}
                           </td>
                           <td className="px-4 py-2 align-top">{statusText}</td>
                         </tr>
