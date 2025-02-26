@@ -12,6 +12,7 @@ import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import DropLoggedin from "./DropLoggedin";
 import ProfileMenu from "./ProfileMenu";
 import userProfile from "@/public/images/userprofile.jpg";
+import Cookies from "js-cookie";
 
 interface NavItem {
   label: string;
@@ -37,12 +38,17 @@ const NavLoggedin: React.FC = () => {
 
   const BASE_URL = "http://localhost:8080";
 
+  const token = Cookies.get("token");
+
   useEffect(() => {
     const fetchUserNameAndImage = async () => {
       try {
         const response = await fetch(`${BASE_URL}/api/name-and-picture`, {
           method: "GET",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
         });
         const data = await response.json();
         setImage(data.profilePicture);
