@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ProtectedPage from "@/app/_components/common/ProtectedPage";
-import AllContracts from "@/app/_components/contracts page/AllContracts";
+import AllContracts from "@/app/_components/contractpage/AllContracts";
 import { getMyContracts } from "@/app/_lib/ContractsAPi/contractAPI";
 import { cookies } from "next/headers";
 
