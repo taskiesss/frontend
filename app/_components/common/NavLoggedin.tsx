@@ -103,14 +103,23 @@ const NavLoggedin: React.FC = () => {
     const formData = new FormData(e.currentTarget);
     const searchTerm = formData.get("search") as string;
 
-    const currentPath = "nx/freelancer/search";
-    const searchRegex = /^\/(jobs|freelancers|communities)\/search(\/)?$/i;
+    const currentPath = window.location.pathname;
+    const searchRegex = /^\/search\/(jobs|freelancers|communities)(\/)?$/i;
 
     if (searchRegex.test(currentPath)) {
       router.push(`${currentPath}?query=${encodeURIComponent(searchTerm)}`);
     } else {
+      const searchtype = currentPath.includes("find-work")
+        ? "jobs"
+        : currentPath.includes("find-talents")
+        ? "freelancers"
+        : currentPath.includes("communities")
+        ? "communities"
+        : "jobs";
       router.push(
-        `${currentPath}/search?query=${encodeURIComponent(searchTerm)}`
+        `/nx/freelancer/search/${searchtype}?query=${encodeURIComponent(
+          searchTerm
+        )}`
       );
     }
   };

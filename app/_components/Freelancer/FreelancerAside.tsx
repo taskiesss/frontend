@@ -1,18 +1,16 @@
 "use client";
-import React, { useState } from "react";
-import StarRating from "../common/StarRating";
 import { useRouter } from "next/navigation";
+import React, { useState } from "react";
 import SkillsSearchInput from "../common/SkillsSearchInput";
-import Link from "next/link";
+import StarRating from "../common/StarRating";
 
 type ExperienceLevelKey = "entry_level" | "intermediate" | "expert";
 type ExperienceLevelLabel = "Entry Level" | "Intermediate" | "Expert";
 
-export default function FreelancerAside({ pathname }: { pathname?: string }) {
+export default function FreelancerAside({ onClose }: { onClose: () => void }) {
   const router = useRouter();
 
   // Local state for filter values
-
   const [userRating, setUserRating] = useState<number>(0);
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
   // A key to force re-mounting of SkillsSearchInput for resetting its local state
@@ -85,14 +83,16 @@ export default function FreelancerAside({ pathname }: { pathname?: string }) {
     // Update the resetKey to force a re-mount of the SkillsSearchInput component.
     setResetKey((prev) => prev + 1);
   };
-  const newPath = pathname ? pathname : "/freelancers/search";
+
   return (
     <div className="sticky top-[2.5rem] left-0">
-      <Link href={newPath}>
-        <button className="px-4 py-2 bg-[var(--btn-color)] text-[var(--accent-color)] rounded-md">
-          Advanced Search
-        </button>
-      </Link>
+      <button
+        onClick={onClose}
+        className="px-4 py-2 bg-[var(--btn-color)] text-[var(--accent-color)] rounded-md"
+      >
+        Advanced Search
+      </button>
+
       <aside className="bg-[var(--background-color)] rounded-lg shadow-s mt-4 p-4">
         {/* Rating Filter */}
         <div className="mb-4">

@@ -4,12 +4,11 @@ import React, { useState } from "react";
 import StarRating from "../common/StarRating";
 import { useRouter } from "next/navigation";
 import SkillsSearchInput from "../common/SkillsSearchInput";
-import Link from "next/link";
 
 type ExperienceLevelKey = "entry_level" | "intermediate" | "expert";
 type ExperienceLevelLabel = "Entry Level" | "Intermediate" | "Expert";
 
-export default function CommunitiyAside({ pathname }: { pathname?: string }) {
+export default function CommunitiyAside({ onClose }: { onClose: () => void }) {
   const router = useRouter();
 
   const [userRating, setUserRating] = useState<number>(0);
@@ -88,31 +87,17 @@ export default function CommunitiyAside({ pathname }: { pathname?: string }) {
     if (currentQuery !== newQuery) {
       router.push(`${window.location.pathname}?${newQuery}`);
     }
-
-    // Reset all filter states after submission.
-    // setIsFull(false);
-    // setUserRating(0);
-    // setSelectedSkills([]);
-    // setExperienceLevels({
-    //   entry_level: false,
-    //   intermediate: false,
-    //   expert: false,
-    // });
-
-    // setHourlyRateMin("");
-    // setHourlyRateMax("");
-
-    // // Update the resetKey to force re-mounting of SkillsSearchInput.
-    // setResetKey((prev) => prev + 1);
   };
-  const newPath = pathname ? pathname : "/communities/search";
+
   return (
     <div className="sticky top-[2.5rem] left-0">
-      <Link href={newPath}>
-        <button className="px-4 py-2 bg-[var(--btn-color)] text-[var(--accent-color)] rounded-md">
-          Advanced Search
-        </button>
-      </Link>
+      <button
+        onClick={onClose}
+        className="px-4 py-2 bg-[var(--btn-color)] text-[var(--accent-color)] rounded-md"
+      >
+        Advanced Search
+      </button>
+
       <aside className="row-start-3 bg-[var(--background-color)] rounded-lg shadow-s">
         <div className="py-2">
           <h2 className="py-3 text-xl font-bold">Rating</h2>

@@ -1,9 +1,8 @@
 "use client";
-import React, { useState } from "react";
-import StarRating from "../common/StarRating";
 import { useRouter } from "next/navigation";
+import React, { useState } from "react";
 import SkillsSearchInput from "../common/SkillsSearchInput";
-import Link from "next/link";
+import StarRating from "../common/StarRating";
 
 type ExperienceLevelKey = "entry_level" | "intermediate" | "expert";
 type ExperienceLevelLabel = "Entry Level" | "Intermediate" | "Expert";
@@ -14,7 +13,7 @@ type ProjectLengthKey =
   | "3 to 6 months"
   | "More than 6 months";
 
-export default function JobAside({ pathname }: { pathname?: string }) {
+export default function JobAside({ onClose }: { onClose: () => void }) {
   const router = useRouter();
 
   const [userRating, setUserRating] = useState<number>(0);
@@ -107,14 +106,16 @@ export default function JobAside({ pathname }: { pathname?: string }) {
       router.push(`${window.location.pathname}?${newQuery}`);
     }
   };
-  const newPath = pathname ? pathname : "/jobs/search";
+
   return (
     <div className="sticky top-[2.5rem] left-0">
-      <Link href={newPath}>
-        <button className="px-4 py-2 bg-[var(--btn-color)] text-[var(--accent-color)] rounded-md">
-          Advanced Search
-        </button>
-      </Link>
+      <button
+        onClick={onClose}
+        className="px-4 py-2 bg-[var(--btn-color)] text-[var(--accent-color)] rounded-md"
+      >
+        Advanced Search
+      </button>
+
       <aside className="row-start-3 bg-[var(--background-color)] rounded-lg shadow-s">
         <div className="py-4">
           <h2 className="py-3 text-xl font-bold">Rating</h2>

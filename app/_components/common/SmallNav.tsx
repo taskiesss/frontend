@@ -4,27 +4,32 @@ import React from "react";
 type Props = {
   pathname?: string;
   role?: "freelancer" | "client";
+  queryString?: string; // Query string passed from the parent (e.g., "query=Machine")
 };
 
-export default function SmallNav({ pathname, role }: Props) {
-  // If a role is provided, use the dynamic URLs for logged-in users.
-  // Otherwise, use the original URLs.
-  const jobsPath = role ? `/nx/${role}/search/jobs` : `/jobs/search`;
-  const communitiesPath = role
-    ? `/nx/${role}/search/communities`
-    : `/communities/search`;
-  const freelancersPath = role
-    ? `/nx/${role}/search/freelancers`
-    : `/freelancers/search`;
+export default function SmallNav({ pathname, role, queryString = "" }: Props) {
+  // Prepend "?" to query string if it exists, otherwise use empty string
+  const querySuffix = queryString ? `?${queryString}` : "";
+
+  // Dynamic paths based on role, with query string appended
+  const jobsPath = `${
+    role ? `/nx/${role}/search/jobs` : `/jobs/search`
+  }${querySuffix}`;
+  const communitiesPath = `${
+    role ? `/nx/${role}/search/communities` : `/communities/search`
+  }${querySuffix}`;
+  const freelancersPath = `${
+    role ? `/nx/${role}/search/freelancers` : `/freelancers/search`
+  }${querySuffix}`;
 
   return (
     <nav className="col-span-2 bg-[var(--background-color)] pt-20 pb-3 flex items-center border-solid border-gray-600 border-b-[0.03rem]">
       <ul className="flex gap-44">
         <li>
           <Link
-            href={{ pathname: jobsPath, query: { page: "1" } }}
+            href={jobsPath}
             className={`text-lg text-[var(--accent-color)]${
-              pathname === jobsPath
+              pathname === jobsPath.split("?")[0]
                 ? " text-2xl text-[var(--hover-color)] font-extrabold hover:text-[var(--hover-color)]"
                 : " hover:text-[var(--hover-color)]"
             }`}
@@ -34,9 +39,9 @@ export default function SmallNav({ pathname, role }: Props) {
         </li>
         <li>
           <Link
-            href={{ pathname: communitiesPath, query: { page: "1" } }}
+            href={communitiesPath}
             className={`text-lg text-[var(--accent-color)]${
-              pathname === communitiesPath
+              pathname === communitiesPath.split("?")[0]
                 ? " text-2xl text-[var(--hover-color)] font-extrabold hover:text-[var(--hover-color)]"
                 : " hover:text-[var(--hover-color)]"
             }`}
@@ -46,9 +51,9 @@ export default function SmallNav({ pathname, role }: Props) {
         </li>
         <li>
           <Link
-            href={{ pathname: freelancersPath, query: { page: "1" } }}
+            href={freelancersPath}
             className={`text-lg text-[var(--accent-color)]${
-              pathname === freelancersPath
+              pathname === freelancersPath.split("?")[0]
                 ? " text-2xl text-[var(--hover-color)] font-extrabold hover:text-[var(--hover-color)]"
                 : " hover:text-[var(--hover-color)]"
             }`}
