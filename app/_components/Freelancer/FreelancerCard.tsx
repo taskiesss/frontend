@@ -31,7 +31,7 @@ const FreelancerCard: React.FC<FreelancerCardProps> = ({ freelancer }) => {
   const detailUrl =
     currentPath === "/nx/freelancer/search/freelancers"
       ? `/nx/freelancer/profile/${id}`
-      : `/freelancers/${id}`;
+      : `/guest/freelancers/${id}`;
 
   // Reference and state for the scrollable skills container.
   const scrollRef = useRef<HTMLDivElement>(null);

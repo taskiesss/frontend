@@ -3,7 +3,7 @@ import React from "react";
 
 type Props = {
   pathname?: string;
-  role?: "freelancer" | "client";
+  role?: "freelancer" | "client" | undefined;
   queryString?: string; // Query string passed from the parent (e.g., "query=Machine")
 };
 
@@ -13,13 +13,13 @@ export default function SmallNav({ pathname, role, queryString = "" }: Props) {
 
   // Dynamic paths based on role, with query string appended
   const jobsPath = `${
-    role ? `/nx/${role}/search/jobs` : `/jobs/search`
+    role ? `/nx/${role}/search/jobs` : `/guest/search/jobs`
   }${querySuffix}`;
   const communitiesPath = `${
-    role ? `/nx/${role}/search/communities` : `/communities/search`
+    role ? `/nx/${role}/search/communities` : `/guest/search/communities`
   }${querySuffix}`;
   const freelancersPath = `${
-    role ? `/nx/${role}/search/freelancers` : `/freelancers/search`
+    role ? `/nx/${role}/search/freelancers` : `/guest/search/freelancers`
   }${querySuffix}`;
 
   return (

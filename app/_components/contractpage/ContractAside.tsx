@@ -1,5 +1,4 @@
 "use client";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
@@ -8,7 +7,7 @@ const StatusOptions: { label: "Active" | "Ended" }[] = [
   { label: "Ended" },
 ];
 
-export default function ContractAside({ pathname }: { pathname: string }) {
+export default function ContractAside({ onClose }: { onClose: () => void }) {
   const router = useRouter();
 
   // Initialize status from URL search params if they exist
@@ -52,14 +51,15 @@ export default function ContractAside({ pathname }: { pathname: string }) {
     }
   };
 
-  const newPath = pathname;
   return (
     <div className="sticky top-[2.5rem] left-0">
-      <Link href={newPath}>
-        <button className="px-4 py-2 bg-[var(--btn-color)] text-[var(--accent-color)] rounded-md">
-          Advanced Search
-        </button>
-      </Link>
+      <button
+        onClick={onClose}
+        className="px-4 py-2 bg-[var(--btn-color)] text-[var(--accent-color)] rounded-md"
+      >
+        Advanced Search
+      </button>
+
       <aside className="row-start-3 bg-[var(--background-color)] rounded-lg shadow-s absolute z-50">
         <form onSubmit={handleSubmit} className="py-4">
           <div className="py-4">

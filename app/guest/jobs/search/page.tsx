@@ -3,12 +3,12 @@ import Container from "@/app/_components/common/Container";
 import Aside from "@/app/_components/Job/JobAside";
 import Link from "next/link";
 import { Suspense } from "react";
-import CustomeSelection from "../../_components/common/CustomeSelection";
-import JobList from "../../_components/Job/JobList";
-import SmallNav from "../../_components/common/SmallNav";
-import Spinner from "../../_components/common/Spinner";
-import { searchJobs } from "../../_lib/Search/Search";
-import { PageJobResponse } from "../../_types/JobSearch";
+import CustomeSelection from "../../../_components/common/CustomeSelection";
+import JobList from "../../../_components/Job/JobList";
+import SmallNav from "../../../_components/common/SmallNav";
+import Spinner from "../../../_components/common/Spinner";
+import { searchJobs } from "../../../_lib/Search/Search";
+import { PageJobResponse } from "../../../_types/JobSearch";
 
 export const revalidate = 3600;
 

@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
-import Container from "../_components/common/Container";
-import CommunityList from "../_components/Community/CommunityList";
-import { PageCommunityResponse } from "../_types/CommunitySearch";
-import { searchCommunities } from "../_lib/Search/Search";
+import Container from "../../_components/common/Container";
+import CommunityList from "../../_components/Community/CommunityList";
+import { PageCommunityResponse } from "../../_types/CommunitySearch";
+import { searchCommunities } from "../../_lib/Search/Search";
 
 type Props = {
   searchParams: Promise<{

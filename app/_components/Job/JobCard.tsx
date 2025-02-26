@@ -43,7 +43,8 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
   } = job;
 
   const pathname = usePathname();
-  const newpath = pathname === "/jobs" ? "/jobs" : "/nx/freelancer/find-work";
+  const newpath =
+    pathname === "/guest/jobs" ? "/guest/jobs" : "/nx/freelancer/find-work";
 
   // Mapping project length to human-readable format
 

@@ -15,7 +15,6 @@ function SearchBar({ initialValue = "" }: Props) {
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newSearchTerm = e.target.value;
     setSearchTerm(newSearchTerm);
-    updateUrl(newSearchTerm); // Update URL as user types
   };
 
   const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -50,10 +49,12 @@ function SearchBar({ initialValue = "" }: Props) {
           placeholder="Search for client name or job title"
           className="focus:outline-none bg-[var(--background-color)] text-[var(--accent-color)] p-4 border-solid border border-gray-600 rounded-xl w-full text-lg pr-10"
         />
-        <FontAwesomeIcon
-          icon={faSearch}
-          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5"
-        />
+        <button type="submit">
+          <FontAwesomeIcon
+            icon={faSearch}
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5"
+          />
+        </button>
       </div>
     </form>
   );

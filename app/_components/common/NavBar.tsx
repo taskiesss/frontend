@@ -25,16 +25,20 @@ const NavBar: React.FC<NavBarProps> = ({ onLogin, onSignup }) => {
     const searchTerm = formData.get("search") as string;
 
     const currentPath = window.location.pathname;
-    // Regular expression to check if current path is one of /jobs/search, /freelancers/search, or /communities/search.
-    const searchRegex = /^\/(jobs|freelancers|communities)\/search(\/)?$/i;
+    const searchRegex = /^\/search\/(jobs|freelancers|communities)(\/)?$/i;
 
     if (searchRegex.test(currentPath)) {
-      // Already in a search route—update query.
       router.push(`${currentPath}?query=${encodeURIComponent(searchTerm)}`);
     } else {
-      // Not in a search route—append /search.
+      const searchtype = currentPath.includes("jobs")
+        ? "jobs"
+        : currentPath.includes("freelancers")
+        ? "freelancers"
+        : currentPath.includes("communities")
+        ? "communities"
+        : "jobs";
       router.push(
-        `${currentPath}/search?query=${encodeURIComponent(searchTerm)}`
+        `/guest/search/${searchtype}?query=${encodeURIComponent(searchTerm)}`
       );
     }
   };

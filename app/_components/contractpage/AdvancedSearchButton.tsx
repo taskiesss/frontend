@@ -2,7 +2,7 @@
 "use client"; // Mark as client component
 
 import { useState } from "react";
-import FreelancerAside from "./FreelancerAside";
+import ContractAside from "./ContractAside";
 
 function AdvancedSearchButton({}) {
   const [showAdvanced, setShowAdvanced] = useState(false); // Local state for toggling
@@ -11,7 +11,7 @@ function AdvancedSearchButton({}) {
     <>
       {showAdvanced ? (
         <div className="relative">
-          <FreelancerAside onClose={() => setShowAdvanced(false)} />
+          <ContractAside onClose={() => setShowAdvanced(false)} />
         </div>
       ) : (
         <div className="">

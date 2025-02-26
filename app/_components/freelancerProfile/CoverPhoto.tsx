@@ -13,11 +13,11 @@ export default function CoverPhoto({
 }) {
   const [isEditingCover, setIsEditingCover] = useState(false);
   // Use freelancer.coverPhoto if valid, otherwise fallback to default
-  const defaultImageUrl =
-    "https://res.cloudinary.com/dvds6blan/image/upload/v1739928508/gtqlnfutfiocsuaqhemo.jpg";
+  // const defaultImageUrl =
+  //   "https://res.cloudinary.com/dvds6blan/image/upload/v1739928508/gtqlnfutfiocsuaqhemo.jpg";
 
   return (
-    <div className="flex relative w-full h-[312px] bg-[var(--background-color)] overflow-hidden">
+    <div className="flex relative w-full min-h-[312px] bg-[var(--background-color)] overflow-hidden">
       {/* Blurred background layer */}
       <div
         className="absolute inset-0 bg-cover bg-center filter blur-[0.5rem]"

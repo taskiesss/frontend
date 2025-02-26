@@ -19,11 +19,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <Container>
-      <SmallNav
-        pathname={pathname || ""}
-        role="freelancer"
-        queryString={queryString}
-      />
+      <SmallNav pathname={pathname || ""} queryString={queryString} />
       <main>{children}</main>
     </Container>
   );

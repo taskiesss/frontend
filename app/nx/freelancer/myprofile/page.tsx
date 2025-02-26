@@ -45,13 +45,15 @@ export default async function page() {
 
   try {
     freelancer = await getFreelancerbyID("my_profile", token);
+    return <Profile id="my_profile" freelancer={freelancer} editable={true} />;
   } catch (error: any) {
     if (
       error.message === "Forbidden" ||
       error.message === "Unauthorized user"
     ) {
-      <ProtectedPage message="You are not allowed to do this action. Please log in" />;
+      return (
+        <ProtectedPage message="You are not allowed to do this action. Please log in" />
+      );
     }
   }
-  return <Profile id="my_profile" freelancer={freelancer} editable={true} />;
 }

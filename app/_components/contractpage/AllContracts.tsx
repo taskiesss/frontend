@@ -1,17 +1,12 @@
-import Link from "next/link";
 import { Suspense } from "react";
 import Container from "../common/Container";
 import CustomeSelection from "../common/CustomeSelection";
 import Spinner from "../common/Spinner";
-import ContractAside from "./ContractAside";
+import AdvancedSearchButton from "./AdvancedSearchButton";
 import ContractList from "./ContractList";
 import SearchBar from "./SearchBar";
 
 type Props = {
-  params: {
-    advanced?: string;
-    contractQuery?: string;
-  };
   contracts: {
     content: {
       contractID: string;
@@ -44,9 +39,7 @@ const DirectionOptions = [
   { label: "Descending", value: "DESC" },
 ];
 
-function AllContracts({ params, contracts }: Props) {
-  const { advanced } = params;
-  const showAdvanced = advanced === "true";
+function AllContracts({ contracts }: Props) {
   return (
     <Container className="pt-10 flex flex-col gap-8">
       <h1 className="text-4xl">All Contracts</h1>
@@ -63,20 +56,7 @@ function AllContracts({ params, contracts }: Props) {
         </div>
       </div>
       <div className=" bg-[var(--background-color)] flex items-start justify-around p-4 ">
-        {showAdvanced ? (
-          <div className="relative">
-            <ContractAside pathname="/nx/freelancer/mycontracts" />
-            {/* <JobAside /> */}
-          </div>
-        ) : (
-          <div className="">
-            <Link href="?advanced=true">
-              <button className="px-4 py-2 bg-[var(--btn-color)] text-[var(--accent-color)] rounded-md">
-                Advanced Search
-              </button>
-            </Link>
-          </div>
-        )}
+        <AdvancedSearchButton />
         {contracts.content.length > 0 ? (
           <ContractList contracts={contracts} />
         ) : (

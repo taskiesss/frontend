@@ -7,6 +7,7 @@ import Skill from "../common/Skill";
 import StarRating from "../common/StarRating";
 import userprofile from "@/public/images/userprofile.jpg";
 import { getExperienceLevel } from "@/app/_helpers/helper";
+import { usePathname } from "next/navigation";
 
 interface JobCardProps {
   community: CommunityResponse;
@@ -72,6 +73,13 @@ const CommunityCard: React.FC<JobCardProps> = ({ community }) => {
     }
   };
 
+  const currentPath = usePathname();
+
+  const detailUrl =
+    currentPath === "/nx/freelancer/search/communities"
+      ? `/nx/freelancer/communities/${id}`
+      : `/guest/communities/${id}`;
+
   return (
     <div className="group relative overflow-hidden bg-[var(--background-color)] border-solid border-t-[0.1rem] border-[var(--border-secondary)] w-11/12 transform transition-all duration-300">
       {/* Pseudo-element for hover animation */}
@@ -106,7 +114,7 @@ const CommunityCard: React.FC<JobCardProps> = ({ community }) => {
           {/* Community Details */}
           <div className="flex-1">
             <Link
-              href={`/communities/${id}`}
+              href={detailUrl}
               className="block text-4xl text-[var(--accent-color)] no-underline hover:text-[var(--btn-color)] hover:underline"
             >
               {name}

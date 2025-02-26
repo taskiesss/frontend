@@ -81,7 +81,6 @@ const Page = async ({ searchParams }: PageProps) => {
   const SortByOptions = [
     { label: "Rate", value: "rate" },
     { label: "Price Per Hour", value: "pricePerHour" },
-    { label: "Name", value: "name" },
   ];
   const DirectionOptions = [
     { label: "Ascending", value: "ASC" },

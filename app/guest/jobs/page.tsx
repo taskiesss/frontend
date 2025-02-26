@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
-import JobList from "../_components/Job/JobList";
-import Container from "../_components/common/Container";
-import { PageJobResponse } from "../_types/JobSearch";
-import { searchJobs } from "../_lib/Search/Search";
+import JobList from "../../_components/Job/JobList";
+import Container from "../../_components/common/Container";
+import { PageJobResponse } from "../../_types/JobSearch";
+import { searchJobs } from "../../_lib/Search/Search";
 
 let paginations: PageJobResponse;
 

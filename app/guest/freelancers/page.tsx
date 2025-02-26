@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
-import Container from "../_components/common/Container";
-import FreelancerList from "../_components/Freelancer/FreelancerList";
-import { PageFreelancerResponse } from "../_types/FreelancerSearch";
-import { searchFreelancers } from "../_lib/Search/Search";
+import Container from "../../_components/common/Container";
+import FreelancerList from "../../_components/Freelancer/FreelancerList";
+import { PageFreelancerResponse } from "../../_types/FreelancerSearch";
+import { searchFreelancers } from "../../_lib/Search/Search";
 
 type Props = {
   searchParams: Promise<{

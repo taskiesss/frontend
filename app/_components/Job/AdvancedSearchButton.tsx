@@ -12,13 +12,6 @@ function AdvancedSearchButton({}) {
       {showAdvanced ? (
         <div className="relative">
           <JobAside onClose={() => setShowAdvanced(false)} />
-          {/* Optional: Add a button to hide advanced search */}
-          <button
-            className="mt-2 px-4 py-2 bg-[var(--btn-color)] text-[var(--accent-color)] rounded-md"
-            onClick={() => setShowAdvanced(false)}
-          >
-            Hide Advanced Search
-          </button>
         </div>
       ) : (
         <div className="">

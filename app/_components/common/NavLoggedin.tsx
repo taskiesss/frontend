@@ -135,7 +135,7 @@ const NavLoggedin: React.FC = () => {
   };
 
   return (
-    <Container className="z-20">
+    <Container className="z-30 mx-0 bg-transparent">
       <nav className="bg-[var(--background-color)] py-10 grid grid-rows-1 grid-cols-[min-content,1fr,1fr] place-items-center ">
         {/* Logo Section */}
         <div className="flex w-[10rem] h-auto justify-center flex-col">
@@ -172,7 +172,10 @@ const NavLoggedin: React.FC = () => {
                 </div>
                 {openDropdownIndex === index && (
                   <div className="absolute top-full left-0 mt-2">
-                    <DropLoggedin options={item.options} />
+                    <DropLoggedin
+                      onClose={() => toggleDropdown(index)}
+                      options={item.options}
+                    />
                   </div>
                 )}
               </li>
@@ -226,11 +229,13 @@ const NavLoggedin: React.FC = () => {
                       fill
                       alt="userProfile"
                       className="object-cover"
+                      sizes="(max-width: 768px) 48px, 64px" // 48px on mobile, 64px on desktop
                     />
                   </div>
                   {isProfileMenuOpen && (
-                    <div className="absolute top-full right-0 mt-2">
+                    <div className="absolute top-full right-0 mt-2 ">
                       <ProfileMenu
+                        onClose={() => setIsProfileMenuOpen(false)}
                         name={name || "Ahmed"}
                         avatarUrl={image || userProfile}
                       />

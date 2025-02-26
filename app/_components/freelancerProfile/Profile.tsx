@@ -39,7 +39,7 @@ export default function Profile({ freelancer, editable, id }: Props) {
   const [editEmpHisSection, setEditEmpHisSection] = useState(false);
 
   return (
-    <div className="relative flex flex-col items-center gap-6">
+    <div className=" flex flex-col items-center gap-6">
       <CoverPhoto
         editable={editable}
         freelancer={{ coverPhoto: freelancer.coverPhoto }}

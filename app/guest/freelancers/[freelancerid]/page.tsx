@@ -1,5 +1,5 @@
 import React from "react";
-import ProtectedPage from "../../_components/common/ProtectedPage";
+import ProtectedPage from "../../../_components/common/ProtectedPage";
 
 export default function page() {
   return (
