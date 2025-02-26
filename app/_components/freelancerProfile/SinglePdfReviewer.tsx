@@ -43,9 +43,9 @@ export default function PDFPreviewAuto({
         <div className="absolute inset-0 transition-colors duration-300 flex items-center justify-center bg-gray-400/0 group-hover:bg-gray-400/50">
           <button
             onClick={onRemove}
-            className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-red-500 hover:bg-red-600 text-white rounded-full p-2"
+            className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-red-500 hover:bg-red-600 text-white rounded-full overflow-hidden w-8 h-8 flex items-center justify-center"
           >
-            <FontAwesomeIcon icon={faTrashAlt} size="sm" />
+            <FontAwesomeIcon icon={faTrashAlt} size="1x" />
           </button>
         </div>
       </div>
