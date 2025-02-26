@@ -103,7 +103,7 @@ const NavLoggedin: React.FC = () => {
     const formData = new FormData(e.currentTarget);
     const searchTerm = formData.get("search") as string;
 
-    const currentPath = window.location.pathname;
+    const currentPath = "nx/freelancer/search";
     const searchRegex = /^\/(jobs|freelancers|communities)\/search(\/)?$/i;
 
     if (searchRegex.test(currentPath)) {
