@@ -1,9 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { Pagination } from "../common/Pagination";
-import PDFPreviewAuto from "./SinglePdfReviewer";
-import { getPortfoliosbyID } from "@/app/_lib/FreelancerProfile/APi";
+import PDFPreviewAuto from "./SinglePdfReviewer"; // Original import path (ensure it points to your PDFPreviewAuto component)
+import {
+  getPortfoliosbyID,
+  DeletePortfolioAction,
+} from "@/app/_lib/FreelancerProfile/APi";
 import Cookies from "js-cookie";
 import ProtectedPage from "../common/ProtectedPage";
 
@@ -17,6 +20,7 @@ export default function Portfolio({ id }: PortfolioProps) {
   const queryClient = useQueryClient();
   const token = Cookies.get("token");
 
+  // Fetch portfolios using React Query
   const { data, isError, error, isLoading } = useQuery({
     queryKey: ["portfolios", id, currentPage, size],
     queryFn: () => getPortfoliosbyID(id, currentPage - 1, size, token),
@@ -29,6 +33,20 @@ export default function Portfolio({ id }: PortfolioProps) {
     },
     staleTime: 0,
   });
+
+  // Mutation to delete a portfolio
+  const mutation = useMutation({
+    mutationFn: (fileUrl: string) => DeletePortfolioAction(fileUrl, token),
+    onSuccess: () => {
+      // Invalidate query to refresh the portfolio list after deletion
+      queryClient.invalidateQueries({ queryKey: ["portfolios"] });
+    },
+  });
+
+  // Handler for remove button click
+  const handleRemove = (fileUrl: string) => {
+    mutation.mutate(fileUrl);
+  };
 
   if (isError) {
     const errorMessage =
@@ -57,6 +75,7 @@ export default function Portfolio({ id }: PortfolioProps) {
             key={i}
             fileUrl={p.portfolioPdf}
             ProjectName={p.name}
+            onRemove={() => handleRemove(p.portfolioPdf)}
           />
         ))}
       </div>

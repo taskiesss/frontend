@@ -2,13 +2,17 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashAlt } from "@fortawesome/free-regular-svg-icons";
 
 export default function PDFPreviewAuto({
   fileUrl,
   ProjectName,
+  onRemove,
 }: {
   fileUrl: string;
   ProjectName: string;
+  onRemove?: () => void;
 }) {
   // Your raw PDF URL (ensure it's publicly accessible)
   //   const rawPdfUrl =
@@ -24,7 +28,14 @@ export default function PDFPreviewAuto({
     .replace(/\.pdf$/, ".jpg");
 
   return (
-    <div className="flex flex-col items-center gap-2  w-[15rem]">
+    <div className="relative group flex flex-col items-center gap-2 w-[15rem]">
+      {/* Remove Button that appears on hover with transition */}
+      <button
+        onClick={onRemove}
+        className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-red-500 hover:bg-red-600 text-white rounded-full p-2"
+      >
+        <FontAwesomeIcon icon={faTrashAlt} size="sm" />
+      </button>
       <Link
         href={fileUrl}
         target="_blank"
@@ -42,7 +53,7 @@ export default function PDFPreviewAuto({
             sizes="18rem"
           />
         </div>
-        <span className="w-full text-center  p-1  rounded-lg text-lg hover:text-[var(--hover-color)]">
+        <span className="w-full text-center p-1 rounded-lg text-lg hover:text-[var(--hover-color)]">
           {ProjectName}
         </span>
       </Link>

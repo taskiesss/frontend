@@ -7,7 +7,7 @@ export default function HomeLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div>
+    <div className="grid">
       <NavLoggedin></NavLoggedin>
       <main>{children}</main>
     </div>
