@@ -28,31 +28,33 @@ export default function PDFPreviewAuto({
     .replace(/\.pdf$/, ".jpg");
 
   return (
-    <div className="relative group flex flex-col items-center gap-2 w-[15rem]">
-      {/* Remove Button that appears on hover with transition */}
-      <button
-        onClick={onRemove}
-        className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-red-500 hover:bg-red-600 text-white rounded-full p-2"
-      >
-        <FontAwesomeIcon icon={faTrashAlt} size="sm" />
-      </button>
+    <div className="group flex flex-col items-center gap-2 w-[15rem]">
+      <div className="relative w-40 aspect-square">
+        <Image
+          src={previewUrl}
+          alt="PDF Preview"
+          quality={70}
+          fill
+          priority
+          className="object-cover"
+          sizes="18rem"
+        />
+        {/* Overlay with background that changes on hover */}
+        <div className="absolute inset-0 transition-colors duration-300 flex items-center justify-center bg-gray-400/0 group-hover:bg-gray-400/50">
+          <button
+            onClick={onRemove}
+            className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-red-500 hover:bg-red-600 text-white rounded-full p-2"
+          >
+            <FontAwesomeIcon icon={faTrashAlt} size="sm" />
+          </button>
+        </div>
+      </div>
       <Link
         href={fileUrl}
         target="_blank"
         rel="noopener noreferrer"
         className="flex flex-col items-center gap-3"
       >
-        <div className="relative w-40 aspect-square">
-          <Image
-            src={previewUrl}
-            alt="PDF Preview"
-            quality={70}
-            fill
-            priority
-            className="object-cover"
-            sizes="18rem"
-          />
-        </div>
         <span className="w-full text-center p-1 rounded-lg text-lg hover:text-[var(--hover-color)]">
           {ProjectName}
         </span>
