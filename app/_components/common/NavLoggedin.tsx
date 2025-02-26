@@ -3,13 +3,15 @@ import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import logo_dark from "@/public/images/logo_dark.png";
 import Image from "next/image";
 import Container from "./Container";
 import { faBell } from "@fortawesome/free-regular-svg-icons";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import DropLoggedin from "./DropLoggedin";
+import ProfileMenu from "./ProfileMenu";
+import userProfile from "@/public/images/userprofile.jpg";
 
 interface NavItem {
   label: string;
@@ -19,44 +21,56 @@ interface NavItem {
 const NavLoggedin: React.FC = () => {
   const router = useRouter();
   const [query, setQuery] = useState("");
-  // Track the currently open dropdown index (or null if none open)
   const [openDropdownIndex, setOpenDropdownIndex] = useState<number | null>(
     null
   );
 
+  // Store user name and image from API
   const [image, setImage] = useState("");
   const [name, setName] = useState("");
+
+  // Control showing/hiding ProfileMenu
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+
+  // Ref for detecting clicks outside the profile menu container
+  const profileMenuRef = useRef<HTMLDivElement>(null);
 
   const BASE_URL = "http://localhost:8080";
 
   useEffect(() => {
-    // Define an async function to perform the fetch
-    const fetchMyImage = async () => {
+    const fetchUserNameAndImage = async () => {
       try {
-        const response = await fetch(
-          `${BASE_URL}/public/signup/create-account`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
+        const response = await fetch(`${BASE_URL}/api/name-and-picture`, {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        });
         const data = await response.json();
         setImage(data.profilePicture);
         setName(data.name);
-        // Do something with myImage here (e.g., update state)
       } catch (error) {
         console.error("Error fetching image:", error);
       }
     };
 
-    // Call the async function
-    fetchMyImage();
-  }, []); // re-run effect when `user` or `BASE_URL` changes
+    fetchUserNameAndImage();
+  }, []);
 
-  // Define your nav items along with the options for each dropdown.
+  // Close profile menu when clicking outside its container
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        profileMenuRef.current &&
+        !profileMenuRef.current.contains(event.target as Node)
+      ) {
+        setIsProfileMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // Your nav items
   const navItems: NavItem[] = [
     {
       label: "My Tasks",
@@ -78,7 +92,7 @@ const NavLoggedin: React.FC = () => {
     },
   ];
 
-  // Handle search form submission.
+  // Handle search form submission
   const handleSearch = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -96,9 +110,14 @@ const NavLoggedin: React.FC = () => {
     }
   };
 
-  // Toggle dropdown: if clicked dropdown is already open, close it; otherwise open it.
+  // Toggle the standard nav dropdowns
   const toggleDropdown = (index: number) => {
     setOpenDropdownIndex((prevIndex) => (prevIndex === index ? null : index));
+  };
+
+  // Toggle the ProfileMenu dropdown
+  const toggleProfileMenu = () => {
+    setIsProfileMenuOpen((prev) => !prev);
   };
 
   return (
@@ -182,8 +201,27 @@ const NavLoggedin: React.FC = () => {
             <li>
               <div className="flex gap-7 items-center">
                 <FontAwesomeIcon size="2xl" icon={faBell} />
-                <div className="relative w-12 aspect-square rounded-full overflow-hidden">
-                  <Image src={image} fill alt="userProfile" />
+                {/* Wrap avatar and dropdown in a container with a ref */}
+                <div ref={profileMenuRef} className="relative">
+                  <div
+                    className="relative w-12 aspect-square rounded-full overflow-hidden cursor-pointer"
+                    onClick={toggleProfileMenu}
+                  >
+                    <Image
+                      src={image || userProfile}
+                      fill
+                      alt="userProfile"
+                      className="object-cover"
+                    />
+                  </div>
+                  {isProfileMenuOpen && (
+                    <div className="absolute top-full right-0 mt-2">
+                      <ProfileMenu
+                        name={name || "Ahmed"}
+                        avatarUrl={image || userProfile}
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
             </li>
