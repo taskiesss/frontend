@@ -46,7 +46,6 @@ const NavLoggedin: React.FC = () => {
         const response = await fetch(`${BASE_URL}/api/name-and-picture`, {
           method: "GET",
           headers: {
-            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
         });
@@ -59,7 +58,7 @@ const NavLoggedin: React.FC = () => {
     };
 
     fetchUserNameAndImage();
-  }, []);
+  }, [token]);
 
   // Close profile menu when clicking outside its container
   useEffect(() => {
