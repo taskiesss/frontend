@@ -96,7 +96,7 @@ const CommunityCard: React.FC<JobCardProps> = ({ community }) => {
                 src={profilePicture}
                 alt="Community Profile"
                 width={100}
-                quality={100}
+                quality={70}
                 height={100}
                 className="object-cover w-full rounded-xl"
               />
@@ -105,7 +105,7 @@ const CommunityCard: React.FC<JobCardProps> = ({ community }) => {
                 src={userprofile}
                 alt="Community Profile"
                 width={100}
-                quality={100}
+                quality={70}
                 height={100}
                 className="object-cover w-full rounded-xl"
               />

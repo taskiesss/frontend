@@ -8,7 +8,7 @@ import { searchJobs } from "@/app/_lib/Search/Search";
 import { PageJobResponse } from "@/app/_types/JobSearch";
 import { Suspense } from "react";
 
-export const revalidate = 3600;
+export const revalidate = 300;
 
 export interface PageProps {
   pathName?: string;

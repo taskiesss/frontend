@@ -8,7 +8,7 @@ import { searchFreelancers } from "@/app/_lib/Search/Search";
 import { PageFreelancerResponse } from "@/app/_types/FreelancerSearch";
 import { Suspense } from "react";
 
-export const revalidate = 3600;
+export const revalidate = 300;
 
 export interface PageProps {
   pathName?: string;

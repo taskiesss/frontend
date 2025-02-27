@@ -63,7 +63,7 @@ const NavBar: React.FC<NavBarProps> = ({ onLogin, onSignup }) => {
             {["Freelancers", "Jobs", "Communities", "About us"].map((item) => (
               <li key={item}>
                 <Link
-                  href={`/${item.toLowerCase()}`}
+                  href={`/guest/${item.toLowerCase()}`}
                   className="w-[8rem]  bg-inherit cursor-pointer"
                 >
                   <span className="font-semibold text-xl">{item}</span>

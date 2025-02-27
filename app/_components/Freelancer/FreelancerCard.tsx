@@ -91,7 +91,7 @@ const FreelancerCard: React.FC<FreelancerCardProps> = ({ freelancer }) => {
                 alt={`${name} Profile`}
                 width={100}
                 height={100}
-                quality={100}
+                quality={70}
                 className="object-cover w-full rounded-xl"
               />
             ) : (
@@ -100,7 +100,7 @@ const FreelancerCard: React.FC<FreelancerCardProps> = ({ freelancer }) => {
                 alt="Freelancer Profile"
                 width={100}
                 height={100}
-                quality={100}
+                quality={70}
                 className="object-cover w-full rounded-xl"
               />
             )}
