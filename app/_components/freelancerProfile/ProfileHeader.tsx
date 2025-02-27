@@ -3,7 +3,6 @@ import Image from "next/image";
 import { useState } from "react";
 import EditButton from "../common/EditButton";
 import StarRating from "../common/StarRating";
-import userprofile from "@/public/images/userprofile.jpg";
 
 import ProfilePhotoForm from "./Forms/ProfilePhotoForm";
 
