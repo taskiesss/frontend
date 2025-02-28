@@ -1,9 +1,9 @@
-"use server";
+'use server';
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { invariant } from "@/app/_helpers/invariant";
-import { revalidatePath } from "next/cache";
+import { invariant } from '@/app/_helpers/invariant';
+import { revalidatePath } from 'next/cache';
 
-const BASE_URL = "http://localhost:8080";
+const BASE_URL = 'http://localhost:8080';
 
 export const ProfileSkillApi = async (
   token: string | undefined,
@@ -11,24 +11,24 @@ export const ProfileSkillApi = async (
 ): Promise<any> => {
   const reqbody = { skills: requestBody };
   console.log(reqbody);
-  invariant(!token, "Unauthorized user");
+  invariant(!token, 'Unauthorized user');
   const res = await fetch(`${BASE_URL}/freelancers/skills`, {
-    method: "PATCH",
+    method: 'PATCH',
     headers: {
-      "content-type": "application/json",
+      'content-type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(reqbody),
   });
   console.log(res);
   if (res.status === 403) {
-    throw new Error("Forbidden");
+    throw new Error('Forbidden');
   }
   if (!res.ok) {
     // console.log('iam here');
-    throw new Error("SomeThing went Wrong");
+    throw new Error('SomeThing went Wrong');
   }
-  revalidatePath("/nx/freelancers/myprofile");
+  revalidatePath('/nx/freelancers/myprofile');
   return true;
 };
 
@@ -38,24 +38,24 @@ export async function AboutAction(
 ): Promise<any> {
   const reqbody = { description: request };
   // console.log(reqbody);
-  invariant(!token, "Unauthorized user");
+  invariant(!token, 'Unauthorized user');
   const res = await fetch(`${BASE_URL}/freelancers/description`, {
-    method: "PATCH",
+    method: 'PATCH',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(reqbody),
   });
   console.log(res);
   if (res.status === 403) {
-    throw new Error("Forbidden");
+    throw new Error('Forbidden');
   }
   if (!res.ok) {
     // console.log('iam here');
-    throw new Error("SomeThing went Wrong");
+    throw new Error('SomeThing went Wrong');
   }
-  revalidatePath("/nx/freelancers/myprofile");
+  revalidatePath('/nx/freelancers/myprofile');
   return true;
 }
 
@@ -65,24 +65,24 @@ export async function EducationAction(
 ): Promise<any> {
   const reqbody = { educations: request };
   // console.log(reqbody);
-  invariant(!token, "Unauthorized user");
+  invariant(!token, 'Unauthorized user');
   const res = await fetch(`${BASE_URL}/freelancers/educations`, {
-    method: "PATCH",
+    method: 'PATCH',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(reqbody),
   });
   console.log(res);
   if (res.status === 403) {
-    throw new Error("Forbidden");
+    throw new Error('Forbidden');
   }
   if (!res.ok) {
     // console.log('iam here');
-    throw new Error("SomeThing went Wrong");
+    throw new Error('SomeThing went Wrong');
   }
-  revalidatePath("/nx/freelancers/myprofile");
+  revalidatePath('/nx/freelancers/myprofile');
   return true;
 }
 
@@ -92,24 +92,24 @@ export async function EmpHistoryAction(
 ): Promise<any> {
   const reqbody = { employeeHistory: request };
   // console.log(reqbody);
-  invariant(!token, "Unauthorized user");
+  invariant(!token, 'Unauthorized user');
   const res = await fetch(`${BASE_URL}/freelancers/employement-history`, {
-    method: "PATCH",
+    method: 'PATCH',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(reqbody),
   });
   console.log(res);
   if (res.status === 403) {
-    throw new Error("Forbidden");
+    throw new Error('Forbidden');
   }
   if (!res.ok) {
     // console.log('iam here');
-    throw new Error("SomeThing went Wrong");
+    throw new Error('SomeThing went Wrong');
   }
-  revalidatePath("/nx/freelancers/myprofile");
+  revalidatePath('/nx/freelancers/myprofile');
   return true;
 }
 
@@ -119,24 +119,24 @@ export async function LanguagesAction(
 ): Promise<any> {
   const reqbody = { languages: request };
   // console.log(reqbody);
-  invariant(!token, "Unauthorized user");
+  invariant(!token, 'Unauthorized user');
   const res = await fetch(`${BASE_URL}/freelancers/languages`, {
-    method: "PATCH",
+    method: 'PATCH',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(reqbody),
   });
   console.log(res);
   if (res.status === 403) {
-    throw new Error("Forbidden");
+    throw new Error('Forbidden');
   }
   if (!res.ok) {
     // console.log('iam here');
-    throw new Error("SomeThing went Wrong");
+    throw new Error('SomeThing went Wrong');
   }
-  revalidatePath("/nx/freelancers/myprofile");
+  revalidatePath('/nx/freelancers/myprofile');
   return true;
 }
 
@@ -146,24 +146,24 @@ export async function LinksAction(
 ): Promise<any> {
   const reqbody = { linkedIn: request };
   // console.log(reqbody);
-  invariant(!token, "Unauthorized user");
+  invariant(!token, 'Unauthorized user');
   const res = await fetch(`${BASE_URL}/freelancers/linkedin`, {
-    method: "PATCH",
+    method: 'PATCH',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(reqbody),
   });
   console.log(res);
   if (res.status === 403) {
-    throw new Error("Forbidden");
+    throw new Error('Forbidden');
   }
   if (!res.ok) {
     // console.log('iam here');
-    throw new Error("SomeThing went Wrong");
+    throw new Error('SomeThing went Wrong');
   }
-  revalidatePath("/nx/freelancers/myprofile");
+  revalidatePath('/nx/freelancers/myprofile');
   return true;
 }
 
@@ -173,24 +173,24 @@ export async function HPWAction(
 ): Promise<any> {
   const reqbody = { avrgHoursPerWeek: request };
 
-  invariant(!token, "Unauthorized user");
-  const res = await fetch(`${BASE_URL}/freelancers/avrg-hours-per-week`, {
-    method: "PATCH",
+  invariant(!token, 'Unauthorized user');
+  const res = await fetch(`${BASE_URL}/freelancers/avrg-hour-per-week`, {
+    method: 'PATCH',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(reqbody),
   });
   console.log(res);
   if (res.status === 403) {
-    throw new Error("Forbidden");
+    throw new Error('Forbidden');
   }
   if (!res.ok) {
     // console.log('iam here');
-    throw new Error("SomeThing went Wrong");
+    throw new Error('SomeThing went Wrong');
   }
-  revalidatePath("/nx/freelancers/myprofile");
+  revalidatePath('/nx/freelancers/myprofile');
   return true;
 }
 
@@ -199,9 +199,9 @@ export async function AddPortFolio(
   token: string | undefined
 ): Promise<any> {
   // Send a POST request to the /freelancers/description endpoint
-  invariant(!token, "Unauthorized user");
+  invariant(!token, 'Unauthorized user');
   const res = await fetch(`${BASE_URL}/freelancers/portfolio`, {
-    method: "POST",
+    method: 'POST',
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -210,13 +210,13 @@ export async function AddPortFolio(
 
   console.log(res);
   if (res.status === 403) {
-    throw new Error("Forbidden");
+    throw new Error('Forbidden');
   }
   if (!res.ok) {
     // console.log('iam here');
-    throw new Error("SomeThing went Wrong");
+    throw new Error('SomeThing went Wrong');
   }
-  revalidatePath("/nx/freelancers/myprofile");
+  revalidatePath('/nx/freelancers/myprofile');
   return true;
 }
 
@@ -231,12 +231,12 @@ export async function HeaderSectionAction(
   token: string | undefined
 ): Promise<any> {
   // console.log(request);
-  invariant(!token, "Unauthorized user");
+  invariant(!token, 'Unauthorized user');
 
   const res = await fetch(`${BASE_URL}/freelancers/header-section`, {
-    method: "PATCH",
+    method: 'PATCH',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(request),
@@ -245,14 +245,14 @@ export async function HeaderSectionAction(
   console.log(res);
 
   if (res.status === 403) {
-    throw new Error("Forbidden");
+    throw new Error('Forbidden');
   }
 
   if (!res.ok) {
-    throw new Error("Something went Wrong");
+    throw new Error('Something went Wrong');
   }
 
-  revalidatePath("/nx/freelancers/myprofile");
+  revalidatePath('/nx/freelancers/myprofile');
   return true;
 }
 
@@ -260,10 +260,10 @@ export async function ProfilePictureAction(
   request: FormData,
   token: string | undefined
 ): Promise<any> {
-  invariant(!token, "Unauthorized user");
+  invariant(!token, 'Unauthorized user');
 
   const res = await fetch(`${BASE_URL}/freelancers/profile-picture`, {
-    method: "PATCH",
+    method: 'PATCH',
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -273,14 +273,14 @@ export async function ProfilePictureAction(
   console.log(res);
 
   if (res.status === 403) {
-    throw new Error("Forbidden");
+    throw new Error('Forbidden');
   }
 
   if (!res.ok) {
-    throw new Error("Something went wrong");
+    throw new Error('Something went wrong');
   }
 
-  revalidatePath("/nx/freelancers/myprofile");
+  revalidatePath('/nx/freelancers/myprofile');
   return true;
 }
 
@@ -291,10 +291,10 @@ export async function CoverPictureAction(
   // for (const key of request.keys()) {
   //   console.log('Key:', key);
   // }
-  invariant(!token, "Unauthorized user");
+  invariant(!token, 'Unauthorized user');
 
   const res = await fetch(`${BASE_URL}/freelancers/cover-picture`, {
-    method: "PATCH",
+    method: 'PATCH',
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -302,14 +302,14 @@ export async function CoverPictureAction(
   });
 
   if (res.status === 403) {
-    throw new Error("Forbidden");
+    throw new Error('Forbidden');
   }
 
   if (!res.ok) {
-    throw new Error("Something went wrong");
+    throw new Error('Something went wrong');
   }
 
-  revalidatePath("/nx/freelancers/myprofile");
+  revalidatePath('/nx/freelancers/myprofile');
 
   return true;
 }
@@ -321,21 +321,21 @@ export async function getFreelancerbyID(
   // for (const key of request.keys()) {
   //   console.log('Key:', key);
   // }
-  invariant(!token, "Unauthorized user");
+  invariant(!token, 'Unauthorized user');
 
   const res = await fetch(`${BASE_URL}/api/freelancers/${id}`, {
-    method: "GET",
+    method: 'GET',
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
 
   if (res.status === 403) {
-    throw new Error("Forbidden");
+    throw new Error('Forbidden');
   }
 
   if (!res.ok) {
-    throw new Error("Something went wrong");
+    throw new Error('Something went wrong');
   }
   const out = await res.json();
   // console.log(out);
@@ -351,12 +351,12 @@ export async function getWorkDonebyID(
   // for (const key of request.keys()) {
   //   console.log('Key:', key);
   // }
-  invariant(!token, "Unauthorized user");
+  invariant(!token, 'Unauthorized user');
 
   const res = await fetch(
     `${BASE_URL}/api/freelancers/${id}/workdone?page=${page}&size=${size}`,
     {
-      method: "GET",
+      method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -364,14 +364,14 @@ export async function getWorkDonebyID(
   );
 
   if (res.status === 403) {
-    throw new Error("Forbidden");
+    throw new Error('Forbidden');
   }
 
   if (!res.ok) {
-    throw new Error("Something went wrong");
+    throw new Error('Something went wrong');
   }
   const out = await res.json();
-  console.log("Work done", out);
+  console.log('Work done', out);
   return out;
 }
 
@@ -384,12 +384,12 @@ export async function getPortfoliosbyID(
   // for (const key of request.keys()) {
   //   console.log('Key:', key);
   // }
-  invariant(!token, "Unauthorized user");
+  invariant(!token, 'Unauthorized user');
 
   const res = await fetch(
     `${BASE_URL}/api/freelancers/${id}/portfolios?page=${page}&size=${size}`,
     {
-      method: "GET",
+      method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -397,11 +397,11 @@ export async function getPortfoliosbyID(
   );
 
   if (res.status === 403) {
-    throw new Error("Forbidden");
+    throw new Error('Forbidden');
   }
 
   if (!res.ok) {
-    throw new Error("Something went wrong");
+    throw new Error('Something went wrong');
   }
   const out = await res.json();
   console.log(out);
@@ -413,7 +413,7 @@ export async function DeletePortfolioAction(
   token: string | undefined
 ): Promise<any> {
   // Ensure that a token is provided.
-  invariant(!token, "Unauthorized user");
+  invariant(!token, 'Unauthorized user');
 
   // Call the API with the DELETE method, passing the filePath as a query parameter.
   const res = await fetch(
@@ -421,7 +421,7 @@ export async function DeletePortfolioAction(
       filePath
     )}`,
     {
-      method: "DELETE",
+      method: 'DELETE',
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -431,13 +431,13 @@ export async function DeletePortfolioAction(
   console.log(res);
 
   if (res.status === 403) {
-    throw new Error("Forbidden");
+    throw new Error('Forbidden');
   }
 
   if (!res.ok) {
-    throw new Error("Something went wrong");
+    throw new Error('Something went wrong');
   }
 
-  revalidatePath("/nx/freelancers/myprofile");
+  revalidatePath('/nx/freelancers/myprofile');
   return true;
 }

@@ -136,7 +136,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
         </span>
 
         {/* Job Description */}
-        <p className="text-xl">{description}</p>
+        <p className="text-xl whitespace-pre-wrap">{description}</p>
 
         {/* Scrollable Skills Section with Buttons */}
         <div className="relative flex items-center mt-3">

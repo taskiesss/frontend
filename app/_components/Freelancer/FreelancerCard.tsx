@@ -126,7 +126,7 @@ const FreelancerCard: React.FC<FreelancerCardProps> = ({ freelancer }) => {
             <span className="text-slate-500 block">
               Hourly: ${pricePerHour}
             </span>
-            <p className="text-xl py-1">{description}</p>
+            <p className="text-xl py-1 whitespace-pre-wrap">{description}</p>
 
             {/* Scrollable Skills Section */}
             <div className="relative flex items-center py-2 px-4">

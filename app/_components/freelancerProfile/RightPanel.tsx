@@ -34,10 +34,12 @@ export default function RightPanel({
     // About
     <div className="bg-[var(--foreground-color)] rounded-2xl w-2/3 p-8 flex flex-col gap-5">
       <div className="flex justify-between pb-6 px-6 border-b-4 border-[var(--border-color)]">
-        <div className="flex flex-col gap-5 ">
+        <div className="flex flex-col gap-5 w-11/12">
           <h2 className="text-3xl font-bold">About</h2>
-          <div className="flex gap-2 flex-wrap">
-            <span className="text-lg py-2">{freelancer.description}</span>
+          <div className="flex gap-2 flex-wrap w-full">
+            <p className="text-lg py-2 w-full whitespace-pre-wrap">
+              {freelancer.description}
+            </p>
           </div>
         </div>
         {editable && (
