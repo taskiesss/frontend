@@ -130,7 +130,7 @@ const CommunityCard: React.FC<JobCardProps> = ({ community }) => {
             <span className="text-slate-500 block">
               Hourly: ${pricePerHour} - {getExperienceLevel(experienceLevel)}
             </span>
-            <p className="text-xl py-1">{description}</p>
+            <p className="text-xl py-1 whitespace-pre-wrap">{description}</p>
             {/* New: Member count and isFull status */}
             <div className="py-1 flex gap-5">
               <span className="block text-md text-slate-500">
