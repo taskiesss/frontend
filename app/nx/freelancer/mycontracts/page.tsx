@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ProtectedPage from "@/app/_components/common/ProtectedPage";
-import AllContracts from "@/app/_components/contractpage/AllContracts";
+import AllContracts from "@/app/_components/myContracts/AllContracts";
 import { getMyContracts } from "@/app/_lib/ContractsAPi/contractAPI";
 import { cookies } from "next/headers";
 
@@ -80,7 +80,7 @@ async function page({ searchParams }: Props) {
     console.log(reqbody);
     const token = (await cookies()).get("token")?.value;
     contracts = await getMyContracts(reqbody, token);
-    return <AllContracts contracts={contracts} params={params} />;
+    return <AllContracts contracts={contracts} />;
   } catch (error: any) {
     if (
       error.message === "Forbidden" ||
