@@ -33,6 +33,8 @@ const NavLoggedin: React.FC = () => {
   // Control showing/hiding ProfileMenu
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
 
+  // const[isError,setIsError] = useState(false);
+
   // Ref for detecting clicks outside the profile menu container
   const profileMenuRef = useRef<HTMLDivElement>(null);
 
@@ -49,6 +51,7 @@ const NavLoggedin: React.FC = () => {
             Authorization: `Bearer ${token}`,
           },
         });
+
         const data = await response.json();
         setImage(data.profilePicture);
         setName(data.name);
