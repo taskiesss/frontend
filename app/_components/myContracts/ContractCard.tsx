@@ -30,7 +30,7 @@ export default function ContractCard({ contract }: Props) {
       <div className="flex w-full  justify-between">
         <h2 className="text-2xl font-bold ">
           <Link
-            href={`/nx/freelancer/jobs/${contract.jobID}`}
+            href={`/nx/freelancer/find-work/${contract.jobID}`}
             className="hover:text-[var(--hover-color)] hover:underline"
           >
             {contract.jobTitle}

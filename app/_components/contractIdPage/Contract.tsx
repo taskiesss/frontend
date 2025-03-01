@@ -1,6 +1,5 @@
 import { formatDayMonthToString } from "@/app/_helpers/helper";
 import { contractDetailsResponse } from "@/app/_types/ContractDetailsResponse";
-import userprofile from "@/public/images/userprofile.jpg";
 import {
   faArrowAltCircleLeft,
   faMessage,
@@ -14,14 +13,15 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import Link from "next/link";
+import { Suspense } from "react";
 import Container from "../common/Container";
+import Spinner from "../common/Spinner";
 import StatusCard from "../myContracts/StatusCard";
-import ContractPagination from "./ContractPagination";
-import MilestonesTable from "./MilestonesTable";
+import Milestones from "./Milestones";
 
-type Props = { contract: contractDetailsResponse };
+type Props = { contract: contractDetailsResponse; contractId: string };
 
-function Contract({ contract }: Props) {
+function Contract({ contract, contractId }: Props) {
   return (
     <Container className="flex flex-col gap-8">
       {/* title section */}
@@ -30,7 +30,7 @@ function Contract({ contract }: Props) {
           <h1 className="text-3xl font-bold ">
             Contract Details for {contract.jobTitle}
           </h1>
-          <StatusCard status="active" />
+          <StatusCard status={contract.contractStatus} />
         </div>
 
         <div className="flex gap-4">
@@ -87,9 +87,9 @@ function Contract({ contract }: Props) {
       <div className="flex flex-col gap-6 border-b-[var(--border-color)] w-full border-solid border-b-2 pb-10">
         <h2 className="text-2xl font-semibold">Overview</h2>
         <div className=" flex items-center gap-4">
-          <div className="flex gap-5">
+          <div className="flex items-center gap-5">
             <Link
-              href={"#"}
+              href={`/nx/freelancer/myprofile`}
               className="flex items-center gap-5 border-solid border border-gray-600 p-4 rounded-lg cursor-default"
             >
               <FontAwesomeIcon icon={faUserCircle} className="text-2xl " />
@@ -100,8 +100,9 @@ function Contract({ contract }: Props) {
                 <div className="flex items-center gap-2">
                   <div className="relative w-8 md:w-10 lg:w-14 aspect-square rounded-full flex-shrink-0 ">
                     <Image
-                      src={userprofile}
+                      src={contract.freelancerProfilePic}
                       alt="pic"
+                      quality={70}
                       fill
                       className="object-cover rounded-full"
                       sizes="(max-width: 1024px) 100vw, 1024px"
@@ -113,32 +114,35 @@ function Contract({ contract }: Props) {
                 </div>
               </div>
             </Link>
-            <Link
-              href={"#"}
-              className="flex items-center gap-5 border-solid border border-gray-600 p-4 rounded-lg cursor-default"
-            >
-              <FontAwesomeIcon icon={faUserCircle} className="text-2xl " />
-              <div className="flex-col flex justify-center gap-2">
-                <span className="text-slate-500">Client: </span>
-                <div className="flex items-center gap-2">
-                  <div className="relative w-8 md:w-10 lg:w-14 aspect-square rounded-full flex-shrink-0 ">
-                    <Image
-                      src={userprofile}
-                      alt="pic"
-                      fill
-                      className="object-cover rounded-full"
-                      sizes="(max-width: 1024px) 100vw, 1024px"
-                    />
+            <div className="flex border-solid border border-gray-600 items-center  pr-4 rounded-lg ">
+              <Link
+                href={`/nx/client/profile/${contract.clientId}`}
+                className="flex items-center gap-5  p-4  cursor-default"
+              >
+                <FontAwesomeIcon icon={faUserCircle} className="text-2xl " />
+                <div className="flex-col flex justify-center gap-2">
+                  <span className="text-slate-500">Client: </span>
+                  <div className="flex items-center gap-2">
+                    <div className="relative w-8 md:w-10 lg:w-14 aspect-square rounded-full flex-shrink-0 ">
+                      <Image
+                        src={contract.clientProfilePic}
+                        alt="pic"
+                        quality={70}
+                        fill
+                        className="object-cover rounded-full"
+                        sizes="(max-width: 1024px) 100vw, 1024px"
+                      />
+                    </div>
+                    <span className="text-lg hover:underline cursor-pointer">
+                      {contract.clientName}
+                    </span>
                   </div>
-                  <span className="text-lg hover:underline cursor-pointer">
-                    {contract.clientName}
-                  </span>
                 </div>
-              </div>
-              <Link href={"#"}>
+              </Link>
+              <Link href={"/#/"}>
                 <FontAwesomeIcon icon={faMessage} className="pl-6 text-2xl" />
               </Link>
-            </Link>
+            </div>
           </div>
         </div>
         <div className="">
@@ -195,28 +199,9 @@ function Contract({ contract }: Props) {
       {/* MILESTONES */}
       <div className="flex flex-col gap-4 pb-20">
         <h2 className="text-2xl font-semibold">Milestones</h2>
-        <div className="overflow-x-auto bg-[var(--foreground-color)] border  border-[var(--border-color)] rounded-xl">
-          <table className="w-full border-collapse text-base">
-            <thead>
-              <tr className="bg-[var(--button-hover-background-color)] text-white">
-                <th className="px-4 py-2 text-left text-lg w-1/12">Title</th>
-                <th className="px-4 py-2 text-left text-lg w-3/12">
-                  Description
-                </th>
-                <th className="px-4 py-2 text-left text-lg w-1/12">
-                  Expected hours
-                </th>
-                <th className="px-4 py-2 text-left text-lg w-1/12">Status</th>
-                <th className="px-4 py-2 text-left text-lg w-1/12">Due date</th>
-                <th className="px-4 py-2 text-left text-lg w-1/12"></th>
-              </tr>
-            </thead>
-            <tbody>
-              <MilestonesTable milestones={contract.milestones} />
-            </tbody>
-          </table>
-        </div>
-        <ContractPagination milestones={contract.milestones} />
+        <Suspense fallback={<Spinner />}>
+          <Milestones contractId={contractId} />
+        </Suspense>
       </div>
     </Container>
   );

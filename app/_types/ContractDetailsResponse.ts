@@ -4,8 +4,10 @@ export interface contractDetailsResponse {
   totalCurrentEarnings: number;
   jobId: string;
   hoursWorked: number;
+  clientId: string;
   clientName: string;
   clientProfilePic: string;
+  freelancerId: string;
   freelancerName: string;
   freelancerProfilePic: string;
   projectType: 'PerMilestones' | 'PerProject';
@@ -13,7 +15,6 @@ export interface contractDetailsResponse {
   startDate: string;
   endDate: string;
   isCommunity: boolean;
-  milestones: ContractMilestones;
 }
 
 export interface ContractMilestones {
