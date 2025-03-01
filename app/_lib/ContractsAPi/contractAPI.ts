@@ -32,3 +32,36 @@ export async function getMyContracts(
   console.log(out);
   return out;
 }
+
+export async function getContractDetails(
+  reqbody: { id: string; page: number; size: number },
+  token: string | undefined
+): Promise<any> {
+  // for (const key of request.keys()) {
+  //   console.log('Key:', key);
+  // }
+  invariant(!token, 'Unauthorized user');
+  //   console.log(reqbody);
+
+  const res = await fetch(
+    `${BASE_URL}/freelancers/my-contracts/${reqbody.id}?page=${reqbody.page}&size=${reqbody.size}`,
+    {
+      method: 'GET',
+      headers: {
+        'content-type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  console.log(res);
+  if (res.status === 403) {
+    throw new Error('Forbidden');
+  }
+
+  if (!res.ok) {
+    throw new Error('Something went wrong');
+  }
+  const out = await res.json();
+  console.log(out);
+  return out;
+}

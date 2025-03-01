@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import SubmissionForm from "./SubmissionForm";
+import SubmissionForm from "../myContracts/SubmissionForm";
 
 // interface MoreOptionButtonProps {}
 
@@ -16,14 +16,14 @@ function MoreOptionButton({}) {
     // Add your submission logic here (e.g., API call, navigation, etc.)
   };
 
-  const handleEndContract = () => {
-    console.log("End contract clicked");
+  const handleViewSubmissions = () => {
+    console.log("view submissions");
     setIsOpen(false); // Close dropdown after click
     // Add your end contract logic here
   };
 
-  const handleSendMessage = () => {
-    console.log("Send a message clicked");
+  const handleRequestPayment = () => {
+    console.log("Request payment");
     setIsOpen(false); // Close dropdown after click
     // Add your send message logic here
   };
@@ -47,19 +47,19 @@ function MoreOptionButton({}) {
               onClick={handleSubmission}
               className="w-full text-left px-4 py-2 hover:bg-[var(--hover-color)]"
             >
-              Submission
+              Add a work
             </button>
             <button
-              onClick={handleEndContract}
+              onClick={handleViewSubmissions}
               className="w-full text-left px-4 py-2 hover:bg-[var(--hover-color)]"
             >
-              End contract
+              View submissions
             </button>
             <button
-              onClick={handleSendMessage}
+              onClick={handleRequestPayment}
               className="w-full text-left px-4 py-2 hover:bg-[var(--hover-color)]"
             >
-              Send a message
+              Request payment
             </button>
           </div>
         )}
