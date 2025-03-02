@@ -63,56 +63,20 @@ export default function HorizontalCarousel({ items }: HorizontalCarouselProps) {
     };
   }, [isDragging, startX, activeIndex]);
 
-  // Get visible items - only show 5 at a time
-  const getVisibleItems = () => {
-    const result = [];
-    const visibleCount = 5;
-    const halfVisible = Math.floor(visibleCount / 2);
+  // Calculate image container size - use smooth scaling with transforms
+  const getImageContainerStyle = (index: number) => {
+    // Base size for all images
+    const baseSize = 120;
+    const activeSize = 150;
 
-    let startIdx = activeIndex - halfVisible;
-    let endIdx = activeIndex + halfVisible;
-
-    // Adjust start and end indexes if they go out of bounds
-    if (startIdx < 0) {
-      endIdx = Math.min(endIdx - startIdx, items.length - 1);
-      startIdx = 0;
-    }
-
-    if (endIdx >= items.length) {
-      startIdx = Math.max(0, startIdx - (endIdx - items.length + 1));
-      endIdx = items.length - 1;
-    }
-
-    for (let i = startIdx; i <= endIdx; i++) {
-      if (i >= 0 && i < items.length) {
-        result.push({ item: items[i], index: i });
-      }
-    }
-
-    return result;
-  };
-
-  // Calculate item size and opacity based on distance from center
-  const getItemStyle = (index: number) => {
-    const distance = Math.abs(index - activeIndex);
-
-    // Base size - center item is largest
-    let scale = 1;
-    if (distance === 1) scale = 0.85;
-    if (distance === 2) scale = 0.7;
-    if (distance > 2) scale = 0.6;
-
-    // Base opacity - center item is fully opaque
-    let opacity = 1;
-    if (distance === 1) opacity = 0.8;
-    if (distance === 2) opacity = 0.6;
-    if (distance > 2) opacity = 0.4;
+    const isActive = index === activeIndex;
 
     return {
-      transform: `scale(${scale})`,
-      opacity,
-      transition: "all 0.3s ease",
-      zIndex: items.length - distance,
+      width: `${baseSize}px`,
+      height: `${baseSize}px`,
+      transform: isActive ? `scale(${activeSize / baseSize})` : "scale(1)",
+      transition: "all 0.3s ease-in-out",
+      transformOrigin: "center center",
     };
   };
 
@@ -132,7 +96,6 @@ export default function HorizontalCarousel({ items }: HorizontalCarouselProps) {
       return <Image src={src} alt={alt} fill className="object-cover" />;
     } else {
       // For local images, use a different approach
-      // Either use a relative path without Image component or adjust path for Image
       return (
         <div
           className="w-full h-full bg-cover bg-center"
@@ -144,20 +107,71 @@ export default function HorizontalCarousel({ items }: HorizontalCarouselProps) {
     }
   };
 
-  const visibleItems = getVisibleItems();
+  // Calculate positioning for all items
+  const getCarouselItems = () => {
+    // Calculate the position/offset for each item
+    const itemWidth = 150; // Base width including margins
+
+    return items.map((item, index) => {
+      const distance = Math.abs(index - activeIndex);
+      const visible = distance <= 2; // Show items within 2 positions of active
+
+      // Scale factors
+      let scale = 1;
+      if (distance === 1) scale = 0.85;
+      if (distance === 2) scale = 0.7;
+      if (distance > 2) scale = 0.6;
+
+      // Opacity factors
+      let opacity = 1;
+      if (distance === 1) opacity = 0.8;
+      if (distance === 2) opacity = 0.6;
+      if (distance > 2) opacity = 0.4;
+
+      return (
+        <div
+          key={index}
+          className="flex flex-col items-center cursor-pointer absolute transition-all duration-300"
+          style={{
+            left: `calc(50% + ${(index - activeIndex) * itemWidth}px)`,
+            transform: `translateX(-50%) scale(${scale})`,
+            opacity: visible ? opacity : 0,
+            pointerEvents: visible ? "auto" : "none",
+            zIndex: items.length - distance,
+          }}
+          onClick={() => handleItemClick(index)}
+        >
+          <div
+            className={`relative rounded-full overflow-hidden border-4 transition-colors duration-300 ${
+              activeIndex === index ? "border-blue-500" : "border-transparent"
+            }`}
+            style={getImageContainerStyle(index)}
+          >
+            {getImageElement(item.src, item.alt)}
+          </div>
+
+          {/* Add proper spacing for text that scales with the image */}
+          <div className={`mt-6 text-center transition-all duration-300`}>
+            <h3 className="font-bold text-center">{item.name}</h3>
+            <p className="text-sm text-gray-600 text-center">{item.position}</p>
+          </div>
+        </div>
+      );
+    });
+  };
 
   return (
     <div className="w-9/12 py-8 px-6 bg-[var(--foreground-color)] rounded-2xl">
       <h2 className="text-3xl font-bold mb-6">Team Members</h2>
 
       <div
-        className="flex justify-center items-center gap-4 overflow-hidden py-8 relative"
+        className="flex justify-center items-center overflow-hidden py-8 relative h-80"
         ref={carouselRef}
         onMouseDown={handleDragStart}
         onTouchStart={handleDragStart}
       >
         <div
-          className="absolute left-0 top-1/2 -translate-y-1/2 bg-black/10 hover:bg-black/20 rounded-full p-2 cursor-pointer z-10"
+          className="absolute left-0 top-1/2 -translate-y-1/2 bg-black/10 hover:bg-black/20 rounded-full p-2 cursor-pointer z-20"
           onClick={() => activeIndex > 0 && setActiveIndex(activeIndex - 1)}
           style={{
             opacity: activeIndex > 0 ? 1 : 0.5,
@@ -179,37 +193,11 @@ export default function HorizontalCarousel({ items }: HorizontalCarouselProps) {
           </svg>
         </div>
 
-        <div className="flex justify-center items-center gap-4 transition-transform duration-300">
-          {visibleItems.map(({ item, index }) => (
-            <div
-              key={index}
-              className="flex flex-col items-center cursor-pointer transition-all duration-300"
-              style={getItemStyle(index)}
-              onClick={() => handleItemClick(index)}
-            >
-              <div
-                className={`relative rounded-full overflow-hidden mb-2 border-4 ${
-                  activeIndex === index
-                    ? "border-blue-500"
-                    : "border-transparent"
-                }`}
-                style={{
-                  width: activeIndex === index ? "150px" : "120px",
-                  height: activeIndex === index ? "150px" : "120px",
-                }}
-              >
-                {getImageElement(item.src, item.alt)}
-              </div>
-              <h3 className="font-bold text-center">{item.name}</h3>
-              <p className="text-sm text-gray-600 text-center">
-                {item.position}
-              </p>
-            </div>
-          ))}
-        </div>
+        {/* Carousel items */}
+        <div className="relative w-full h-full">{getCarouselItems()}</div>
 
         <div
-          className="absolute right-0 top-1/2 -translate-y-1/2 bg-black/10 hover:bg-black/20 rounded-full p-2 cursor-pointer z-10"
+          className="absolute right-0 top-1/2 -translate-y-1/2 bg-black/10 hover:bg-black/20 rounded-full p-2 cursor-pointer z-20"
           onClick={() =>
             activeIndex < items.length - 1 && setActiveIndex(activeIndex + 1)
           }
@@ -239,7 +227,7 @@ export default function HorizontalCarousel({ items }: HorizontalCarouselProps) {
         {items.map((_, index) => (
           <button
             key={index}
-            className={`w-2 h-2 rounded-full ${
+            className={`w-2 h-2 rounded-full transition-colors duration-300 ${
               activeIndex === index ? "bg-blue-500" : "bg-gray-300"
             }`}
             onClick={() => setActiveIndex(index)}

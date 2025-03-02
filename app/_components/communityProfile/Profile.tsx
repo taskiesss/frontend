@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import CommunityProfileResponse from "@/app/_types/CommunityProfileResponse";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import CommunityCoverPhoto from "./CoverPhoto";
 import CommunityHeader from "./ProfileHeader";
 import Skill from "../common/Skill";
@@ -9,6 +9,7 @@ import EditButton from "../common/EditButton";
 import SkillForm from "./Forms/SkillForm";
 import AboutForm from "./Forms/AboutForm";
 import HorizontalCarousel from "./TeamMembers";
+import Spinner from "../common/Spinner";
 
 interface Props {
   editable: boolean;
@@ -168,6 +169,16 @@ export default function Profile({ community, editable, id }: Props) {
       </div>
 
       <HorizontalCarousel items={items} />
+
+      {/* Completed Jobs */}
+      {/* <div className="flex flex-col gap-6 pb-6 px-6 border-b-4 border-[var(--border-color)] ">
+        <h2 className="text-3xl font-bold">Completed Jobs</h2>
+        <div className="gap-2  ">
+          <Suspense fallback={<Spinner />}>
+            <CompletedJobslist id={id} />
+          </Suspense>
+        </div>
+      </div> */}
     </div>
   );
 }
