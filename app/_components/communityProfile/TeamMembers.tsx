@@ -1,9 +1,11 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 interface CarouselItem {
-  src: string;
+  freelancerId: string;
+  freelancerProfilePicture: string;
   name: string;
   position: string;
 }
@@ -114,6 +116,7 @@ export default function HorizontalCarousel({ items }: HorizontalCarouselProps) {
     return items.map((item, index) => {
       const distance = Math.abs(index - activeIndex);
       const visible = distance <= 2; // Show items within 2 positions of active
+      const isActive = index === activeIndex;
 
       // Scale factors
       let scale = 1;
@@ -127,6 +130,26 @@ export default function HorizontalCarousel({ items }: HorizontalCarouselProps) {
       if (distance === 2) opacity = 0.6;
       if (distance > 2) opacity = 0.4;
 
+      // Create the item content
+      const itemContent = (
+        <>
+          <div
+            className={`relative rounded-full overflow-hidden border-4 transition-colors duration-300 ${
+              isActive ? "border-blue-500" : "border-transparent"
+            }`}
+            style={getImageContainerStyle(index)}
+          >
+            {getImageElement(item.freelancerProfilePicture, `Member ${index}`)}
+          </div>
+
+          {/* Add proper spacing for text that scales with the image */}
+          <div className={`mt-6 text-center transition-all duration-300`}>
+            <h3 className="font-bold text-center">{item.name}</h3>
+            <p className="text-sm text-gray-600 text-center">{item.position}</p>
+          </div>
+        </>
+      );
+
       return (
         <div
           key={index}
@@ -138,22 +161,15 @@ export default function HorizontalCarousel({ items }: HorizontalCarouselProps) {
             pointerEvents: visible ? "auto" : "none",
             zIndex: items.length - distance,
           }}
-          onClick={() => handleItemClick(index)}
+          onClick={() => !isActive && handleItemClick(index)}
         >
-          <div
-            className={`relative rounded-full overflow-hidden border-4 transition-colors duration-300 ${
-              activeIndex === index ? "border-blue-500" : "border-transparent"
-            }`}
-            style={getImageContainerStyle(index)}
-          >
-            {getImageElement(item.src, `Member ${index}`)}
-          </div>
-
-          {/* Add proper spacing for text that scales with the image */}
-          <div className={`mt-6 text-center transition-all duration-300`}>
-            <h3 className="font-bold text-center">{item.name}</h3>
-            <p className="text-sm text-gray-600 text-center">{item.position}</p>
-          </div>
+          {isActive ? (
+            <Link href={`/nx/freelancer/profile/${item.freelancerId}`}>
+              {itemContent}
+            </Link>
+          ) : (
+            itemContent
+          )}
         </div>
       );
     });

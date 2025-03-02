@@ -11,7 +11,8 @@ export default interface CommunityProfileResponse {
   members: Array<{
     name: string;
     position: string;
-    src: string;
+    freelancerId: string;
+    freelancerProfilePicture: string;
   }>;
   isFull: boolean;
   isMember: boolean;
