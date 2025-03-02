@@ -168,7 +168,9 @@ export default function Profile({ community, editable, id }: Props) {
         )}
       </div>
 
-      <HorizontalCarousel items={community.members} />
+      {community?.communityMembers?.length && (
+        <HorizontalCarousel items={community.communityMembers} />
+      )}
 
       {/* Completed Jobs */}
       {/* <div className="flex flex-col gap-6 pb-6 px-6 border-b-4 border-[var(--border-color)] ">
