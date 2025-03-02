@@ -35,6 +35,7 @@ export default async function Page({ params }: Props) {
       id,
       token
     );
+
     return (
       <Profile
         id={communityId}
