@@ -4,7 +4,6 @@ import Image from "next/image";
 
 interface CarouselItem {
   src: string;
-  alt: string;
   name: string;
   position: string;
 }
@@ -147,7 +146,7 @@ export default function HorizontalCarousel({ items }: HorizontalCarouselProps) {
             }`}
             style={getImageContainerStyle(index)}
           >
-            {getImageElement(item.src, item.alt)}
+            {getImageElement(item.src, `Member ${index}`)}
           </div>
 
           {/* Add proper spacing for text that scales with the image */}
