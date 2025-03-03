@@ -34,7 +34,7 @@ export default function ViewSubmission({
   closeView: () => void;
   title: string;
 }) {
-  const [submission, setSubmission] = useState<Submission | null>(null);
+  const [submission, setSubmission] = useState<Submission | null>();
   const [isForbidden, setIsForbidden] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [newLinkName, setNewLinkName] = useState<string>("");
@@ -183,12 +183,6 @@ export default function ViewSubmission({
       setError("Failed to update submission. Please try again.");
     }
   };
-
-  if (isForbidden) {
-    return (
-      <ProtectedPage message="You are not allowed to view these submissions. Please log in" />
-    );
-  }
 
   if (isForbidden) {
     return (
@@ -414,54 +408,57 @@ export default function ViewSubmission({
                       </div>
 
                       {/* Link Input Fields (when shown) */}
-                      {showLinkInputs && (
-                        <div className="flex items-center gap-4">
-                          <div className="flex-1">
-                            <input
-                              type="text"
-                              value={newLinkName}
-                              onChange={(e) => setNewLinkName(e.target.value)}
-                              placeholder="e.g., Project Documentation"
-                              className="w-full p-2 bg-[var(--background-color)] rounded-lg border-[var(--border-color)] border-solid border-2 focus:outline-none placeholder-gray-400"
-                            />
-                          </div>
-                          <div className="flex flex-col gap-1 flex-1">
-                            <input
-                              type="url"
-                              value={newLinkUrl}
-                              onChange={(e) => setNewLinkUrl(e.target.value)}
-                              placeholder="https://example.com"
-                              className="w-full p-2 bg-[var(--background-color)] rounded-lg border-[var(--border-color)] border-solid border-2 focus:outline-none placeholder-gray-400"
-                            />
-                            {urlError && (
-                              <span className="text-red-500 text-sm">
-                                {urlError}
-                              </span>
-                            )}
-                          </div>
-                          <div className="flex gap-2">
-                            <button
-                              type="button"
-                              onClick={handleAddLink}
-                              className="px-3 py-2 bg-[var(--btn-color)] rounded-lg hover:bg-[var(--hover-color)] transition-colors"
-                            >
-                              + Add
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => {
-                                setNewLinkName("");
-                                setNewLinkUrl("");
-                                setUrlError("");
-                                setShowLinkInputs(false);
-                              }}
-                              className="px-3 py-2 text-black bg-gray-300 rounded-lg hover:bg-gray-400 transition-colors"
-                            >
-                              Cancel
-                            </button>
-                          </div>
+
+                      <div
+                        className={`flex items-center gap-4 ${
+                          showLinkInputs ? "" : "invisible"
+                        }`}
+                      >
+                        <div className="flex-1">
+                          <input
+                            type="text"
+                            value={newLinkName}
+                            onChange={(e) => setNewLinkName(e.target.value)}
+                            placeholder="e.g., Project Documentation"
+                            className="w-full p-2 bg-[var(--background-color)] rounded-lg border-[var(--border-color)] border-solid border-2 focus:outline-none placeholder-gray-400"
+                          />
                         </div>
-                      )}
+                        <div className="flex flex-col gap-1 flex-1">
+                          <input
+                            type="url"
+                            value={newLinkUrl}
+                            onChange={(e) => setNewLinkUrl(e.target.value)}
+                            placeholder="https://example.com"
+                            className="w-full p-2 bg-[var(--background-color)] rounded-lg border-[var(--border-color)] border-solid border-2 focus:outline-none placeholder-gray-400"
+                          />
+                          {urlError && (
+                            <span className="text-red-500 text-sm">
+                              {urlError}
+                            </span>
+                          )}
+                        </div>
+                        <div className="flex gap-2">
+                          <button
+                            type="button"
+                            onClick={handleAddLink}
+                            className="px-3 py-2 bg-[var(--btn-color)] rounded-lg hover:bg-[var(--hover-color)] transition-colors"
+                          >
+                            + Add
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setNewLinkName("");
+                              setNewLinkUrl("");
+                              setUrlError("");
+                              setShowLinkInputs(false);
+                            }}
+                            className="px-3 py-2 text-black bg-gray-300 rounded-lg hover:bg-gray-400 transition-colors"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
                     </>
                   )}
                 </div>
