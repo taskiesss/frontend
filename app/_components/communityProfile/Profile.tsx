@@ -10,6 +10,7 @@ import SkillForm from "./Forms/SkillForm";
 import AboutForm from "./Forms/AboutForm";
 import HorizontalCarousel from "./TeamMembers";
 import Spinner from "../common/Spinner";
+import CompletedJobslist from "./CompletedJobsList";
 
 interface Props {
   editable: boolean;
@@ -92,6 +93,9 @@ export default function Profile({ community, editable, id }: Props) {
 
   console.log(community);
 
+  const style =
+    "flex w-9/12 justify-between bg-[var(--foreground-color)] rounded-2xl py-8 px-6";
+
   return (
     <div className="flex flex-col items-center gap-6">
       <CommunityCoverPhoto
@@ -118,7 +122,7 @@ export default function Profile({ community, editable, id }: Props) {
       />
 
       {/* Skills Section */}
-      <div className="flex w-9/12 justify-between bg-[var(--foreground-color)] rounded-2xl py-8 px-6">
+      <div className={style}>
         <div className=" flex flex-col gap-5  ">
           <h2 className="text-3xl font-bold">Skills</h2>
           <div className="flex gap-2 flex-wrap">
@@ -144,7 +148,7 @@ export default function Profile({ community, editable, id }: Props) {
       </div>
 
       {/* About Section */}
-      <div className="flex w-9/12 rounded-2xl justify-between py-8 px-6  bg-[var(--foreground-color)] ">
+      <div className={style}>
         <div className="flex flex-col gap-5 w-11/12">
           <h2 className="text-3xl font-bold">About</h2>
           <div className="flex gap-2 flex-wrap w-full">
@@ -173,14 +177,14 @@ export default function Profile({ community, editable, id }: Props) {
       )}
 
       {/* Completed Jobs */}
-      {/* <div className="flex flex-col gap-6 pb-6 px-6 border-b-4 border-[var(--border-color)] ">
+      <div className={`${style} flex-col gap-9`}>
         <h2 className="text-3xl font-bold">Completed Jobs</h2>
-        <div className="gap-2  ">
+        <div className="gap-2">
           <Suspense fallback={<Spinner />}>
             <CompletedJobslist id={id} />
           </Suspense>
         </div>
-      </div> */}
+      </div>
     </div>
   );
 }
