@@ -16,7 +16,7 @@ export default function CompletedJobsCard({
   return (
     <div className="flex flex-col">
       <div className="flex flex-col gap-2">
-        <Link href={`/nx/find-work/${job.jobId}`}>
+        <Link href={`/nx/freelancer/find-work/${job.jobId}`}>
           <h2 className="text-xl text-[var(--accent-color)] font-extrabold hover:underline hover:text-[var(--hover-color)]">
             {job.jobName}
           </h2>
