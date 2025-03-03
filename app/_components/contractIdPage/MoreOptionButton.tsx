@@ -1,23 +1,17 @@
 "use client";
 import { useState } from "react";
-import SubmissionForm from "../myContracts/SubmissionForm";
+import ViewSubmission from "./ViewSubmissions";
 
 // interface MoreOptionButtonProps {}
 
-function MoreOptionButton({}) {
+function MoreOptionButton({ title }: { title: string }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [isSubmission, setIsSubmission] = useState(false);
 
-  // Define handlers for each option
-  const handleSubmission = () => {
-    console.log("Submission clicked");
-    setIsSubmission(true);
-    setIsOpen(false); // Close dropdown after click
-    // Add your submission logic here (e.g., API call, navigation, etc.)
-  };
+  const [isViewSubmission, setIsViewSubmission] = useState(false);
 
   const handleViewSubmissions = () => {
     console.log("view submissions");
+    setIsViewSubmission(true);
     setIsOpen(false); // Close dropdown after click
     // Add your end contract logic here
   };
@@ -44,12 +38,6 @@ function MoreOptionButton({}) {
         {isOpen && (
           <div className="absolute top-full right-0 mt-3 min-w-40 bg-[var(--background-color)] border border-gray-600 rounded-lg shadow-lg">
             <button
-              onClick={handleSubmission}
-              className="w-full text-left px-4 py-2 hover:bg-[var(--hover-color)]"
-            >
-              Add a work
-            </button>
-            <button
               onClick={handleViewSubmissions}
               className="w-full text-left px-4 py-2 hover:bg-[var(--hover-color)]"
             >
@@ -64,8 +52,14 @@ function MoreOptionButton({}) {
           </div>
         )}
       </div>
-      {isSubmission && (
-        <SubmissionForm closeEdit={() => setIsSubmission(false)} />
+
+      {isViewSubmission && (
+        <ViewSubmission
+          notEditable={false}
+          title={title}
+          milestoneIndex={"123"}
+          closeView={() => setIsViewSubmission(false)}
+        />
       )}
     </>
   );

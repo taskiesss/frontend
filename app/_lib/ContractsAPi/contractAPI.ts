@@ -20,7 +20,7 @@ export async function getMyContracts(
     },
     body: JSON.stringify(reqbody),
   });
-  console.log(res);
+  // console.log(res);
   if (res.status === 403) {
     throw new Error('Forbidden');
   }
@@ -43,17 +43,14 @@ export async function getContractDetails(
   invariant(!token, 'Unauthorized user');
   //   console.log(reqbody);
 
-  const res = await fetch(
-    `${BASE_URL}/freelancers/my-contracts/${reqbody.id}`,
-    {
-      method: 'GET',
-      headers: {
-        'content-type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
-  console.log(res);
+  const res = await fetch(`${BASE_URL}/api/contracts/${reqbody.id}`, {
+    method: 'GET',
+    headers: {
+      'content-type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  // console.log(res);
   if (res.status === 403) {
     throw new Error('Forbidden');
   }
@@ -77,7 +74,7 @@ export async function getMilestones(
   //   console.log(reqbody);
 
   const res = await fetch(
-    `${BASE_URL}/freelancers/my-contracts/${reqbody.id}/milestones?page=${reqbody.page}&size=${reqbody.size}`,
+    `${BASE_URL}/api/contracts/${reqbody.id}/milestones?page=${reqbody.page}&size=${reqbody.size}`,
     {
       method: 'GET',
       headers: {
@@ -86,7 +83,7 @@ export async function getMilestones(
       },
     }
   );
-  console.log(res);
+  // console.log(res);
   if (res.status === 403) {
     throw new Error('Forbidden');
   }

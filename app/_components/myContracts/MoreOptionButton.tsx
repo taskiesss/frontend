@@ -47,7 +47,7 @@ function MoreOptionButton({}) {
               onClick={handleSubmission}
               className="w-full text-left px-4 py-2 hover:bg-[var(--hover-color)]"
             >
-              Submission
+              View Submissions
             </button>
             <button
               onClick={handleEndContract}

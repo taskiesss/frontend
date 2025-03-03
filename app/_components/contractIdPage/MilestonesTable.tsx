@@ -2,10 +2,17 @@ import { formatDayMonthToString } from "@/app/_helpers/helper";
 import { ContractMilestones } from "@/app/_types/ContractDetailsResponse";
 import MoreOptionButton from "./MoreOptionButton";
 import MilestoneStatus from "./MilestoneStatus";
+import { Suspense, useState } from "react";
+import ViewSubmission from "./ViewSubmissions";
+import Spinner from "../common/Spinner";
 
-type Props = { milestones: ContractMilestones };
+type Props = { milestones: ContractMilestones; contractId: string };
 
-function MilestonesTable({ milestones }: Props) {
+function MilestonesTable({ milestones, contractId }: Props) {
+  const [viewingMilestoneIndex, setViewingMilestoneIndex] = useState<
+    number | null
+  >(null);
+
   return (
     <>
       {milestones.content.length > 0 ? (
@@ -25,12 +32,30 @@ function MilestonesTable({ milestones }: Props) {
               {formatDayMonthToString(m.dueDate)}
             </td>
             <td className="px-4 py-4 align-top w-1/12 text-lg">
-              {m.status.toLowerCase() === "in_progress" && <MoreOptionButton />}
+              {m.status.toLowerCase() === "in_progress" && (
+                <MoreOptionButton title={m.title} />
+              )}
               {m.status.toLowerCase() === "in_review" ||
               m.status.toLowerCase() === "approved" ? (
-                <button className="bg-[var(--btn-color)] t px-3 py-1.5 rounded hover:bg-[var(--hover-color)]">
-                  View submissions
-                </button>
+                <>
+                  <button
+                    onClick={() => setViewingMilestoneIndex(i)}
+                    className="bg-[var(--btn-color)] t px-3 py-1.5 rounded hover:bg-[var(--hover-color)]"
+                  >
+                    View submissions
+                  </button>
+                  {viewingMilestoneIndex === i && (
+                    <Suspense fallback={<Spinner />}>
+                      <ViewSubmission
+                        contractId={contractId}
+                        notEditable={true}
+                        title={m.title}
+                        milestoneIndex={m.milestoneId}
+                        closeView={() => setViewingMilestoneIndex(null)}
+                      />
+                    </Suspense>
+                  )}
+                </>
               ) : (
                 ""
               )}

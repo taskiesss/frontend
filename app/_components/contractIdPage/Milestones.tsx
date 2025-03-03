@@ -101,7 +101,7 @@ function Milestones({ contractId }: Props) {
     // Fallback for other errors
     return <div>Error loading jobs list: {errorMessage}</div>;
   }
-  console.log("current page", data);
+  // console.log("current page", data);
 
   if (!data) return;
   // Handle page change with an event handler if Pagination uses an event
@@ -114,7 +114,7 @@ function Milestones({ contractId }: Props) {
   };
   return (
     <>
-      <div className="overflow-x-auto bg-[var(--foreground-color)] border  border-[var(--border-color)] rounded-xl">
+      <div className=" bg-[var(--foreground-color)] border  border-[var(--border-color)] rounded-xl">
         <table className="w-full border-collapse text-base">
           <thead>
             <tr className="bg-[var(--button-hover-background-color)] text-white">
@@ -131,7 +131,7 @@ function Milestones({ contractId }: Props) {
             </tr>
           </thead>
           <tbody>
-            <MilestonesTable milestones={data} />
+            <MilestonesTable contractId={contractId} milestones={data} />
           </tbody>
         </table>
       </div>
