@@ -12,9 +12,10 @@ import ProtectedPage from "../common/ProtectedPage";
 
 interface PortfolioProps {
   id: string;
+  editable: boolean;
 }
 
-export default function Portfolio({ id }: PortfolioProps) {
+export default function Portfolio({ id, editable }: PortfolioProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const size = 3;
   const queryClient = useQueryClient();
@@ -76,6 +77,7 @@ export default function Portfolio({ id }: PortfolioProps) {
             fileUrl={p.portfolioPdf}
             ProjectName={p.name}
             onRemove={() => handleRemove(p.portfolioPdf)}
+            editable={editable}
           />
         ))}
       </div>

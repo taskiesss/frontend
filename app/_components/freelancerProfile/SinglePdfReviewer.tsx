@@ -9,10 +9,12 @@ export default function PDFPreviewAuto({
   fileUrl,
   ProjectName,
   onRemove,
+  editable,
 }: {
   fileUrl: string;
   ProjectName: string;
   onRemove?: () => void;
+  editable: boolean;
 }) {
   // Your raw PDF URL (ensure it's publicly accessible)
   //   const rawPdfUrl =
@@ -40,14 +42,16 @@ export default function PDFPreviewAuto({
           sizes="18rem"
         />
         {/* Overlay with background that changes on hover */}
-        <div className="absolute inset-0 transition-colors duration-300 flex items-center justify-center bg-gray-400/0 group-hover:bg-gray-400/50">
-          <button
-            onClick={onRemove}
-            className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-red-500 hover:bg-red-600 text-white rounded-full overflow-hidden w-8 h-8 flex items-center justify-center"
-          >
-            <FontAwesomeIcon icon={faTrashAlt} size="1x" />
-          </button>
-        </div>
+        {editable && (
+          <div className="absolute inset-0 transition-colors duration-300 flex items-center justify-center bg-gray-400/0 group-hover:bg-gray-400/50">
+            <button
+              onClick={onRemove}
+              className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-red-500 hover:bg-red-600 text-white rounded-full overflow-hidden w-8 h-8 flex items-center justify-center"
+            >
+              <FontAwesomeIcon icon={faTrashAlt} size="1x" />
+            </button>
+          </div>
+        )}
       </div>
       <Link
         href={fileUrl}

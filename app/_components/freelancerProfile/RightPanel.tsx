@@ -54,7 +54,7 @@ export default function RightPanel({
           <h2 className="text-3xl font-bold">Portfolio</h2>
           <div className="flex flex-col w-full gap-2 flex-wrap">
             <Suspense fallback={<Spinner />}>
-              <Portfolio id={id} />
+              <Portfolio editable={editable} id={id} />
             </Suspense>
           </div>
         </div>
