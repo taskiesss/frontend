@@ -9,21 +9,21 @@ import Profile from "@/app/_components/communityProfile/Profile";
 
 type Props = { params: { id: string } };
 
-const defaultCommunity: CommunityProfileResponse = {
-  profilePicture: "",
-  coverPhoto: "",
-  title: "Community Title",
-  name: "Community Name",
-  country: "",
-  pricePerHour: 0,
-  rate: 4.5,
-  skills: [],
-  description: "",
-  members: [],
-  isFull: false,
-  isMember: false,
-  isAdmin: false,
-};
+// const defaultCommunity: CommunityProfileResponse = {
+//   profilePicture: "",
+//   coverPhoto: "",
+//   title: "Community Title",
+//   name: "Community Name",
+//   country: "",
+//   pricePerHour: 0,
+//   rate: 4.5,
+//   skills: [],
+//   description: "",
+//   communityMembers: [],
+//   isFull: false,
+//   isMember: false,
+//   isAdmin: false,
+// };
 
 export default async function Page({ params }: Props) {
   const { id } = await Promise.resolve(params);
@@ -35,6 +35,7 @@ export default async function Page({ params }: Props) {
       id,
       token
     );
+
     return (
       <Profile
         id={communityId}

@@ -13,6 +13,7 @@ import DropLoggedin from "./DropLoggedin";
 import ProfileMenu from "./ProfileMenu";
 import userProfile from "@/public/images/userprofile.jpg";
 import Cookies from "js-cookie";
+import ProtectedPage from "./ProtectedPage";
 
 interface NavItem {
   label: string;
@@ -33,7 +34,7 @@ const NavLoggedin: React.FC = () => {
   // Control showing/hiding ProfileMenu
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
 
-  // const[isError,setIsError] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   // Ref for detecting clicks outside the profile menu container
   const profileMenuRef = useRef<HTMLDivElement>(null);
@@ -51,7 +52,9 @@ const NavLoggedin: React.FC = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-
+        if (response.status === 403) {
+          setIsError(true);
+        }
         const data = await response.json();
         setImage(data.profilePicture);
         setName(data.name);
@@ -77,6 +80,10 @@ const NavLoggedin: React.FC = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  if (isError) {
+    return <ProtectedPage message="Please login again"></ProtectedPage>;
+  }
 
   // Your nav items
   const navItems: NavItem[] = [

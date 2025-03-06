@@ -8,9 +8,11 @@ export default interface CommunityProfileResponse {
   rate: number;
   skills: string[];
   description: string;
-  members: Array<{
+  communityMembers: Array<{
     name: string;
     position: string;
+    freelancerId: string;
+    freelancerProfilePicture: string;
   }>;
   isFull: boolean;
   isMember: boolean;
