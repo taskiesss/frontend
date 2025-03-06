@@ -67,7 +67,7 @@ async function page({ searchParams }: Props) {
   } = params;
   const statusArr = status ? status.split(",") : [];
   const pageNumber = Number(page) ? Number(page) : 1;
-  console.log(statusArr, contractQuery, page, sortBy, sortDirection);
+  // console.log(statusArr, contractQuery, page, sortBy, sortDirection);
   try {
     const reqbody = {
       search: contractQuery,
@@ -77,7 +77,7 @@ async function page({ searchParams }: Props) {
       sortedBy: sortBy,
       sortDirection: sortDirection,
     };
-    console.log(reqbody);
+    // console.log(reqbody);
     const token = (await cookies()).get("token")?.value;
     contracts = await getMyContracts(reqbody, token);
     return <AllContracts contracts={contracts} />;

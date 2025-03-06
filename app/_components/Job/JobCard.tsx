@@ -44,7 +44,8 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
 
   const pathname = usePathname();
   const newpath =
-    pathname === "/nx/freelancer/find-work"
+    pathname === "/nx/freelancer/find-work" ||
+    pathname === "/nx/freelancer/search/jobs"
       ? "/nx/freelancer/find-work"
       : "/guest/jobs";
 

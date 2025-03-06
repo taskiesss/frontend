@@ -133,11 +133,14 @@ const CommunityCard: React.FC<JobCardProps> = ({ community }) => {
             <p className="text-xl py-1 whitespace-pre-wrap">{description}</p>
             {/* New: Member count and isFull status */}
             <div className="py-1 flex gap-5">
-              <span className="block text-md text-slate-500">
+              <p className="block text-md text-slate-500">
                 Members: {memberCount}
-              </span>
-              <span className="block text-md text-slate-500">
-                Status: {isFull ? "Full" : "Open"}
+              </p>
+              <span className="block text-md">
+                <span className="text-slate-500">Status: </span>
+                <span className={isFull ? "text-red-600" : "text-green-600"}>
+                  {isFull ? "Full" : "Open"}
+                </span>
               </span>
             </div>
 

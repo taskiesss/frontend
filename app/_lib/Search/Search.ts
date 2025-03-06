@@ -35,6 +35,7 @@ const BASE_URL = 'http://localhost:8080';
  */
 export async function searchJobs(request: SearchJobsRequest): Promise<any> {
   try {
+    console.log(request);
     const response = await fetch(`${BASE_URL}/jobs/search`, {
       method: 'POST',
       headers: {
@@ -42,7 +43,7 @@ export async function searchJobs(request: SearchJobsRequest): Promise<any> {
       },
       body: JSON.stringify(request),
     });
-
+    // console.log(response);
     const data = await response.json();
     return data as PageJobResponse;
   } catch (error) {

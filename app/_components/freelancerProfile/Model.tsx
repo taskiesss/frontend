@@ -19,7 +19,7 @@ export default function Model({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
       <div
-        className={`bg-[var(--foreground-color)] rounded-lg p-12 shadow-lg relative ${className}`}
+        className={`bg-[var(--background-color)] rounded-lg p-12 shadow-lg relative ${className}`}
       >
         <button onClick={onClose} className="absolute top-2 right-2  text-2xl">
           X

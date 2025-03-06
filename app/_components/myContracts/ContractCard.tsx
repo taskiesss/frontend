@@ -3,7 +3,6 @@ import { faCalendarAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import StarRating from "../common/StarRating";
-import MoreOptionButton from "./MoreOptionButton";
 import StatusCard from "./StatusCard";
 type Props = {
   contract: {
@@ -30,7 +29,7 @@ export default function ContractCard({ contract }: Props) {
       <div className="flex w-full  justify-between">
         <h2 className="text-2xl font-bold ">
           <Link
-            href={`/nx/freelancer/jobs/${contract.jobID}`}
+            href={`/nx/freelancer/find-work/${contract.jobID}`}
             className="hover:text-[var(--hover-color)] hover:underline"
           >
             {contract.jobTitle}
@@ -41,12 +40,12 @@ export default function ContractCard({ contract }: Props) {
         <div className="flex items-center gap-2">
           <Link
             href={`/nx/freelancer/mycontracts/${contract.contractID}`}
-            className="text-[var(--hover-color)] border-[var(--hover-color)] border-solid border p-2 rounded-2xl text-md hover:border-[var(--btn-color)] hover:text-[var(--btn-color)]  "
+            className="text-[var(--hover-color)] border-[var(--hover-color)] border-solid border p-2 rounded-2xl text-lg hover:border-[var(--btn-color)] hover:text-[var(--btn-color)]  "
           >
             View details
           </Link>
-          {/* more option button  */}
-          <MoreOptionButton />
+          {/* more option button 
+          {contract.contractStatus === "ACTIVE" && <MoreOptionButton />} */}
         </div>
       </div>
 
