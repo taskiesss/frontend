@@ -5,7 +5,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import Cookies from "js-cookie";
 import ProtectedPage from "../common/ProtectedPage";
+import { postSubmission } from "@/app/_lib/ContractsAPi/contractAPI";
 interface CreateSubmissionFormProps {
+  milestoneIndex: string;
   contractId: string;
   onNewSubmission: () => void;
   onCancel: () => void;
@@ -13,6 +15,7 @@ interface CreateSubmissionFormProps {
 
 export default function CreateSubmissionForm({
   onNewSubmission,
+  milestoneIndex,
   contractId,
   onCancel,
 }: CreateSubmissionFormProps) {
@@ -24,6 +27,7 @@ export default function CreateSubmissionForm({
   const [showLinkInputs, setShowLinkInputs] = useState<boolean>(false);
   const [links, setLinks] = useState<{ name: string; url: string }[]>([]);
   const [isForbidden, setIsForbidden] = useState(false);
+  const [error, setError] = useState("");
   // Handle file input change
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = e.target.files;
@@ -65,11 +69,12 @@ export default function CreateSubmissionForm({
   };
 
   const handleCreateSubmission = async () => {
+    if (!files.length && !links.length) {
+      setError("You have to submit either a file or url");
+      return;
+    }
     const token = Cookies.get("token");
     const formData = new FormData();
-
-    // Append description
-    formData.append("description", description);
 
     // Append new files
     files.forEach((file) => formData.append("files", file));
@@ -87,8 +92,16 @@ export default function CreateSubmissionForm({
       //   body: formData,
       // });
       // if (!response.ok) throw new Error("Failed to create submission");
-
+      const postResponse = await postSubmission(
+        {
+          contractid: contractId,
+          milestoneIndex: milestoneIndex,
+          body: formData,
+        },
+        token
+      );
       // Reset form and state
+      setError("");
       setDescription("");
       setFiles([]);
       setLinks([]);
@@ -116,7 +129,7 @@ export default function CreateSubmissionForm({
       </h3>
       <div className="flex flex-col gap-4 bg-[var(--background-color)] rounded-xl border-[var(--border-color)] border-solid border-2 p-4">
         {/* Description */}
-        <div className="flex flex-col gap-2">
+        {/* <div className="flex flex-col gap-2">
           <h3 className="text-lg font-medium">Description</h3>
           <textarea
             required
@@ -125,7 +138,7 @@ export default function CreateSubmissionForm({
             className="bg-[var(--background-color)] text-lg border border-solid border-[var(--border-color)] p-3 rounded-lg text-[var(--accent-color)] whitespace-pre-wrap focus:outline-none"
             placeholder="Enter a description for your submission"
           />
-        </div>
+        </div> */}
 
         {/* Files & Links Section */}
         <h3 className="text-lg font-medium">Files & Links</h3>
@@ -268,7 +281,7 @@ export default function CreateSubmissionForm({
             </div>
           )}
         </div>
-
+        {error && <span className="text-red-500 text-lg">{error}</span>}
         {/* Submit and Cancel Buttons */}
         <div className="flex justify-end gap-4">
           <button

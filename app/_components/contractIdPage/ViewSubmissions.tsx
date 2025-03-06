@@ -5,7 +5,7 @@ import {
   faLink,
   faTrash,
   faEdit,
-  faSave,
+  faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Cookies from "js-cookie";
@@ -13,10 +13,14 @@ import { useState, useEffect } from "react";
 import ProtectedPage from "../common/ProtectedPage";
 import Model from "../freelancerProfile/Model";
 import CreateSubmissionForm from "./CreateSubmissionForm";
+import {
+  deleteFileOrLinkAPI,
+  getSubmission,
+  postSubmission,
+} from "@/app/_lib/ContractsAPi/contractAPI";
 
 interface Submission {
   id: string | number;
-  description: string;
   files: { url: string; name: string; id: string }[];
   links: { url: string; name: string; id: string }[];
 }
@@ -34,37 +38,41 @@ export default function ViewSubmission({
   closeView: () => void;
   title: string;
 }) {
-  const [submission, setSubmission] = useState<Submission | null>();
+  const [submission, setSubmission] = useState<Submission>({
+    id: "",
+    files: [{ url: "", name: "", id: "" }],
+    links: [{ url: "", name: "", id: "" }],
+  });
   const [isForbidden, setIsForbidden] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [newLinkName, setNewLinkName] = useState<string>("");
   const [newLinkUrl, setNewLinkUrl] = useState<string>("");
   const [urlError, setUrlError] = useState<string>("");
   const [showLinkInputs, setShowLinkInputs] = useState<boolean>(false);
-  const [isEditing, setIsEditing] = useState<boolean>(false); // Edit mode state
-  const [editedDescription, setEditedDescription] = useState<string>("");
-  const [newFiles, setNewFiles] = useState<File[]>([]); // New files to be added
-  const [newLinks, setNewLinks] = useState<{ name: string; url: string }[]>([]); // New links to be added
-  const [dataRefreshed, setDataRefreshed] = useState(false); // to refetch submission data
-  const [showCreateForm, setShowCreateForm] = useState<boolean>(false); // Show/hide create submission form
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [newFiles, setNewFiles] = useState<File[]>([]);
+  const [newLinks, setNewLinks] = useState<{ name: string; url: string }[]>([]);
+  const [dataRefreshed, setDataRefreshed] = useState(false);
+  const [showCreateForm, setShowCreateForm] = useState<boolean>(false);
+
+  // State for confirmation dialog
+  const [showConfirmDelete, setShowConfirmDelete] = useState<boolean>(false);
+  const [itemToDelete, setItemToDelete] = useState<{
+    type: "file" | "link";
+    id: string;
+    name: string;
+  } | null>(null);
 
   // Fetch submission data on component mount
   useEffect(() => {
     const fetchSubmission = async () => {
       const token = Cookies.get("token");
       try {
-        // Replace with your API endpoint to fetch submission data
-        // const response = await fetch(`/api/contracts/${contractId}/milestone/${milestoneIndex}`, {
-        //   headers: {
-        //     Authorization: `Bearer ${token}`,
-        //   },
-        // });
-        // if (!response.ok) throw new Error("Failed to fetch submission");
-        // const data = await response.json();
-        // setSubmission(data);
-
-        // Mock data for demonstration
-        setSubmission(null); // Simulate no submission
+        const submissionResponse = await getSubmission(
+          { contractid: contractId, milestoneIndex: milestoneIndex },
+          token
+        );
+        setSubmission(submissionResponse);
       } catch (error: any) {
         if (
           error.message === "Forbidden" ||
@@ -76,29 +84,17 @@ export default function ViewSubmission({
         setError("Failed to fetch submission. Please try again.");
       }
     };
-
     fetchSubmission();
-  }, [milestoneIndex, dataRefreshed]);
+  }, [milestoneIndex, dataRefreshed, contractId]);
 
   // API to delete a file or link
   const deleteFileOrLink = async (type: "file" | "link", id: string) => {
     const token = Cookies.get("token");
     try {
-      // Replace with your API endpoint to delete a file or link
-      // const response = await fetch(`/api/contracts/${contractId}/milestone/${milestoneIndex}/${type}/${id}`, {
-      //   method: "DELETE",
-      //   headers: {
-      //     Authorization: `Bearer ${token}`,
-      //   },
-      // });
-      // if (!response.ok) throw new Error("Failed to delete");
-
-      // Update UI after deletion
-      if (type === "file") {
-        setNewFiles((prev) => prev.filter((file) => file.name !== id)); // Remove from newFiles
-      } else {
-        setNewLinks((prev) => prev.filter((link) => link.name !== id)); // Remove from newLinks
-      }
+      const deleteResponse = await deleteFileOrLinkAPI(
+        { contractid: contractId, milestoneIndex: milestoneIndex, type, id },
+        token
+      );
       setDataRefreshed((prev) => !prev);
     } catch (error: any) {
       if (
@@ -128,7 +124,7 @@ export default function ViewSubmission({
       return;
     }
     try {
-      new URL(newLinkUrl.trim()); // Validate URL
+      new URL(newLinkUrl.trim());
       setUrlError("");
       setNewLinks((prev) => [
         ...prev,
@@ -144,30 +140,23 @@ export default function ViewSubmission({
 
   // Handle submitting changes
   const submitChanges = async () => {
+    if (!newFiles.length && !newLinks.length) {
+      setIsEditing(false);
+      return;
+    }
     const token = Cookies.get("token");
     const formData = new FormData();
-
-    // Append new files
     newFiles.forEach((file) => formData.append("files", file));
-
-    // Append new links as JSON
     formData.append("links", JSON.stringify(newLinks));
-
-    // Append the updated description
-    formData.append("description", editedDescription);
-
     try {
-      // Replace with your API endpoint to update submission
-      // const response = await fetch(`/api/contracts/${contractId}/milestone/${milestoneIndex}`, {
-      //   method: "POST",
-      //   headers: {
-      //     Authorization: `Bearer ${token}`,
-      //   },
-      //   body: formData,
-      // });
-      // if (!response.ok) throw new Error("Failed to update submission");
-
-      // Clear local changes after successful submission
+      const PostResponse = await postSubmission(
+        {
+          contractid: contractId,
+          milestoneIndex: milestoneIndex,
+          body: formData,
+        },
+        token
+      );
       setNewFiles([]);
       setNewLinks([]);
       setDataRefreshed((prev) => !prev);
@@ -184,6 +173,27 @@ export default function ViewSubmission({
     }
   };
 
+  // Show confirmation dialog for deletion
+  const confirmDelete = (type: "file" | "link", id: string, name: string) => {
+    setItemToDelete({ type, id, name });
+    setShowConfirmDelete(true);
+  };
+
+  // Handle confirmed deletion
+  const handleConfirmDelete = async () => {
+    if (itemToDelete) {
+      await deleteFileOrLink(itemToDelete.type, itemToDelete.id);
+      setShowConfirmDelete(false);
+      setItemToDelete(null);
+    }
+  };
+
+  // Cancel deletion
+  const handleCancelDelete = () => {
+    setShowConfirmDelete(false);
+    setItemToDelete(null);
+  };
+
   if (isForbidden) {
     return (
       <ProtectedPage message="You are not allowed to view these submissions. Please log in" />
@@ -193,55 +203,37 @@ export default function ViewSubmission({
   return (
     <Model
       isOpen={true}
-      onClose={() => {
-        closeView();
-      }}
+      onClose={closeView}
       className="overflow-y-auto max-h-[50rem] max-w-5xl py-10 border-solid border-2 border-[var(--border-color)] bg-[var(--background-color)] transition-all duration-300"
     >
       <div className="flex flex-col gap-8 w-auto max-w-4xl">
-        {/* Submissions Title */}
         <h1 className="text-2xl font-bold text-[var(--accent-color)]">
           Submissions for {title}
         </h1>
 
-        {/* Render Create Form or Existing Submission */}
-        {submission ? (
+        {submission.links.length > 0 || submission.files.length > 0 ? (
           <div className="flex flex-col gap-4">
             <div className="flex flex-col bg-[var(--background-color)] rounded-xl overflow-hidden border-gray-500 border-solid border-2 w-full">
-              <div className="p-6">
-                {/* Description */}
-                <div className="flex flex-col gap-2">
-                  <div className="flex justify-between items-center">
-                    <h3 className="text-xl mb-2">Description</h3>
-                    <button
-                      onClick={() => {
-                        setIsEditing(!isEditing);
-                        setEditedDescription(submission.description);
-                      }}
-                      className={`text-[var(--accent-color)] hover:text-[var(--hover-color)] ${
-                        notEditable ? "invisible" : ""
-                      }`}
-                    >
-                      <FontAwesomeIcon icon={isEditing ? faSave : faEdit} />
-                    </button>
-                  </div>
-                  {isEditing ? (
-                    <textarea
-                      value={editedDescription}
-                      onChange={(e) => setEditedDescription(e.target.value)}
-                      className="bg-[var(--background-color)] text-lg border border-solid border-[var(--border-color)] p-3 rounded-lg text-[var(--accent-color)] whitespace-pre-wrap focus:outline-none"
-                    />
-                  ) : (
-                    <p className="text-lg border border-solid border-[var(--border-color)] p-3 rounded-lg whitespace-pre-wrap">
-                      {submission.description || "No description provided."}
-                    </p>
-                  )}
+              <div className="flex flex-col p-6">
+                <div className="flex justify-between">
+                  <h3 className="text-xl py-4">Files & Links</h3>
+                  <button
+                    onClick={() => {
+                      if (isEditing) {
+                        setNewFiles([]);
+                        setNewLinks([]);
+                      }
+                      setIsEditing(!isEditing);
+                    }}
+                    className={`text-[var(--accent-color)] text-lg hover:text-[var(--hover-color)] ${
+                      notEditable ? "invisible" : ""
+                    }`}
+                  >
+                    <FontAwesomeIcon icon={isEditing ? faXmark : faEdit} />
+                  </button>
                 </div>
 
-                {/* Files & Links Section */}
-                <h3 className="text-xl mt-4">Files & Links</h3>
                 <div className="flex flex-col gap-3 bg-[var(--background-color)] rounded-xl border-[var(--border-color)] border-solid border-2 p-4">
-                  {/* Files and Links List */}
                   <div className="flex flex-wrap gap-4">
                     {/* Existing Files */}
                     {submission.files.map((file) => (
@@ -266,7 +258,9 @@ export default function ViewSubmission({
                         {isEditing && (
                           <button
                             type="button"
-                            onClick={() => deleteFileOrLink("file", file.id)}
+                            onClick={() =>
+                              confirmDelete("file", file.id, file.name)
+                            }
                             className="text-red-500 hover:text-red-700"
                             aria-label={`Remove ${file.name}`}
                           >
@@ -331,7 +325,9 @@ export default function ViewSubmission({
                         {isEditing && (
                           <button
                             type="button"
-                            onClick={() => deleteFileOrLink("link", link.id)}
+                            onClick={() =>
+                              confirmDelete("link", link.id, link.name)
+                            }
                             className="text-red-500 hover:text-red-700"
                             aria-label={`Remove link ${link.name}`}
                           >
@@ -379,7 +375,6 @@ export default function ViewSubmission({
                     ))}
                   </div>
 
-                  {/* Add File and Add Link Buttons (visible in edit mode) */}
                   {isEditing && (
                     <>
                       <div className="flex gap-4">
@@ -406,8 +401,6 @@ export default function ViewSubmission({
                           Add Link
                         </button>
                       </div>
-
-                      {/* Link Input Fields (when shown) */}
 
                       <div
                         className={`flex items-center gap-4 ${
@@ -463,7 +456,7 @@ export default function ViewSubmission({
                   )}
                 </div>
               </div>
-              {/* Submit Button (visible in edit mode) */}
+
               {isEditing && (
                 <div className="self-end p-4">
                   <button
@@ -478,7 +471,7 @@ export default function ViewSubmission({
             </div>
           </div>
         ) : (
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 ">
             <span className="text-xl">No submission found.</span>
             {!notEditable && !showCreateForm && (
               <button
@@ -491,11 +484,44 @@ export default function ViewSubmission({
             )}
             {showCreateForm && !notEditable && (
               <CreateSubmissionForm
+                milestoneIndex={milestoneIndex}
                 contractId={contractId}
                 onNewSubmission={() => setDataRefreshed((prev) => !prev)}
                 onCancel={() => setShowCreateForm(false)}
               />
             )}
+          </div>
+        )}
+
+        {/* Confirmation Dialog */}
+        {showConfirmDelete && itemToDelete && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+            <div className="bg-[var(--background-color)] p-6 rounded-lg border-[var(--border-color)] border-solid border-2 max-w-md w-full">
+              <h3 className="text-xl font-bold text-[var(--accent-color)] mb-4">
+                Confirm Deletion
+              </h3>
+              <p className="text-lg mb-6">
+                Are you sure you want to delete{" "}
+                <span className="font-semibold">{itemToDelete.name}</span>? This
+                action cannot be undone.
+              </p>
+              <div className="flex justify-end gap-4">
+                <button
+                  type="button"
+                  onClick={handleCancelDelete}
+                  className="px-4 py-2 bg-gray-300 text-black rounded-lg hover:bg-gray-400 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={handleConfirmDelete}
+                  className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
           </div>
         )}
       </div>

@@ -12,7 +12,7 @@ function MilestonesTable({ milestones, contractId }: Props) {
   const [viewingMilestoneIndex, setViewingMilestoneIndex] = useState<
     number | null
   >(null);
-
+  // console.log(milestones);
   return (
     <>
       {milestones.content.length > 0 ? (
@@ -33,7 +33,11 @@ function MilestonesTable({ milestones, contractId }: Props) {
             </td>
             <td className="px-4 py-4 align-top w-1/12 text-lg">
               {m.status.toLowerCase() === "in_progress" && (
-                <MoreOptionButton title={m.title} />
+                <MoreOptionButton
+                  contractId={contractId}
+                  milestoneIndex={m.milestoneId}
+                  title={m.title}
+                />
               )}
               {m.status.toLowerCase() === "in_review" ||
               m.status.toLowerCase() === "approved" ? (

@@ -4,7 +4,15 @@ import ViewSubmission from "./ViewSubmissions";
 
 // interface MoreOptionButtonProps {}
 
-function MoreOptionButton({ title }: { title: string }) {
+function MoreOptionButton({
+  title,
+  contractId,
+  milestoneIndex,
+}: {
+  title: string;
+  contractId: string;
+  milestoneIndex: string;
+}) {
   const [isOpen, setIsOpen] = useState(false);
 
   const [isViewSubmission, setIsViewSubmission] = useState(false);
@@ -55,9 +63,10 @@ function MoreOptionButton({ title }: { title: string }) {
 
       {isViewSubmission && (
         <ViewSubmission
+          contractId={contractId}
           notEditable={false}
           title={title}
-          milestoneIndex={"123"}
+          milestoneIndex={milestoneIndex}
           closeView={() => setIsViewSubmission(false)}
         />
       )}

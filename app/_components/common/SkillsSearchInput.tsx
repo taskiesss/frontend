@@ -112,7 +112,7 @@ export default function SkillsSearchInput({
         {skillSuggestions.length > 0 &&
           skillsSearch.length > 2 &&
           isInputFocused && (
-            <ul className="absolute left-0 right-0 bg-[var(--background-color)] border border-gray-300 mt-1 rounded shadow">
+            <ul className="absolute left-0 right-0 bg-[var(--background-color)] border border-gray-300 mt-1 rounded shadow z-20">
               {skillSuggestions.map((suggestion, index) => (
                 <li
                   key={index}
