@@ -94,7 +94,15 @@ export default function HorizontalCarousel({ items }: HorizontalCarouselProps) {
   // Get proper image element based on source
   const getImageElement = (src: string, alt: string) => {
     if (isRemoteImage(src)) {
-      return <Image src={src} alt={alt} fill className="object-cover" />;
+      return (
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          sizes="(max-width: 1024px) 100vw, 1024px"
+          className="object-cover"
+        />
+      );
     } else {
       // For local images, use a different approach
       return (

@@ -52,7 +52,6 @@ export default function PDFPreviewAuto({
   };
 
   return (
-
     <>
       <div className="group flex flex-col items-center gap-2 w-[15rem]">
         <div className="relative w-40 aspect-square">
@@ -66,16 +65,16 @@ export default function PDFPreviewAuto({
             sizes="18rem"
           />
           {/* Overlay with background that changes on hover */}
-          <div className="absolute inset-0 transition-colors duration-300 flex items-center justify-center bg-gray-400/0 group-hover:bg-gray-400/50">
-            <button
-              onClick={handleDeleteClick}
-
-              className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-red-500 hover:bg-red-600 text-white rounded-full overflow-hidden w-8 h-8 flex items-center justify-center"
-            >
-              <FontAwesomeIcon icon={faTrashAlt} size="1x" />
-            </button>
-          </div>
-
+          {editable && (
+            <div className="absolute inset-0 transition-colors duration-300 flex items-center justify-center bg-gray-400/0 group-hover:bg-gray-400/50">
+              <button
+                onClick={handleDeleteClick}
+                className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-red-500 hover:bg-red-600 text-white rounded-full overflow-hidden w-8 h-8 flex items-center justify-center"
+              >
+                <FontAwesomeIcon icon={faTrashAlt} size="1x" />
+              </button>
+            </div>
+          )}
         </div>
         <Link
           href={fileUrl}
@@ -87,7 +86,6 @@ export default function PDFPreviewAuto({
             {ProjectName}
           </span>
         </Link>
-
       </div>
 
       {/* Confirmation Dialog */}
