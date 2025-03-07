@@ -11,6 +11,8 @@ import AboutForm from "./Forms/AboutForm";
 import HorizontalCarousel from "./TeamMembers";
 import Spinner from "../common/Spinner";
 import CompletedJobslist from "./CompletedJobsList";
+import Button from "../common/button";
+import CommunityNav from "./CommunityNav";
 
 interface Props {
   editable: boolean;
@@ -83,13 +85,7 @@ interface Props {
 export default function Profile({ community, editable, id }: Props) {
   const [editSkillSection, setEditSkillSection] = useState(false);
 
-  const [editLanguageSection, setEditLanguageSection] = useState(false);
-  const [editEducationSection, setEditEducationSection] = useState(false);
   const [editAboutSection, setEditAboutSection] = useState(false);
-  const [editPortfolioSection, setEditPortfolioSection] = useState(false);
-  const [editLinksSection, setEditLinksSection] = useState(false);
-  const [editHPWSection, setEditHPWSection] = useState(false);
-  const [editEmpHisSection, setEditEmpHisSection] = useState(false);
 
   console.log(community);
 
@@ -120,6 +116,10 @@ export default function Profile({ community, editable, id }: Props) {
           isFull: community.isFull,
         }}
       />
+
+      {/* Navigation Section */}
+
+      <CommunityNav />
 
       {/* Skills Section */}
       <div className={style}>

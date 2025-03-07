@@ -13,6 +13,7 @@ export default interface CommunityProfileResponse {
     position: string;
     freelancerId: string;
     freelancerProfilePicture: string;
+    isAdmin: boolean;
   }>;
   isFull: boolean;
   isMember: boolean;

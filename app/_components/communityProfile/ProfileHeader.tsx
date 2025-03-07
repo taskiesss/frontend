@@ -6,6 +6,7 @@ import EditButton from "../common/EditButton";
 import StarRating from "../common/StarRating";
 import CommunityProfilePhotoForm from "./ProfilePhotoForm";
 import HeaderForm from "./Forms/HeaderForm";
+import Button from "../common/button";
 
 export default function CommunityHeader({
   community,
@@ -61,13 +62,24 @@ export default function CommunityHeader({
           <div className="pointer-events-none">
             <StarRating size={20} defaultRating={community.rate} />
           </div>
+          {community.isFull && (
+            <p className="bg-red-600 text-white py-2 px-4 rounded-full max-w-fit">
+              Community is Full
+            </p>
+          )}
         </div>
       </div>
-      {community.isAdmin && (
-        <div className="self-start">
-          <EditButton onClick={() => setIsEditingHeader(true)} />
-        </div>
-      )}
+      <div className="flex gap-9 self-start items-center">
+        {!community.isFull && !community.isMember && (
+          <Button>Send Request</Button>
+        )}
+
+        {community.isAdmin && (
+          <div>
+            <EditButton onClick={() => setIsEditingHeader(true)} />
+          </div>
+        )}
+      </div>
 
       {/* Profile Picture Edit Modal */}
       {isEditingPicture && (

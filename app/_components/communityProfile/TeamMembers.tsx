@@ -2,12 +2,16 @@
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+// Import Font Awesome
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCrown } from "@fortawesome/free-solid-svg-icons";
 
 interface CarouselItem {
   freelancerId: string;
   freelancerProfilePicture: string;
   name: string;
   position: string;
+  isAdmin: boolean;
 }
 
 interface HorizontalCarouselProps {
@@ -141,13 +145,25 @@ export default function HorizontalCarousel({ items }: HorizontalCarouselProps) {
       // Create the item content
       const itemContent = (
         <>
-          <div
-            className={`relative rounded-full overflow-hidden border-4 transition-colors duration-300 ${
-              isActive ? "border-blue-500" : "border-transparent"
-            }`}
-            style={getImageContainerStyle(index)}
-          >
-            {getImageElement(item.freelancerProfilePicture, `Member ${index}`)}
+          <div className="relative">
+            {/* Admin crown icon - positioned above the image */}
+            {item.isAdmin && (
+              <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 z-10 text-yellow-500">
+                <FontAwesomeIcon icon={faCrown} size="lg" />
+              </div>
+            )}
+
+            <div
+              className={`relative rounded-full overflow-hidden border-4 transition-colors duration-300 ${
+                isActive ? "border-blue-500" : "border-transparent"
+              }`}
+              style={getImageContainerStyle(index)}
+            >
+              {getImageElement(
+                item.freelancerProfilePicture,
+                `Member ${index}`
+              )}
+            </div>
           </div>
 
           {/* Add proper spacing for text that scales with the image */}
@@ -245,17 +261,19 @@ export default function HorizontalCarousel({ items }: HorizontalCarouselProps) {
         </div>
       </div>
 
-      {/* Navigation dots */}
-      <div className="flex justify-center gap-2 mt-4">
-        {items.map((_, index) => (
-          <button
-            key={index}
-            className={`w-2 h-2 rounded-full transition-colors duration-300 ${
-              activeIndex === index ? "bg-blue-500" : "bg-gray-300"
-            }`}
-            onClick={() => setActiveIndex(index)}
-          />
-        ))}
+      {/* Navigation dots - fixed alignment with explicit width and proper centering */}
+      <div className="flex justify-center items-center mt-4 w-full">
+        <div className="flex gap-2 justify-center">
+          {items.map((_, index) => (
+            <button
+              key={index}
+              className={`w-2 h-2 rounded-full transition-colors duration-300 ${
+                activeIndex === index ? "bg-blue-500" : "bg-gray-300"
+              }`}
+              onClick={() => setActiveIndex(index)}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
