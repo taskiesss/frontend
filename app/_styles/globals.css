@@ -303,3 +303,13 @@ ul,
 }
 
 /*# sourceMappingURL=styles.css.map */
+.react-datepicker-custom .react-datepicker__day--highlighted-range {
+  background-color: var(--background-color); /* Tailwind blue-500 */
+  color: var(--accent-color);
+}
+.react-datepicker-custom .react-datepicker__day--highlighted-range:hover {
+  background-color: var(--hover-color); /* Tailwind blue-600 */
+}
+.react-datepicker__input-container input {
+  padding-right: 2rem; /* Space for the calendar icon */
+}

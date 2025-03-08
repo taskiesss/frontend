@@ -103,7 +103,7 @@ const NavLoggedin: React.FC = () => {
     },
     {
       label: "Finance",
-      options: [{ label: "Transactions", link: "/finance/invoices" }],
+      options: [{ label: "Transactions", link: "/nx/freelancer/transactions" }],
     },
   ];
 
