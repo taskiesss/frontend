@@ -1,7 +1,9 @@
 "use client";
-import React, { useState } from "react";
+import React, { Suspense, useState } from "react";
 import DateRangePicker from "./DateRangePicker";
 import FilterDropdown from "./FilterDropDown";
+import TransactionTable from "./TransactionTable";
+import Spinner from "../common/Spinner";
 
 function RightPanel() {
   const [dates, setDates] = useState<{
@@ -13,8 +15,8 @@ function RightPanel() {
   });
 
   const [filter, setFilter] = useState<
-    "" | "TRANSACTION" | "DEPOSIT" | "WITHDRAWAL"
-  >("TRANSACTION");
+    "" | "TRANSACTION" | "DEPOSIT" | "WITHDRAWL"
+  >("");
 
   const handleDateChange = (start: Date | null, end: Date | null) => {
     setDates({ startDate: start, endDate: end });
@@ -26,16 +28,18 @@ function RightPanel() {
   };
 
   const handleFilterChange = (
-    newFilter: "" | "TRANSACTION" | "DEPOSIT" | "WITHDRAWAL"
+    newFilter: "" | "TRANSACTION" | "DEPOSIT" | "WITHDRAWL"
   ) => {
     setFilter(newFilter);
     console.log("Selected filter:", newFilter);
   };
 
   return (
-    <div className="flex flex-col items-center gap-6 w-4/5 bg-[var(--foreground-color)] p-8 rounded-xl ">
-      <div className="flex items-center justify-between w-full ">
-        <h1 className="text-2xl">Transaction history</h1>
+    <div className="flex flex-col items-center bg-[var(--foreground-color)] gap-4 w-4/5 rounded-xl border-2 border-solid border-[var(--border-color)] ">
+      <div className="flex items-center justify-between w-full pt-10 px-8 ">
+        <h1 className="text-3xl font-extrabold self-end">
+          Transaction history
+        </h1>
         <div className="flex  items-center gap-10">
           <div className="flex flex-col gap-1">
             <span className="text-sm text-gray-400">Filter by: Dates</span>
@@ -63,9 +67,10 @@ function RightPanel() {
           </div> */}
         </div>
       </div>
-      <div className="text-lg">
-        <span>There is no transactions.</span>
-      </div>
+
+      <Suspense fallback={<Spinner />}>
+        <TransactionTable filter={{ type: filter, dates: dates }} />
+      </Suspense>
     </div>
   );
 }

@@ -47,7 +47,7 @@ function Finance({ profile }: Props) {
             <span className="text-center text-3xl font-extrabold ">
               ${profile.totalBalance.toFixed(2)}
             </span>
-            <span className="text-gray-400">Available balance</span>
+            <span className="text-gray-500">Available balance</span>
           </div>
           <div className="flex justify-between border-t-2 border-solid border-gray-500 w-full">
             <button className="p-5 text-lg">Withdraw</button>

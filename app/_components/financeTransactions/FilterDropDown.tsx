@@ -4,9 +4,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; // Import Font
 import { faFilter } from "@fortawesome/free-solid-svg-icons"; // Import the filter icon
 
 type FilterDropdownProps = {
-  filter: "" | "TRANSACTION" | "DEPOSIT" | "WITHDRAWAL";
+  filter: "" | "TRANSACTION" | "DEPOSIT" | "WITHDRAWL";
   onFilterChange: (
-    filter: "" | "TRANSACTION" | "DEPOSIT" | "WITHDRAWAL"
+    filter: "" | "TRANSACTION" | "DEPOSIT" | "WITHDRAWL"
   ) => void;
 };
 
@@ -14,14 +14,14 @@ function FilterDropdown({ filter, onFilterChange }: FilterDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const options = [
-    { value: "", label: "All" },
+    { value: "", label: "All Transactions" },
     { value: "TRANSACTION", label: "transaction" },
     { value: "DEPOSIT", label: "deposit" },
-    { value: "WITHDRAWAL", label: "withdrawal" },
+    { value: "WITHDRAWL", label: "withdrawal" },
   ];
 
   const handleOptionClick = (
-    value: "" | "TRANSACTION" | "DEPOSIT" | "WITHDRAWAL"
+    value: "" | "TRANSACTION" | "DEPOSIT" | "WITHDRAWL"
   ) => {
     onFilterChange(value);
     setIsOpen(false); // Close the dropdown after selection
@@ -39,7 +39,7 @@ function FilterDropdown({ filter, onFilterChange }: FilterDropdownProps) {
         {/* Dropdown Button */}
         <div
           onClick={toggleDropdown}
-          className="bg-[var(--background-color)] w-full pl-10 pr-8 p-2 text-md border border-solid border-gray-600 rounded-lg lowercase cursor-pointer flex items-center justify-between"
+          className="bg-[var(--background-color)] w-full pl-10 pr-8 p-2 text-md border border-solid border-gray-600 rounded-md lowercase cursor-pointer flex items-center justify-between"
         >
           <span className="truncate">
             {options.find((opt) => opt.value === filter)?.label || "All"}
@@ -68,20 +68,16 @@ function FilterDropdown({ filter, onFilterChange }: FilterDropdownProps) {
         </div>
         {/* Dropdown Menu */}
         {isOpen && (
-          <div className="absolute z-10 w-full min-w-[10rem] bg-[var(--background-color)] border border-solid border-gray-600 rounded-lg mt-1 shadow-lg">
+          <div className="absolute z-10 w-full min-w-[10rem] bg-[var(--background-color)] border border-solid border-gray-600 rounded-md mt-1 shadow-lg">
             {options.map((option) => (
               <div
                 key={option.value}
                 onClick={() =>
                   handleOptionClick(
-                    option.value as
-                      | ""
-                      | "TRANSACTION"
-                      | "DEPOSIT"
-                      | "WITHDRAWAL"
+                    option.value as "" | "TRANSACTION" | "DEPOSIT" | "WITHDRAWL"
                   )
                 }
-                className="px-4 py-2 text-md lowercase cursor-pointer hover:bg-gray-700 truncate"
+                className="px-4 py-2 text-md lowercase cursor-pointer hover:bg-[var(--hover-color)] truncate"
               >
                 {option.label}
               </div>

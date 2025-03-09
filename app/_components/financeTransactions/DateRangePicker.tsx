@@ -74,7 +74,7 @@ function DateRangePicker({
           dateFormat="dd/MM/yyyy"
           placeholderText={displayValue}
           className="flex text-md p-2 bg-[var(--background-color)] focus:outline-none focus:border-blue-500 cursor-pointer"
-          calendarClassName="react-datepicker-custom"
+          calendarClassName="react-datepicker-table"
           dayClassName={highlightRange}
         />
         <svg

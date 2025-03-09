@@ -17,7 +17,14 @@ function MilestonesTable({ milestones, contractId }: Props) {
     <>
       {milestones.content.length > 0 ? (
         milestones.content.map((m, i) => (
-          <tr key={i} className="border-b border-solid border-b-gray-500 ">
+          <tr
+            key={i}
+            className={`${
+              i === milestones.content.length - 1
+                ? "rounded-bl-lg rounded-br-lg"
+                : "border-b border-solid border-b-gray-500"
+            }`}
+          >
             <td className="px-4 py-4 align-top w-1/12 text-lg">{m.title}</td>
             <td className="px-4 py-4 align-top w-3/12 text-lg">
               <p className="whitespace-pre-wrap">{m.description}</p>

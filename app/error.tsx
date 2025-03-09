@@ -12,7 +12,7 @@ const ErrorPage: React.FC<ErrorPageProps> = ({ error, reset }) => {
       <h1 className="text-4xl font-bold text-red-600 mb-4">
         Something went wrong
       </h1>
-      <p className="text-xl text-gray-700 mb-4">{error.message}</p>
+      <p className="text-xl  mb-4">{error.message}</p>
       <div className="flex gap-4">
         {reset && (
           <button
