@@ -1,23 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import CommunityProfileResponse from "@/app/_types/CommunityProfileResponse";
-import { Suspense, useState } from "react";
+import { ReactNode } from "react";
 import CommunityCoverPhoto from "./CoverPhoto";
 import CommunityHeader from "./ProfileHeader";
-import Skill from "../common/Skill";
-import EditButton from "../common/EditButton";
-import SkillForm from "./Forms/SkillForm";
-import AboutForm from "./Forms/AboutForm";
-import HorizontalCarousel from "./TeamMembers";
-import Spinner from "../common/Spinner";
-import CompletedJobslist from "./CompletedJobsList";
-import Button from "../common/button";
+
 import CommunityNav from "./CommunityNav";
+import AboutCommunity from "./AboutCommunity";
 
 interface Props {
   editable: boolean;
   community: CommunityProfileResponse;
   id: string;
+  children?: ReactNode;
 }
 
 // const items = [
@@ -82,11 +77,7 @@ interface Props {
 //     position: "QA Engineer",
 //   },
 // ];
-export default function Profile({ community, editable, id }: Props) {
-  const [editSkillSection, setEditSkillSection] = useState(false);
-
-  const [editAboutSection, setEditAboutSection] = useState(false);
-
+export default function Profile({ community, editable, id, children }: Props) {
   console.log(community);
 
   const style =
@@ -121,70 +112,7 @@ export default function Profile({ community, editable, id }: Props) {
 
       <CommunityNav />
 
-      {/* Skills Section */}
-      <div className={style}>
-        <div className=" flex flex-col gap-5  ">
-          <h2 className="text-3xl font-bold">Skills</h2>
-          <div className="flex gap-2 flex-wrap">
-            {community.skills.map((skill, index) => (
-              <Skill index={index} skill={skill} key={index} />
-            ))}
-          </div>
-        </div>
-
-        {editSkillSection && (
-          <SkillForm
-            skills={community.skills}
-            closeEdit={() => setEditSkillSection(false)}
-            id={id}
-          ></SkillForm>
-        )}
-
-        {editable && (
-          <div className="self-start">
-            <EditButton onClick={() => setEditSkillSection(true)} />
-          </div>
-        )}
-      </div>
-
-      {/* About Section */}
-      <div className={style}>
-        <div className="flex flex-col gap-5 w-11/12">
-          <h2 className="text-3xl font-bold">About</h2>
-          <div className="flex gap-2 flex-wrap w-full">
-            <p className="text-lg py-2 w-full whitespace-pre-wrap">
-              {community.description}
-            </p>
-          </div>
-        </div>
-
-        {editAboutSection && (
-          <AboutForm
-            description={community.description}
-            closeEdit={() => setEditAboutSection(false)}
-            id={id}
-          ></AboutForm>
-        )}
-        {editable && (
-          <div className="self-start">
-            <EditButton onClick={() => setEditAboutSection(true)} />
-          </div>
-        )}
-      </div>
-
-      {community?.communityMembers?.length && (
-        <HorizontalCarousel items={community.communityMembers} />
-      )}
-
-      {/* Completed Jobs */}
-      <div className={`${style} flex-col gap-9`}>
-        <h2 className="text-3xl font-bold">Completed Jobs</h2>
-        <div className="gap-2">
-          <Suspense fallback={<Spinner />}>
-            <CompletedJobslist id={id} />
-          </Suspense>
-        </div>
-      </div>
+      {children}
     </div>
   );
 }

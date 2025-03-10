@@ -11,7 +11,7 @@ interface CarouselItem {
   freelancerProfilePicture: string;
   name: string;
   position: string;
-  isAdmin: boolean;
+  admin: boolean;
 }
 
 interface HorizontalCarouselProps {
@@ -147,9 +147,9 @@ export default function HorizontalCarousel({ items }: HorizontalCarouselProps) {
         <>
           <div className="relative">
             {/* Admin crown icon - positioned above the image */}
-            {item.isAdmin && (
-              <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 z-10 text-yellow-500">
-                <FontAwesomeIcon icon={faCrown} size="lg" />
+            {item.admin && (
+              <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 z-10 text-yellow-500">
+                <FontAwesomeIcon icon={faCrown} size="2xl" />
               </div>
             )}
 
