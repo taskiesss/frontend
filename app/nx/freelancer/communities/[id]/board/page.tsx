@@ -29,12 +29,7 @@ export default async function BoardPage({ params }: Props) {
         community={communityData}
         editable={communityData.isAdmin}
       >
-        <Board
-          community={communityData}
-          editable={communityData.isAdmin}
-          id={communityId}
-          style={style}
-        />
+        <Board community={communityData} id={communityId} style={style} />
       </Profile>
     );
   } catch (error: any) {
