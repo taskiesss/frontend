@@ -11,7 +11,7 @@ export async function getProfileTransaction(
   invariant(!token, 'Unauthorized user');
   //   console.log(reqbody);
 
-  const res = await fetch(`${BASE_URL}/api/finance/transactions`, {
+  const res = await fetch(`${BASE_URL}/api/finance/profile`, {
     method: 'GET',
     headers: {
       'content-type': 'application/json',

@@ -2,7 +2,6 @@
 import React from "react";
 import Container from "../common/Container";
 import Image from "next/image";
-import userprofile from "@/public/images/userprofile.jpg";
 import wallet from "@/public/images/wallet-money-business-svgrepo-com.svg";
 import RightPanel from "./RightPanel";
 
@@ -22,7 +21,7 @@ function Finance({ profile }: Props) {
         <div className="flex flex-col gap-4 bg-[var(--foreground-color)] w-full p-5 rounded-xl items-center">
           <div className="relative w-14 md:w-24 lg:w-28 aspect-square rounded-full flex-shrink-0 ">
             <Image
-              src={userprofile}
+              src={profile.profilePicture}
               fill
               priority
               alt="profilepic"
