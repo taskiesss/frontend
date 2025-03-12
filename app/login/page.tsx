@@ -165,6 +165,7 @@ const LoginPage: React.FC = () => {
   }
 
   useEffect(() => {
+    if (Cookies.get("token")) Cookies.remove("token");
     const msg = localStorage.getItem("toastMessage");
     if (msg) {
       toast.error(msg, { autoClose: 5000 });

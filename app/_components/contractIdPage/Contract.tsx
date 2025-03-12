@@ -91,7 +91,7 @@ function Contract({ contract, contractId }: Props) {
             <Link
               href={`${
                 contract.isCommunity
-                  ? `/nx/community/${contract.freelancerId}/about`
+                  ? `/nx/freelancer/communities/${contract.freelancerId}/about`
                   : "/nx/freelancer/myprofile"
               }`}
               className="flex items-center gap-5 border-solid border border-gray-600 p-4 rounded-lg cursor-default"
