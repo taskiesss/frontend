@@ -89,7 +89,11 @@ function Contract({ contract, contractId }: Props) {
         <div className=" flex items-center gap-4">
           <div className="flex items-center gap-5">
             <Link
-              href={`/nx/freelancer/myprofile`}
+              href={`${
+                contract.isCommunity
+                  ? `/nx/community/${contract.freelancerId}/about`
+                  : "/nx/freelancer/myprofile"
+              }`}
               className="flex items-center gap-5 border-solid border border-gray-600 p-4 rounded-lg cursor-default"
             >
               <FontAwesomeIcon icon={faUserCircle} className="text-2xl " />
