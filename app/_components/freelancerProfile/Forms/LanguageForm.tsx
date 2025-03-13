@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent, useState, useMemo } from "react";
 import Model from "../Model";
 import Select, { MultiValue, ActionMeta } from "react-select";
 import LanguagesData from "@/app/_data/languages.json";
@@ -20,23 +20,43 @@ export default function LanguageForm({
   closeEdit: any;
   currentLanguages: string[];
 }) {
-  // We'll store only the selected labels as strings
-  const [selectedLanguageLabels, setSelectedLanguageLabels] =
-    useState<string[]>(currentLanguages);
-  const [isForbidden, setIsForbidden] = useState(false);
-  // Convert the languages object into an array of options.
-  const options: Option[] = Object.entries(LanguagesData).map(
-    ([code, name]) => ({
-      value: code,
-      label: name,
-    })
+  // Normalize currentLanguages to match LanguagesData (capitalize first letter)
+  const normalizedCurrentLanguages = useMemo(
+    () =>
+      currentLanguages.map(
+        (lang) => lang.charAt(0).toUpperCase() + lang.slice(1).toLowerCase()
+      ),
+    [currentLanguages]
   );
 
-  const handleChange = (
-    newValue: MultiValue<Option>,
-    actionMeta: ActionMeta<Option>
-  ) => {
-    // Extract just the labels from the selected options
+  // Initialize with normalized currentLanguages
+  const [selectedLanguageLabels, setSelectedLanguageLabels] = useState<
+    string[]
+  >(normalizedCurrentLanguages);
+  const [isForbidden, setIsForbidden] = useState(false);
+
+  // Memoize options
+  const options: Option[] = useMemo(
+    () =>
+      Object.entries(LanguagesData).map(([code, name]) => ({
+        value: code,
+        label: name,
+      })),
+    []
+  );
+
+  // Memoize default value with case-insensitive matching
+  const defaultValue = useMemo(
+    () =>
+      options.filter((opt) =>
+        normalizedCurrentLanguages.some(
+          (lang) => lang.toLowerCase() === opt.label.toLowerCase()
+        )
+      ),
+    [options, normalizedCurrentLanguages]
+  );
+
+  const handleChange = (newValue: MultiValue<Option>) => {
     setSelectedLanguageLabels(newValue.map((option) => option.label));
   };
 
@@ -59,10 +79,12 @@ export default function LanguageForm({
       console.error(error.message);
     }
   };
-  if (isForbidden)
+
+  if (isForbidden) {
     return (
       <ProtectedPage message="You are not allowed to do this action. Please log in" />
     );
+  }
 
   return (
     <Model isOpen={true} onClose={closeEdit}>
@@ -74,14 +96,16 @@ export default function LanguageForm({
         <div className="w-full">
           <Select
             isMulti
-            // The value is computed from the state: only options whose labels are in the state are selected.
             value={options.filter((opt) =>
-              selectedLanguageLabels.includes(opt.label)
+              selectedLanguageLabels.some(
+                (lang) => lang.toLowerCase() === opt.label.toLowerCase()
+              )
             )}
+            defaultValue={defaultValue}
             options={options}
             onChange={handleChange}
             placeholder="Select languages..."
-            className="w-full text-black"
+            className="w-full"
             classNamePrefix="react-select"
           />
         </div>
