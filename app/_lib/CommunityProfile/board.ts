@@ -1,6 +1,7 @@
 "use server";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { invariant } from "@/app/_helpers/invariant";
+import { Contracts } from "@/app/_types/AllContractsResponce";
 import { revalidatePath } from "next/cache";
 
 const BASE_URL = "http://localhost:8080";
@@ -40,21 +41,6 @@ interface Offer {
   accepted: number;
   rejected: number;
   agreed: boolean;
-}
-
-interface ActiveContract {
-  contractID: string;
-  jobID: string;
-  jobTitle: string;
-  clientName: string;
-  clientID: string;
-  contractStatus: string;
-  budget: number;
-  activeMilestone: string;
-  clientRateForFreelancer: number;
-  startDate: string;
-  dueDate: string;
-  endDate: string;
 }
 
 // API Functions
@@ -109,7 +95,7 @@ export async function getCommunityActiveContracts(
   token: string | undefined,
   page: number = 0,
   size: number = 10
-): Promise<PaginatedResponse<ActiveContract>> {
+): Promise<Contracts> {
   invariant(!token, "Unauthorized user");
   const res = await fetch(
     `${BASE_URL}/freelancers/communities/${communityId}/active-contracts?page=${page}&size=${size}`,
@@ -137,6 +123,8 @@ export async function acceptOrRejectJoinRequest(
   token: string | undefined
 ): Promise<boolean> {
   invariant(!token, "Unauthorized user");
+  console.log(request);
+  console.log(communityId);
   const res = await fetch(
     `${BASE_URL}/freelancers/communities/${communityId}/accept-to-join`,
     {
@@ -153,7 +141,7 @@ export async function acceptOrRejectJoinRequest(
   if (res.status === 400) throw new Error("Invalid request data");
   if (!res.ok) throw new Error("Something went wrong");
 
-  revalidatePath(`/communities/${communityId}`);
+  revalidatePath(`nx/freelancer/communities/${communityId}/board`);
   return true;
 }
 

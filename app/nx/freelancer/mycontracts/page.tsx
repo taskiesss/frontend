@@ -2,6 +2,7 @@
 import ProtectedPage from "@/app/_components/common/ProtectedPage";
 import AllContracts from "@/app/_components/myContracts/AllContracts";
 import { getMyContracts } from "@/app/_lib/ContractsAPi/contractAPI";
+import { Contracts } from "@/app/_types/AllContractsResponce";
 import { cookies } from "next/headers";
 
 type Props = {
@@ -14,26 +15,7 @@ type Props = {
     "Sort direction"?: "ASC" | "DESC";
   }>;
 };
-interface Contracts {
-  content: {
-    contractID: string;
-    jobID: string;
-    jobTitle: string;
-    clientName: string;
-    clientID: string;
-    contractStatus: "ACTIVE" | "ENDED";
-    budget: number;
-    activeMilestone: string;
-    clientRateForFreelancer?: number;
-    startDate: string;
-    dueDate?: string;
-    endDate?: string;
-  }[];
-  totalElements: number;
-  totalPages: number;
-  size: number;
-  number: number;
-}
+
 let contracts: Contracts = {
   content: [
     {

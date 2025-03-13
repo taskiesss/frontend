@@ -110,7 +110,7 @@ export default function Profile({ community, editable, id, children }: Props) {
 
       {/* Navigation Section */}
 
-      <CommunityNav />
+      <CommunityNav isMember={community.isMember} />
 
       {children}
     </div>

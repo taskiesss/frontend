@@ -81,11 +81,10 @@ export default function JobDetailsPage({ jobid, jobdetails }: Props) {
     <Container>
       <div className="max-w-7xl mx-auto px-16 py-20">
         {/* Page Headings */}
-        <h1 className="text-3xl font-bold mb-4">Submit A Proposal</h1>
-        <h2 className="text-2xl font-semibold mb-10">Job Details</h2>
+        <h1 className="text-3xl font-bold mb-4">{projectTitle}</h1>
 
-        {/* Title and Posted Date */}
-        <h3 className="text-xl font-semibold mb-4">{projectTitle}</h3>
+        {/*Posted Date */}
+
         <p className="text-base text-gray-500 mb-8">
           Posted at {formattedDate}
         </p>

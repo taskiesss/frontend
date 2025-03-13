@@ -63,7 +63,7 @@ export default function CommunityHeader({
             <StarRating size={20} defaultRating={community.rate} />
           </div>
           {community.isFull && (
-            <p className="bg-red-600 text-white py-2 px-4 rounded-full max-w-fit">
+            <p className="border-2 border-red-600 text-red-600 py-2 px-4 rounded-full max-w-fit">
               Community is Full
             </p>
           )}
