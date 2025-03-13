@@ -33,14 +33,16 @@ function Contract({ contract, contractId }: Props) {
           <StatusCard status={contract.contractStatus} />
         </div>
 
-        <div className="flex gap-4">
-          <span className="text-[var(--bg-skill)] font-semibold text-lg">
-            Do you want to end contract?
-          </span>
-          <button className="hover:underline text-lg underline text-[var(--hover-color)] hover:text-[var(--btn-color)]">
-            End Contract
-          </button>
-        </div>
+        {contract.contractStatus.toLowerCase() === "active" && (
+          <div className="flex gap-4">
+            <span className="text-[var(--bg-skill)] font-semibold text-lg">
+              Do you want to end contract?
+            </span>
+            <button className="hover:underline text-lg underline text-[var(--hover-color)] hover:text-[var(--btn-color)]">
+              End Contract
+            </button>
+          </div>
+        )}
       </div>
       {/* view job button section */}
       <div className="border-b-[var(--border-color)] w-full border-solid border-b-2 pb-10">
