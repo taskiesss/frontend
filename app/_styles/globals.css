@@ -369,3 +369,42 @@ ul,
 .react-datepicker-table .react-datepicker__day--highlighted-range {
   background-color: var(--hover-color);
 }
+
+/* Select Component */
+.react-select__control {
+  border: 1px solid #4b5563 !important ;
+  border-radius: 0.5rem !important;
+
+  background-color: var(--background-color) !important;
+  padding: 0.5rem;
+  font-size: 1.125rem;
+}
+
+.react-select__menu {
+  border: 2px solid #4b5563;
+  border-radius: 0.5rem;
+  background-color: var(--background-color) !important;
+  margin-top: 0.5rem;
+}
+
+.react-select__option {
+  padding: 0.75rem 1rem;
+  background-color: var(--background-color) !important;
+}
+
+.react-select__option--is-focused,
+.react-select__option--is-selected {
+  background-color: var(--hover-color) !important;
+}
+/* Style the "X" (remove button) */
+.react-select__multi-value__remove {
+  color: black; /* White "X" */
+  background-color: transparent; /* No background by default */
+  padding: 0.25rem; /* Smaller padding for a compact look */
+  cursor: pointer;
+  font-size: 1rem; /* Size of the "X" */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}

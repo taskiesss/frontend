@@ -229,8 +229,9 @@ export default function Page({}: Props) {
                     options={options}
                     onChange={handleChange}
                     placeholder="Select languages..."
-                    className="w-full text-black"
+                    className="w-full "
                     classNamePrefix="react-select"
+                    instanceId="language-select"
                   />
                 </div>
               </div>
