@@ -9,15 +9,15 @@ import {
   getCommunityJoinRequests,
 } from "@/app/_lib/CommunityProfile/board";
 import { Pagination } from "../common/Pagination";
+import Image from "next/image";
 
 interface TalentRequestProps {
   editable: boolean;
   communityId: string;
 }
 
-export default function TalentRequest({
+export default function TalentRequests({
   communityId,
-
   editable,
 }: TalentRequestProps) {
   const [currentPage, setCurrentPage] = useState(1);
@@ -42,8 +42,10 @@ export default function TalentRequest({
       }
       return undefined;
     },
-    staleTime: 0, // Data is considered stale immediately, refetch on focus or interval if needed
+    staleTime: 0,
   });
+
+  console.log(data);
 
   // Mutation to accept or reject a join request
   const mutation = useMutation({
@@ -53,7 +55,6 @@ export default function TalentRequest({
       choice: "accept" | "reject";
     }) => acceptOrRejectJoinRequest(communityId, request, token),
     onSuccess: () => {
-      // Invalidate query to refresh the join requests list after an action
       queryClient.invalidateQueries({
         queryKey: ["communityJoinRequests", communityId],
       });
@@ -88,26 +89,39 @@ export default function TalentRequest({
     return <div>No join requests available.</div>;
   }
 
+  // Define a fallback image URL or null
+  const fallbackImage = "/images/userprofile.jpg";
+
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-7">
       <h2 className="text-3xl font-bold mb-6">Talent Requests</h2>
       <div>
         {data.content.map((request: any) => (
           <div
             key={request.freelancerID}
-            className="flex items-center gap-2 p-2"
+            className="flex items-center gap-5 py-5"
           >
-            <img
-              src={request.profilePicture}
-              alt={`${request.name}'s profile`}
-              className="w-12 h-12 rounded-full"
-            />
+            <div className="relative w-12 aspect-square">
+              <Image
+                src={request.profilePicture || fallbackImage}
+                alt={`${request.name}'s profile`}
+                className="rounded-full object-cover"
+                fill
+                sizes="3rem"
+              />
+            </div>
+
             <div>
-              <p className="">{request.name}</p>
-              <p>Requested to join your community</p>
+              <p className="font-bold text-xl">{request.name}</p>
+              <p>
+                Requested to join your community as{" "}
+                <span className="font-bold text-xl text-[var(--accent-color)]">
+                  {request.positionName}
+                </span>
+              </p>
             </div>
             {editable && (
-              <>
+              <div className="flex gap-4">
                 <button
                   onClick={() =>
                     handleAction(
@@ -116,7 +130,7 @@ export default function TalentRequest({
                       "accept"
                     )
                   }
-                  className="px-4 py-2 border-2 border-solid border-green-600 text-[var(--accent-color)] rounded hover:bg-green-600"
+                  className="w-28 px-4 py-2 border-2 border-solid border-green-600 text-[var(--accent-color)] rounded hover:bg-green-600"
                 >
                   Approve
                 </button>
@@ -128,25 +142,24 @@ export default function TalentRequest({
                       "reject"
                     )
                   }
-                  className="px-4 py-2 border-2 border-solid border-red-500 text-[var(--accent-color)] rounded hover:bg-red-600"
+                  className="w-28 px-4 py-2 border-2 border-solid border-red-500 text-[var(--accent-color)] rounded hover:bg-red-600"
                 >
                   Reject
                 </button>
-              </>
+              </div>
             )}
           </div>
         ))}
       </div>
-      <div>
-        <Pagination
-          currentPage={currentPage}
-          totalCount={data.totalElements}
-          pageSize={size}
-          onPageChange={setCurrentPage}
-          siblingCount={0}
-          setPageParamter={true}
-        />
-      </div>
+
+      <Pagination
+        currentPage={currentPage}
+        totalCount={data.totalElements}
+        pageSize={size}
+        onPageChange={setCurrentPage}
+        siblingCount={0}
+        setPageParamter={true}
+      />
     </div>
   );
 }

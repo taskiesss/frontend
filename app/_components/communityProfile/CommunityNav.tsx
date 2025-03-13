@@ -4,21 +4,33 @@ import { useState, useEffect } from "react";
 import Button from "../common/button";
 import { usePathname, useRouter } from "next/navigation";
 
+// Define the button type
+interface ButtonConfig {
+  text: string;
+  route: string;
+  membersOnly: boolean;
+}
+
 // Move buttons outside the component since it's static
-const buttons = [
-  { text: "About Community", route: "about" },
-  { text: "Job & Talent Board", route: "board" },
-  { text: "Community posts", route: "posts" },
+const buttons: ButtonConfig[] = [
+  { text: "About Community", route: "about", membersOnly: false },
+  { text: "Job & Talent Board", route: "board", membersOnly: true },
+  { text: "Community posts", route: "posts", membersOnly: true },
 ];
 
-export default function CommunityNav() {
+// Define props interface
+interface CommunityNavProps {
+  isMember: boolean;
+}
+
+export default function CommunityNav({ isMember }: CommunityNavProps) {
   const router = useRouter();
   const pathname = usePathname();
 
   // Extract communityId and current tab from pathname
   const pathSegments = pathname.split("/");
-  const communityId = pathSegments[pathSegments.length - 2]; // e.g., "123"
-  const currentTab = pathSegments[pathSegments.length - 1] || "about"; // e.g., "board"
+  const communityId = pathSegments[pathSegments.length - 2];
+  const currentTab = pathSegments[pathSegments.length - 1] || "about";
 
   // Set initial active button based on current route
   const initialActive = buttons.findIndex((btn) => btn.route === currentTab);
@@ -44,19 +56,21 @@ export default function CommunityNav() {
 
   return (
     <nav className="flex gap-4">
-      {buttons.map((btn, i) => (
-        <Button
-          key={btn.route}
-          className={`${
-            activeButton === i
-              ? "bg-[var(--button-hover-background-color)] text-white"
-              : ""
-          }`}
-          onClick={() => setActive(i)}
-        >
-          {btn.text}
-        </Button>
-      ))}
+      {buttons
+        .filter((btn) => !btn.membersOnly || isMember === btn.membersOnly)
+        .map((btn, i) => (
+          <Button
+            key={btn.route}
+            className={`${
+              activeButton === i
+                ? "bg-[var(--button-hover-background-color)] text-white"
+                : ""
+            }`}
+            onClick={() => setActive(i)}
+          >
+            {btn.text}
+          </Button>
+        ))}
     </nav>
   );
 }

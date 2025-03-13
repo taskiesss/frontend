@@ -29,7 +29,7 @@ type Props = {
 export default function ContractList({ contracts }: Props) {
   const [currentPage, setCurrentPage] = useState(1);
   return (
-    <div className="w-4/5 bg-[var(--foreground-color)] rounded-lg shadow-sm border border-gray-600 p-4 flex flex-col">
+    <div className="w-4/5 bg-[var(--foreground-color)] rounded-lg shadow-sm p-4 flex flex-col">
       {contracts.content.map((c, i) => (
         <ContractCard key={i} contract={c} />
       ))}
