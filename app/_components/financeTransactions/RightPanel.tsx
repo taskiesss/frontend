@@ -35,8 +35,8 @@ function RightPanel() {
   };
 
   return (
-    <div className="flex flex-col items-center bg-[var(--foreground-color)] gap-4 w-4/5 rounded-xl border-2 border-solid border-[var(--border-color)] ">
-      <div className="flex items-center justify-between w-full pt-10 px-8 ">
+    <div className="flex flex-col items-center bg-[var(--foreground-color)] gap-4 w-4/5 rounded-xl border-2 border-solid border-[var(--border-color)] py-10">
+      <div className="flex items-center justify-between w-full  px-8 ">
         <h1 className="text-3xl font-extrabold self-end">
           Transaction history
         </h1>

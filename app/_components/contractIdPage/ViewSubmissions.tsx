@@ -16,6 +16,7 @@ import CreateSubmissionForm from "./CreateSubmissionForm";
 import {
   deleteFileOrLinkAPI,
   getSubmission,
+  milestoneApproval,
   postSubmission,
 } from "@/app/_lib/ContractsAPi/contractAPI";
 
@@ -28,10 +29,14 @@ interface Submission {
 export default function ViewSubmission({
   contractId,
   notEditable,
+  role,
   milestoneIndex,
   closeView,
   title,
+  status,
 }: {
+  status: string;
+  role?: string;
   contractId: string;
   notEditable: boolean;
   milestoneIndex: string;
@@ -43,6 +48,10 @@ export default function ViewSubmission({
     files: [{ url: "", name: "", id: "" }],
     links: [{ url: "", name: "", id: "" }],
   });
+  // client states
+  const [showAccept, setShowAccept] = useState(false);
+  const [showReject, setShowReject] = useState(false);
+
   const [isForbidden, setIsForbidden] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [newLinkName, setNewLinkName] = useState<string>("");
@@ -188,6 +197,30 @@ export default function ViewSubmission({
     }
   };
 
+  const handleMilestoneApprovalConfirmation = async (accepted: boolean) => {
+    const token = Cookies.get("token");
+    try {
+      const approval = await milestoneApproval(
+        { contractid: contractId, milestoneIndex: milestoneIndex },
+        { accepted: accepted },
+        token
+      );
+      setDataRefreshed((prev) => !prev);
+    } catch (error: any) {
+      if (
+        error.message === "Forbidden" ||
+        error.message === "Unauthorized user"
+      ) {
+        setIsForbidden(true);
+        return;
+      }
+      setError("Failed to do this action. Please try again.");
+    } finally {
+      setShowAccept(false);
+      setShowReject(false);
+    }
+  };
+
   // Cancel deletion
   const handleCancelDelete = () => {
     setShowConfirmDelete(false);
@@ -204,33 +237,36 @@ export default function ViewSubmission({
     <Model
       isOpen={true}
       onClose={closeView}
-      className="overflow-y-auto max-h-[50rem] max-w-5xl py-10 border-solid border-2 border-[var(--border-color)] bg-[var(--background-color)] transition-all duration-300"
+      className="overflow-y-auto max-h-[50rem] max-w-6xl py-10 border-solid border-2 border-[var(--border-color)] bg-[var(--background-color)] transition-all duration-300"
     >
       <div className="flex flex-col gap-8 w-auto max-w-4xl">
         <h1 className="text-2xl font-bold text-[var(--accent-color)]">
-          Submissions for {title}
+          {role === "client" ? "Review Submission" : "View submissions"} for{" "}
+          {title}
         </h1>
 
         {submission.links.length > 0 || submission.files.length > 0 ? (
           <div className="flex flex-col gap-4">
             <div className="flex flex-col bg-[var(--background-color)] rounded-xl overflow-hidden border-gray-500 border-solid border-2 w-full">
-              <div className="flex flex-col p-6">
+              <div className="flex flex-col p-5">
                 <div className="flex justify-between">
                   <h3 className="text-xl py-4">Files & Links</h3>
-                  <button
-                    onClick={() => {
-                      if (isEditing) {
-                        setNewFiles([]);
-                        setNewLinks([]);
-                      }
-                      setIsEditing(!isEditing);
-                    }}
-                    className={`text-[var(--accent-color)] text-lg hover:text-[var(--hover-color)] ${
-                      notEditable ? "invisible" : ""
-                    }`}
-                  >
-                    <FontAwesomeIcon icon={isEditing ? faXmark : faEdit} />
-                  </button>
+                  {role !== "client" && (
+                    <button
+                      onClick={() => {
+                        if (isEditing) {
+                          setNewFiles([]);
+                          setNewLinks([]);
+                        }
+                        setIsEditing(!isEditing);
+                      }}
+                      className={`text-[var(--accent-color)] text-lg hover:text-[var(--hover-color)] ${
+                        notEditable ? "invisible" : ""
+                      }`}
+                    >
+                      <FontAwesomeIcon icon={isEditing ? faXmark : faEdit} />
+                    </button>
+                  )}
                 </div>
 
                 <div className="flex flex-col gap-3 bg-[var(--background-color)] rounded-xl border-[var(--border-color)] border-solid border-2 p-4">
@@ -472,8 +508,10 @@ export default function ViewSubmission({
           </div>
         ) : (
           <div className="flex flex-col gap-4 ">
-            <span className="text-xl">No submission found.</span>
-            {!notEditable && !showCreateForm && (
+            {!showCreateForm && (
+              <span className="text-xl">No submission found.</span>
+            )}
+            {!notEditable && !showCreateForm && role !== "client" && (
               <button
                 type="button"
                 onClick={() => setShowCreateForm(true)}
@@ -482,7 +520,7 @@ export default function ViewSubmission({
                 Create Submission
               </button>
             )}
-            {showCreateForm && !notEditable && (
+            {showCreateForm && !notEditable && role !== "client" && (
               <CreateSubmissionForm
                 milestoneIndex={milestoneIndex}
                 contractId={contractId}
@@ -497,8 +535,8 @@ export default function ViewSubmission({
         {showConfirmDelete && itemToDelete && (
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
             <div className="bg-[var(--background-color)] p-6 rounded-lg border-[var(--border-color)] border-solid border-2 max-w-md w-full">
-              <h3 className="text-xl font-bold text-[var(--accent-color)] mb-4">
-                Confirm Deletion
+              <h3 className="text-xl font-bold text-red-500 mb-4">
+                <span className="text-3xl">⚠{"  "}</span>Confirm Deletion
               </h3>
               <p className="text-lg mb-6">
                 Are you sure you want to delete{" "}
@@ -519,6 +557,83 @@ export default function ViewSubmission({
                   className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
                 >
                   Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+        {status.toLowerCase() === "pending_review" && role === "client" && (
+          <div className="flex gap-5 self-end">
+            <button
+              onClick={() => setShowReject(true)}
+              className="bg-red-500 py-2 px-3 rounded-lg text-lg hover:bg-red-600 text-white"
+            >
+              ❌ Reject
+            </button>
+            <button
+              onClick={() => setShowAccept(true)}
+              className="bg-green-500 py-2 px-3 rounded-lg text-lg hover:bg-green-600 text-white"
+            >
+              ✔ Accept
+            </button>
+          </div>
+        )}
+
+        {showAccept && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+            <div className="bg-[var(--background-color)] p-7 rounded-lg border-[var(--border-color)] border-solid border-2 max-w-lg w-full">
+              <h3 className="text-xl font-bold text-green-500 mb-4">
+                <span className="text-3xl">⚠{"  "}</span>
+                Confirm Acceptance
+              </h3>
+              <p className="text-lg mb-6">
+                Are you sure you want to accept this request ? This action
+                cannot be undone.
+              </p>
+              <div className="flex justify-end gap-4">
+                <button
+                  type="button"
+                  onClick={() => setShowAccept(false)}
+                  className="px-4 py-2 bg-gray-300 text-black rounded-lg hover:bg-gray-400 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleMilestoneApprovalConfirmation(true)}
+                  className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
+                >
+                  ✔ Confirm Accept
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+        {showReject && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+            <div className="bg-[var(--background-color)] p-7 rounded-lg border-[var(--border-color)] border-solid border-2 max-w-lg w-full">
+              <h3 className="text-xl font-bold text-red-500 mb-4">
+                <span className="text-3xl">⚠{"  "}</span>
+                Confirm Rejection
+              </h3>
+              <p className="text-lg mb-6">
+                Are you sure you want to reject this request ? This action
+                cannot be undone.
+              </p>
+              <div className="flex justify-end gap-4">
+                <button
+                  type="button"
+                  onClick={() => setShowReject(false)}
+                  className="px-4 py-2 bg-gray-300 text-black rounded-lg hover:bg-gray-400 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleMilestoneApprovalConfirmation(false)}
+                  className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+                >
+                  ❌ Confirm Reject
                 </button>
               </div>
             </div>

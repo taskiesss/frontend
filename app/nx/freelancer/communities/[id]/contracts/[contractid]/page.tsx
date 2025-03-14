@@ -45,7 +45,7 @@ async function page({ params }: Props) {
     console.error(error.message);
   }
   return (
-    <Contract isAdmin={true} contract={contract} contractId={contractid} />
+    <Contract isAdmin={false} contract={contract} contractId={contractid} />
   );
 }
 

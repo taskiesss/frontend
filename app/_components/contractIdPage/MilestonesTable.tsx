@@ -6,13 +6,18 @@ import { Suspense, useState } from "react";
 import ViewSubmission from "./ViewSubmissions";
 import Spinner from "../common/Spinner";
 
-type Props = { milestones: ContractMilestones; contractId: string };
+type Props = {
+  isAdmin: boolean;
+  milestones: ContractMilestones;
+  contractId: string;
+  role?: string;
+};
 
-function MilestonesTable({ milestones, contractId }: Props) {
+function MilestonesTable({ milestones, contractId, role, isAdmin }: Props) {
   const [viewingMilestoneIndex, setViewingMilestoneIndex] = useState<
     number | null
   >(null);
-  // console.log(milestones);
+  console.log(milestones);
   return (
     <>
       {milestones.content.length > 0 ? (
@@ -39,27 +44,40 @@ function MilestonesTable({ milestones, contractId }: Props) {
               {formatDayMonthToString(m.dueDate)}
             </td>
             <td className="px-4 py-4 align-top w-1/12 text-lg">
-              {m.status.toLowerCase() === "in_progress" && (
-                <MoreOptionButton
-                  contractId={contractId}
-                  milestoneIndex={m.milestoneId}
-                  title={m.title}
-                />
-              )}
-              {m.status.toLowerCase() === "in_review" ||
+              {m.status.toLowerCase() === "in_progress" &&
+                isAdmin &&
+                role !== "client" && (
+                  <MoreOptionButton
+                    status={m.status}
+                    contractId={contractId}
+                    milestoneIndex={m.milestoneId}
+                    title={m.title}
+                  />
+                )}
+
+              {(m.status.toLowerCase() === "in_progress" && !isAdmin) ||
+              m.status.toLowerCase() === "pending_review" ||
               m.status.toLowerCase() === "approved" ? (
                 <>
                   <button
                     onClick={() => setViewingMilestoneIndex(i)}
                     className="bg-[var(--btn-color)] t px-3 py-1.5 rounded hover:bg-[var(--hover-color)]"
                   >
-                    View submissions
+                    {role === "client"
+                      ? "Review Submission"
+                      : "View submissions"}
                   </button>
                   {viewingMilestoneIndex === i && (
                     <Suspense fallback={<Spinner />}>
                       <ViewSubmission
+                        status={m.status}
+                        role={role}
                         contractId={contractId}
-                        notEditable={true}
+                        notEditable={
+                          m.status.toLowerCase() === "in_progress"
+                            ? false
+                            : true
+                        }
                         title={m.title}
                         milestoneIndex={m.milestoneId}
                         closeView={() => setViewingMilestoneIndex(null)}
