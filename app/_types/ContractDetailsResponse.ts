@@ -23,7 +23,7 @@ export interface ContractMilestones {
     description: string;
     expectedHours: number;
     dueDate: string;
-    status: 'not_started' | 'in_review' | 'in_progress' | 'approved';
+    status: 'not_started' | 'pending_review' | 'in_progress' | 'approved';
     milestoneId: string;
   }[];
   totalElements: number;

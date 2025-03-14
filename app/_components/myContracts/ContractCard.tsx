@@ -5,6 +5,8 @@ import Link from "next/link";
 import StarRating from "../common/StarRating";
 import StatusCard from "./StatusCard";
 type Props = {
+  pathname: string;
+  communityid: string;
   contract: {
     contractID: string;
     jobID: string;
@@ -21,7 +23,11 @@ type Props = {
   };
 };
 
-export default function ContractCard({ contract }: Props) {
+export default function ContractCard({
+  communityid,
+  contract,
+  pathname,
+}: Props) {
   return (
     <div className="flex flex-col items-start justify-between gap-2 p-2 border-b-2 border-solid border-[var(--border-color)]">
       {/* upper div */}
@@ -39,7 +45,11 @@ export default function ContractCard({ contract }: Props) {
 
         <div className="flex items-center gap-2">
           <Link
-            href={`/nx/freelancer/mycontracts/${contract.contractID}`}
+            href={
+              pathname === "/nx/freelancer/mycontracts"
+                ? `/nx/freelancer/mycontracts/${contract.contractID}`
+                : `/nx/freelancer/communities/${communityid}/contracts/${contract.contractID}`
+            }
             className="text-[var(--hover-color)] border-[var(--hover-color)] border-solid border p-2 rounded-2xl text-lg hover:border-[var(--btn-color)] hover:text-[var(--btn-color)]  "
           >
             View details

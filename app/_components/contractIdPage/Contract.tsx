@@ -19,9 +19,14 @@ import Spinner from "../common/Spinner";
 import StatusCard from "../myContracts/StatusCard";
 import Milestones from "./Milestones";
 
-type Props = { contract: contractDetailsResponse; contractId: string };
+type Props = {
+  contract: contractDetailsResponse;
+  contractId: string;
+  role?: string;
+  isAdmin: boolean;
+};
 
-function Contract({ contract, contractId }: Props) {
+function Contract({ contract, contractId, role, isAdmin }: Props) {
   return (
     <Container className="flex flex-col gap-8">
       {/* title section */}
@@ -33,7 +38,7 @@ function Contract({ contract, contractId }: Props) {
           <StatusCard status={contract.contractStatus} />
         </div>
 
-        {contract.contractStatus.toLowerCase() === "active" && (
+        {contract.contractStatus.toLowerCase() === "active" && isAdmin && (
           <div className="flex gap-4">
             <span className="text-[var(--bg-skill)] font-semibold text-lg">
               Do you want to end contract?
@@ -94,6 +99,8 @@ function Contract({ contract, contractId }: Props) {
               href={`${
                 contract.isCommunity
                   ? `/nx/freelancer/communities/${contract.freelancerId}/about`
+                  : role === "client"
+                  ? `/nx/client/talent/${contract.freelancerId}`
                   : "/nx/freelancer/myprofile"
               }`}
               className="flex items-center gap-5 border-solid border border-gray-600 p-4 rounded-lg cursor-default"
@@ -110,6 +117,7 @@ function Contract({ contract, contractId }: Props) {
                       alt="pic"
                       quality={70}
                       fill
+                      priority
                       className="object-cover rounded-full"
                       sizes="(max-width: 1024px) 100vw, 1024px"
                     />
@@ -135,6 +143,7 @@ function Contract({ contract, contractId }: Props) {
                         alt="pic"
                         quality={70}
                         fill
+                        priority
                         className="object-cover rounded-full"
                         sizes="(max-width: 1024px) 100vw, 1024px"
                       />
@@ -165,18 +174,7 @@ function Contract({ contract, contractId }: Props) {
             </span>
           </span>
         </div>
-        {/* <div className="flex gap-5">
-          <span className="text-lg text-slate-500">
-            <FontAwesomeIcon
-              icon={faSackDollar}
-              className="text-[var(--accent-color)] text-xl font-bold"
-            />{" "}
-            Price Per hour:{" "}
-          </span>
-          <span className="text-lg text-[var(--accent-color)] font-bold">
-            $15.00
-          </span>
-        </div> */}
+        {/* Contract Dates */}
         <div className="flex gap-16">
           <span className="text-lg text-slate-500">
             <FontAwesomeIcon
@@ -206,7 +204,7 @@ function Contract({ contract, contractId }: Props) {
       <div className="flex flex-col gap-4 pb-20">
         <h2 className="text-2xl font-semibold">Milestones</h2>
         <Suspense fallback={<Spinner />}>
-          <Milestones contractId={contractId} />
+          <Milestones isAdmin={isAdmin} contractId={contractId} role={role} />
         </Suspense>
       </div>
     </Container>

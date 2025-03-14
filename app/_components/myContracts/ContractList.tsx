@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import ContractCard from "./ContractCard";
 import { Pagination } from "../common/Pagination";
+import { useParams, usePathname } from "next/navigation";
 
 type Props = {
   contracts: {
@@ -25,13 +26,23 @@ type Props = {
     number: number;
   };
 };
-
+type RouteParams = {
+  id?: string; // Make id optional if it might not always be present
+};
 export default function ContractList({ contracts }: Props) {
   const [currentPage, setCurrentPage] = useState(1);
+  const params = useParams<RouteParams>();
+  const pathname = usePathname();
+  const { id } = params || {};
   return (
     <div className="w-4/5 bg-[var(--foreground-color)] rounded-lg shadow-sm p-4 flex flex-col">
       {contracts.content.map((c, i) => (
-        <ContractCard key={i} contract={c} />
+        <ContractCard
+          communityid={id || ""}
+          pathname={pathname || ""}
+          key={i}
+          contract={c}
+        />
       ))}
       <div className="self-center">
         <Pagination

@@ -88,7 +88,10 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({
           </li>
           <li className=" text-md hover:bg-[var(--hover-color)]">
             <button onClick={onClose} className="text-start self-start">
-              <Link href={"#"} className="flex items-center gap-2 p-4 w-full">
+              <Link
+                href={"/login"}
+                className="flex items-center gap-2 p-4 w-full"
+              >
                 <FontAwesomeIcon icon={faArrowAltCircleRight} className="w-4" />
                 <span>Log out</span>
               </Link>
