@@ -45,7 +45,11 @@ async function page({ params }: Props) {
     console.error(error.message);
   }
   return (
-    <Contract isAdmin={false} contract={contract} contractId={contractid} />
+    <Contract
+      isAdmin={contract.isCommunityAdmin || false}
+      contract={contract}
+      contractId={contractid}
+    />
   );
 }
 
