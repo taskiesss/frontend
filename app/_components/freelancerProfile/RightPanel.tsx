@@ -6,6 +6,7 @@ import { formatYearToString } from "@/app/_helpers/helper";
 import EditButton from "../common/EditButton";
 
 interface RightPanelProps {
+  role?: string;
   onEditAbout: () => void;
   onEditPortfolio: () => void;
   onEditEmpHis: () => void;
@@ -23,6 +24,7 @@ interface RightPanelProps {
 }
 
 export default function RightPanel({
+  role,
   freelancer,
   editable,
   onEditAbout,
@@ -69,7 +71,7 @@ export default function RightPanel({
         <h2 className="text-3xl font-bold">Completed Jobs</h2>
         <div className="gap-2  ">
           <Suspense fallback={<Spinner />}>
-            <CompletedJobslist id={id} />
+            <CompletedJobslist role={role} id={id} />
           </Suspense>
         </div>
       </div>

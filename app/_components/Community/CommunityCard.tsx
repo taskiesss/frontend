@@ -22,7 +22,7 @@ const CommunityCard: React.FC<JobCardProps> = ({ community }) => {
     experienceLevel,
     pricePerHour,
     profilePicture,
-    rating,
+    rate,
     isFull,
     memberCount,
   } = community;
@@ -78,6 +78,9 @@ const CommunityCard: React.FC<JobCardProps> = ({ community }) => {
   const detailUrl =
     currentPath === "/nx/freelancer/search/communities"
       ? `/nx/freelancer/communities/${id}`
+      : currentPath === "/nx/client/discover-communities" ||
+        currentPath === "/nx/client/search/communities"
+      ? `/nx/client/discover-communities/${id}`
       : `/guest/communities/${id}`;
 
   return (
@@ -122,7 +125,7 @@ const CommunityCard: React.FC<JobCardProps> = ({ community }) => {
             <div className="pointer-events-none py-[0.2rem]">
               <StarRating
                 maxRating={5}
-                defaultRating={rating}
+                defaultRating={rate}
                 color="var(--star)"
                 size={18}
               />
@@ -136,12 +139,17 @@ const CommunityCard: React.FC<JobCardProps> = ({ community }) => {
               <p className="block text-md text-slate-500">
                 Members: {memberCount}
               </p>
-              <span className="block text-md">
-                <span className="text-slate-500">Status: </span>
-                <span className={isFull ? "text-red-600" : "text-green-600"}>
-                  {isFull ? "Full" : "Open"}
+              {currentPath === "/nx/client/discover-communities" ||
+              currentPath === "/nx/client/search/communities" ? (
+                ""
+              ) : (
+                <span className="block text-md">
+                  <span className="text-slate-500">Status: </span>
+                  <span className={isFull ? "text-red-600" : "text-green-600"}>
+                    {isFull ? "Full" : "Open"}
+                  </span>
                 </span>
-              </span>
+              )}
             </div>
 
             {/* Scrollable Skills Section aligned under the description */}
