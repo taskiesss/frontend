@@ -10,7 +10,9 @@ import Button from "../common/button";
 
 export default function CommunityHeader({
   community,
+  role,
 }: {
+  role?: string;
   community: {
     id: string;
     profilePicture: string;
@@ -70,7 +72,7 @@ export default function CommunityHeader({
         </div>
       </div>
       <div className="flex gap-9 self-start items-center">
-        {!community.isFull && !community.isMember && (
+        {!community.isFull && !community.isMember && role !== "client" && (
           <Button>Send Request</Button>
         )}
 

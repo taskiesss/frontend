@@ -30,6 +30,7 @@ const NavLoggedin: React.FC = () => {
   // Store user name and image from API
   const [image, setImage] = useState("");
   const [name, setName] = useState("");
+  const [role, setRole] = useState("");
 
   // Control showing/hiding ProfileMenu
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
@@ -58,6 +59,8 @@ const NavLoggedin: React.FC = () => {
         const data = await response.json();
         setImage(data.profilePicture);
         setName(data.name);
+        // console.log(data);
+        setRole(data.role);
       } catch (error) {
         console.error("Error fetching image:", error);
       }
@@ -86,26 +89,63 @@ const NavLoggedin: React.FC = () => {
   }
 
   // Your nav items
-  const navItems: NavItem[] = [
-    {
-      label: "My Tasks",
-      options: [
-        { label: "Your active contracts", link: "/nx/freelancer/mycontracts" },
-      ],
-    },
-    {
-      label: "Explore Jobs",
-      options: [
-        { label: "Find work", link: "/nx/freelancer/find-work" },
-        { label: "Saved Jobs", link: "/nx/freelancer/saved-jobs" },
-        { label: "Proposals", link: "/nx/freelancer/proposals/myProposals" },
-      ],
-    },
-    {
-      label: "Finance",
-      options: [{ label: "Transactions", link: "/nx/freelancer/transactions" }],
-    },
-  ];
+  const navItems: NavItem[] =
+    role === "FREELANCER"
+      ? [
+          {
+            label: "My Tasks",
+            options: [
+              { label: "All contracts", link: "/nx/freelancer/mycontracts" },
+            ],
+          },
+          {
+            label: "Explore Jobs",
+            options: [
+              { label: "Find work", link: "/nx/freelancer/find-work" },
+              { label: "Saved Jobs", link: "/nx/freelancer/saved-jobs" },
+              {
+                label: "Proposals",
+                link: "/nx/freelancer/proposals/myProposals",
+              },
+            ],
+          },
+          {
+            label: "Finance",
+            options: [
+              { label: "Transactions", link: "/nx/freelancer/transactions" },
+            ],
+          },
+        ]
+      : [
+          {
+            label: "My Jobs",
+            options: [
+              { label: "Post a job", link: "/nx/client/job-post" },
+              { label: "My posted job", link: "/nx/client/all-jobs" },
+              { label: "Proposals", link: "/nx/client/myProposals" },
+              { label: "All contracts", link: "/nx/client/mycontracts" },
+            ],
+          },
+          {
+            label: "Discover Talents",
+            options: [
+              {
+                label: "Discover talents",
+                link: "/nx/client/discover-talents",
+              },
+              {
+                label: "Discover communities",
+                link: "/nx/client/discover-communities",
+              },
+            ],
+          },
+          {
+            label: "Finance",
+            options: [
+              { label: "Transactions", link: "/nx/client/transactions" },
+            ],
+          },
+        ];
 
   // Handle search form submission
   const handleSearch = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -121,13 +161,17 @@ const NavLoggedin: React.FC = () => {
     } else {
       const searchtype = currentPath.includes("find-work")
         ? "jobs"
-        : currentPath.includes("find-talents")
+        : currentPath.includes("find-talents") ||
+          currentPath.includes("discover-talents")
         ? "freelancers"
-        : currentPath.includes("communities")
+        : currentPath.includes("communities") ||
+          currentPath.includes("discover-communities")
         ? "communities"
-        : "jobs";
+        : role === "FREELANCER"
+        ? "jobs"
+        : "freelancers";
       router.push(
-        `/nx/freelancer/search/${searchtype}?query=${encodeURIComponent(
+        `/nx/${role.toLowerCase()}/search/${searchtype}?query=${encodeURIComponent(
           searchTerm
         )}`
       );
@@ -149,7 +193,13 @@ const NavLoggedin: React.FC = () => {
       <nav className="bg-[var(--background-color)] py-10 grid grid-rows-1 grid-cols-[min-content,1fr,1fr] place-items-center ">
         {/* Logo Section */}
         <div className="flex w-[10rem] h-auto justify-center flex-col">
-          <Link href="/">
+          <Link
+            href={
+              role === "CLIENT"
+                ? `/nx/client/discover-talents`
+                : "/nx/freelancer/find-work"
+            }
+          >
             <Image
               src={logo_dark}
               alt="Taskaya Logo"
@@ -245,6 +295,7 @@ const NavLoggedin: React.FC = () => {
                   {isProfileMenuOpen && (
                     <div className="absolute top-full right-0 mt-2 ">
                       <ProfileMenu
+                        role={role}
                         onClose={() => setIsProfileMenuOpen(false)}
                         name={name || "Ahmed"}
                         avatarUrl={image || userProfile}

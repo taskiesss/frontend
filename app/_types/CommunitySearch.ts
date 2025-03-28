@@ -31,7 +31,7 @@ export interface CommunityResponse {
   experienceLevel: 'entry_level' | 'intermediate' | 'expert';
   memberCount: number;
   pricePerHour: number;
-  rating: number;
+  rate: number;
   profilePicture: string;
   isFull: boolean;
 }

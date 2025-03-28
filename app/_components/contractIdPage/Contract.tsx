@@ -52,7 +52,11 @@ function Contract({ contract, contractId, role, isAdmin }: Props) {
       {/* view job button section */}
       <div className="border-b-[var(--border-color)] w-full border-solid border-b-2 pb-10">
         <Link
-          href={`/nx/freelancer/find-work/${contract.jobId}`}
+          href={
+            role === "client"
+              ? `/nx/client/job-details/${contract.jobId}`
+              : `/nx/freelancer/find-work/${contract.jobId}`
+          }
           className="underline text-[var(--hover-color)] hover:text-[var(--btn-color)] text-xl"
         >
           <FontAwesomeIcon icon={faArrowAltCircleLeft} />
@@ -98,9 +102,11 @@ function Contract({ contract, contractId, role, isAdmin }: Props) {
             <Link
               href={`${
                 contract.isCommunity
-                  ? `/nx/freelancer/communities/${contract.freelancerId}/about`
+                  ? role === "client"
+                    ? `/nx/client/discover-communities/${contract.freelancerId}`
+                    : `/nx/freelancer/communities/${contract.freelancerId}/about`
                   : role === "client"
-                  ? `/nx/client/talent/${contract.freelancerId}`
+                  ? `/nx/client/discover-talents/${contract.freelancerId}`
                   : "/nx/freelancer/myprofile"
               }`}
               className="flex items-center gap-5 border-solid border border-gray-600 p-4 rounded-lg cursor-default"
@@ -130,7 +136,11 @@ function Contract({ contract, contractId, role, isAdmin }: Props) {
             </Link>
             <div className="flex border-solid border border-gray-600 items-center  pr-4 rounded-lg ">
               <Link
-                href={`/nx/client/profile/${contract.clientId}`}
+                href={
+                  role === "client"
+                    ? `/nx/client/myprofile`
+                    : `/nx/freelancer/client-profile/${contract.clientId}`
+                }
                 className="flex items-center gap-5  p-4  cursor-default"
               >
                 <FontAwesomeIcon icon={faUserCircle} className="text-2xl " />

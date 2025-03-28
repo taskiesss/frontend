@@ -25,16 +25,31 @@ export default function SmallNav({ pathname, role, queryString = "" }: Props) {
   return (
     <nav className="col-span-2 bg-[var(--background-color)] pt-20 pb-3 flex items-center border-solid border-gray-600 border-b-[0.03rem]">
       <ul className="flex gap-44">
+        {role === "freelancer" && (
+          <li>
+            <Link
+              href={jobsPath}
+              className={`text-lg text-[var(--accent-color)]${
+                pathname === jobsPath.split("?")[0]
+                  ? " text-2xl text-[var(--hover-color)] font-extrabold hover:text-[var(--hover-color)]"
+                  : " hover:text-[var(--hover-color)]"
+              }`}
+            >
+              Jobs
+            </Link>
+          </li>
+        )}
+
         <li>
           <Link
-            href={jobsPath}
+            href={freelancersPath}
             className={`text-lg text-[var(--accent-color)]${
-              pathname === jobsPath.split("?")[0]
+              pathname === freelancersPath.split("?")[0]
                 ? " text-2xl text-[var(--hover-color)] font-extrabold hover:text-[var(--hover-color)]"
                 : " hover:text-[var(--hover-color)]"
             }`}
           >
-            Jobs
+            Freelancers
           </Link>
         </li>
         <li>
@@ -47,18 +62,6 @@ export default function SmallNav({ pathname, role, queryString = "" }: Props) {
             }`}
           >
             Communities
-          </Link>
-        </li>
-        <li>
-          <Link
-            href={freelancersPath}
-            className={`text-lg text-[var(--accent-color)]${
-              pathname === freelancersPath.split("?")[0]
-                ? " text-2xl text-[var(--hover-color)] font-extrabold hover:text-[var(--hover-color)]"
-                : " hover:text-[var(--hover-color)]"
-            }`}
-          >
-            Freelancers
           </Link>
         </li>
       </ul>
