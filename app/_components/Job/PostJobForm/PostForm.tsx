@@ -8,7 +8,6 @@ import Button from "../../common/button";
 import { postAJob } from "@/app/_lib/Client/PostJob";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
-import ProtectedPage from "../../common/ProtectedPage";
 
 type Props = { t?: string };
 
@@ -36,7 +35,14 @@ function SubmitButton() {
 }
 
 function PostForm({}: Props) {
+  // State for all form fields
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
+  const [title, setTitle] = useState("");
+  const [projectLength, setProjectLength] = useState("");
+  const [experienceLevel, setExperienceLevel] = useState("");
+  const [expectedPricePerHour, setExpectedPricePerHour] = useState("");
+  const [description, setDescription] = useState("");
+
   const [state, formAction] = useActionState(postAJob, { error: undefined });
 
   const handleSelectSkill = (skill: string) => {
@@ -48,10 +54,6 @@ function PostForm({}: Props) {
   const handleRemoveSkill = (skill: string, index: number) => {
     setSelectedSkills((prev) => prev.filter((_, i) => i !== index));
   };
-
-  if (state.error === "Forbidden" || state.error === "Unauthorized user") {
-    return <ProtectedPage message="You're not allowed to view this page" />;
-  }
 
   return (
     <Container className="flex flex-col items-center py-20">
@@ -69,7 +71,6 @@ function PostForm({}: Props) {
           action={formAction}
           className="w-full flex flex-col pb-20 gap-10 items-center px-20"
         >
-          {/* Show other errors (not skills-related) at the top */}
           {state?.error &&
             state.error !== "Skills required is a mandatory field" && (
               <div className="w-full text-red-500 text-lg">{state.error}</div>
@@ -81,6 +82,8 @@ function PostForm({}: Props) {
               required
               type="text"
               name="title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
               placeholder="ex: E-commerce website"
               className="px-3 py-4 text-lg w-full border border-solid border-gray-600 rounded-lg focus:outline-none bg-[var(--background-color)]"
             />
@@ -98,7 +101,6 @@ function PostForm({}: Props) {
               name="skills"
               value={selectedSkills.join(",")}
             />
-            {/* Show skills-specific error here */}
             {state?.error === "Skills required is a mandatory field" && (
               <span className="text-red-500 text-sm">{state.error}</span>
             )}
@@ -110,9 +112,13 @@ function PostForm({}: Props) {
                 name="projectLength"
                 id="projectLength"
                 required
+                value={projectLength}
+                onChange={(e) => setProjectLength(e.target.value)}
                 className="outline-none focus:outline-none py-4 px-3 text-lg border border-solid border-gray-600 rounded-lg bg-[var(--background-color)] w-full"
               >
-                <option value="">Select duration</option>
+                <option value="" className="text-gray-500" disabled={true}>
+                  Select duration
+                </option>
                 {projectLengthOptions.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
@@ -126,9 +132,13 @@ function PostForm({}: Props) {
                 name="experienceLevel"
                 id="experienceLevel"
                 required
+                value={experienceLevel}
+                onChange={(e) => setExperienceLevel(e.target.value)}
                 className="outline-none focus:outline-none py-4 px-3 text-lg border border-solid border-gray-600 rounded-lg bg-[var(--background-color)] w-full"
               >
-                <option value="">Select duration</option>
+                <option value="" className="text-gray-500" disabled={true}>
+                  Select level
+                </option>
                 {experienceLevelOptions.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
@@ -143,6 +153,8 @@ function PostForm({}: Props) {
               required
               type="number"
               name="expectedPricePerHour"
+              value={expectedPricePerHour}
+              onChange={(e) => setExpectedPricePerHour(e.target.value)}
               min={0}
               placeholder="ex: 14.00"
               className="px-3 py-4 text-lg w-full border border-solid border-gray-600 rounded-lg focus:outline-none bg-[var(--background-color)]"
@@ -153,6 +165,8 @@ function PostForm({}: Props) {
             <textarea
               required
               name="description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
               placeholder="Describe the job requirements and responsibilities..."
               className="resize-none px-3 py-4 text-lg w-full border border-solid border-gray-600 rounded-lg focus:outline-none bg-[var(--background-color)]"
               rows={5}
