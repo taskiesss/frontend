@@ -11,6 +11,7 @@ import { invariant } from "../../../_helpers/invariant";
 import { useRouter } from "next/navigation";
 import Select, { MultiValue, ActionMeta } from "react-select";
 import LanguagesData from "@/app/_data/languages.json";
+import ProtectedPage from "@/app/_components/common/ProtectedPage";
 
 type Props = { params: string };
 interface Option {
@@ -36,7 +37,7 @@ export default function Page({}: Props) {
   const [averageWorkHours, setAverageWorkHours] = useState("");
   const [professionalTitle, setProfessionalTitle] = useState("");
   const [professionalSummary, setProfessionalSummary] = useState("");
-
+  const [isForbidden, setIsForbidden] = useState(false);
   // Education: Allow multiple entries
   const [educationList, setEducationList] = useState<Education[]>([]);
   const [error, setError] = useState<string>("");
@@ -130,12 +131,15 @@ export default function Page({}: Props) {
         router.push("/nx/freelancer/find-work");
       }
     } catch (error: any) {
-      if (error.message === "Forbidden") router.push("/login");
-      if (error.message === "unauthorized user") router.push("/login");
+      if (error.message === "Forbidden") setIsForbidden(true);
+      if (error.message === "unauthorized user") setIsForbidden(true);
 
       console.error(error.message);
     }
   };
+
+  if (isForbidden)
+    return <ProtectedPage message="You're not allowed to view this page" />;
 
   return (
     <Container className="flex flex-col items-center py-20">
