@@ -3,6 +3,7 @@ import TalentRequests from "./TalentRequest";
 import { Suspense } from "react";
 import Spinner from "../common/Spinner";
 import Contracts from "./Contracts";
+import CommunityOffers from "./Offers";
 
 interface Props {
   community: CommunityProfileResponse;
@@ -19,6 +20,14 @@ export default function Board({ community, id, style }: Props) {
             editable={community.isAdmin}
             communityId={id}
           ></TalentRequests>
+        </Suspense>
+      </div>
+      <div className={style}>
+        <Suspense fallback={<Spinner />}>
+          <CommunityOffers
+            editable={community.isAdmin}
+            communityId={id}
+          ></CommunityOffers>
         </Suspense>
       </div>
       <div className={style}>

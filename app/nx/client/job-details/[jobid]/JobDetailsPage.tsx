@@ -52,7 +52,7 @@ export default function JobDetailsPage({ jobid, jobdetails }: Props) {
     skills,
     client: { completedJobs, totalSpent, rate },
   } = jobdetails;
-
+  // console.log(jobdetails);
   // Format the posted date consistently.
   const formattedDate = new Date(postedAt).toLocaleDateString("en-US", {
     timeZone: "UTC",
@@ -76,7 +76,7 @@ export default function JobDetailsPage({ jobid, jobdetails }: Props) {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-  // console.log(jobdetails);
+
   return (
     <Container>
       <div className="max-w-7xl mx-auto px-16 py-20">

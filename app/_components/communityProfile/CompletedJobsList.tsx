@@ -9,10 +9,14 @@ import Cookies from "js-cookie";
 import { getCommunityWorkDone } from "@/app/_lib/CommunityProfile/APi";
 
 interface CompletedJobslistProps {
+  role?: string;
   id: string;
 }
 
-export default function CompletedJobslist({ id }: CompletedJobslistProps) {
+export default function CompletedJobslist({
+  id,
+  role,
+}: CompletedJobslistProps) {
   const [currentPage, setCurrentPage] = useState(1);
 
   const size = 3;
@@ -63,7 +67,7 @@ export default function CompletedJobslist({ id }: CompletedJobslistProps) {
     <>
       <div className="grid grid-cols-2 grid-flow-row gap-5 flex-wrap justify-between">
         {data.content.map((j: any, i: number) => (
-          <CompletedJobsCard key={i} job={j} />
+          <CompletedJobsCard key={i} job={j} role={role} />
         ))}
       </div>
       <div className="">

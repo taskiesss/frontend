@@ -15,10 +15,14 @@ interface CarouselItem {
 }
 
 interface HorizontalCarouselProps {
+  role?: string;
   items: CarouselItem[];
 }
 
-export default function HorizontalCarousel({ items }: HorizontalCarouselProps) {
+export default function HorizontalCarousel({
+  items,
+  role,
+}: HorizontalCarouselProps) {
   const [activeIndex, setActiveIndex] = useState(Math.floor(items.length / 2));
   const [startX, setStartX] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
@@ -188,7 +192,13 @@ export default function HorizontalCarousel({ items }: HorizontalCarouselProps) {
           onClick={() => !isActive && handleItemClick(index)}
         >
           {isActive ? (
-            <Link href={`/nx/freelancer/profile/${item.freelancerId}`}>
+            <Link
+              href={
+                role === "client"
+                  ? `/nx/client/discover-talents/${item.freelancerId}`
+                  : `/nx/freelancer/profile/${item.freelancerId}`
+              }
+            >
               {itemContent}
             </Link>
           ) : (
