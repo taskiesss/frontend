@@ -22,14 +22,14 @@ interface Props {
     content: Job[];
     totalElements: number;
     size: number;
-    pageable: { pageNumber: number };
+    number: number;
   };
 }
 
 // await new Promise((resolve) => setTimeout(resolve, 5000));
 
 export default function JobList({ jobs }: Props) {
-  const [currentPage, setCurrentPage] = useState(jobs.pageable.pageNumber);
+  const [currentPage, setCurrentPage] = useState(jobs.number + 1);
   console.log(jobs);
   return (
     <div className=" w-full flex flex-col gap-8 justify-start ">
@@ -42,7 +42,7 @@ export default function JobList({ jobs }: Props) {
         </section>
         <div className="self-center ">
           <Pagination
-            currentPage={currentPage}
+            currentPage={jobs.number + 1}
             totalCount={jobs.totalElements}
             pageSize={jobs.size}
             onPageChange={setCurrentPage}

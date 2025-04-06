@@ -9,14 +9,12 @@ interface Props {
     content: FreelancerResponse[];
     totalElements: number;
     size: number;
-    pageable: { pageNumber: number };
+    number: number;
   };
 }
 
 export default function FreelancerList({ freelancers }: Props) {
-  const [currentPage, setCurrentPage] = useState(
-    freelancers.pageable.pageNumber
-  );
+  const [currentPage, setCurrentPage] = useState(freelancers.number + 1);
 
   return (
     <div className="w-full flex flex-col gap-8 justify-start">
@@ -29,7 +27,7 @@ export default function FreelancerList({ freelancers }: Props) {
         </section>
         <div className="self-center">
           <Pagination
-            currentPage={currentPage}
+            currentPage={freelancers.number + 1}
             totalCount={freelancers.totalElements}
             pageSize={freelancers.size}
             onPageChange={setCurrentPage}

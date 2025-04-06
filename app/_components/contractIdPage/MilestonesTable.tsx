@@ -28,7 +28,7 @@ function MilestonesTable({
   const [viewingMilestoneIndex, setViewingMilestoneIndex] = useState<
     number | null
   >(null);
-  console.log(milestones);
+
   return (
     <>
       {milestones.content.length > 0 ? (
@@ -85,6 +85,9 @@ function MilestonesTable({
                   {viewingMilestoneIndex === i && (
                     <Suspense fallback={<Spinner />}>
                       <ViewSubmission
+                        index={i}
+                        currentPage={currentPage}
+                        size={size}
                         status={m.status}
                         role={role}
                         contractId={contractId}

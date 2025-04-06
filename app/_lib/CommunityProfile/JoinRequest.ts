@@ -9,7 +9,7 @@ export async function getAvailablePositions(
 ): Promise<any> {
   invariant(!token, 'Unauthorized user');
   const res = await fetch(
-    `${BASE_URL}/freelancers/communities/${communityId}/available-positions?page=${1}&size=${15}`,
+    `${BASE_URL}/freelancers/communities/${communityId}/available-positions?page=${0}&size=${15}`,
     {
       method: 'GET',
       headers: {
