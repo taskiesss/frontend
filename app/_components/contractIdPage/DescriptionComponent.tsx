@@ -1,13 +1,9 @@
 import {
-  faChevronCircleDown,
   faChevronCircleLeft,
   faChevronCircleRight,
-  faChevronCircleUp,
-  faChevronDown,
-  faChevronUp,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useState } from "react";
+import { useState } from "react";
 
 type Props = { description: string };
 
