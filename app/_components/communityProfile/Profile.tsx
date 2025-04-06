@@ -118,7 +118,11 @@ export default function Profile({
 
       {/* Navigation Section */}
 
-      {role !== "client" && <CommunityNav isMember={community.isMember} />}
+      {role !== "client" && community.isMember && (
+        <div className="w-9/12">
+          <CommunityNav isMember={community.isMember} />
+        </div>
+      )}
 
       {children}
     </div>

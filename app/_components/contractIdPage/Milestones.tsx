@@ -123,10 +123,8 @@ function Milestones({ communityid, isAdmin, contractId, role }: Props) {
         <table className="w-full border-collapse text-base">
           <thead>
             <tr className="bg-[var(--button-hover-background-color)] text-white">
-              <th className="px-4 py-2 text-left text-lg w-1/12">Title</th>
-              <th className="px-4 py-2 text-left text-lg w-3/12">
-                Description
-              </th>
+              <th className="px-4 py-2 text-left text-lg w-4/12">Title</th>
+
               <th className="px-4 py-2 text-left text-lg w-1/12">
                 Expected hours
               </th>

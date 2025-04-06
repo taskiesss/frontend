@@ -9,13 +9,14 @@ interface Props {
     content: CommunityResponse[];
     totalElements: number;
     size: number;
+    number: number;
   };
 }
 
 // await new Promise((resolve) => setTimeout(resolve, 5000));
 
 export default function CommunityList({ communities }: Props) {
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(communities.number + 1);
 
   return (
     <div className=" w-full flex flex-col gap-8 justify-start  ">
@@ -28,7 +29,7 @@ export default function CommunityList({ communities }: Props) {
         </section>
         <div className="self-center ">
           <Pagination
-            currentPage={currentPage}
+            currentPage={communities.number + 1}
             totalCount={communities.totalElements}
             pageSize={communities.size}
             onPageChange={setCurrentPage}

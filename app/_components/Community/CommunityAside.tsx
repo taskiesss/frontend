@@ -81,7 +81,7 @@ export default function CommunitiyAside({ onClose }: { onClose: () => void }) {
       params.delete("rate");
     }
 
-    params.set("page", "0");
+    params.set("page", "1");
     const currentQuery = new URLSearchParams(window.location.search).toString();
     const newQuery = params.toString();
     if (currentQuery !== newQuery) {

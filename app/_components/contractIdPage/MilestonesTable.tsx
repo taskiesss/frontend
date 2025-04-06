@@ -5,6 +5,7 @@ import MilestoneStatus from "./MilestoneStatus";
 import { Suspense, useState } from "react";
 import ViewSubmission from "./ViewSubmissions";
 import Spinner from "../common/Spinner";
+import DescriptionComponent from "./DescriptionComponent";
 
 type Props = {
   isAdmin: boolean;
@@ -28,7 +29,7 @@ function MilestonesTable({
   const [viewingMilestoneIndex, setViewingMilestoneIndex] = useState<
     number | null
   >(null);
-  console.log(milestones);
+
   return (
     <>
       {milestones.content.length > 0 ? (
@@ -41,10 +42,15 @@ function MilestonesTable({
                 : "border-b border-solid border-b-gray-500"
             }`}
           >
-            <td className="px-4 py-4 align-top w-1/12 text-lg">{m.title}</td>
-            <td className="px-4 py-4 align-top w-3/12 text-lg">
-              <p className="whitespace-pre-wrap">{m.description}</p>
+            <td className="px-4 py-4 align-top w-4/12 text-lg">
+              <div className="flex flex-col gap-3">
+                {m.title}
+                <DescriptionComponent description={m.description} />
+              </div>
             </td>
+            {/* <td className="px-4 py-4 align-top w-3/12 text-lg">
+              <p className="whitespace-pre-wrap">{m.description}</p>
+            </td> */}
             <td className="px-4 py-4 align-top w-1/12 text-lg">
               {m.expectedHours} Hours
             </td>
@@ -85,6 +91,9 @@ function MilestonesTable({
                   {viewingMilestoneIndex === i && (
                     <Suspense fallback={<Spinner />}>
                       <ViewSubmission
+                        index={i}
+                        currentPage={currentPage}
+                        size={size}
                         status={m.status}
                         role={role}
                         contractId={contractId}

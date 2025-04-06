@@ -4,9 +4,9 @@ import Image from "next/image";
 import { useState } from "react";
 import EditButton from "../common/EditButton";
 import StarRating from "../common/StarRating";
-import CommunityProfilePhotoForm from "./ProfilePhotoForm";
 import HeaderForm from "./Forms/HeaderForm";
-import Button from "../common/button";
+import CommunityProfilePhotoForm from "./ProfilePhotoForm";
+import SendRequestComponent from "./SendRequestComponent";
 
 export default function CommunityHeader({
   community,
@@ -73,7 +73,10 @@ export default function CommunityHeader({
       </div>
       <div className="flex gap-9 self-start items-center">
         {!community.isFull && !community.isMember && role !== "client" && (
-          <Button>Send Request</Button>
+          <SendRequestComponent
+            communityId={community.id}
+            communityName={community.name}
+          />
         )}
 
         {community.isAdmin && (

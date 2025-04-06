@@ -207,7 +207,7 @@ const Page = async ({ searchParams }: PageProps) => {
 
         {/* Job results */}
         {paginations?.content && paginations?.content.length > 0 ? (
-          <Container className="w-full px-3 sm:px-5 lg:px-7 xl:px-14">
+          <Container className="w-full px-3 sm:px-5 lg:px-7 xl:px-12">
             <Suspense fallback={<Spinner />}>
               <JobList jobs={paginations} />
             </Suspense>

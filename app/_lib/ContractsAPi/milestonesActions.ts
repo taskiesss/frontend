@@ -5,7 +5,7 @@ const BASE_URL = 'http://localhost:8080';
 export async function milestoneApproval(
   params: {
     contractid: string;
-    milestoneIndex: string;
+    milestoneIndex: number;
   },
   reqbody: { accepted: boolean },
   token: string | undefined
@@ -36,7 +36,11 @@ export async function milestoneApproval(
     throw new Error('Something went wrong');
   }
 
-  return true;
+  return {
+    success: true,
+    contractId: params.contractid,
+    milestoneIndex: params.milestoneIndex,
+  };
 }
 
 export async function requestPayment(

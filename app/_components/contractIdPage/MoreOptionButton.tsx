@@ -116,6 +116,9 @@ function MoreOptionButton({
 
       {isViewSubmission && (
         <ViewSubmission
+          currentPage={currentPage}
+          size={size}
+          index={index}
           status={status}
           contractId={contractId}
           notEditable={false}

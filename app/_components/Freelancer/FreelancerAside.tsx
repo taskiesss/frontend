@@ -72,7 +72,7 @@ export default function FreelancerAside({ onClose }: { onClose: () => void }) {
     } else {
       params.delete("rate");
     }
-
+    params.set("page", "1");
     const currentQuery = new URLSearchParams(window.location.search).toString();
     const newQuery = params.toString();
 
