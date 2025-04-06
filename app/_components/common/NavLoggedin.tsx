@@ -189,7 +189,7 @@ const NavLoggedin: React.FC = () => {
   };
 
   return (
-    <Container className="z-30 mx-0 bg-transparent">
+    <Container className="z-20 mx-0 bg-transparent">
       <nav className="bg-[var(--background-color)] py-10 grid grid-rows-1 grid-cols-[min-content,1fr,1fr] place-items-center ">
         {/* Logo Section */}
         <div className="flex w-[10rem] h-auto justify-center flex-col">

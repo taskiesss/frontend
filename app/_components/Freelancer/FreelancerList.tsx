@@ -9,11 +9,14 @@ interface Props {
     content: FreelancerResponse[];
     totalElements: number;
     size: number;
+    pageable: { pageNumber: number };
   };
 }
 
 export default function FreelancerList({ freelancers }: Props) {
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(
+    freelancers.pageable.pageNumber
+  );
 
   return (
     <div className="w-full flex flex-col gap-8 justify-start">

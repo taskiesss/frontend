@@ -22,14 +22,15 @@ interface Props {
     content: Job[];
     totalElements: number;
     size: number;
+    pageable: { pageNumber: number };
   };
 }
 
 // await new Promise((resolve) => setTimeout(resolve, 5000));
 
 export default function JobList({ jobs }: Props) {
-  const [currentPage, setCurrentPage] = useState(1);
-
+  const [currentPage, setCurrentPage] = useState(jobs.pageable.pageNumber);
+  console.log(jobs);
   return (
     <div className=" w-full flex flex-col gap-8 justify-start ">
       <h1 className="text-3xl font-bold mb-6">Job Listings</h1>

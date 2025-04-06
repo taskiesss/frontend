@@ -9,13 +9,16 @@ interface Props {
     content: CommunityResponse[];
     totalElements: number;
     size: number;
+    pageable: { pageNumber: number };
   };
 }
 
 // await new Promise((resolve) => setTimeout(resolve, 5000));
 
 export default function CommunityList({ communities }: Props) {
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(
+    communities.pageable.pageNumber
+  );
 
   return (
     <div className=" w-full flex flex-col gap-8 justify-start  ">
