@@ -16,9 +16,9 @@ import CreateSubmissionForm from "./CreateSubmissionForm";
 import {
   deleteFileOrLinkAPI,
   getSubmission,
-  milestoneApproval,
   postSubmission,
 } from "@/app/_lib/ContractsAPi/contractAPI";
+import { milestoneApproval } from "@/app/_lib/ContractsAPi/milestonesActions";
 
 interface Submission {
   id: string | number;

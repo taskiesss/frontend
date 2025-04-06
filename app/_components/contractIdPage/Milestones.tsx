@@ -7,7 +7,12 @@ import { Pagination } from "../common/Pagination";
 import ProtectedPage from "../common/ProtectedPage";
 import MilestonesTable from "./MilestonesTable";
 
-type Props = { contractId: string; role?: string; isAdmin: boolean };
+type Props = {
+  communityid?: string;
+  contractId: string;
+  role?: string;
+  isAdmin: boolean;
+};
 
 //   content: [
 //     {
@@ -52,7 +57,7 @@ type Props = { contractId: string; role?: string; isAdmin: boolean };
 //   size: 2,
 //   number: 0,
 // };
-function Milestones({ isAdmin, contractId, role }: Props) {
+function Milestones({ communityid, isAdmin, contractId, role }: Props) {
   const [currentPage, setCurrentPage] = useState(1);
 
   const size = 10;
@@ -86,7 +91,7 @@ function Milestones({ isAdmin, contractId, role }: Props) {
       return undefined;
     },
 
-    staleTime: 5 * 60 * 1000,
+    staleTime: 0,
   });
 
   if (isError) {
@@ -132,10 +137,13 @@ function Milestones({ isAdmin, contractId, role }: Props) {
           </thead>
           <tbody>
             <MilestonesTable
+              communityid={communityid}
               isAdmin={isAdmin}
               contractId={contractId}
               milestones={data}
               role={role}
+              currentPage={currentPage}
+              size={size}
             />
           </tbody>
         </table>

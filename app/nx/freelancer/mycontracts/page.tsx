@@ -62,6 +62,7 @@ async function page({ searchParams }: Props) {
     // console.log(reqbody);
     const token = (await cookies()).get("token")?.value;
     contracts = await getMyContracts(reqbody, token);
+    console.log(contracts);
     return <AllContracts contracts={contracts} />;
   } catch (error: any) {
     if (

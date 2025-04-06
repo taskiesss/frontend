@@ -11,9 +11,20 @@ type Props = {
   milestones: ContractMilestones;
   contractId: string;
   role?: string;
+  communityid?: string;
+  currentPage: number;
+  size: number;
 };
 
-function MilestonesTable({ milestones, contractId, role, isAdmin }: Props) {
+function MilestonesTable({
+  communityid,
+  milestones,
+  contractId,
+  role,
+  isAdmin,
+  size,
+  currentPage,
+}: Props) {
   const [viewingMilestoneIndex, setViewingMilestoneIndex] = useState<
     number | null
   >(null);
@@ -48,10 +59,14 @@ function MilestonesTable({ milestones, contractId, role, isAdmin }: Props) {
                 isAdmin &&
                 role !== "client" && (
                   <MoreOptionButton
+                    index={i}
+                    communityid={communityid}
                     status={m.status}
                     contractId={contractId}
                     milestoneIndex={m.milestoneId}
                     title={m.title}
+                    currentPage={currentPage}
+                    size={size}
                   />
                 )}
 
@@ -92,7 +107,11 @@ function MilestonesTable({ milestones, contractId, role, isAdmin }: Props) {
           </tr>
         ))
       ) : (
-        <span>There is no milestones</span>
+        <tr>
+          <td className="p-4">
+            <span>There is no milestones</span>
+          </td>
+        </tr>
       )}
     </>
   );

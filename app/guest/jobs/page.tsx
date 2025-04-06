@@ -25,7 +25,9 @@ export default async function page({ searchParams }: Props) {
   return (
     <Container className="py-6">
       {paginations?.content && paginations?.content.length > 0 ? (
-        <JobList jobs={paginations} />
+        <Container className="w-full px-3 sm:px-5 lg:px-7 xl:px-16">
+          <JobList jobs={paginations} />
+        </Container>
       ) : (
         <div className=" grid place-items-center min-h-screen">
           <span className="text-[var(--accent-color)] text-3xl">

@@ -4,26 +4,37 @@
 import { useState } from "react";
 import ViewSubmission from "./ViewSubmissions";
 import Cookies from "js-cookie";
-import { requestPayment } from "@/app/_lib/ContractsAPi/contractAPI";
+import { requestPayment } from "@/app/_lib/ContractsAPi/milestonesActions";
 import ProtectedPage from "../common/ProtectedPage";
 import Button from "../common/button";
+import { useQueryClient } from "@tanstack/react-query";
 // interface MoreOptionButtonProps {}
 
 function MoreOptionButton({
+  communityid,
   status,
   title,
   contractId,
   milestoneIndex,
+  index,
+  currentPage,
+  size,
 }: {
+  communityid?: string;
   status: string;
   title: string;
   contractId: string;
   milestoneIndex: string;
+  index: number;
+  currentPage: number;
+  size: number;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isForbidden, setIsForbidden] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [isViewSubmission, setIsViewSubmission] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const queryClient = useQueryClient();
 
   const handleViewSubmissions = () => {
     setIsViewSubmission(true);
@@ -33,24 +44,34 @@ function MoreOptionButton({
 
   const handleRequestPayment = async () => {
     const token = Cookies.get("token");
+    setIsSubmitting(true);
     try {
-      const requestPayemntResponse = await requestPayment(
+      const { contractId: returnedContractId } = await requestPayment(
         {
+          communityid: communityid,
           contractid: contractId,
-          milestoneIndex: milestoneIndex,
+          index: index + 1,
+          milestoneIndex,
         },
         token
       );
+
+      queryClient.invalidateQueries({
+        queryKey: ["ContractMilestones", returnedContractId, currentPage, size],
+        exact: true,
+      });
     } catch (error: any) {
       if (
         error.message === "Forbidden" ||
         error.message === "Unauthorized user"
       ) {
         setIsForbidden(true);
+        setIsSubmitting(false);
         return;
       }
     } finally {
-      setIsOpen(false);
+      setIsSubmitting(false);
+      setShowConfirmation(false);
     }
   };
   if (isForbidden) {
@@ -118,6 +139,7 @@ function MoreOptionButton({
             <div className="flex justify-end gap-4">
               <button
                 type="button"
+                disabled={isSubmitting}
                 onClick={() => setShowConfirmation(false)}
                 className="px-4 py-2 bg-gray-300 text-black rounded-lg hover:bg-gray-400 transition-colors"
               >
@@ -126,9 +148,10 @@ function MoreOptionButton({
 
               <button
                 className="text-lg bg-[var(--hover-color)] py-2 px-3 rounded-lg hover:bg-[var(--btn-color)]"
+                disabled={isSubmitting}
                 onClick={handleRequestPayment}
               >
-                Request Payment
+                {isSubmitting ? "Submitting request..." : "Request Payment"}
               </button>
             </div>
           </div>

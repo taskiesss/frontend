@@ -214,7 +214,14 @@ function Contract({ contract, contractId, role, isAdmin }: Props) {
       <div className="flex flex-col gap-4 pb-20">
         <h2 className="text-2xl font-semibold">Milestones</h2>
         <Suspense fallback={<Spinner />}>
-          <Milestones isAdmin={isAdmin} contractId={contractId} role={role} />
+          <Milestones
+            communityid={
+              contract.isCommunity ? contract.freelancerId : undefined
+            }
+            isAdmin={isAdmin}
+            contractId={contractId}
+            role={role}
+          />
         </Suspense>
       </div>
     </Container>

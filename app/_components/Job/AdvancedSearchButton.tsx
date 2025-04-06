@@ -9,20 +9,9 @@ function AdvancedSearchButton({}) {
 
   return (
     <>
-      {showAdvanced ? (
-        <div className="relative">
-          <JobAside onClose={() => setShowAdvanced(false)} />
-        </div>
-      ) : (
-        <div className="">
-          <button
-            className="px-4 py-2 bg-[var(--btn-color)] text-[var(--accent-color)] rounded-md"
-            onClick={() => setShowAdvanced(true)} // Toggle state on click
-          >
-            Advanced Search
-          </button>
-        </div>
-      )}
+      <div className="relative">
+        <JobAside onClose={() => setShowAdvanced(false)} />
+      </div>
     </>
   );
 }

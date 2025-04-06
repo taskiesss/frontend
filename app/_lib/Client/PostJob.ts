@@ -27,7 +27,7 @@ export async function postAJob(
   }
   console.log(reqbody);
 
-  const res = await fetch(`${BASE_URL}/client/PostJob`, {
+  const res = await fetch(`${BASE_URL}/clients/PostJob`, {
     method: 'POST',
     headers: {
       'content-type': 'application/json',
@@ -44,7 +44,7 @@ export async function postAJob(
     return { error: 'Something went wrong' };
   }
 
-  redirect('/nx/client/all-jobs');
-
+  // redirect('/nx/client/all-jobs');
+  console.log('Form Sent successfuly');
   return {};
 }

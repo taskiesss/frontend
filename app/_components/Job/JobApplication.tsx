@@ -177,14 +177,17 @@ export default function JobApplication({ jobid }: Props) {
   const discountedTotalPrice = totalPrice * (1 - TASKAYA_SERVICE);
 
   return (
-    <Container className="flex flex-col items-center gap-4">
+    <Container className="flex flex-col items-center gap-4 w-4/6">
       <div className="pt-16 text-center">
         <h1 className="text-3xl font-bold ">
           You are Applying as {localCandidateName}
         </h1>
       </div>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-10 py-5">
-        <div className="flex flex-col border border-solid border-gray-600 gap-5 px-6 py-6 rounded-lg">
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col gap-10 py-5 px-4 w-full"
+      >
+        <div className="flex flex-col border border-solid border-gray-600 gap-5 p-6 rounded-lg w-full">
           <h1 className="text-3xl">Terms</h1>
           <div className="flex flex-col gap-3">
             <label className="text-lg">How do you want to be paid</label>
@@ -218,7 +221,7 @@ export default function JobApplication({ jobid }: Props) {
               value={pricePerHour}
               onChange={handlePricePerHourChange}
               min="0"
-              className="border border-solid w-1/4 border-[var(--border-color)] focus:outline-none bg-[var(--background-color)] py-2 px-2 rounded-lg"
+              className="border border-solid w-1/4 border-[var(--border-color)] focus:outline-none bg-[var(--background-color)] text-lg py-2 px-2 rounded-lg"
               required
             />
           </div>
@@ -227,75 +230,84 @@ export default function JobApplication({ jobid }: Props) {
               How many milestones do you want to include
             </span>
             {milestones.map((m, index) => (
-              <div key={index} className="flex gap-7 items-start py-3">
-                <div className="flex flex-col gap-3">
-                  <label htmlFor={`title-${index}`} className="text-lg">
-                    Title
-                  </label>
-                  <input
-                    type="text"
-                    name={`title-${index}`}
-                    id={`title-${index}`}
-                    value={m.title}
-                    onChange={(e) => handleMilestoneChange(index, "title", e)}
-                    className="border border-solid border-[var(--border-color)] focus:outline-none bg-[var(--background-color)] py-2 px-2 rounded-lg"
-                    required
-                  />
+              <div key={index} className="flex flex-col pt-5 gap-3 w-full">
+                <div className="flex gap-5">
+                  <h1 className="text-lg font-bold">Milestone {index + 1}</h1>
+                  <div
+                    className={`${
+                      !(milestones.length > 1) ? "invisible" : ""
+                    } self-center`}
+                  >
+                    <button
+                      type="button"
+                      onClick={() => removeMilestone(index)}
+                      className="focus:outline-none text-red-600 transition-transform duration-200 hover:scale-110"
+                    >
+                      Remove
+                    </button>
+                  </div>
                 </div>
-                <div className="flex flex-col gap-3">
+                <div className="flex gap-7 items-start py-3 w-full">
+                  <div className="flex flex-col gap-3 w-full">
+                    <label htmlFor={`title-${index}`} className="text-lg">
+                      Title
+                    </label>
+                    <input
+                      type="text"
+                      name={`title-${index}`}
+                      id={`title-${index}`}
+                      value={m.title}
+                      onChange={(e) => handleMilestoneChange(index, "title", e)}
+                      className="border border-solid border-[var(--border-color)] focus:outline-none bg-[var(--background-color)] text-lg py-2 px-2 rounded-lg"
+                      required
+                    />
+                  </div>
+
+                  <div className="flex flex-col gap-3 w-full">
+                    <label htmlFor={`duedate-${index}`}>Due Date</label>
+                    <input
+                      type="date"
+                      name={`duedate-${index}`}
+                      id={`duedate-${index}`}
+                      value={m.dueDate}
+                      onChange={(e) =>
+                        handleMilestoneChange(index, "dueDate", e)
+                      }
+                      className="border border-solid border-[var(--border-color)] bg-[var(--background-color)] text-lg focus:outline-none py-2 px-2 rounded-lg"
+                      required
+                    />
+                  </div>
+                  <div className="flex flex-col  gap-3 w-full">
+                    <label htmlFor={`expectedHours-${index}`}>
+                      Expected Hours
+                    </label>
+                    <input
+                      type="number"
+                      name={`expectedHours-${index}`}
+                      id={`expectedHours-${index}`}
+                      value={m.expectedHours}
+                      onChange={(e) =>
+                        handleMilestoneChange(index, "expectedHours", e)
+                      }
+                      min="0"
+                      className="border border-solid border-[var(--border-color)] bg-[var(--background-color)] text-lg focus:outline-none py-2 px-2 rounded-lg"
+                      required
+                    />
+                  </div>
+                </div>
+                <div className="w-full flex flex-col gap-3">
                   <label htmlFor={`description-${index}`}>Description</label>
                   <textarea
                     name={`description-${index}`}
                     id={`description-${index}`}
+                    rows={3}
                     value={m.description}
                     onChange={(e) =>
                       handleMilestoneChange(index, "description", e)
                     }
-                    className="border border-solid border-[var(--border-color)] focus:outline-none bg-[var(--background-color)] py-2 px-2 rounded-lg resize-none"
+                    className="border border-solid border-[var(--border-color)] focus:outline-none bg-[var(--background-color)] text-lg py-3 px-3 rounded-lg resize-none "
                     required
                   />
-                </div>
-                <div className="flex flex-col gap-3">
-                  <label htmlFor={`duedate-${index}`}>Due Date</label>
-                  <input
-                    type="date"
-                    name={`duedate-${index}`}
-                    id={`duedate-${index}`}
-                    value={m.dueDate}
-                    onChange={(e) => handleMilestoneChange(index, "dueDate", e)}
-                    className="border border-solid border-[var(--border-color)] bg-[var(--background-color)] focus:outline-none py-2 px-2 rounded-lg"
-                    required
-                  />
-                </div>
-                <div className="flex flex-col gap-3">
-                  <label htmlFor={`expectedHours-${index}`}>
-                    Expected Hours
-                  </label>
-                  <input
-                    type="number"
-                    name={`expectedHours-${index}`}
-                    id={`expectedHours-${index}`}
-                    value={m.expectedHours}
-                    onChange={(e) =>
-                      handleMilestoneChange(index, "expectedHours", e)
-                    }
-                    min="0"
-                    className="border border-solid border-[var(--border-color)] bg-[var(--background-color)] focus:outline-none py-2 px-2 rounded-lg"
-                    required
-                  />
-                </div>
-                <div
-                  className={`${
-                    !(milestones.length > 1) ? "invisible" : ""
-                  } self-center`}
-                >
-                  <button
-                    type="button"
-                    onClick={() => removeMilestone(index)}
-                    className="focus:outline-none text-red-600 transition-transform duration-200 hover:scale-110"
-                  >
-                    Remove
-                  </button>
                 </div>
               </div>
             ))}

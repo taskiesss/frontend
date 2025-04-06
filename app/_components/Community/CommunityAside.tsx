@@ -90,22 +90,19 @@ export default function CommunitiyAside({ onClose }: { onClose: () => void }) {
   };
 
   return (
-    <div className="sticky top-[2.5rem] left-0">
-      <button
-        onClick={onClose}
-        className="px-4 py-2 bg-[var(--btn-color)] text-[var(--accent-color)] rounded-md"
-      >
+    <div className="sticky  left-0">
+      <h1 className="px-4 py-2 text-xl font-bold text-[var(--accent-color)] rounded-md">
         Advanced Search
-      </button>
+      </h1>
 
-      <aside className="row-start-3 bg-[var(--background-color)] rounded-lg shadow-s">
-        <div className="py-2">
+      <aside className="bg-[var(--background-color)] rounded-lg shadow-s  p-4 ">
+        <div className="pb-2">
           <h2 className="py-3 text-xl font-bold">Rating</h2>
           <StarRating maxRating={5} size={24} onSetRating={setUserRating} />
         </div>
 
-        <form onSubmit={handleSubmit} className="py-5">
-          <div className="py-2">
+        <form onSubmit={handleSubmit} className="pb-5">
+          <div className="pb-2">
             <h3 className="py-3 text-xl font-bold">Skills</h3>
             <SkillsSearchInput
               key={resetKey}
@@ -118,7 +115,7 @@ export default function CommunitiyAside({ onClose }: { onClose: () => void }) {
             />
           </div>
 
-          <div className="py-2">
+          <div className="pb-2">
             <h3 className="text-xl py-3 font-bold">Experience level</h3>
             <div className="space-y-2 py-3">
               {experienceOptions.map((exp) => (
@@ -142,7 +139,7 @@ export default function CommunitiyAside({ onClose }: { onClose: () => void }) {
             </div>
           </div>
 
-          <div className="py-4">
+          <div className="pb-4">
             <h3 className="text-xl py-3 font-bold">Community capacity</h3>
             <div className="flex items-center">
               <label className="container">
@@ -157,7 +154,7 @@ export default function CommunitiyAside({ onClose }: { onClose: () => void }) {
             </div>
           </div>
 
-          <div className="py-4">
+          <div className="pb-4">
             <h3 className="text-xl py-3 font-bold">Hourly Rate range</h3>
             <div className="py-3 flex space-x-2">
               <div className="w-1/2">
