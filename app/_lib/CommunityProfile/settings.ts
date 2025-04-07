@@ -1,0 +1,74 @@
+"use server";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { invariant } from "@/app/_helpers/invariant";
+import {
+  RoleAndPosition,
+  UpdatePositionRequest,
+} from "@/app/_types/CommunitySettings";
+import { revalidatePath } from "next/cache";
+
+const BASE_URL = "http://localhost:8080";
+
+export async function getCommunityRolesAndPositions(
+  communityId: string,
+  token: string | undefined
+): Promise<RoleAndPosition[]> {
+  invariant(!token, "Unauthorized user");
+
+  const res = await fetch(
+    `${BASE_URL}/freelancers/communities/${communityId}/roles-and-positions`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  console.log(communityId);
+  console.log(token);
+
+  if (res.status === 401) throw new Error("Unauthorized");
+  if (res.status === 403) throw new Error("Forbidden");
+  if (!res.ok) throw new Error("Something went wrong");
+
+  return res.json();
+}
+
+export async function updateCommunityPositions(
+  communityId: string,
+  positions: UpdatePositionRequest[],
+  token: string | undefined
+): Promise<{ message: string }> {
+  invariant(!token, "Unauthorized user");
+
+  // Validate total percentage equals 100% with a small tolerance
+  const totalPercent = positions.reduce(
+    (sum, pos) => sum + pos.financialPercent,
+    0
+  );
+  if (Math.abs(totalPercent - 100) > 0.01) {
+    throw new Error("Total financial percentage must equal 100%");
+  }
+
+  const res = await fetch(
+    `${BASE_URL}/freelancers/communities/${communityId}/update-positions`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(positions),
+    }
+  );
+
+  if (res.status === 400) throw new Error("Bad Request - Invalid data");
+  if (res.status === 401) throw new Error("Unauthorized");
+  if (res.status === 403) throw new Error("Forbidden");
+  if (res.status === 404) throw new Error("Community not found");
+  if (!res.ok) throw new Error("Something went wrong");
+
+  revalidatePath(`/communities/${communityId}/settings`);
+  return res.json();
+}
