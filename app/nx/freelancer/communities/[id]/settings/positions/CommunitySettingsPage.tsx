@@ -22,7 +22,7 @@ import {
   getCommunityRolesAndPositions,
   updateCommunityPositions,
 } from "@/app/_lib/CommunityProfile/settings";
-import Button from "@/app/_components/common/button";
+
 import AddPositionForm from "@/app/_components/communityProfile/Forms/AddPositionForm";
 import Spinner from "@/app/_components/common/Spinner";
 
@@ -39,9 +39,6 @@ export default function CommunitySettingsPage({
   token,
   userId,
 }: Props) {
-  // Keep original positions reference untouched
-  const [currentPositions, setCurrentPositions] =
-    useState<RoleAndPosition[]>(initialPositions);
   const [futurePositions, setFuturePositions] =
     useState<RoleAndPosition[]>(initialPositions);
 
@@ -65,7 +62,7 @@ export default function CommunitySettingsPage({
 
     // Initialize input values from current positions
     setInputValues(
-      currentPositions.map((pos) => pos.futurePercentage.toString())
+      futurePositions.map((pos) => pos.futurePercentage.toString())
     );
 
     setIsEditing(true);
@@ -263,7 +260,7 @@ export default function CommunitySettingsPage({
               <Suspense fallback={<Spinner />}>
                 <tbody>
                   {(isEditing ? editingPositions : futurePositions).map(
-                    (item, index) => (
+                    (item: RoleAndPosition, index) => (
                       <tr
                         key={index}
                         className="border-b border-[var(--border-color)]"
@@ -317,8 +314,7 @@ export default function CommunitySettingsPage({
                               {item.futurePercentage}%
                               {!isEditing &&
                                 item.futurePercentage !==
-                                  item.currentPercentage &&
-                                item.positionId && (
+                                  item.currentPercentage && (
                                   <span className="relative inline-block ml-2 group">
                                     <FontAwesomeIcon
                                       icon={faCircleInfo}
@@ -343,7 +339,7 @@ export default function CommunitySettingsPage({
                         </td>
                         <td className="px-6 py-4 text-sm flex justify-between items-center gap-2">
                           <span>{item.description}</span>
-                          {isEditing && (
+                          {isEditing && !item.nameAndPicture.admin && (
                             <FontAwesomeIcon
                               icon={faTrash}
                               className="text-gray-400 hover:text-gray-600 cursor-pointer"
@@ -386,7 +382,7 @@ export default function CommunitySettingsPage({
               currentPercentage: 0, // New positions start with 0 current %
               description: newPosition.description,
             };
-            // Update state
+
             setEditingPositions((prev) => [...prev, newRolePosition]);
             setInputValues((prev) => [
               ...prev,

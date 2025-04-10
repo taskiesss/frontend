@@ -14,29 +14,13 @@ export default function SettingsSmallNav({
       <ul className="flex gap-8">
         <li>
           <Link
-            href={`/communities/${communityId}/settings`}
-            className={`text-lg text-[var(--accent-color)] whitespace-nowrap py-2 px-0 hover:text-[var(--hover-color)] font-medium ${
-              pathname === `/communities/${communityId}/settings`
-                ? "text-2xl text-[var(--hover-color)] font-extrabold"
-                : "border-transparent"
-            }`}
-          >
-            General
-          </Link>
-        </li>
-        <li>
-          <Link
             href={`/communities/${communityId}/settings/positions`}
             className={`text-lg text-[var(--accent-color)] whitespace-nowrap py-2 px-0 hover:text-[var(--hover-color)] font-medium ${
               pathname === `/communities/${communityId}/settings/positions`
                 ? "text-2xl text-[var(--hover-color)] font-extrabold"
                 : "border-transparent"
             }`}
-            aria-current={
-              pathname === `/communities/${communityId}/settings/positions`
-                ? "page"
-                : undefined
-            }
+            aria-current="page"
           >
             Positions & Roles
           </Link>
