@@ -154,6 +154,21 @@ export default function CommunitySettingsPage({
     // Simply exit edit mode without applying changes
     setIsEditing(false);
     setErrorMessage(null);
+    console.log(editingPositions);
+  };
+
+  const handleDeleteClick = (positionId: number) => {
+    setEditingPositions((prev) => {
+      const indexToRemove = prev.findIndex((p) => p.positionId === positionId);
+
+      // Remove both position and input value
+      const newPositions = prev.filter((p) => p.positionId !== positionId);
+      const newInputValues = [...inputValues];
+      newInputValues.splice(indexToRemove, 1);
+
+      setInputValues(newInputValues);
+      return newPositions;
+    });
   };
 
   return (
@@ -312,7 +327,8 @@ export default function CommunitySettingsPage({
                         {isEditing && (
                           <FontAwesomeIcon
                             icon={faTrash}
-                            className="text-gray-400 hover:text-gray-600 cursor-pointer "
+                            className="text-gray-400 hover:text-gray-600 cursor-pointer"
+                            onClick={() => handleDeleteClick(item.positionId)}
                           />
                         )}
                       </td>
