@@ -14,6 +14,7 @@ import {
 } from "@/app/_lib/CommunityProfile/board"; // <-- ADJUST PATH AS NEEDED
 import { Pagination } from "../common/Pagination"; // Assuming correct path
 import Skill from "../common/Skill";
+import Link from "next/link";
 
 // --- INTERFACE FOR PROPS ---
 interface CommunityOffersProps {
@@ -235,7 +236,13 @@ export default function CommunityOffers({
               className="rounded-lg shadow-md p-4 md:p-5"
             >
               {/* Offer Header */}
-              <h3 className="text-xl font-semibold mb-2">{offer.jobTitle}</h3>
+              <Link
+                href={`/nx/freelancer/communities/${communityId}/contracts/${offer.contractID}`}
+              >
+                <h3 className="text-2xl font-semibold mb-2 text-[var(--btn-color)] hover:text-[var(--button-hover-background-color)] hover:underline transition-colors">
+                  {offer.jobTitle}
+                </h3>
+              </Link>
               <p className="text-gray-500 mb-3 text-sm leading-relaxed line-clamp-3">
                 {offer.description}
               </p>
@@ -293,7 +300,7 @@ export default function CommunityOffers({
                   >
                     <div className="flex justify-between items-center">
                       <p
-                        className={`text-sm font-medium ${
+                        className={`text-sm font-medium transition-colors ${
                           offer.agreed === true
                             ? "text-green-700"
                             : "text-gray-600"

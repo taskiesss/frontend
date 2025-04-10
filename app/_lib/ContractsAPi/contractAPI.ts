@@ -234,3 +234,37 @@ export async function postRateReview(
   // revalidate contract api
   revalidateTag('contracts');
 }
+
+export async function AcceptOrRejectContract(
+  reqbody: { id: string; accepted: boolean },
+  token: string | undefined
+): Promise<any> {
+  // for (const key of request.keys()) {
+  //   console.log('Key:', key);
+  // }
+  invariant(!token, 'Unauthorized user');
+  console.log(reqbody);
+
+  const res = await fetch(
+    `${BASE_URL}/freelancers/contracts/${reqbody.id}/approve-contract`,
+    {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ accepted: reqbody.accepted }),
+    }
+  );
+  // console.log(res);
+  if (res.status === 403) {
+    throw new Error('Forbidden');
+  }
+
+  if (!res.ok) {
+    throw new Error('Something went wrong');
+  }
+
+  // revalidate contract api
+  revalidateTag('contracts');
+}

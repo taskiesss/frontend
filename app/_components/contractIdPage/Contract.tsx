@@ -17,8 +17,8 @@ import { Suspense } from "react";
 import Container from "../common/Container";
 import Spinner from "../common/Spinner";
 import StatusCard from "../myContracts/StatusCard";
+import ApproveContract from "./ApproveContract";
 import Milestones from "./Milestones";
-import Button from "../common/button";
 import RatingModal from "./RatingModal";
 
 type Props = {
@@ -260,17 +260,9 @@ function Contract({ contract, contractId, role, isAdmin }: Props) {
         </Suspense>
       </div>
       {/* Accept or reject contract */}
-      {contract.canAccept &&
-        contract.contractStatus.toLowerCase() === "pending" && (
-          <div className="flex gap-5 self-end pb-20">
-            <Button className="shadow-[0_0_1em_0.25em_red] after:shadow-[0_0_1em_0.25em_red] after:bg-red-500 py-2 px-3 rounded-lg text-lg  ">
-              Reject
-            </Button>
-            <Button className="shadow-[0_0_1em_0.25em_green] after:shadow-[0_0_1em_0.25em_green] after:bg-green-500 py-2 px-3 rounded-lg text-lg">
-              Accept
-            </Button>
-          </div>
-        )}
+      {contract.contractStatus.toLowerCase() === "pending" && (
+        <ApproveContract contract={contract} contractId={contractId} />
+      )}
     </Container>
   );
 }
