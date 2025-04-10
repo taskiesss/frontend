@@ -7,6 +7,9 @@ import StarRating from "../common/StarRating";
 import HeaderForm from "./Forms/HeaderForm";
 import CommunityProfilePhotoForm from "./ProfilePhotoForm";
 import SendRequestComponent from "./SendRequestComponent";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGear } from "@fortawesome/free-solid-svg-icons";
+import Link from "next/link";
 
 export default function CommunityHeader({
   community,
@@ -47,7 +50,7 @@ export default function CommunityHeader({
           {community.isAdmin && (
             <div className="absolute bottom-1 right-0 rounded-full z-50">
               <EditButton
-                className="rounded-full p-1 w-10 aspect-square text-white bg-[var(--hover-color)] text-md "
+                className="rounded-full p-1 w-10 aspect-square text-white bg-[var(--hover-color)] text-md"
                 onClick={() => setIsEditingPicture(true)}
               />
             </div>
@@ -80,8 +83,21 @@ export default function CommunityHeader({
         )}
 
         {community.isAdmin && (
-          <div>
+          <div className="flex space-x-2">
             <EditButton onClick={() => setIsEditingHeader(true)} />
+
+            {/* Settings navigation link */}
+            <Link
+              href={`/nx/freelancer/communities/${community.id}/settings/positions`}
+              passHref
+            >
+              <button
+                className="rounded-full p-1 w-10 aspect-square text-white bg-[var(--hover-color)] text-md flex items-center justify-center"
+                aria-label="Settings"
+              >
+                <FontAwesomeIcon icon={faGear} />
+              </button>
+            </Link>
           </div>
         )}
       </div>
