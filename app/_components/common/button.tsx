@@ -43,6 +43,7 @@ const Button: React.FC<ButtonProps> = ({
         after:content-['']
         after:absolute
         after:top-0
+        after:rounded
         after:bottom-0
         after:left-0
         after:right-0

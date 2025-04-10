@@ -65,7 +65,11 @@ export default function CommunityHeader({
           <p className="text-md">{community.country}</p>
           <p className="text-lg font-bold">${community.pricePerHour}/hr</p>
           <div className="pointer-events-none">
-            <StarRating size={20} defaultRating={community.rate} />
+            <StarRating
+              size={20}
+              defaultRating={community.rate}
+              allowHalf={true}
+            />
           </div>
           {community.isFull && (
             <p className="border-2 border-red-600 text-red-600 py-2 px-4 rounded-full max-w-fit">

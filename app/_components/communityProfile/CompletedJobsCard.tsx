@@ -36,6 +36,7 @@ export default function CompletedJobsCard({
             defaultRating={job.rate}
             color="#FFC107"
             className="text-lg"
+            allowHalf={true}
           />
         </div>
         <div className="flex gap-4 text-md font-extralight">

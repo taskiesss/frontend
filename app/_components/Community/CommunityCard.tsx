@@ -128,6 +128,7 @@ const CommunityCard: React.FC<JobCardProps> = ({ community }) => {
                 defaultRating={rate}
                 color="var(--star)"
                 size={18}
+                allowHalf={true}
               />
             </div>
             <span className="text-slate-500 block">

@@ -2,7 +2,7 @@ import { formatDayMonthToString } from "@/app/_helpers/helper";
 import { ContractMilestones } from "@/app/_types/ContractDetailsResponse";
 import MoreOptionButton from "./MoreOptionButton";
 import MilestoneStatus from "./MilestoneStatus";
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import ViewSubmission from "./ViewSubmissions";
 import Spinner from "../common/Spinner";
 import DescriptionComponent from "./DescriptionComponent";
@@ -29,6 +29,16 @@ function MilestonesTable({
   const [viewingMilestoneIndex, setViewingMilestoneIndex] = useState<
     number | null
   >(null);
+
+  useEffect(() => {
+    if (viewingMilestoneIndex !== null)
+      document.body.style.overflow = "hidden"; // Hide page scrollbar
+    else document.body.style.overflow = "auto";
+    // Cleanup on unmount
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [viewingMilestoneIndex]);
 
   return (
     <>

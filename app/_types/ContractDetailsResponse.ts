@@ -1,5 +1,5 @@
 export interface contractDetailsResponse {
-  contractStatus: 'active' | 'ended';
+  contractStatus: 'active' | 'ended' | 'rejected' | 'pending';
   jobTitle: string;
   totalCurrentEarnings: number;
   jobId: string;
@@ -16,6 +16,12 @@ export interface contractDetailsResponse {
   startDate: string;
   endDate: string;
   isCommunity: boolean;
+  memberPercentage: number;
+  memberEarnings: number;
+  voteIsDone: boolean;
+  pendingClientToRate: boolean;
+  pendingFreelancerToRate: boolean;
+  canAccept: boolean;
 }
 
 export interface ContractMilestones {

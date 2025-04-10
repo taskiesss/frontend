@@ -76,6 +76,7 @@ export default function ContractCard({
                   defaultRating={contract.clientRateForFreelancer}
                   size={14}
                   color="#FFC107"
+                  allowHalf={true}
                 />
               </div>
             ) : (

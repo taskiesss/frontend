@@ -10,6 +10,7 @@ import {
 } from "@/app/_lib/CommunityProfile/board";
 import { Pagination } from "../common/Pagination";
 import Image from "next/image";
+import Link from "next/link";
 
 interface TalentRequestProps {
   editable: boolean;
@@ -101,18 +102,25 @@ export default function TalentRequests({
             key={request.freelancerID}
             className="flex items-center gap-5 py-5"
           >
-            <div className="relative w-12 aspect-square">
-              <Image
-                src={request.profilePicture || fallbackImage}
-                alt={`${request.name}'s profile`}
-                className="rounded-full object-cover"
-                fill
-                sizes="3rem"
-              />
-            </div>
+            <Link href={`/nx/freelancer/profile/${request.freelancerID}`}>
+              <div className="relative w-12 aspect-square">
+                <Image
+                  src={request.profilePicture || fallbackImage}
+                  alt={`${request.name}'s profile`}
+                  className="rounded-full object-cover"
+                  fill
+                  sizes="3rem"
+                />
+              </div>
+            </Link>
 
             <div>
-              <p className="font-bold text-xl">{request.name}</p>
+              <Link
+                href={`/nx/freelancer/profile/${request.freelancerID} `}
+                className="hover:text-[var(--button-hover-background-color)] hover:underline transition-colors"
+              >
+                <p className="font-bold text-xl">{request.name}</p>
+              </Link>
               <p>
                 Requested to join your community as{" "}
                 <span className="font-bold text-xl text-[var(--accent-color)]">
@@ -130,7 +138,7 @@ export default function TalentRequests({
                       "accept"
                     )
                   }
-                  className="w-28 px-4 py-2 border-2 border-solid border-green-600 text-[var(--accent-color)] rounded hover:bg-green-600"
+                  className="w-28 px-4 py-2 border-2 border-solid border-green-600 text-[var(--accent-color)] rounded hover:bg-green-600 transition-colors"
                 >
                   Approve
                 </button>
@@ -142,7 +150,7 @@ export default function TalentRequests({
                       "reject"
                     )
                   }
-                  className="w-28 px-4 py-2 border-2 border-solid border-red-500 text-[var(--accent-color)] rounded hover:bg-red-600"
+                  className="w-28 px-4 py-2 border-2 border-solid border-red-500 text-[var(--accent-color)] rounded hover:bg-red-600 transition-colors"
                 >
                   Reject
                 </button>
