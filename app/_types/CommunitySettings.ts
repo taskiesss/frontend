@@ -4,8 +4,8 @@ export interface RoleAndPosition {
     freelancerProfilePicture: string;
     name: string;
     position: string; // Matches the "position" field in nameAndPicture
-    freelancerId: string;
-    admin: boolean;
+    freelancerId?: string;
+    admin?: boolean;
   };
   description: string;
   positionId: number;

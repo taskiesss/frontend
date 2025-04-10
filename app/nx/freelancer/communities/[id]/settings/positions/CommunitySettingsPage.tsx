@@ -2,7 +2,7 @@
 "use client";
 
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { Suspense, useState } from "react";
 import SettingsSmallNav from "@/app/_components/communityProfile/SettingsSmallNav";
 import Container from "@/app/_components/common/Container";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -23,17 +23,21 @@ import {
   updateCommunityPositions,
 } from "@/app/_lib/CommunityProfile/settings";
 import Button from "@/app/_components/common/button";
+import AddPositionForm from "@/app/_components/communityProfile/Forms/AddPositionForm";
+import Spinner from "@/app/_components/common/Spinner";
 
 type Props = {
   rolesAndPositions: RoleAndPosition[];
   id: string;
   token?: string; // Token passed from server component for API calls
+  userId: string;
 };
 
 export default function CommunitySettingsPage({
   rolesAndPositions: initialPositions,
   id,
   token,
+  userId,
 }: Props) {
   // Keep original positions reference untouched
   const [currentPositions, setCurrentPositions] =
@@ -51,6 +55,8 @@ export default function CommunitySettingsPage({
 
   // Input values for display only
   const [inputValues, setInputValues] = useState<string[]>([]);
+
+  const [showAddPosition, setShowAddPosition] = useState(false);
 
   const handleEditClick = () => {
     // Create deep copies for editing
@@ -197,15 +203,20 @@ export default function CommunitySettingsPage({
               )}
               {isEditing && (
                 <>
-                  <Button
+                  <button
                     onClick={handleSaveClick}
                     disabled={errorMessage !== null}
+                    className="bg-green-500 text-white rounded-full w-10 aspect-square flex items-center justify-center hover:bg-green-600 disabled:bg-gray-300 disabled:cursor-not-allowed"
                   >
                     <FontAwesomeIcon icon={faCheck} size="lg" />
-                  </Button>
-                  <Button onClick={handleUndoClick}>
+                  </button>
+
+                  <button
+                    onClick={handleUndoClick}
+                    className="bg-orange-500 text-white rounded-full w-10 aspect-square flex items-center justify-center hover:bg-orange-600 ml-2"
+                  >
                     <FontAwesomeIcon icon={faUndo} size="lg" />
-                  </Button>
+                  </button>
                 </>
               )}
             </div>
@@ -213,133 +224,177 @@ export default function CommunitySettingsPage({
 
           {/* Error Message */}
           {errorMessage && (
-            <div className="text-red-500 text-sm">{errorMessage}</div>
+            <div className="text-red-500 text-sm font-semibold">
+              {errorMessage}
+            </div>
           )}
 
           {/* Table */}
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200 bg-white dark:bg-gray-800 shadow-md rounded-md">
               <thead className="bg-gray-50 dark:bg-gray-700">
-                <tr>
+                <tr className="bg-[var(--button-hover-background-color)] text-white">
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400"
+                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider "
                   >
                     Freelancer
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400"
+                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider "
                   >
                     Position
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400"
+                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider "
                   >
                     Financial %
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400"
+                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider "
                   >
                     Description
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-900 dark:divide-gray-700">
-                {(isEditing ? editingPositions : futurePositions).map(
-                  (item, index) => (
-                    <tr key={index}>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <div className="flex-shrink-0 h-10 w-10 relative">
-                            <Image
-                              src={
-                                item.nameAndPicture?.freelancerProfilePicture ||
-                                "/images/userprofile.jpg"
-                              }
-                              alt={item.nameAndPicture?.name || "image"}
-                              className="rounded-full object-cover"
-                              fill
-                              sizes="2.5rem"
-                            />
-                          </div>
-                          <div className="ml-4">
-                            <div className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                              {item.nameAndPicture?.name}
+              <Suspense fallback={<Spinner />}>
+                <tbody>
+                  {(isEditing ? editingPositions : futurePositions).map(
+                    (item, index) => (
+                      <tr
+                        key={index}
+                        className="border-b border-[var(--border-color)]"
+                      >
+                        <td className="px-6 py-4 whitespace-nowrap align-top">
+                          <div className="flex items-center">
+                            <div className="flex-shrink-0 h-10 w-10 relative">
+                              <Image
+                                src={
+                                  item.nameAndPicture
+                                    ?.freelancerProfilePicture ||
+                                  "/images/userprofile.jpg"
+                                }
+                                alt={item.nameAndPicture?.name || "image"}
+                                className="rounded-full object-cover"
+                                fill
+                                sizes="2.5rem"
+                              />
+                            </div>
+                            <div className="ml-4">
+                              <div className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                                {item.nameAndPicture?.name}
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900 dark:text-gray-100">
-                          {item.nameAndPicture?.position}
-                        </div>
-                        {item.nameAndPicture?.admin && (
-                          <div className="text-xs text-gray-500 dark:text-gray-300">
-                            Admin
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm text-gray-900 dark:text-gray-100">
+                            {item.nameAndPicture?.position}
                           </div>
-                        )}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        {isEditing ? (
-                          <input
-                            min={0}
-                            max={100}
-                            type="number"
-                            value={inputValues[index]}
-                            onChange={(e) =>
-                              handlePercentChange(index, e.target.value)
-                            }
-                            className="w-20 px-2 py-1 rounded dark:bg-gray-700 "
-                          />
-                        ) : (
-                          <div className="text-sm text-gray-500 dark:text-gray-300">
-                            {item.futurePercentage}%
-                            {!isEditing &&
-                              item.futurePercentage !==
-                                item.currentPercentage && (
-                                <span className="relative inline-block ml-2 group">
-                                  <FontAwesomeIcon
-                                    icon={faCircleInfo}
-                                    className="text-gray-500 group-hover:text-gray-600"
-                                  />
-                                  <div
-                                    className="
+                          {item.nameAndPicture?.admin && (
+                            <div className="text-xs text-gray-500 dark:text-gray-300">
+                              Admin
+                            </div>
+                          )}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          {isEditing ? (
+                            <input
+                              min={0}
+                              max={100}
+                              type="number"
+                              value={inputValues[index]}
+                              onChange={(e) =>
+                                handlePercentChange(index, e.target.value)
+                              }
+                              className="w-20 px-2 py-1 rounded bg-[var(--hover-color)]"
+                            />
+                          ) : (
+                            <div className="text-sm ">
+                              {item.futurePercentage}%
+                              {!isEditing &&
+                                item.futurePercentage !==
+                                  item.currentPercentage &&
+                                item.positionId && (
+                                  <span className="relative inline-block ml-2 group">
+                                    <FontAwesomeIcon
+                                      icon={faCircleInfo}
+                                      className="text-gray-500 group-hover:text-gray-600"
+                                    />
+                                    <div
+                                      className="
                                       absolute left-full top-1/2 transform -translate-y-1/2
                                       bg-gray-800 text-white text-xs rounded px-2 py-1
                                       whitespace-nowrap opacity-0 group-hover:opacity-100
                                       transition-opacity duration-200 ml-2
                                       pointer-events-none                          
                                     "
-                                  >
-                                    Current allocation: {item.currentPercentage}
-                                    %
-                                  </div>
-                                </span>
-                              )}
-                          </div>
-                        )}
-                      </td>
-                      <td className="px-6 py-4 text-sm text-gray-500 dark:text-gray-300 flex justify-between items-center gap-2">
-                        <span>{item.description}</span>
-                        {isEditing && (
-                          <FontAwesomeIcon
-                            icon={faTrash}
-                            className="text-gray-400 hover:text-gray-600 cursor-pointer"
-                            onClick={() => handleDeleteClick(item.positionId)}
-                          />
-                        )}
-                      </td>
-                    </tr>
-                  )
-                )}
-              </tbody>
+                                    >
+                                      Current allocation:{" "}
+                                      {item.currentPercentage}%
+                                    </div>
+                                  </span>
+                                )}
+                            </div>
+                          )}
+                        </td>
+                        <td className="px-6 py-4 text-sm flex justify-between items-center gap-2">
+                          <span>{item.description}</span>
+                          {isEditing && (
+                            <FontAwesomeIcon
+                              icon={faTrash}
+                              className="text-gray-400 hover:text-gray-600 cursor-pointer"
+                              onClick={() => handleDeleteClick(item.positionId)}
+                            />
+                          )}
+                        </td>
+                      </tr>
+                    )
+                  )}
+                </tbody>
+              </Suspense>
             </table>
           </div>
+
+          {isEditing && (
+            <button
+              onClick={() => setShowAddPosition(true)}
+              className="w-fit bg-[var(--btn-color)] px-4 py-2 rounded-lg"
+            >
+              + Add Position
+            </button>
+          )}
         </div>
       </div>
+
+      {showAddPosition && (
+        <AddPositionForm
+          onClose={() => setShowAddPosition(false)}
+          onPositionAdded={(newPosition: UpdatePositionRequest) => {
+            // Create RoleAndPosition object
+            const newRolePosition: RoleAndPosition = {
+              positionId: 0,
+              nameAndPicture: {
+                position: newPosition.positionName,
+                name: "New Member", // Default name (adjust as needed)
+                freelancerProfilePicture: "/images/userprofile.jpg", // Default image
+              },
+              futurePercentage: newPosition.financialPercent,
+              currentPercentage: 0, // New positions start with 0 current %
+              description: newPosition.description,
+            };
+            // Update state
+            setEditingPositions((prev) => [...prev, newRolePosition]);
+            setInputValues((prev) => [
+              ...prev,
+              newPosition.financialPercent.toString(),
+            ]);
+          }}
+        />
+      )}
     </Container>
   );
 }

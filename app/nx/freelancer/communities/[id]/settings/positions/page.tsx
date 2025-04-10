@@ -5,6 +5,7 @@ import { getCommunityRolesAndPositions } from "@/app/_lib/CommunityProfile/setti
 
 import ProtectedPage from "@/app/_components/common/ProtectedPage";
 import CommunitySettingsPage from "./CommunitySettingsPage";
+import { getFreelancerbyID } from "@/app/_lib/FreelancerProfile/APi";
 
 type Props = { params: { id: string } };
 
@@ -15,11 +16,13 @@ export default async function CommunitySettingsPageWrapper({ params }: Props) {
   const token = (await cookies()).get("token")?.value;
 
   let rolesAndPositions;
+  let userId;
   try {
     // Fetch roles and positions using the token
     rolesAndPositions = await getCommunityRolesAndPositions(id, token);
-
-    console.log(rolesAndPositions);
+    const freelancer = await getFreelancerbyID("my_profile", token);
+    console.log(freelancer);
+    userId = freelancer.uuid;
   } catch (error: any) {
     if (
       error.message === "Forbidden" ||
@@ -35,6 +38,7 @@ export default async function CommunitySettingsPageWrapper({ params }: Props) {
       rolesAndPositions={rolesAndPositions}
       id={id}
       token={token}
+      userId={userId}
     />
   );
 }
