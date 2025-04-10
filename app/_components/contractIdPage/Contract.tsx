@@ -57,7 +57,7 @@ function Contract({ contract, contractId, role, isAdmin }: Props) {
           contract.pendingFreelancerToRate) && (
           <div className="flex gap-4">
             <p className="text-[var(--bg-skill)] font-semibold text-lg">
-              Give your feedback in order to end contract
+              Give your feedback on your experience!
             </p>
             <RatingModal
               contractId={contractId}
