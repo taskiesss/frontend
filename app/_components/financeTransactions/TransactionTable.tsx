@@ -125,17 +125,17 @@ function TransactionTable({ filter }: Props) {
                     {capitalizeFirstLetter(m.type.toLowerCase())}
                   </td>
                   <td className="px-6 py-5 align-top w-1/2 text-lg ">
-                    <p className="whitespace-pre-wrap flex gap-3">
+                    <p className="whitespace-pre-wrap ">
                       {m.description}
-
+                      {"   "}
                       {m?.contractId && (
                         <Link
                           href={`/nx/freelancer/mycontracts/${m.contractId}`}
-                          className="inline-flex items-center"
+                          className="inline-flex items-center transition-opacity hover:opacity-50"
                         >
                           <FontAwesomeIcon
                             icon={faExternalLinkAlt}
-                            className="text-sm text-[var(--hover-color)]"
+                            className="text-md text-[var(--hover-color)]"
                           />
                         </Link>
                       )}

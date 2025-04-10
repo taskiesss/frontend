@@ -21,4 +21,10 @@ export default function StatusCard({ status }: Props) {
         Ended
       </span>
     );
+  else if (status.toLowerCase() === "rejected")
+    return (
+      <span className=" items-center px-2 py-1 rounded-xl text-md font-medium bg-red-500 text-white">
+        Rejected
+      </span>
+    );
 }

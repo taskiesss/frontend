@@ -57,7 +57,11 @@ export default function ProfileHeader({
           <p className="text-md">{freelancer.Country}</p>
           <p className="text-lg font-bold">${freelancer.pricePerHour}/hr</p>
           <div className="pointer-events-none">
-            <StarRating size={20} defaultRating={freelancer.rate} />
+            <StarRating
+              size={20}
+              defaultRating={freelancer.rate}
+              allowHalf={true}
+            />
           </div>
         </div>
       </div>

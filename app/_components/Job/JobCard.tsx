@@ -119,6 +119,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
             defaultRating={rate}
             color="var(--star)"
             size={18}
+            allowHalf={true}
           />
         </div>
 

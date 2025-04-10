@@ -10,24 +10,7 @@ type Props = {
   params: { contractid: string };
   searchParams: Promise<{ page?: string }>;
 };
-let contract: contractDetailsResponse = {
-  freelancerId: "string",
-  clientId: "string",
-  contractStatus: "active",
-  jobId: "job_12345",
-  jobTitle: "UI/UX Design for Taskaya Contract Page",
-  clientName: "Emma Johnson",
-  clientProfilePic: "/images/emma-johnson-profile.jpg",
-  freelancerName: "Jonas Smith",
-  freelancerProfilePic: "/images/jonas-smith-profile.jpg",
-  isCommunity: false,
-  pricePerHour: 45,
-  totalCurrentEarnings: 450,
-  hoursWorked: 10,
-  startDate: "2025-02-10",
-  endDate: "2025-03-15",
-  projectType: "PerMilestones",
-};
+let contract: contractDetailsResponse;
 async function page({ params }: Props) {
   const { contractid } = await Promise.resolve(params);
 

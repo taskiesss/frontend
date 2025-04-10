@@ -124,6 +124,7 @@ const FreelancerCard: React.FC<FreelancerCardProps> = ({ freelancer }) => {
                 defaultRating={rate}
                 color="var(--star)"
                 size={18}
+                allowHalf={true}
               />
             </div>
             <span className="text-slate-500 block">

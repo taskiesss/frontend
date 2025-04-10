@@ -18,6 +18,8 @@ import Container from "../common/Container";
 import Spinner from "../common/Spinner";
 import StatusCard from "../myContracts/StatusCard";
 import Milestones from "./Milestones";
+import Button from "../common/button";
+import RatingModal from "./RatingModal";
 
 type Props = {
   contract: contractDetailsResponse;
@@ -38,14 +40,32 @@ function Contract({ contract, contractId, role, isAdmin }: Props) {
           <StatusCard status={contract.contractStatus} />
         </div>
 
-        {contract.contractStatus.toLowerCase() === "active" && isAdmin && (
+        {contract.contractStatus.toLowerCase() === "active" &&
+          !contract.pendingClientToRate &&
+          !contract.pendingFreelancerToRate &&
+          isAdmin && (
+            <div className="flex gap-4">
+              <span className="text-[var(--bg-skill)] font-semibold text-lg">
+                Do you want to end contract?
+              </span>
+              <button className="hover:underline text-lg underline text-[var(--hover-color)] hover:text-[var(--btn-color)]">
+                End Contract
+              </button>
+            </div>
+          )}
+        {((contract.pendingClientToRate && role === "client") ||
+          contract.pendingFreelancerToRate) && (
           <div className="flex gap-4">
-            <span className="text-[var(--bg-skill)] font-semibold text-lg">
-              Do you want to end contract?
-            </span>
-            <button className="hover:underline text-lg underline text-[var(--hover-color)] hover:text-[var(--btn-color)]">
-              End Contract
-            </button>
+            <p className="text-[var(--bg-skill)] font-semibold text-lg">
+              Give your feedback in order to end contract
+            </p>
+            <RatingModal
+              contractId={contractId}
+              canRate={
+                (contract.pendingClientToRate && role === "client") ||
+                contract.pendingFreelancerToRate
+              }
+            />
           </div>
         )}
       </div>
@@ -59,7 +79,7 @@ function Contract({ contract, contractId, role, isAdmin }: Props) {
           }
           className="underline text-[var(--hover-color)] hover:text-[var(--btn-color)] text-xl"
         >
-          <FontAwesomeIcon icon={faArrowAltCircleLeft} />
+          <FontAwesomeIcon icon={faArrowAltCircleLeft} className="pr-1" />
           view job details
         </Link>
       </div>
@@ -79,19 +99,30 @@ function Contract({ contract, contractId, role, isAdmin }: Props) {
             </span>
           </div>
         </div>
-        <div className="flex gap-4">
-          <div className="flex flex-col gap-3 bg-[var(--foreground-color)] p-4 rounded-lg">
+        <div className="flex gap-4 self-center ">
+          <div className="flex flex-col justify-center gap-3 bg-[var(--foreground-color)] p-4 rounded-lg">
             <span className="text-xl">Total Earnings</span>
             <span className="text-4xl font-bold">
               $ {contract.totalCurrentEarnings.toFixed(2)}
             </span>
           </div>
-          <div className="flex flex-col gap-3 bg-[var(--foreground-color)] p-4 rounded-lg">
+          <div className="flex flex-col justify-center gap-3 bg-[var(--foreground-color)] p-4 rounded-lg">
             <span className="text-xl">Hours worked</span>
             <span className="text-4xl font-bold">
               {contract.hoursWorked} hrs
             </span>
           </div>
+          {contract.isCommunity && role !== "client" && (
+            <div className="flex flex-col gap-3 justify-center bg-[var(--foreground-color)] p-4 rounded-lg">
+              <span className="text-xl">My Earnings</span>
+              <span className="text-4xl font-bold">
+                $ {contract.memberEarnings.toFixed(2)}
+              </span>
+              <span className="text-lg opacity-85">
+                {contract.memberPercentage.toFixed(2)} % of project value
+              </span>
+            </div>
+          )}
         </div>
       </div>
       {/* OVERVIEW */}
@@ -211,7 +242,11 @@ function Contract({ contract, contractId, role, isAdmin }: Props) {
         </div>
       </div>
       {/* MILESTONES */}
-      <div className="flex flex-col gap-4 pb-20">
+      <div
+        className={`flex flex-col gap-4 ${
+          contract.contractStatus === "pending" ? "" : "pb-20"
+        }`}
+      >
         <h2 className="text-2xl font-semibold">Milestones</h2>
         <Suspense fallback={<Spinner />}>
           <Milestones
@@ -224,6 +259,18 @@ function Contract({ contract, contractId, role, isAdmin }: Props) {
           />
         </Suspense>
       </div>
+      {/* Accept or reject contract */}
+      {contract.canAccept &&
+        contract.contractStatus.toLowerCase() === "pending" && (
+          <div className="flex gap-5 self-end pb-20">
+            <Button className="shadow-[0_0_1em_0.25em_red] after:shadow-[0_0_1em_0.25em_red] after:bg-red-500 py-2 px-3 rounded-lg text-lg  ">
+              Reject
+            </Button>
+            <Button className="shadow-[0_0_1em_0.25em_green] after:shadow-[0_0_1em_0.25em_green] after:bg-green-500 py-2 px-3 rounded-lg text-lg">
+              Accept
+            </Button>
+          </div>
+        )}
     </Container>
   );
 }
