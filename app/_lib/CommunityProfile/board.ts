@@ -43,6 +43,19 @@ interface Offer {
   agreed: boolean;
 }
 
+interface VoterDetail {
+  name: string;
+  position: string;
+  freelancerId: string;
+  freelancerProfilePicture: string;
+}
+
+interface ContractVoteDetails {
+  accepted: VoterDetail[];
+  rejected: VoterDetail[];
+  remaining: VoterDetail[];
+}
+
 // API Functions
 export async function getCommunityJoinRequests(
   communityId: string,
@@ -172,4 +185,34 @@ export async function voteOnCommunityContract(
 
   revalidatePath(`/communities/${communityId}`);
   return true;
+}
+
+export async function getCommunityContractVotes(
+  communityId: string,
+  contractId: string,
+  token: string | undefined
+): Promise<ContractVoteDetails> {
+  invariant(!token, "Unauthorized user");
+
+  const res = await fetch(
+    `${BASE_URL}/freelancers/communities/${communityId}/votes/${contractId}`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  if (res.status === 403) {
+    throw new Error("Forbidden: User is not authorized to view vote details");
+  }
+  if (res.status === 400) {
+    throw new Error("Invalid request data");
+  }
+  if (!res.ok) {
+    throw new Error("Something went wrong fetching contract vote details");
+  }
+
+  return res.json();
 }

@@ -9,10 +9,14 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Cookies from "js-cookie";
 
 interface CompletedJobslistProps {
+  role?: string;
   id: string;
 }
 
-export default function CompletedJobslist({ id }: CompletedJobslistProps) {
+export default function CompletedJobslist({
+  id,
+  role,
+}: CompletedJobslistProps) {
   const [currentPage, setCurrentPage] = useState(1);
 
   const size = 3;
@@ -58,7 +62,7 @@ export default function CompletedJobslist({ id }: CompletedJobslistProps) {
     <>
       <div className="flex flex-col  gap-9 flex-wrap">
         {data.content.map((j: any, i: number) => (
-          <CompletedJobsCard key={i} job={j} />
+          <CompletedJobsCard key={i} job={j} role={role} />
         ))}
       </div>
       <div className="">

@@ -76,7 +76,7 @@ export default function JobDetailsPage({ jobid, jobdetails }: Props) {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-
+  // console.log(jobdetails);
   return (
     <Container>
       <div className="max-w-7xl mx-auto px-16 py-20">
@@ -94,11 +94,6 @@ export default function JobDetailsPage({ jobid, jobdetails }: Props) {
           {/* Left Column: Project Description */}
           <div className="md:col-span-2 space-y-8">
             <p className="text-lg whitespace-pre-wrap">{projectDescription}</p>
-            <ul className="list-disc list-inside space-y-4 text-lg">
-              <li>Solid JavaScript/React experience</li>
-              <li>Ability to work with APIs and handle data-rich UIs</li>
-              <li>Strong communication skills</li>
-            </ul>
           </div>
 
           {/* Right Column: Job & Client Details */}

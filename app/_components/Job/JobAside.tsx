@@ -98,7 +98,7 @@ export default function JobAside({ onClose }: { onClose: () => void }) {
     } else {
       params.delete("rate");
     }
-
+    params.set("page", "1");
     const currentQuery = new URLSearchParams(window.location.search).toString();
     const newQuery = params.toString();
 
@@ -108,22 +108,19 @@ export default function JobAside({ onClose }: { onClose: () => void }) {
   };
 
   return (
-    <div className="sticky top-[2.5rem] left-0">
-      <button
-        onClick={onClose}
-        className="px-4 py-2 bg-[var(--btn-color)] text-[var(--accent-color)] rounded-md"
-      >
+    <div className="relative  left-0  ">
+      <h1 className="px-4 py-2 text-xl font-bold text-[var(--accent-color)] rounded-md">
         Advanced Search
-      </button>
+      </h1>
 
-      <aside className="row-start-3 bg-[var(--background-color)] rounded-lg shadow-s">
-        <div className="py-4">
+      <aside className="bg-[var(--background-color)] rounded-lg shadow-s  p-4">
+        <div className="pb-2">
           <h2 className="py-3 text-xl font-bold">Rating</h2>
           <StarRating maxRating={5} size={24} onSetRating={setUserRating} />
         </div>
 
-        <form onSubmit={handleSubmit} className="py-4">
-          <div className="py-4">
+        <form onSubmit={handleSubmit} className="pb-2">
+          <div className="pb-2">
             <h3 className="py-3 text-xl font-bold">Skills</h3>
             <SkillsSearchInput
               key={resetKey}
@@ -136,7 +133,7 @@ export default function JobAside({ onClose }: { onClose: () => void }) {
             />
           </div>
 
-          <div className="py-4">
+          <div className="pb-2">
             <h3 className="text-xl py-3 font-bold">Experience level</h3>
             <div className="space-y-2 py-3">
               {experienceOptions.map((exp) => (
@@ -160,9 +157,9 @@ export default function JobAside({ onClose }: { onClose: () => void }) {
             </div>
           </div>
 
-          <div className="py-4">
-            <h3 className="text-xl py-3 font-bold">Hourly Rate range</h3>
-            <div className="py-3 flex space-x-2">
+          <div className="pb-5">
+            <h3 className="text-xl py-3 font-bold">Hourly Rate Range</h3>
+            <div className=" flex space-x-2">
               <div className="w-1/2">
                 <label htmlFor="hourly-min" className="sr-only">
                   Minimum hourly rate
@@ -172,9 +169,9 @@ export default function JobAside({ onClose }: { onClose: () => void }) {
                   type="number"
                   placeholder="Min"
                   value={hourlyRateMin}
+                  min={1}
                   onChange={(e) => {
-                    if (Number(e.target.value) > 0)
-                      setHourlyRateMin(e.target.value);
+                    setHourlyRateMin(e.target.value);
                   }}
                   className="w-full px-3 py-2 border border-solid border-[var(--border-color)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--hover-color)] bg-[var(--background-color)]"
                 />
@@ -200,7 +197,7 @@ export default function JobAside({ onClose }: { onClose: () => void }) {
             </div>
           </div>
 
-          <div className="py-4">
+          <div className="pb-2">
             <h3 className="text-xl py-3 font-bold">Project length</h3>
             <div className="space-y-2 py-3">
               {projectLengthOptions.map((proj) => (

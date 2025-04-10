@@ -8,6 +8,7 @@ export interface contractDetailsResponse {
   clientName: string;
   clientProfilePic: string;
   freelancerId: string;
+  isCommunityAdmin?: boolean;
   freelancerName: string;
   freelancerProfilePic: string;
   projectType: 'PerMilestones' | 'PerProject';

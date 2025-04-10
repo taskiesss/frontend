@@ -11,6 +11,7 @@ import AboutForm from "./Forms/AboutForm";
 import Skill from "../common/Skill";
 
 interface Props {
+  role?: string;
   editable: boolean;
   community: CommunityProfileResponse;
   id: string;
@@ -18,6 +19,7 @@ interface Props {
 }
 
 export default function AboutCommunity({
+  role,
   community,
   editable,
   id,
@@ -81,7 +83,7 @@ export default function AboutCommunity({
 
       {/* Community Members */}
       {community?.communityMembers?.length && (
-        <HorizontalCarousel items={community.communityMembers} />
+        <HorizontalCarousel items={community.communityMembers} role={role} />
       )}
 
       {/* Completed Jobs */}
@@ -89,7 +91,7 @@ export default function AboutCommunity({
         <h2 className="text-3xl font-bold">Completed Jobs</h2>
         <div className="gap-2">
           <Suspense fallback={<Spinner />}>
-            <CompletedJobslist id={id} />
+            <CompletedJobslist id={id} role={role} />
           </Suspense>
         </div>
       </div>

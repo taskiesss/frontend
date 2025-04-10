@@ -5,19 +5,31 @@ import MilestoneStatus from "./MilestoneStatus";
 import { Suspense, useState } from "react";
 import ViewSubmission from "./ViewSubmissions";
 import Spinner from "../common/Spinner";
+import DescriptionComponent from "./DescriptionComponent";
 
 type Props = {
   isAdmin: boolean;
   milestones: ContractMilestones;
   contractId: string;
   role?: string;
+  communityid?: string;
+  currentPage: number;
+  size: number;
 };
 
-function MilestonesTable({ milestones, contractId, role, isAdmin }: Props) {
+function MilestonesTable({
+  communityid,
+  milestones,
+  contractId,
+  role,
+  isAdmin,
+  size,
+  currentPage,
+}: Props) {
   const [viewingMilestoneIndex, setViewingMilestoneIndex] = useState<
     number | null
   >(null);
-  console.log(milestones);
+
   return (
     <>
       {milestones.content.length > 0 ? (
@@ -30,10 +42,15 @@ function MilestonesTable({ milestones, contractId, role, isAdmin }: Props) {
                 : "border-b border-solid border-b-gray-500"
             }`}
           >
-            <td className="px-4 py-4 align-top w-1/12 text-lg">{m.title}</td>
-            <td className="px-4 py-4 align-top w-3/12 text-lg">
-              <p className="whitespace-pre-wrap">{m.description}</p>
+            <td className="px-4 py-4 align-top w-4/12 text-lg">
+              <div className="flex flex-col gap-3">
+                {m.title}
+                <DescriptionComponent description={m.description} />
+              </div>
             </td>
+            {/* <td className="px-4 py-4 align-top w-3/12 text-lg">
+              <p className="whitespace-pre-wrap">{m.description}</p>
+            </td> */}
             <td className="px-4 py-4 align-top w-1/12 text-lg">
               {m.expectedHours} Hours
             </td>
@@ -48,10 +65,14 @@ function MilestonesTable({ milestones, contractId, role, isAdmin }: Props) {
                 isAdmin &&
                 role !== "client" && (
                   <MoreOptionButton
+                    index={i}
+                    communityid={communityid}
                     status={m.status}
                     contractId={contractId}
                     milestoneIndex={m.milestoneId}
                     title={m.title}
+                    currentPage={currentPage}
+                    size={size}
                   />
                 )}
 
@@ -70,6 +91,9 @@ function MilestonesTable({ milestones, contractId, role, isAdmin }: Props) {
                   {viewingMilestoneIndex === i && (
                     <Suspense fallback={<Spinner />}>
                       <ViewSubmission
+                        index={i}
+                        currentPage={currentPage}
+                        size={size}
                         status={m.status}
                         role={role}
                         contractId={contractId}
@@ -92,7 +116,11 @@ function MilestonesTable({ milestones, contractId, role, isAdmin }: Props) {
           </tr>
         ))
       ) : (
-        <span>There is no milestones</span>
+        <tr>
+          <td className="p-4">
+            <span>There is no milestones</span>
+          </td>
+        </tr>
       )}
     </>
   );

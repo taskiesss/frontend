@@ -89,7 +89,7 @@ const Page = async ({ searchParams }: PageProps) => {
 
   return (
     <Container>
-      <div className="h-screen grid grid-cols-[0.75fr_3fr] grid-rows-[min-content_min-content_1fr]">
+      <div className="h-screen grid grid-cols-[0.65fr_3fr] grid-rows-[min-content_min-content_1fr]">
         {/* Top navigation */}
 
         {/* Sorting controls */}
@@ -107,9 +107,11 @@ const Page = async ({ searchParams }: PageProps) => {
 
         {/* Freelancer results */}
         {paginations?.content && paginations?.content.length > 0 ? (
-          <Suspense fallback={<Spinner />}>
-            <FreelancerList freelancers={paginations} />
-          </Suspense>
+          <Container className="w-full px-3 sm:px-5 lg:px-7 xl:px-12">
+            <Suspense fallback={<Spinner />}>
+              <FreelancerList freelancers={paginations} />
+            </Suspense>
+          </Container>
         ) : (
           <div className=" grid place-items-center min-h-screen">
             <span className="text-[var(--accent-color)] text-3xl">

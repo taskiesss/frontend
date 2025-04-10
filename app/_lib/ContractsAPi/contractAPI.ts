@@ -1,3 +1,4 @@
+'use server';
 import { invariant } from '@/app/_helpers/invariant';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -181,78 +182,6 @@ export async function deleteFileOrLinkAPI(
     `${BASE_URL}/api/contracts/${reqbody.contractid}/milestones/${reqbody.milestoneIndex}/${reqbody.type}/${reqbody.id}`,
     {
       method: 'DELETE',
-      headers: {
-        'content-type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
-  // console.log(res);
-  if (res.status === 403) {
-    throw new Error('Forbidden');
-  }
-
-  if (!res.ok) {
-    throw new Error('Something went wrong');
-  }
-
-  return true;
-}
-
-export async function milestoneApproval(
-  params: {
-    contractid: string;
-    milestoneIndex: string;
-  },
-  reqbody: { accepted: boolean },
-  token: string | undefined
-): Promise<any> {
-  // for (const key of request.keys()) {
-  //   console.log('Key:', key);
-  // }
-  invariant(!token, 'Unauthorized user');
-  //   console.log(reqbody);
-
-  const res = await fetch(
-    `${BASE_URL}/clients/contracts/${params.contractid}/milestones/${params.milestoneIndex}/approve-milestone`,
-    {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(reqbody),
-    }
-  );
-  // console.log(res);
-  if (res.status === 403) {
-    throw new Error('Forbidden');
-  }
-
-  if (!res.ok) {
-    throw new Error('Something went wrong');
-  }
-
-  return true;
-}
-
-export async function requestPayment(
-  params: {
-    contractid: string;
-    milestoneIndex: string;
-  },
-  token: string | undefined
-): Promise<any> {
-  // for (const key of request.keys()) {
-  //   console.log('Key:', key);
-  // }
-  invariant(!token, 'Unauthorized user');
-  //   console.log(reqbody);
-
-  const res = await fetch(
-    `${BASE_URL}/freelancers/contracts/${params.contractid}/milestones/${params.milestoneIndex}/request-review`,
-    {
-      method: 'POST',
       headers: {
         'content-type': 'application/json',
         Authorization: `Bearer ${token}`,

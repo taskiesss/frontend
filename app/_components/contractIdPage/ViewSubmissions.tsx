@@ -16,9 +16,10 @@ import CreateSubmissionForm from "./CreateSubmissionForm";
 import {
   deleteFileOrLinkAPI,
   getSubmission,
-  milestoneApproval,
   postSubmission,
 } from "@/app/_lib/ContractsAPi/contractAPI";
+import { milestoneApproval } from "@/app/_lib/ContractsAPi/milestonesActions";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface Submission {
   id: string | number;
@@ -28,13 +29,19 @@ interface Submission {
 
 export default function ViewSubmission({
   contractId,
+  currentPage,
+  size,
   notEditable,
   role,
   milestoneIndex,
+  index,
   closeView,
   title,
   status,
 }: {
+  index: number;
+  currentPage: number;
+  size: number;
   status: string;
   role?: string;
   contractId: string;
@@ -63,7 +70,7 @@ export default function ViewSubmission({
   const [newLinks, setNewLinks] = useState<{ name: string; url: string }[]>([]);
   const [dataRefreshed, setDataRefreshed] = useState(false);
   const [showCreateForm, setShowCreateForm] = useState<boolean>(false);
-
+  const queryClient = useQueryClient();
   // State for confirmation dialog
   const [showConfirmDelete, setShowConfirmDelete] = useState<boolean>(false);
   const [itemToDelete, setItemToDelete] = useState<{
@@ -200,11 +207,15 @@ export default function ViewSubmission({
   const handleMilestoneApprovalConfirmation = async (accepted: boolean) => {
     const token = Cookies.get("token");
     try {
-      const approval = await milestoneApproval(
-        { contractid: contractId, milestoneIndex: milestoneIndex },
+      const { contractId: returnedContractId } = await milestoneApproval(
+        { contractid: contractId, milestoneIndex: index + 1 },
         { accepted: accepted },
         token
       );
+      queryClient.invalidateQueries({
+        queryKey: ["ContractMilestones", returnedContractId, currentPage, size],
+        exact: true,
+      });
       setDataRefreshed((prev) => !prev);
     } catch (error: any) {
       if (

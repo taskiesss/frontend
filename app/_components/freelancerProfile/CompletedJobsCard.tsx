@@ -3,8 +3,10 @@ import StarRating from "../common/StarRating";
 import Link from "next/link";
 
 export default function CompletedJobsCard({
+  role,
   job,
 }: {
+  role?: string;
   job: {
     jobId: string;
     jobName: string;
@@ -16,7 +18,13 @@ export default function CompletedJobsCard({
   return (
     <div className="flex flex-col">
       <div className="flex flex-col gap-2">
-        <Link href={`/nx/freelancer/find-work/${job.jobId}`}>
+        <Link
+          href={
+            role === "client"
+              ? `/nx/client/job-details/${job.jobId}`
+              : `/nx/freelancer/find-work/${job.jobId}`
+          }
+        >
           <h2 className="text-xl text-[var(--accent-color)] font-extrabold hover:underline hover:text-[var(--hover-color)]">
             {job.jobName}
           </h2>
