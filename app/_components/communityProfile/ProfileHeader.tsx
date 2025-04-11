@@ -1,3 +1,4 @@
+"use client";
 // components/CommunityHeader.tsx
 
 import Image from "next/image";

@@ -1,3 +1,4 @@
+"use client";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { contractDetailsResponse } from "@/app/_types/ContractDetailsResponse";
