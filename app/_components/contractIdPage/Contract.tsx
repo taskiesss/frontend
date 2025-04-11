@@ -112,17 +112,20 @@ function Contract({ contract, contractId, role, isAdmin }: Props) {
               {contract.hoursWorked} hrs
             </span>
           </div>
-          {contract.isCommunity && role !== "client" && (
-            <div className="flex flex-col gap-3 justify-center bg-[var(--foreground-color)] p-4 rounded-lg">
-              <span className="text-xl">My Earnings</span>
-              <span className="text-4xl font-bold">
-                $ {contract.memberEarnings.toFixed(2)}
-              </span>
-              <span className="text-lg opacity-85">
-                {contract.memberPercentage.toFixed(2)} % of project value
-              </span>
-            </div>
-          )}
+          {contract.isCommunity &&
+            role !== "client" &&
+            (contract.contractStatus.toLowerCase() === "active" ||
+              contract.contractStatus.toLowerCase() === "ended") && (
+              <div className="flex flex-col gap-3 justify-center bg-[var(--foreground-color)] p-4 rounded-lg">
+                <span className="text-xl">My Earnings</span>
+                <span className="text-4xl font-bold">
+                  $ {contract.memberEarnings.toFixed(2)}
+                </span>
+                <span className="text-lg opacity-85">
+                  {contract.memberPercentage.toFixed(2)} % of project value
+                </span>
+              </div>
+            )}
         </div>
       </div>
       {/* OVERVIEW */}
