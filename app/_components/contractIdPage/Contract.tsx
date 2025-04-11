@@ -99,23 +99,22 @@ function Contract({ contract, contractId, role, isAdmin }: Props) {
             </span>
           </div>
         </div>
-        <div className="flex gap-4 self-center ">
-          <div className="flex flex-col justify-center gap-3 bg-[var(--foreground-color)] p-4 rounded-lg">
-            <span className="text-xl">Total Earnings</span>
-            <span className="text-4xl font-bold">
-              $ {contract.totalCurrentEarnings.toFixed(2)}
-            </span>
-          </div>
-          <div className="flex flex-col justify-center gap-3 bg-[var(--foreground-color)] p-4 rounded-lg">
-            <span className="text-xl">Hours worked</span>
-            <span className="text-4xl font-bold">
-              {contract.hoursWorked} hrs
-            </span>
-          </div>
-          {contract.isCommunity &&
-            role !== "client" &&
-            (contract.contractStatus.toLowerCase() === "active" ||
-              contract.contractStatus.toLowerCase() === "ended") && (
+        {(contract.contractStatus.toLowerCase() === "active" ||
+          contract.contractStatus.toLowerCase() === "ended") && (
+          <div className="flex gap-4 self-center ">
+            <div className="flex flex-col justify-center gap-3 bg-[var(--foreground-color)] p-4 rounded-lg">
+              <span className="text-xl">Total Earnings</span>
+              <span className="text-4xl font-bold">
+                $ {contract.totalCurrentEarnings.toFixed(2)}
+              </span>
+            </div>
+            <div className="flex flex-col justify-center gap-3 bg-[var(--foreground-color)] p-4 rounded-lg">
+              <span className="text-xl">Hours worked</span>
+              <span className="text-4xl font-bold">
+                {contract.hoursWorked} hrs
+              </span>
+            </div>
+            {contract.isCommunity && role !== "client" && (
               <div className="flex flex-col gap-3 justify-center bg-[var(--foreground-color)] p-4 rounded-lg">
                 <span className="text-xl">My Earnings</span>
                 <span className="text-4xl font-bold">
@@ -126,7 +125,8 @@ function Contract({ contract, contractId, role, isAdmin }: Props) {
                 </span>
               </div>
             )}
-        </div>
+          </div>
+        )}
       </div>
       {/* OVERVIEW */}
       <div className="flex flex-col gap-6 border-b-[var(--border-color)] w-full border-solid border-b-2 pb-10">
@@ -247,7 +247,7 @@ function Contract({ contract, contractId, role, isAdmin }: Props) {
       {/* MILESTONES */}
       <div
         className={`flex flex-col gap-4 ${
-          contract.contractStatus === "pending" ? "" : "pb-20"
+          contract.contractStatus.toLowerCase() === "pending" ? "" : "pb-20"
         }`}
       >
         <h2 className="text-2xl font-semibold">Milestones</h2>

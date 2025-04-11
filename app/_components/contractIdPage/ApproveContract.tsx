@@ -49,24 +49,33 @@ const ApproveContract = ({ contractId, contract }: Props) => {
         <ProtectedPage message="You are not allowed to do this action. Please log in" />
       );
   };
+  console.log(contract.voteIsDone);
   return (
     <>
       {contract.isCommunity ? (
         contract.isCommunityAdmin && (
-          <div className="flex gap-5 self-end pb-20">
-            <Button
-              onClick={() => setShowReject(true)}
-              className="shadow-[0_0_1em_0.25em_red] after:shadow-[0_0_1em_0.25em_red] after:bg-red-500 py-2 px-3 rounded-lg text-lg"
-            >
-              Reject
-            </Button>
-            <Button
-              onClick={() => setShowAccept(true)}
-              className="shadow-[0_0_1em_0.25em_green] after:shadow-[0_0_1em_0.25em_green] after:bg-green-500 py-2 px-3 rounded-lg text-lg"
-              disabled={contract.voteIsDone}
-            >
-              Accept
-            </Button>
+          <div className="flex justify-between pb-20">
+            {!contract.voteIsDone && (
+              <p className="self-center opacity-80">
+                Note: Acceptance is locked until every community member submits
+                their vote. The button activates once all votes are in.
+              </p>
+            )}
+            <div className="flex gap-8 self-end ">
+              <Button
+                onClick={() => setShowReject(true)}
+                className="shadow-[0_0_1em_0.25em_#ff0000] after:shadow-[0_0_1em_0.25em_#ff0000] after:bg-red-500 py-2 px-3 rounded-lg text-lg "
+              >
+                Reject
+              </Button>
+              <Button
+                onClick={() => setShowAccept(true)}
+                className="shadow-[0_0_1em_0.25em_#40ff00] after:shadow-[0_0_1em_0.25em_#40ff00] after:bg-green-500 py-2 px-3 rounded-lg text-lg"
+                disabled={!contract.voteIsDone}
+              >
+                Accept
+              </Button>
+            </div>
           </div>
         )
       ) : (
