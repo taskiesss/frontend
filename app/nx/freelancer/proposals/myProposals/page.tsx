@@ -163,10 +163,8 @@ export default function MyProposalsPage() {
                   <tr className="bg-[var(--button-hover-background-color)] text-white">
                     <th className="px-4 py-2 text-left">Date</th>
                     <th className="px-4 py-2 text-left">Job Title</th>
-                    <th className="px-4 py-2 text-left">
-                      Income/Outcome (active)
-                    </th>
                     <th className="px-4 py-2 text-left">Status</th>
+                    <th className="px-4 py-2 text-left">Income/Outcome</th>
                   </tr>
                 </thead>
                 {/* If you need Suspense for asynchronous children, consider placing it around a component that may suspend.
@@ -226,17 +224,20 @@ export default function MyProposalsPage() {
                               {proposal.jobTitle}
                             </Link>
                           </td>
+                          <td className="px-4 py-2 align-top">{statusText}</td>
                           <td className="px-4 py-2 align-top">
                             {proposal.status === "ACCEPTED" ||
                             proposal.status === "HIRED" ? (
-                              <Link href="#" className="hover:underline">
+                              <Link
+                                href={`/nx/freelancer/mycontracts/${proposal.contractId}`}
+                                className="transition-colors hover:underline hover:text-[--hover-color]"
+                              >
                                 {incomeOutcome}
                               </Link>
                             ) : (
                               incomeOutcome
                             )}
                           </td>
-                          <td className="px-4 py-2 align-top">{statusText}</td>
                         </tr>
                       );
                     })}
