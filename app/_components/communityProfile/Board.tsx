@@ -25,7 +25,7 @@ export default function Board({ community, id, style }: Props) {
       <div className={style}>
         <Suspense fallback={<Spinner />}>
           <CommunityOffers
-            editable={community.isAdmin}
+            editable={community.isMember}
             communityId={id}
           ></CommunityOffers>
         </Suspense>

@@ -15,6 +15,7 @@ import {
 import { Pagination } from "../common/Pagination"; // Assuming correct path
 import Skill from "../common/Skill";
 import Link from "next/link";
+import VoteDetailsModal from "./OffersModal";
 
 // --- INTERFACE FOR PROPS ---
 interface CommunityOffersProps {
@@ -70,11 +71,12 @@ export default function CommunityOffers({
   editable,
 }: CommunityOffersProps) {
   const [currentPage, setCurrentPage] = useState(1);
-  const [modalOpen, setModalOpen] = useState(false);
   const [activeContractId, setActiveContractId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<
     "accepted" | "rejected" | "remaining"
   >("accepted");
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const size = 5;
   const queryClient = useQueryClient();
@@ -124,12 +126,7 @@ export default function CommunityOffers({
   const openModal = (contractId: string) => {
     setActiveContractId(contractId);
     setActiveTab("accepted"); // default tab on open
-    setModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setModalOpen(false);
-    setActiveContractId(null);
+    setIsModalOpen(true);
   };
 
   // --- FETCH VOTE DETAILS FOR MODAL ---
@@ -144,7 +141,7 @@ export default function CommunityOffers({
       if (!activeContractId) throw new Error("No contract selected");
       return getCommunityContractVotes(communityId, activeContractId, token);
     },
-    enabled: !!activeContractId && modalOpen,
+    enabled: !!activeContractId && isModalOpen,
   });
 
   // --- RENDER STATES ---
@@ -243,7 +240,7 @@ export default function CommunityOffers({
                   {offer.jobTitle}
                 </h3>
               </Link>
-              <p className="text-gray-500 mb-3 text-sm leading-relaxed line-clamp-3">
+              <p className=" mb-3 text-sm leading-relaxed line-clamp-3">
                 {offer.description}
               </p>
 
@@ -261,10 +258,10 @@ export default function CommunityOffers({
               )}
 
               {/* Rate and Dates */}
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between text-sm text-gray-500 mb-4">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between text-sm mb-4">
                 <p>
                   Offered hourly rate:{" "}
-                  <span className="font-medium text-gray-500">
+                  <span className="font-medium ">
                     {formatCurrency(offer.pricePerHour)}
                   </span>
                 </p>
@@ -301,14 +298,12 @@ export default function CommunityOffers({
                     <div className="flex justify-between items-center">
                       <p
                         className={`text-sm font-medium transition-colors ${
-                          offer.agreed === true
-                            ? "text-green-700"
-                            : "text-gray-600"
+                          offer.agreed === true ? "text-green-700" : ""
                         }`}
                       >
                         {offer.agreed === true ? "✓ Accepted" : "Accept"}
                       </p>
-                      <span className="text-sm text-gray-500">
+                      <span className="text-sm">
                         {offer.accepted} vote{offer.accepted !== 1 ? "s" : ""}
                       </span>
                     </div>
@@ -317,7 +312,7 @@ export default function CommunityOffers({
                         className={`absolute top-0 left-0 h-full rounded-full transition-all duration-300 ${
                           offer.agreed === true
                             ? "bg-green-600"
-                            : "bg-green-400 group-hover:bg-green-500"
+                            : "bg-green-400 group-hover:bg-green-600"
                         }`}
                         style={{ width: `${acceptedPercent}%` }}
                       ></div>
@@ -335,14 +330,12 @@ export default function CommunityOffers({
                     <div className="flex justify-between items-center">
                       <p
                         className={`text-sm font-medium ${
-                          offer.agreed === false
-                            ? "text-red-700"
-                            : "text-gray-600"
+                          offer.agreed === false ? "text-red-700" : ""
                         }`}
                       >
                         {offer.agreed === false ? "✗ Rejected" : "Reject"}
                       </p>
-                      <span className="text-sm text-gray-500">
+                      <span className="text-sm">
                         {offer.rejected} vote{offer.rejected !== 1 ? "s" : ""}
                       </span>
                     </div>
@@ -351,7 +344,7 @@ export default function CommunityOffers({
                         className={`absolute top-0 left-0 h-full rounded-full transition-all duration-300 ${
                           offer.agreed === false
                             ? "bg-red-600"
-                            : "bg-red-400 group-hover:bg-red-500"
+                            : "bg-red-400 group-hover:bg-red-600"
                         }`}
                         style={{ width: `${rejectedPercent}%` }}
                       ></div>
@@ -393,83 +386,17 @@ export default function CommunityOffers({
       )}
 
       {/* Modal for Vote Details */}
-      {modalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-          {/* Overlay */}
-          <div
-            className="absolute inset-0 bg-black opacity-50"
-            onClick={closeModal}
-          ></div>
-          {/* Modal Content */}
-          <div className="relative bg-white rounded-lg shadow-lg w-11/12 max-w-md z-50">
-            <div className="p-4 border-b flex justify-between items-center">
-              <h3 className="text-lg font-semibold">Vote Details</h3>
-              <button
-                onClick={closeModal}
-                className="text-gray-600 hover:text-gray-800"
-              >
-                ×
-              </button>
-            </div>
-            <div className="p-4">
-              {/* Tabs */}
-              <div className="flex border-b mb-4">
-                {(["accepted", "rejected", "remaining"] as const).map((tab) => (
-                  <button
-                    key={tab}
-                    onClick={() => setActiveTab(tab)}
-                    className={`flex-1 text-center py-2 ${
-                      activeTab === tab
-                        ? "border-b-2 border-blue-500 font-semibold"
-                        : "text-gray-500"
-                    }`}
-                  >
-                    {tab.charAt(0).toUpperCase() + tab.slice(1)}
-                  </button>
-                ))}
-              </div>
-              {/* Tab Content */}
-              <div className="max-h-60 overflow-y-auto">
-                {votesLoading && (
-                  <p className="text-center text-gray-500">Loading votes...</p>
-                )}
-                {votesError && (
-                  <p className="text-center text-red-600">
-                    {votesErrorMessage instanceof Error
-                      ? votesErrorMessage.message
-                      : "Error loading votes"}
-                  </p>
-                )}
-                {voteDetails && !votesLoading && !votesError && (
-                  <ul className="space-y-2">
-                    {voteDetails[activeTab].length === 0 ? (
-                      <li className="text-center text-gray-500">
-                        No votes in this category.
-                      </li>
-                    ) : (
-                      voteDetails[activeTab].map((voter, index) => (
-                        <li key={index} className="flex items-center space-x-3">
-                          <img
-                            src={voter.freelancerProfilePicture}
-                            alt={voter.name}
-                            className="w-8 h-8 rounded-full"
-                          />
-                          <div>
-                            <p className="text-sm font-medium">{voter.name}</p>
-                            <p className="text-xs text-gray-500">
-                              {voter.position}
-                            </p>
-                          </div>
-                        </li>
-                      ))
-                    )}
-                  </ul>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+
+      <VoteDetailsModal
+        isOpen={isModalOpen}
+        closeModal={() => setIsModalOpen(false)}
+        votesLoading={votesLoading}
+        votesError={votesError}
+        votesErrorMessage={votesErrorMessage}
+        voteDetails={voteDetails}
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+      />
     </div>
   );
 }

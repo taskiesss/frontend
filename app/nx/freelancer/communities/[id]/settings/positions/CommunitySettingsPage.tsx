@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
+import Link from "next/link";
 import Image from "next/image";
 import React, { Suspense, useEffect, useState } from "react";
 import SettingsSmallNav from "@/app/_components/communityProfile/SettingsSmallNav";
@@ -230,7 +231,7 @@ export default function CommunitySettingsPage({
 
           {/* Error Message */}
           {errorMessage && (
-            <div className="text-red-500 text-sm font-semibold">
+            <div className="text-red-500 text-base font-semibold">
               {errorMessage}
             </div>
           )}
@@ -242,25 +243,25 @@ export default function CommunitySettingsPage({
                 <tr className="bg-[var(--button-hover-background-color)] text-white">
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider "
+                    className="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider "
                   >
                     Freelancer
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider "
+                    className="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider "
                   >
                     Position
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider "
+                    className="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider "
                   >
                     Financial %
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider "
+                    className="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider "
                   >
                     Description
                   </th>
@@ -276,32 +277,43 @@ export default function CommunitySettingsPage({
                       >
                         <td className="px-6 py-4 whitespace-nowrap align-top">
                           <div className="flex items-center">
-                            <div className="flex-shrink-0 h-10 w-10 relative">
-                              <Image
-                                src={
-                                  item.nameAndPicture
-                                    ?.freelancerProfilePicture ||
-                                  "/images/userprofile.jpg"
-                                }
-                                alt={item.nameAndPicture?.name || "image"}
-                                className="rounded-full object-cover"
-                                fill
-                                sizes="2.5rem"
-                              />
-                            </div>
-                            <div className="ml-4">
-                              <div className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                                {item.nameAndPicture?.name}
+                            {item.nameAndPicture?.freelancerId && (
+                              <div className="flex-shrink-0 h-10 w-10 relative">
+                                <Image
+                                  src={
+                                    item.nameAndPicture
+                                      ?.freelancerProfilePicture ||
+                                    "/images/userprofile.jpg"
+                                  }
+                                  alt={item.nameAndPicture?.name || "image"}
+                                  className="rounded-full object-cover"
+                                  fill
+                                  sizes="2.5rem"
+                                />
                               </div>
+                            )}
+                            <div className="ml-4">
+                              {item.nameAndPicture?.freelancerId ? (
+                                <Link
+                                  href={`/nx/freelancer/profile/${item.nameAndPicture.freelancerId}`}
+                                  className="text-base font-medium  hover:underline"
+                                >
+                                  {item.nameAndPicture.name}
+                                </Link>
+                              ) : (
+                                <div className="text-base font-medium ">
+                                  {item.nameAndPicture?.name}
+                                </div>
+                              )}
                             </div>
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-900 dark:text-gray-100">
+                          <div className="text-base text-gray-900 dark:text-gray-100">
                             {item.nameAndPicture?.position}
                           </div>
                           {item.nameAndPicture?.admin && (
-                            <div className="text-xs text-gray-500 dark:text-gray-300">
+                            <div className="text-sm text-gray-500 dark:text-gray-300">
                               Admin
                             </div>
                           )}
@@ -319,7 +331,7 @@ export default function CommunitySettingsPage({
                               className="w-20 px-2 py-1 rounded bg-[var(--hover-color)]"
                             />
                           ) : (
-                            <div className="text-sm ">
+                            <div className="text-base ">
                               {item.futurePercentage}%
                               {!isEditing &&
                                 item.futurePercentage !==
@@ -332,7 +344,7 @@ export default function CommunitySettingsPage({
                                     <div
                                       className="
                                       absolute left-full top-1/2 transform -translate-y-1/2
-                                      bg-gray-800 text-white text-xs rounded px-2 py-1
+                                      bg-gray-800 text-white text-sm rounded px-2 py-1
                                       whitespace-nowrap opacity-0 group-hover:opacity-100
                                       transition-opacity duration-200 ml-2
                                       pointer-events-none                          
@@ -346,7 +358,7 @@ export default function CommunitySettingsPage({
                             </div>
                           )}
                         </td>
-                        <td className="px-6 py-4 text-sm flex justify-between items-center gap-2">
+                        <td className="px-6 py-4 text-base flex justify-between items-center gap-2">
                           <span>{item.description}</span>
                           {isEditing && !item.nameAndPicture.admin && (
                             <FontAwesomeIcon
