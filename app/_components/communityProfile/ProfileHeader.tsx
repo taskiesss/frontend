@@ -69,7 +69,7 @@ export default function CommunityHeader({
           <p className="text-md">
             {getExperienceLevel(community.experienceLevel)}
           </p>
-          <p className="text-md"></p>
+
           <p className="text-lg ">
             ${community.pricePerHour}/hr - {community.avgHoursPerWeek} hr/week
           </p>
@@ -95,7 +95,7 @@ export default function CommunityHeader({
           />
         )}
 
-        <div className="flex space-x-2">
+        <div className="flex space-x-2 gap-3">
           {/* Conditionally show EditButton for admins */}
           {community.isAdmin && (
             <EditButton onClick={() => setIsEditingHeader(true)} />

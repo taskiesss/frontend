@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { useEffect } from "react";
 
 type Voter = {
   name: string;
@@ -33,8 +34,15 @@ const VoteDetailsModal = ({
   activeTab,
   setActiveTab,
 }: VoteDetailsModalProps) => {
-  if (!isOpen) return null;
+  useEffect(() => {
+    if (isOpen) document.body.style.overflow = "hidden";
+    else document.body.style.overflow = "auto";
 
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isOpen]);
+  if (!isOpen) return null;
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       {/* Overlay */}
@@ -46,13 +54,13 @@ const VoteDetailsModal = ({
       {/* Modal Content */}
       <div
         className="
-          relative bg-white rounded-lg shadow-lg 
+          relative bg-[var(--background-color)] rounded-lg shadow-lg 
           w-[95%] sm:w-[42rem] max-w-[95%] 
           h-[85vh] max-h-[48rem] 
           overflow-hidden
         "
       >
-        <div className="p-6 flex justify-between items-center border-b">
+        <div className="p-6 flex justify-between items-center ">
           <h3 className="text-3xl font-bold text-center flex-1">
             Vote Details
           </h3>
@@ -60,7 +68,7 @@ const VoteDetailsModal = ({
             onClick={closeModal}
             className="text-gray-600 hover:text-gray-800 text-3xl"
           >
-            ×
+            ✖
           </button>
         </div>
 
@@ -75,8 +83,8 @@ const VoteDetailsModal = ({
                   flex-1 text-center py-4 text-xl 
                   ${
                     activeTab === tab
-                      ? "border-b-2 border-blue-500 font-bold text-blue-600"
-                      : "text-gray-500 hover:text-gray-700"
+                      ? "border-b-2  border-blue-500 font-bold text-[var(--btn-color)]"
+                      : "opacity-70 hover:text-[var(--button-hover-background-color)] hover:opacity-100 transition-color"
                   }
                 `}
               >
