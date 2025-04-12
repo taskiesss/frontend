@@ -2,6 +2,8 @@ import { ReactNode } from "react";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
+  shadowColor?: string; // Optional prop to override shadow color
+  textColor?: string; // Optional prop to set text color explicitly
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -10,12 +12,21 @@ const Button: React.FC<ButtonProps> = ({
   onClick,
   disabled,
   className,
+  shadowColor, // Relies on global --button-hover-background-color if not provided
+  textColor, // Optional for text color control
 }) => {
   return (
     <button
       type={type || "button"}
       onClick={onClick}
       disabled={disabled}
+      style={
+        shadowColor
+          ? ({
+              "--button-hover-background-color": shadowColor,
+            } as React.CSSProperties)
+          : undefined
+      } // Only override if shadowColor is provided
       className={`
         font-semibold
         inline-block
@@ -53,6 +64,7 @@ const Button: React.FC<ButtonProps> = ({
         after:-z-10
         after:transition-opacity
         after:duration-300
+        ${textColor ? `text-[${textColor}]` : ""}
         ${className}
       `}
     >

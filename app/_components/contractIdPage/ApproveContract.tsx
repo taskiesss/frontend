@@ -49,7 +49,7 @@ const ApproveContract = ({ contractId, contract }: Props) => {
         <ProtectedPage message="You are not allowed to do this action. Please log in" />
       );
   };
-  console.log(contract.voteIsDone);
+  // console.log(contract.voteIsDone);
   return (
     <>
       {contract.isCommunity ? (
@@ -64,13 +64,15 @@ const ApproveContract = ({ contractId, contract }: Props) => {
             <div className="flex gap-8 self-end ">
               <Button
                 onClick={() => setShowReject(true)}
-                className="shadow-[0_0_1em_0.25em_#ff0000] after:shadow-[0_0_1em_0.25em_#ff0000] after:bg-red-500 py-2 px-3 rounded-lg text-lg "
+                shadowColor="#ff0000"
+                className="after:bg-red-500 py-2 px-3 rounded-lg text-lg"
               >
                 Reject
               </Button>
               <Button
                 onClick={() => setShowAccept(true)}
-                className="shadow-[0_0_1em_0.25em_#40ff00] after:shadow-[0_0_1em_0.25em_#40ff00] after:bg-green-500 py-2 px-3 rounded-lg text-lg"
+                shadowColor="#40ff00"
+                className=" after:bg-green-400 py-2 px-3 rounded-lg text-lg"
                 disabled={!contract.voteIsDone}
               >
                 Accept
@@ -82,13 +84,15 @@ const ApproveContract = ({ contractId, contract }: Props) => {
         <div className="flex gap-5 self-end pb-20">
           <Button
             onClick={() => setShowReject(true)}
-            className="shadow-[0_0_1em_0.25em_red] after:shadow-[0_0_1em_0.25em_red] after:bg-red-500 py-2 px-3 rounded-lg text-lg"
+            shadowColor="#ff0000"
+            className=" after:bg-red-500 py-2 px-3 rounded-lg text-lg"
           >
             Reject
           </Button>
           <Button
             onClick={() => setShowAccept(true)}
-            className="shadow-[0_0_1em_0.25em_green] after:shadow-[0_0_1em_0.25em_green] after:bg-green-500 py-2 px-3 rounded-lg text-lg"
+            shadowColor="#40ff00"
+            className="after:bg-green-500 py-2 px-3 rounded-lg text-lg"
           >
             Accept
           </Button>
