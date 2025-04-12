@@ -35,6 +35,7 @@ const RatingModal = ({ contractId, canRate }: Props) => {
         setIsForbidden(true);
       }
     } finally {
+      setRating(0);
       setIsClicked(false);
     }
   };
@@ -47,7 +48,10 @@ const RatingModal = ({ contractId, canRate }: Props) => {
   return (
     <>
       <button
-        onClick={() => setIsClicked(true)}
+        onClick={() => {
+          setRating(0);
+          setIsClicked(true);
+        }}
         className="hover:underline text-xl underline text-[var(--hover-color)] hover:text-[var(--btn-color)]"
       >
         Rate now
@@ -76,7 +80,10 @@ const RatingModal = ({ contractId, canRate }: Props) => {
             <div className="flex justify-end gap-4">
               <button
                 type="button"
-                onClick={() => setIsClicked(false)}
+                onClick={() => {
+                  setRating(0);
+                  setIsClicked(false);
+                }}
                 className="px-4 py-2 bg-gray-300 text-black rounded-lg hover:bg-gray-400 transition-colors"
               >
                 Cancel
@@ -84,7 +91,8 @@ const RatingModal = ({ contractId, canRate }: Props) => {
               <button
                 type="button"
                 onClick={handleSubmit}
-                className="px-4 py-2 bg-[var(--btn-color)] text-white rounded-lg hover:bg-[var(--button-hover-background-color)] transition-colors"
+                disabled={rating <= 0}
+                className="px-4 py-2 bg-[var(--btn-color)] text-white rounded-lg hover:bg-[var(--button-hover-background-color)] transition-colors disabled:bg-[#f2f2f2] disabled:text-black disabled:cursor-not-allowed disabled:opacity-60 "
               >
                 Submit
               </button>
