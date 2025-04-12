@@ -19,10 +19,7 @@ import {
   UpdatePositionRequest,
 } from "@/app/_types/CommunitySettings";
 
-import {
-  getCommunityRolesAndPositions,
-  updateCommunityPositions,
-} from "@/app/_lib/CommunityProfile/settings";
+import { updateCommunityPositions } from "@/app/_lib/CommunityProfile/settings";
 
 import { useRouter } from "next/navigation";
 
@@ -33,7 +30,6 @@ type Props = {
   rolesAndPositions: CommunityRolesResponse;
   id: string;
   token?: string; // Token passed from server component for API calls
-  userId: string;
 };
 
 export default function CommunitySettingsPage({

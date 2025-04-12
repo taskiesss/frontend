@@ -87,24 +87,25 @@ export default function CommunityHeader({
           />
         )}
 
-        {community.isAdmin && (
-          <div className="flex space-x-2">
+        <div className="flex space-x-2">
+          {/* Conditionally show EditButton for admins */}
+          {community.isAdmin && (
             <EditButton onClick={() => setIsEditingHeader(true)} />
+          )}
 
-            {/* Settings navigation link */}
-            <Link
-              href={`/nx/freelancer/communities/${community.id}/settings/positions`}
-              passHref
+          {/* Settings gear always visible */}
+          <Link
+            href={`/nx/freelancer/communities/${community.id}/settings/positions`}
+            passHref
+          >
+            <button
+              className="rounded-full p-1 w-10 aspect-square text-white bg-[var(--hover-color)] text-md flex items-center justify-center"
+              aria-label="Settings"
             >
-              <button
-                className="rounded-full p-1 w-10 aspect-square text-white bg-[var(--hover-color)] text-md flex items-center justify-center"
-                aria-label="Settings"
-              >
-                <FontAwesomeIcon icon={faGear} />
-              </button>
-            </Link>
-          </div>
-        )}
+              <FontAwesomeIcon icon={faGear} />
+            </button>
+          </Link>
+        </div>
       </div>
 
       {/* Profile Picture Edit Modal */}
