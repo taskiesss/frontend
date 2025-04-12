@@ -36,9 +36,9 @@ export interface FreelancerResponse {
   title: string;
   description: string;
   skills: string[];
-  /** The freelancer's average rating */
+  experienceLevel: 'entry_level' | 'intermediate' | 'expert';
   rate: number;
-  /** Hourly rate for the freelancer */
+  avrgHoursPerWeek: number;
   pricePerHour: number;
   profilePicture: string;
 }

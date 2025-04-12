@@ -12,19 +12,17 @@ interface HeaderFormProps {
     name: string;
     title: string;
     pricePerHour: number;
-    country: string;
     id: string;
+    avgHoursPerWeek: number;
   };
 }
 
 export default function HeaderForm({ closeEdit, community }: HeaderFormProps) {
-  // Split the initial name into first and last name (assuming space separator)
-
   const [formData, setFormData] = useState({
     name: community.name,
     title: community.title,
     pricePerHour: community.pricePerHour,
-    country: community.country,
+    avgHoursPerWeek: community.avgHoursPerWeek,
   });
 
   const [loading, setLoading] = useState(false);
@@ -46,12 +44,11 @@ export default function HeaderForm({ closeEdit, community }: HeaderFormProps) {
 
     const token = Cookies.get("token");
 
-    // Combine firstName and lastName for the API
     const submitData = {
       firstName: `${formData.name}`.trim(),
       jobTitle: formData.title,
       pricePerHour: formData.pricePerHour,
-      country: formData.country,
+      avgHoursPerWeek: formData.avgHoursPerWeek,
     };
     console.log(submitData);
     try {
@@ -75,58 +72,84 @@ export default function HeaderForm({ closeEdit, community }: HeaderFormProps) {
       setLoading(false);
     }
   };
+
   if (isForbidden)
     return (
       <ProtectedPage message="You are not allowed to do this action. Please log in" />
     );
+
   const inputClassName =
-    "p-3 focus:outline-none bg-[var(--background-color)] border border-solid border-gray-600";
+    "p-3 focus:outline-none bg-[var(--background-color)] border border-solid border-gray-600 w-full";
+
+  // Function to format input names for display
+  const formatLabel = (name: string) => {
+    return name
+      .replace(/([A-Z])/g, " $1")
+      .replace(/^./, (str) => str.toUpperCase())
+      .trim();
+  };
 
   return (
     <Model isOpen={true} onClose={closeEdit}>
       <h2 className="text-2xl font-bold mb-4">Edit Profile Header</h2>
       <form onSubmit={handleSubmit} className="flex flex-col gap-6 w-[30rem]">
-        <input
-          type="text"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          placeholder="Last Name"
-          className={inputClassName}
-          required
-        />
+        <div className="flex flex-col gap-1">
+          <span className="text-md font-medium">{formatLabel("name")}</span>
+          <input
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            placeholder="Name"
+            className={inputClassName}
+            required
+          />
+        </div>
 
-        <input
-          type="text"
-          name="title"
-          value={formData.title}
-          onChange={handleChange}
-          placeholder="Job Title"
-          className={inputClassName}
-          required
-        />
+        <div className="flex flex-col gap-1">
+          <span className="text-md font-medium">{formatLabel("title")}</span>
+          <input
+            type="text"
+            name="title"
+            value={formData.title}
+            onChange={handleChange}
+            placeholder="Job Title"
+            className={inputClassName}
+            required
+          />
+        </div>
 
-        <input
-          type="number"
-          name="pricePerHour"
-          value={formData.pricePerHour}
-          onChange={handleChange}
-          placeholder="Price per Hour"
-          className={inputClassName}
-          min="0"
-          step="1"
-          required
-        />
+        <div className="flex flex-col gap-1">
+          <span className="text-md font-medium">
+            {formatLabel("pricePerHour")}
+          </span>
+          <input
+            type="number"
+            name="pricePerHour"
+            value={formData.pricePerHour}
+            onChange={handleChange}
+            placeholder="Price per Hour"
+            className={inputClassName}
+            min="0"
+            step="1"
+            required
+          />
+        </div>
 
-        <input
-          type="text"
-          name="country"
-          value={formData.country}
-          onChange={handleChange}
-          placeholder="Country"
-          className={inputClassName}
-          required
-        />
+        <div className="flex flex-col gap-1">
+          <span className="text-md font-medium">
+            {formatLabel("average hours per week")}
+          </span>
+          <input
+            type="text"
+            name="avgHoursPerWeek"
+            value={formData.avgHoursPerWeek}
+            onChange={handleChange}
+            placeholder="Average Hours Per Week"
+            className={inputClassName}
+            required
+          />
+        </div>
 
         {error && <p className="text-red-500">{error}</p>}
 

@@ -11,6 +11,7 @@ import SendRequestComponent from "./SendRequestComponent";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGear } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
+import { getExperienceLevel } from "@/app/_helpers/helper";
 
 export default function CommunityHeader({
   community,
@@ -28,6 +29,8 @@ export default function CommunityHeader({
     isFull?: boolean;
     isMember: boolean;
     isAdmin?: boolean;
+    experienceLevel: string;
+    avgHoursPerWeek: number;
   };
 }) {
   const [isEditingPicture, setIsEditingPicture] = useState(false);
@@ -63,8 +66,13 @@ export default function CommunityHeader({
             <h2 className="text-4xl font-extrabold">{community.name}</h2>
           </div>
           <h5 className="text-2xl font-bold">{community.title}</h5>
-          <p className="text-md">{community.country}</p>
-          <p className="text-lg font-bold">${community.pricePerHour}/hr</p>
+          <p className="text-md">
+            {getExperienceLevel(community.experienceLevel)}
+          </p>
+          <p className="text-md"></p>
+          <p className="text-lg ">
+            ${community.pricePerHour}/hr - {community.avgHoursPerWeek} hr/week
+          </p>
           <div className="pointer-events-none">
             <StarRating
               size={20}
@@ -122,7 +130,7 @@ export default function CommunityHeader({
             name: community.name,
             title: community.title,
             pricePerHour: community.pricePerHour,
-            country: community.country,
+            avgHoursPerWeek: community.avgHoursPerWeek,
             id: community.id,
           }}
           closeEdit={() => setIsEditingHeader(false)}

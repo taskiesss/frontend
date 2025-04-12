@@ -7,6 +7,7 @@ import { FreelancerResponse } from "@/app/_types/FreelancerSearch"; // Adjust th
 import Skill from "../common/Skill";
 import StarRating from "../common/StarRating";
 import userprofile from "@/public/images/userprofile.jpg";
+import { getExperienceLevel } from "@/app/_helpers/helper";
 
 interface FreelancerCardProps {
   freelancer: FreelancerResponse;
@@ -22,6 +23,8 @@ const FreelancerCard: React.FC<FreelancerCardProps> = ({ freelancer }) => {
     rate,
     pricePerHour,
     profilePicture,
+    experienceLevel,
+    avrgHoursPerWeek,
   } = freelancer;
 
   // Use usePathname to get the current path.
@@ -128,7 +131,8 @@ const FreelancerCard: React.FC<FreelancerCardProps> = ({ freelancer }) => {
               />
             </div>
             <span className="text-slate-500 block">
-              Hourly: ${pricePerHour}
+              Hourly: ${pricePerHour} - {getExperienceLevel(experienceLevel)} -{" "}
+              {avrgHoursPerWeek} hr/week
             </span>
             <p className="text-xl py-1 whitespace-pre-wrap">{description}</p>
 

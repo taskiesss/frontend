@@ -1,24 +1,24 @@
-"use server";
+'use server';
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { invariant } from "@/app/_helpers/invariant";
-import { revalidatePath } from "next/cache";
+import { invariant } from '@/app/_helpers/invariant';
+import { revalidatePath } from 'next/cache';
 
-const BASE_URL = "http://localhost:8080";
+const BASE_URL = 'http://localhost:8080';
 
 export async function getCommunityProfile(
   communityId: string,
   token: string | undefined
 ): Promise<any> {
-  invariant(!token, "Unauthorized user");
+  invariant(!token, 'Unauthorized user');
   const res = await fetch(`${BASE_URL}/communities/${communityId}/profile`, {
-    method: "GET",
+    method: 'GET',
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
 
-  if (res.status === 403) throw new Error("Forbidden");
-  if (!res.ok) throw new Error("Something went wrong");
+  if (res.status === 403) throw new Error('Forbidden');
+  if (!res.ok) throw new Error('Something went wrong');
 
   return res.json();
 }
@@ -29,19 +29,19 @@ export async function getCommunityWorkDone(
   size: number,
   token: string | undefined
 ): Promise<any> {
-  invariant(!token, "Unauthorized user");
+  invariant(!token, 'Unauthorized user');
   const res = await fetch(
     `${BASE_URL}/communities/${id}/workdone?page=${page}&size=${size}`,
     {
-      method: "GET",
+      method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
       },
     }
   );
 
-  if (res.status === 403) throw new Error("Forbidden");
-  if (!res.ok) throw new Error("Something went wrong");
+  if (res.status === 403) throw new Error('Forbidden');
+  if (!res.ok) throw new Error('Something went wrong');
 
   return res.json();
 }
@@ -51,17 +51,17 @@ export async function updateCommunityProfilePicture(
   formData: FormData,
   token: string | undefined
 ): Promise<any> {
-  invariant(!token, "Unauthorized user");
+  invariant(!token, 'Unauthorized user');
   const res = await fetch(`${BASE_URL}/communities/${id}/profile-picture`, {
-    method: "PATCH",
+    method: 'PATCH',
     headers: {
       Authorization: `Bearer ${token}`,
     },
     body: formData,
   });
 
-  if (res.status === 403) throw new Error("Forbidden");
-  if (!res.ok) throw new Error("Something went wrong");
+  if (res.status === 403) throw new Error('Forbidden');
+  if (!res.ok) throw new Error('Something went wrong');
 
   revalidatePath(`/communities/${id}`);
   return true;
@@ -72,17 +72,17 @@ export async function updateCommunityCoverPicture(
   formData: FormData,
   token: string | undefined
 ): Promise<any> {
-  invariant(!token, "Unauthorized user");
+  invariant(!token, 'Unauthorized user');
   const res = await fetch(`${BASE_URL}/communities/${id}/cover-picture`, {
-    method: "PATCH",
+    method: 'PATCH',
     headers: {
       Authorization: `Bearer ${token}`,
     },
     body: formData,
   });
 
-  if (res.status === 403) throw new Error("Forbidden");
-  if (!res.ok) throw new Error("Something went wrong");
+  if (res.status === 403) throw new Error('Forbidden');
+  if (!res.ok) throw new Error('Something went wrong');
 
   revalidatePath(`/communities/${id}`);
   return true;
@@ -93,18 +93,18 @@ export async function updateCommunitySkills(
   skills: string[],
   token: string | undefined
 ): Promise<any> {
-  invariant(!token, "Unauthorized user");
+  invariant(!token, 'Unauthorized user');
   const res = await fetch(`${BASE_URL}/communities/${id}/skills`, {
-    method: "PATCH",
+    method: 'PATCH',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({ skills }),
   });
 
-  if (res.status === 403) throw new Error("Forbidden");
-  if (!res.ok) throw new Error("Something went wrong");
+  if (res.status === 403) throw new Error('Forbidden');
+  if (!res.ok) throw new Error('Something went wrong');
 
   revalidatePath(`/communities/${id}`);
   return true;
@@ -115,18 +115,18 @@ export async function updateCommunityDescription(
   description: string,
   token: string | undefined
 ): Promise<any> {
-  invariant(!token, "Unauthorized user");
+  invariant(!token, 'Unauthorized user');
   const res = await fetch(`${BASE_URL}/communities/${id}/description`, {
-    method: "PATCH",
+    method: 'PATCH',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({ description }),
   });
 
-  if (res.status === 403) throw new Error("Forbidden");
-  if (!res.ok) throw new Error("Something went wrong");
+  if (res.status === 403) throw new Error('Forbidden');
+  if (!res.ok) throw new Error('Something went wrong');
 
   revalidatePath(`/communities/${id}`);
   return true;
@@ -137,23 +137,23 @@ export async function updateCommunityHeaderSection(
   request: {
     firstName: string;
     jobTitle: string;
-    country: string;
+    avgHoursPerWeek: number;
     pricePerHour: number;
   },
   token: string | undefined
 ): Promise<any> {
-  invariant(!token, "Unauthorized user");
+  invariant(!token, 'Unauthorized user');
   const res = await fetch(`${BASE_URL}/communities/${id}/header-section`, {
-    method: "PATCH",
+    method: 'PATCH',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(request),
   });
 
-  if (res.status === 403) throw new Error("Forbidden");
-  if (!res.ok) throw new Error("Something went wrong");
+  if (res.status === 403) throw new Error('Forbidden');
+  if (!res.ok) throw new Error('Something went wrong');
 
   revalidatePath(`/communities/${id}`);
   return true;

@@ -18,4 +18,6 @@ export default interface CommunityProfileResponse {
   isFull: boolean;
   isMember: boolean;
   isAdmin: boolean;
+  experienceLevel: 'entry_level' | 'intermediate' | 'expert';
+  avgHoursPerWeek: number;
 }
