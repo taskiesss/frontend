@@ -2,7 +2,7 @@
 "use client";
 
 import Image from "next/image";
-import React, { Suspense, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import SettingsSmallNav from "@/app/_components/communityProfile/SettingsSmallNav";
 import Container from "@/app/_components/common/Container";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -14,33 +14,34 @@ import {
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import {
+  CommunityRolesResponse,
   RoleAndPosition,
   UpdatePositionRequest,
 } from "@/app/_types/CommunitySettings";
 
-import {
-  getCommunityRolesAndPositions,
-  updateCommunityPositions,
-} from "@/app/_lib/CommunityProfile/settings";
+import { updateCommunityPositions } from "@/app/_lib/CommunityProfile/settings";
+
+import { useRouter } from "next/navigation";
 
 import AddPositionForm from "@/app/_components/communityProfile/Forms/AddPositionForm";
 import Spinner from "@/app/_components/common/Spinner";
 
 type Props = {
-  rolesAndPositions: RoleAndPosition[];
+  rolesAndPositions: CommunityRolesResponse;
   id: string;
   token?: string; // Token passed from server component for API calls
-  userId: string;
 };
 
 export default function CommunitySettingsPage({
   rolesAndPositions: initialPositions,
   id,
   token,
-  userId,
 }: Props) {
+  console.log(initialPositions);
+  const router = useRouter();
+  const { isUserAdmin, communityMembers } = initialPositions;
   const [futurePositions, setFuturePositions] =
-    useState<RoleAndPosition[]>(initialPositions);
+    useState<RoleAndPosition[]>(communityMembers);
 
   // Working copy for edits that only gets applied on save
   const [editingPositions, setEditingPositions] = useState<RoleAndPosition[]>(
@@ -143,10 +144,14 @@ export default function CommunitySettingsPage({
 
       // Only update the current positions after successful API call
 
-      const newPositions: RoleAndPosition[] =
-        await getCommunityRolesAndPositions(id, token);
+      router.refresh();
 
-      setFuturePositions(newPositions);
+      // const newPositions: CommunityRolesResponse =
+      //   await getCommunityRolesAndPositions(id, token);
+
+      // const { communityMembers: newCommunityMembers } = newPositions;
+
+      // setFuturePositions(newCommunityMembers);
       setIsEditing(false);
     } catch (error: any) {
       setErrorMessage(error.message || "Failed to update positions");
@@ -174,6 +179,10 @@ export default function CommunitySettingsPage({
     });
   };
 
+  useEffect(() => {
+    setFuturePositions(communityMembers);
+  }, [communityMembers]);
+
   return (
     <Container>
       <div className="flex flex-col my-16 gap-6 p-6 bg-[var(--background-color)] text-[var(--accent-color)]">
@@ -190,7 +199,7 @@ export default function CommunitySettingsPage({
           {/* Action Buttons */}
           <div className="flex justify-end items-center">
             <div className="flex gap-4">
-              {!isEditing && (
+              {!isEditing && isUserAdmin && (
                 <button
                   onClick={handleEditClick}
                   className="text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100"

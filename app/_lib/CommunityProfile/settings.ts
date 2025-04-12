@@ -2,17 +2,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { invariant } from "@/app/_helpers/invariant";
 import {
-  RoleAndPosition,
+  CommunityRolesResponse,
   UpdatePositionRequest,
 } from "@/app/_types/CommunitySettings";
-import { revalidatePath } from "next/cache";
+import { revalidateTag } from "next/cache";
 
 const BASE_URL = "http://localhost:8080";
 
 export async function getCommunityRolesAndPositions(
   communityId: string,
   token: string | undefined
-): Promise<RoleAndPosition[]> {
+): Promise<CommunityRolesResponse> {
   invariant(!token, "Unauthorized user");
 
   const res = await fetch(
@@ -22,11 +22,10 @@ export async function getCommunityRolesAndPositions(
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      // Add cache tag here
+      next: { tags: [`community-${communityId}-settings`] },
     }
   );
-
-  console.log(communityId);
-  console.log(token);
 
   if (res.status === 401) throw new Error("Unauthorized");
   if (res.status === 403) throw new Error("Forbidden");
@@ -42,7 +41,6 @@ export async function updateCommunityPositions(
 ): Promise<{ message: string }> {
   invariant(!token, "Unauthorized user");
 
-  // Validate total percentage equals 100% with a small tolerance
   const totalPercent = positions.reduce(
     (sum, pos) => sum + pos.financialPercent,
     0
@@ -69,6 +67,6 @@ export async function updateCommunityPositions(
   if (res.status === 404) throw new Error("Community not found");
   if (!res.ok) throw new Error("Something went wrong");
 
-  revalidatePath(`/communities/${communityId}/settings`);
+  revalidateTag(`community-${communityId}-settings`);
   return res.json();
 }
