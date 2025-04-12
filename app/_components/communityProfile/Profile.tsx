@@ -45,7 +45,8 @@ export default function Profile({
           title: community.title,
           country: community.country,
           pricePerHour: community.pricePerHour,
-
+          experienceLevel: community.experienceLevel,
+          avgHoursPerWeek: community.avgHoursPerWeek,
           rate: community.rate,
           id,
           isMember: community.isMember,

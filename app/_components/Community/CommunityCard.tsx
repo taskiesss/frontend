@@ -25,6 +25,8 @@ const CommunityCard: React.FC<JobCardProps> = ({ community }) => {
     rate,
     isFull,
     memberCount,
+    avrgHoursPerWeek,
+    title,
   } = community;
   console.log(community);
   // Map experience levels to human-readable strings.
@@ -122,6 +124,7 @@ const CommunityCard: React.FC<JobCardProps> = ({ community }) => {
             >
               {name}
             </Link>
+            <span className="text-slate-500">{title}</span>
             <div className="pointer-events-none py-[0.2rem]">
               <StarRating
                 maxRating={5}
@@ -131,8 +134,10 @@ const CommunityCard: React.FC<JobCardProps> = ({ community }) => {
                 allowHalf={true}
               />
             </div>
+
             <span className="text-slate-500 block">
-              Hourly: ${pricePerHour} - {getExperienceLevel(experienceLevel)}
+              Hourly: ${pricePerHour} - {getExperienceLevel(experienceLevel)} -{" "}
+              {avrgHoursPerWeek} hr/week
             </span>
             <p className="text-xl py-1 whitespace-pre-wrap">{description}</p>
             {/* New: Member count and isFull status */}

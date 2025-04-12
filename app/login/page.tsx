@@ -219,7 +219,9 @@ const LoginPage: React.FC = () => {
           </form>
         </LeftChild>
         <RightChild>
-          <Image src={logo_dark} alt="logo_light" />
+          <Link href={"/"}>
+            <Image src={logo_dark} alt="logo_light" />
+          </Link>
           <h1>Hello, Friend!</h1>
           <p>To keep connected with us please login with your personal info</p>
           <Button className="text-xl">

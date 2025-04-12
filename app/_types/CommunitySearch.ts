@@ -26,6 +26,7 @@ export interface SearchCommunitiesRequest {
 export interface CommunityResponse {
   id: string;
   name: string;
+  title: string;
   description: string;
   skills: string[];
   experienceLevel: 'entry_level' | 'intermediate' | 'expert';
@@ -34,6 +35,7 @@ export interface CommunityResponse {
   rate: number;
   profilePicture: string;
   isFull: boolean;
+  avrgHoursPerWeek: number;
 }
 
 // Define the page response schema
