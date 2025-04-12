@@ -14,6 +14,7 @@ import {
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import {
+  CommunityRolesResponse,
   RoleAndPosition,
   UpdatePositionRequest,
 } from "@/app/_types/CommunitySettings";
@@ -27,7 +28,7 @@ import AddPositionForm from "@/app/_components/communityProfile/Forms/AddPositio
 import Spinner from "@/app/_components/common/Spinner";
 
 type Props = {
-  rolesAndPositions: RoleAndPosition[];
+  rolesAndPositions: CommunityRolesResponse;
   id: string;
   token?: string; // Token passed from server component for API calls
   userId: string;
@@ -37,10 +38,11 @@ export default function CommunitySettingsPage({
   rolesAndPositions: initialPositions,
   id,
   token,
-  userId,
 }: Props) {
+  console.log(initialPositions);
+  const { isUserAdmin, communityMembers } = initialPositions;
   const [futurePositions, setFuturePositions] =
-    useState<RoleAndPosition[]>(initialPositions);
+    useState<RoleAndPosition[]>(communityMembers);
 
   // Working copy for edits that only gets applied on save
   const [editingPositions, setEditingPositions] = useState<RoleAndPosition[]>(
@@ -143,10 +145,12 @@ export default function CommunitySettingsPage({
 
       // Only update the current positions after successful API call
 
-      const newPositions: RoleAndPosition[] =
+      const newPositions: CommunityRolesResponse =
         await getCommunityRolesAndPositions(id, token);
 
-      setFuturePositions(newPositions);
+      const { communityMembers: newCommunityMembers } = newPositions;
+
+      setFuturePositions(newCommunityMembers);
       setIsEditing(false);
     } catch (error: any) {
       setErrorMessage(error.message || "Failed to update positions");
@@ -190,7 +194,7 @@ export default function CommunitySettingsPage({
           {/* Action Buttons */}
           <div className="flex justify-end items-center">
             <div className="flex gap-4">
-              {!isEditing && (
+              {!isEditing && isUserAdmin && (
                 <button
                   onClick={handleEditClick}
                   className="text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100"
