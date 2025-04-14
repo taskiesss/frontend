@@ -36,7 +36,7 @@ export default function CommunityHeader({
   const [isEditingPicture, setIsEditingPicture] = useState(false);
   const [isEditingHeader, setIsEditingHeader] = useState(false);
 
-  console.log(community);
+  // console.log(community);
 
   return (
     <div className="relative z-20 w-9/12 -mt-10 bg-[var(--foreground-color)] px-6 py-8 rounded-2xl flex items-center space-x-4 justify-between">

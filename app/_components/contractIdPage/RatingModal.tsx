@@ -12,6 +12,7 @@ const RatingModal = ({ contractId, canRate }: Props) => {
   const [isClicked, setIsClicked] = useState(canRate);
   const [rating, setRating] = useState(0);
   const [isForbidden, setIsForbidden] = useState(false);
+  const [isPending, setIsPending] = useState(false);
 
   useEffect(() => {
     if (isClicked)
@@ -24,6 +25,8 @@ const RatingModal = ({ contractId, canRate }: Props) => {
   }, [isClicked]);
 
   const handleSubmit = async () => {
+    if (rating <= 0) return;
+    setIsPending(true);
     const token = Cookies.get("token");
     try {
       await postRateReview({ id: contractId, rate: rating }, token);
@@ -37,6 +40,7 @@ const RatingModal = ({ contractId, canRate }: Props) => {
     } finally {
       setRating(0);
       setIsClicked(false);
+      setIsPending(false);
     }
   };
 
@@ -91,10 +95,10 @@ const RatingModal = ({ contractId, canRate }: Props) => {
               <button
                 type="button"
                 onClick={handleSubmit}
-                disabled={rating <= 0}
+                disabled={rating <= 0 || isPending}
                 className="px-4 py-2 bg-[var(--btn-color)] text-white rounded-lg hover:bg-[var(--button-hover-background-color)] transition-colors disabled:bg-[#f2f2f2] disabled:text-black disabled:cursor-not-allowed disabled:opacity-60 "
               >
-                Submit
+                {isPending ? "Submitting..." : "Submit"}
               </button>
             </div>
           </div>

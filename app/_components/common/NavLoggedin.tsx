@@ -14,6 +14,8 @@ import ProfileMenu from "./ProfileMenu";
 import userProfile from "@/public/images/userprofile.jpg";
 import Cookies from "js-cookie";
 import ProtectedPage from "./ProtectedPage";
+import { useDispatch } from "react-redux";
+import { updateAuthInfo } from "@/app/_store/_contexts/userSlice";
 
 interface NavItem {
   label: string;
@@ -22,6 +24,7 @@ interface NavItem {
 
 const NavLoggedin: React.FC = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
   const [query, setQuery] = useState("");
   const [openDropdownIndex, setOpenDropdownIndex] = useState<number | null>(
     null
@@ -59,6 +62,7 @@ const NavLoggedin: React.FC = () => {
         const data = await response.json();
         setImage(data.profilePicture);
         setName(data.name);
+        dispatch(updateAuthInfo({ profilePic: data.profilePicture }));
         // console.log(data);
         setRole(data.role);
       } catch (error) {
