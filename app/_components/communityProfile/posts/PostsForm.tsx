@@ -90,13 +90,13 @@ function PostsForm({ communityId }: Props) {
             <input
               type="text"
               name="postTitle"
-              onClick={() => setIsClicked(true)}
+              onFocus={() => setIsClicked(true)}
               className=" bg-[--foreground-color] border-b-2 border-solid focus:outline-none text-[var(--text-color)] placeholder:text-[var(--text-color)] placeholder:opacity-80 py-1  w-full self-start text-lg focus:border-b-[var(--hover-color)]"
               placeholder="Add a Subject"
             />
             <textarea
-              rows={isClicked ? 4 : 1}
-              onClick={() => setIsClicked(true)}
+              rows={isClicked ? 4 : 2}
+              onFocus={() => setIsClicked(true)}
               name="postContent"
               className="w-full resize-none focus:outline-none bg-[--foreground-color]  placeholder:text-[var(--text-color)] placeholder:opacity-60 py-2 text-lg 
             "
