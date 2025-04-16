@@ -1,20 +1,30 @@
 import { timeAgo } from "@/app/_helpers/helper";
+import { PostResponse } from "@/app/_types/CommunityPostsResponse";
 import Image from "next/image";
 import Link from "next/link";
 import CommentButton from "./CommentButton";
+import DeletePostButton from "./DeletePostButton";
 import LikeButton from "./LikeButton";
-import { PostResponse } from "@/app/_types/CommunityPostsResponse";
 
-type Props = { index: number; communityId: string; post: PostResponse };
+type Props = {
+  index: number;
+  communityId: string;
+  post: PostResponse;
+  canDelete: boolean;
+};
 
-function Post({ communityId, post, index }: Props) {
+function Post({ communityId, post, index, canDelete }: Props) {
   return (
     <main
       key={index}
       className="flex flex-col w-9/12 justify-between bg-[var(--foreground-color)] rounded-2xl py-8 px-6"
     >
-      {/* PostList Component Content */}
+      {/* Post Component Content */}
       <div className="flex gap-4 w-full">
+        {/* delete button */}
+        {canDelete && (
+          <DeletePostButton communityId={communityId} postId={post.postID} />
+        )}
         <Link
           href={`/nx/freelancer/profile/${post.postOwner.id}`}
           className="w-fit self-start"
@@ -53,6 +63,7 @@ function Post({ communityId, post, index }: Props) {
               communityId={communityId}
             />
             <CommentButton
+              canDelete={canDelete}
               postId={post.postID}
               numberOfComments={post.numberOfComments}
               communityId={communityId}

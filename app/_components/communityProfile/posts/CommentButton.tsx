@@ -1,19 +1,34 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import {
   deleteCommentAPI,
   getComments,
+  postComment,
 } from "@/app/_lib/CommunityProfile/Posts";
 import { faComment } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Cookies from "js-cookie";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import ProtectedPage from "../../common/ProtectedPage";
 import Comment from "./Comment";
 import { CommentResponse } from "@/app/_types/CommunityPostsResponse";
+import Image from "next/image";
+import { useSelector } from "react-redux";
+import defaultProfile from "@/public/images/userprofile.jpg";
 
-type Props = { numberOfComments: number; communityId: string; postId: string };
+type Props = {
+  numberOfComments: number;
+  communityId: string;
+  postId: string;
+  canDelete: boolean;
+};
 
-function CommentButton({ numberOfComments, communityId, postId }: Props) {
+function CommentButton({
+  numberOfComments,
+  communityId,
+  postId,
+  canDelete,
+}: Props) {
   const [showComments, setShowComments] = useState(false);
   const [isForbidden, setIsForbidden] = useState(false);
   const [isLast, setIsLast] = useState(true);
@@ -25,6 +40,10 @@ function CommentButton({ numberOfComments, communityId, postId }: Props) {
   const [showConfirm, setShowConfirm] = useState(false);
   const [commentId, setCommentId] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isPending, startTransition] = useTransition();
+  const userProfile = useSelector(
+    (state: any) => state.user.currentUser.profilePic
+  );
 
   useEffect(() => {
     if (showComments) document.body.style.overflow = "hidden";
@@ -65,6 +84,12 @@ function CommentButton({ numberOfComments, communityId, postId }: Props) {
     fetchComments();
   }, [currentPage, showComments, refetch, postId, communityId]);
 
+  useEffect(() => {
+    if (showComments) {
+      setCurrentPage(0);
+    }
+  }, [showComments]);
+
   //delete comment
   const handleDelete = async (commentId: string) => {
     const token = Cookies.get("token");
@@ -89,11 +114,31 @@ function CommentButton({ numberOfComments, communityId, postId }: Props) {
     setShowConfirm(false);
   };
 
-  useEffect(() => {
-    if (showComments) {
-      setCurrentPage(0);
+  const handleSubmitComment = async (formData: FormData) => {
+    const reqbody = {
+      content: formData.get("content"),
+    };
+    if (!reqbody.content) {
+      return;
     }
-  }, [showComments]);
+    startTransition(async () => {
+      const token = Cookies.get("token");
+      const response = await postComment(postId, communityId, token, reqbody);
+      if (response.error) {
+        if (
+          response.error === "Forbidden" ||
+          response.error === "Unauthorized user"
+        ) {
+          setIsForbidden(true);
+        } else {
+          console.error("Error posting comment:", response.error);
+        }
+
+        return;
+      }
+      setRefetch((prev) => !prev);
+    });
+  };
 
   if (isForbidden) {
     return (
@@ -149,10 +194,10 @@ function CommentButton({ numberOfComments, communityId, postId }: Props) {
                 {/* List of users who liked the post */}
                 <ul className="list-none flex flex-col px-4 pb-5 gap-6">
                   {/* Replace with actual user data */}
-
                   {comments.map((comment) =>
                     comment.comment.content.map((p, i) => (
                       <Comment
+                        canDelete={canDelete}
                         handleDelete={() => {
                           setCommentId(p.commentId);
                           setShowConfirm(true);
@@ -179,6 +224,42 @@ function CommentButton({ numberOfComments, communityId, postId }: Props) {
                       No comments yet
                     </li>
                   )}
+                  {/* submitting a comment */}
+                  <form
+                    action={handleSubmitComment}
+                    className="flex gap-2 border-2 border-solid border-[var(--background-color)] rounded-xl p-4"
+                  >
+                    {" "}
+                    <div className="w-fit self-start">
+                      <div className="relative w-16 aspect-square rounded-full overflow-hidden">
+                        <Image
+                          src={userProfile || defaultProfile}
+                          alt="my profile"
+                          fill
+                          className="object-cover rounded-full overflow-hidden"
+                          sizes="(max-width: 1024px) 100vw, 1024px"
+                        />
+                      </div>
+                    </div>
+                    <div className="w-full">
+                      <textarea
+                        rows={3}
+                        name="content"
+                        className="w-full resize-none focus:outline-none bg-[--foreground-color]  placeholder:text-[var(--text-color)] placeholder:opacity-60 py-2 text-lg 
+            "
+                        placeholder="Write something..."
+                      />
+                    </div>
+                    <div className="self-end">
+                      <button
+                        type="submit"
+                        disabled={isPending}
+                        className="bg-[var(--btn-color)] rounded-xl px-5 py-3 font-semibold text-lg hover:bg-[var(--button-hover-background-color)] transition-all duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[var(--button-hover-background-color)] disabled:hover:text-[var(--text-color)]"
+                      >
+                        {isPending ? "Posting..." : "Post"}
+                      </button>
+                    </div>
+                  </form>
                 </ul>
               </div>
             </div>

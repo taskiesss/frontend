@@ -199,7 +199,7 @@ export async function postComment(
   postId: string,
   communityId: string,
   token: string | undefined,
-  reqbody: { commentContent: FormDataEntryValue | null }
+  reqbody: { content: FormDataEntryValue | null }
 ): Promise<any> {
   if (!token) {
     return { error: 'Unauthorized user' };

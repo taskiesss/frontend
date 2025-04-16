@@ -9,22 +9,25 @@ import React from "react";
 type Props = {
   p: any;
   i: number;
+  canDelete: boolean;
   handleDelete: any;
 };
 
-function Comment({ p, i, handleDelete }: Props) {
+function Comment({ p, i, handleDelete, canDelete }: Props) {
   return (
     <li
       className="flex gap-4 items-center hover:opacity-80 transition-opacity relative"
       key={i}
     >
       {/* delete button */}
-      <button
-        onClick={() => handleDelete(p.content.commentId)}
-        className="absolute self-start right-4 opacity-70 hover:opacity-100 transition-opacity"
-      >
-        <FontAwesomeIcon icon={faTrash} className="text-lg" />
-      </button>
+      {canDelete && (
+        <button
+          onClick={() => handleDelete(p.content.commentId)}
+          className="absolute self-start right-4 opacity-70 hover:opacity-100 transition-opacity"
+        >
+          <FontAwesomeIcon icon={faTrash} className="text-lg" />
+        </button>
+      )}
 
       <div className="w-fit self-start">
         <Link href={`/nx/freelancer/profile/${p.postOwner.id}`}>

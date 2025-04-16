@@ -27,7 +27,7 @@ async function page({ params }: Props) {
         editable={communityData.isAdmin}
       >
         <PostsForm communityId={communityId} />
-        <PostList communityId={communityId} />
+        <PostList communityId={communityId} canDelete={communityData.isAdmin} />
       </Profile>
     );
   } catch (error: any) {
