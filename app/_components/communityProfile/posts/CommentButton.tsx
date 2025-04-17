@@ -77,7 +77,20 @@ function CommentButton({
         }
         return;
       }
-      setComments(response);
+      // update comments state with the new comments by appending them to the existing ones if page is not in state
+      const existingPage = comments.find((c) => c.page === currentPage);
+      if (existingPage) {
+        setComments((state) =>
+          state.map((c) => (c.page === currentPage ? response : c))
+        );
+      }
+      // append the new comments to the existing ones if page is not in state
+      else
+        setComments((state) => [
+          ...state,
+          { comment: response, page: currentPage },
+        ]);
+
       setCurrentPage((prev) => prev + 1);
       setIsLast(response.last);
     };
