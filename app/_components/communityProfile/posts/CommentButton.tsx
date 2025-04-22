@@ -5,16 +5,16 @@ import {
   getComments,
   postComment,
 } from "@/app/_lib/CommunityProfile/Posts";
-import { faComment } from "@fortawesome/free-solid-svg-icons";
+import { CommentResponse } from "@/app/_types/CommunityPostsResponse";
+import defaultProfile from "@/public/images/userprofile.jpg";
+import { faComment, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Cookies from "js-cookie";
+import Image from "next/image";
 import { useEffect, useState, useTransition } from "react";
+import { useSelector } from "react-redux";
 import ProtectedPage from "../../common/ProtectedPage";
 import Comment from "./Comment";
-import { CommentResponse } from "@/app/_types/CommunityPostsResponse";
-import Image from "next/image";
-import { useSelector } from "react-redux";
-import defaultProfile from "@/public/images/userprofile.jpg";
 
 type Props = {
   numberOfComments: number;
@@ -55,7 +55,17 @@ function CommentButton({
 
   useEffect(() => {
     const fetchComments = async () => {
-      if (!showComments) return;
+      if (!showComments) {
+        setCurrentPage(0);
+        setComments([]);
+        setIsLast(true);
+        setRefetch(false);
+        setIsForbidden(false);
+        setShowConfirm(false);
+        setCommentId("");
+        setIsSubmitting(false);
+        return;
+      }
 
       const token = Cookies.get("token");
 
@@ -64,7 +74,8 @@ function CommentButton({
         postId,
         communityId,
         token,
-        currentPage
+        currentPage,
+        5
       );
       if (response.error) {
         if (
@@ -91,17 +102,10 @@ function CommentButton({
           { comment: response, page: currentPage },
         ]);
 
-      setCurrentPage((prev) => prev + 1);
       setIsLast(response.last);
     };
     fetchComments();
   }, [currentPage, showComments, refetch, postId, communityId]);
-
-  useEffect(() => {
-    if (showComments) {
-      setCurrentPage(0);
-    }
-  }, [showComments]);
 
   //delete comment
   const handleDelete = async (commentId: string) => {
@@ -238,12 +242,13 @@ function CommentButton({
                     </li>
                   )}
                   {/* submitting a comment */}
+                  <div className="border-t border-solid opacity-50 border-[var(--accent-color)]"></div>
                   <form
                     action={handleSubmitComment}
-                    className="flex gap-2 border-2 border-solid border-[var(--background-color)] rounded-xl p-4"
+                    className="flex gap-4 p-1  "
                   >
                     {" "}
-                    <div className="w-fit self-start">
+                    <div className="w-fit self-center">
                       <div className="relative w-16 aspect-square rounded-full overflow-hidden">
                         <Image
                           src={userProfile || defaultProfile}
@@ -254,23 +259,28 @@ function CommentButton({
                         />
                       </div>
                     </div>
-                    <div className="w-full">
-                      <textarea
-                        rows={3}
-                        name="content"
-                        className="w-full resize-none focus:outline-none bg-[--foreground-color]  placeholder:text-[var(--text-color)] placeholder:opacity-60 py-2 text-lg 
-            "
-                        placeholder="Write something..."
-                      />
-                    </div>
-                    <div className="self-end">
-                      <button
-                        type="submit"
-                        disabled={isPending}
-                        className="bg-[var(--btn-color)] rounded-xl px-5 py-3 font-semibold text-lg hover:bg-[var(--button-hover-background-color)] transition-all duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[var(--button-hover-background-color)] disabled:hover:text-[var(--text-color)]"
-                      >
-                        {isPending ? "Posting..." : "Post"}
-                      </button>
+                    <div
+                      className="flex w-full border-2 border-solid border-[var(--border-color)]
+                    border-opacity-35 rounded-xl px-3 py-1 focus-within:border-[var(--hover-color)] transition-all ease-in-out"
+                    >
+                      <div className="w-full">
+                        <textarea
+                          rows={2}
+                          name="content"
+                          className="w-full resize-none focus:outline-none   placeholder:text-[var(--accent-color)] bg-[var(--background-color)] placeholder:opacity-60 py-2 px-3 text-lg rounded-xl
+                        "
+                          placeholder="Write something..."
+                        />
+                      </div>
+                      <div className="self-center">
+                        <button
+                          type="submit"
+                          disabled={isPending}
+                          className=" bg-[var(--btn-color)] rounded-full px-4 py-2 font-semibold text-xl hover:bg-[var(--button-hover-background-color)] transition-all duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[var(--button-hover-background-color)] disabled:hover:text-[var(--text-color)]"
+                        >
+                          <FontAwesomeIcon icon={faPaperPlane} />
+                        </button>
+                      </div>
                     </div>
                   </form>
                 </ul>
