@@ -23,7 +23,7 @@ export default function Profile({
   children,
   role,
 }: Props) {
-  console.log(community);
+  // console.log(community);
 
   const style =
     "flex w-9/12 justify-between bg-[var(--foreground-color)] rounded-2xl py-8 px-6";

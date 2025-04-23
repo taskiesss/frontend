@@ -1,15 +1,21 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { User } from "../../_types/User";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { User } from '../../_types/User';
 
 interface userState {
   currentUser: User;
 }
 
 const initialState: userState = {
-  currentUser: { username: " ", email: "", password: "", role: "" },
+  currentUser: {
+    username: ' ',
+    email: '',
+    password: '',
+    role: '',
+    profilePic: '',
+  },
 };
 export const userSlice = createSlice({
-  name: "user",
+  name: 'user',
   initialState,
   reducers: {
     updateAuthInfo: (state, action: PayloadAction<Partial<User>>) => {

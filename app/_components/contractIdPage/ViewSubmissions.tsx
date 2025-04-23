@@ -78,6 +78,8 @@ export default function ViewSubmission({
     id: string;
     name: string;
   } | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isConfirming, setIsConfirming] = useState(false);
 
   // Fetch submission data on component mount
   useEffect(() => {
@@ -105,7 +107,10 @@ export default function ViewSubmission({
 
   // API to delete a file or link
   const deleteFileOrLink = async (type: "file" | "link", id: string) => {
+    setIsConfirming(true);
+
     const token = Cookies.get("token");
+
     try {
       const deleteResponse = await deleteFileOrLinkAPI(
         { contractid: contractId, milestoneIndex: milestoneIndex, type, id },
@@ -121,6 +126,8 @@ export default function ViewSubmission({
         return;
       }
       setError("Failed to delete. Please try again.");
+    } finally {
+      setIsConfirming(false);
     }
   };
 
@@ -160,6 +167,7 @@ export default function ViewSubmission({
       setIsEditing(false);
       return;
     }
+    setIsSubmitting(true);
     const token = Cookies.get("token");
     const formData = new FormData();
     newFiles.forEach((file) => formData.append("files", file));
@@ -186,6 +194,8 @@ export default function ViewSubmission({
         return;
       }
       setError("Failed to update submission. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -205,6 +215,7 @@ export default function ViewSubmission({
   };
 
   const handleMilestoneApprovalConfirmation = async (accepted: boolean) => {
+    setIsConfirming(true);
     const token = Cookies.get("token");
     try {
       const { contractId: returnedContractId } = await milestoneApproval(
@@ -227,6 +238,7 @@ export default function ViewSubmission({
       }
       setError("Failed to do this action. Please try again.");
     } finally {
+      setIsConfirming(false);
       setShowAccept(false);
       setShowReject(false);
     }
@@ -508,8 +520,9 @@ export default function ViewSubmission({
                 <div className="self-end p-4">
                   <button
                     type="button"
+                    disabled={isSubmitting}
                     onClick={submitChanges}
-                    className="px-4 py-2 bg-[var(--btn-color)] rounded-lg hover:bg-[var(--hover-color)] transition-colors"
+                    className="px-4 py-2 bg-[var(--btn-color)] rounded-lg hover:bg-[var(--hover-color)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     Submit Changes
                   </button>
@@ -564,8 +577,9 @@ export default function ViewSubmission({
                 </button>
                 <button
                   type="button"
+                  disabled={isConfirming}
                   onClick={handleConfirmDelete}
-                  className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+                  className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Delete
                 </button>
@@ -611,8 +625,9 @@ export default function ViewSubmission({
                 </button>
                 <button
                   type="button"
+                  disabled={isConfirming}
                   onClick={() => handleMilestoneApprovalConfirmation(true)}
-                  className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
+                  className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   ✔ Confirm Accept
                 </button>
@@ -641,8 +656,9 @@ export default function ViewSubmission({
                 </button>
                 <button
                   type="button"
+                  disabled={isConfirming}
                   onClick={() => handleMilestoneApprovalConfirmation(false)}
-                  className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+                  className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   ❌ Confirm Reject
                 </button>

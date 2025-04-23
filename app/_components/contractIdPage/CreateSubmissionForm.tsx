@@ -28,6 +28,7 @@ export default function CreateSubmissionForm({
   const [links, setLinks] = useState<{ name: string; url: string }[]>([]);
   const [isForbidden, setIsForbidden] = useState(false);
   const [error, setError] = useState("");
+  const [isCreating, setIsCreating] = useState(false);
   // Handle file input change
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = e.target.files;
@@ -83,15 +84,7 @@ export default function CreateSubmissionForm({
     formData.append("links", JSON.stringify(links));
 
     try {
-      // Replace with your API endpoint to create a new submission
-      // const response = await fetch(`/api/contracts/${contractId}/milestone/${milestoneIndex}`, {
-      //   method: "POST",
-      //   headers: {
-      //     Authorization: `Bearer ${token}`,
-      //   },
-      //   body: formData,
-      // });
-      // if (!response.ok) throw new Error("Failed to create submission");
+      setIsCreating(true);
       const postResponse = await postSubmission(
         {
           contractid: contractId,
@@ -115,6 +108,8 @@ export default function CreateSubmissionForm({
         setIsForbidden(true);
         return;
       }
+    } finally {
+      setIsCreating(false);
     }
   };
   if (isForbidden) {
@@ -293,8 +288,9 @@ export default function CreateSubmissionForm({
           </button>
           <button
             type="button"
+            disabled={isCreating}
             onClick={handleCreateSubmission}
-            className="px-4 py-2 bg-[var(--btn-color)] rounded-lg text-white hover:bg-[var(--hover-color)] transition-colors"
+            className="px-4 py-2 bg-[var(--btn-color)] rounded-lg text-white hover:bg-[var(--hover-color)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Create Submission
           </button>
