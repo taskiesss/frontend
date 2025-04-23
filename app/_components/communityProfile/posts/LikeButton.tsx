@@ -36,6 +36,14 @@ function LikeButton({
   const [likes, setLikes] = useState<LikeResponse>({ likes: [] });
   const [isForbidden, setIsForbidden] = useState(false);
 
+  // handline new post added to have fresh data
+  useEffect(() => {
+    setNumberOfLike(numberOfLikes); // Sync with new numberOfLikes
+    setIsLiked(isLikedpost); // Sync with new isLikedpost
+    setLikes({ likes: [] }); // Clear likes for new post
+    setShowLikes(false); // Close likes modal
+  }, [postId, numberOfLikes, isLikedpost]);
+
   useEffect(() => {
     if (showLikes) document.body.style.overflow = "hidden";
     else document.body.style.overflow = "auto";

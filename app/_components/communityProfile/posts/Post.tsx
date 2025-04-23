@@ -14,6 +14,7 @@ type Props = {
 };
 
 function Post({ communityId, post, index, canDelete }: Props) {
+  // console.log(post);
   return (
     <main
       key={index}
@@ -22,9 +23,7 @@ function Post({ communityId, post, index, canDelete }: Props) {
       {/* Post Component Content */}
       <div className="flex gap-4 w-full">
         {/* delete button */}
-        {canDelete && (
-          <DeletePostButton communityId={communityId} postId={post.postID} />
-        )}
+
         <Link
           href={`/nx/freelancer/profile/${post.postOwner.id}`}
           className="w-fit self-start"
@@ -70,6 +69,9 @@ function Post({ communityId, post, index, canDelete }: Props) {
             />
           </div>
         </div>
+        {canDelete && (
+          <DeletePostButton communityId={communityId} postId={post.postID} />
+        )}
       </div>
     </main>
   );

@@ -4,6 +4,7 @@ import { PostingaPost } from "@/app/_lib/CommunityProfile/Posts";
 import defaultProfile from "@/public/images/userprofile.jpg";
 import Cookies from "js-cookie";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
 import { useSelector } from "react-redux";
 import ProtectedPage from "../../common/ProtectedPage";
@@ -17,6 +18,7 @@ function PostsForm({ communityId }: Props) {
   const [isForbidden, setIsForbidden] = useState(false);
   const [isPending, startTransition] = useTransition();
   const [isClicked, setIsClicked] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     // Close the textarea when clicking outside of it
@@ -60,6 +62,13 @@ function PostsForm({ communityId }: Props) {
         }
         throw new Error("Error posting:", response.error);
       }
+
+      setIsClicked(false);
+
+      // Reset pagination paramter
+      const url = new URL(window.location.href);
+      url.searchParams.set("page", "1");
+      router.push(url.toString(), undefined);
     });
   };
 
@@ -95,7 +104,7 @@ function PostsForm({ communityId }: Props) {
               placeholder="Add a Subject"
             />
             <textarea
-              rows={isClicked ? 4 : 2}
+              rows={isClicked ? 4 : 1}
               onFocus={() => setIsClicked(true)}
               name="postContent"
               className="w-full resize-none focus:outline-none bg-[--foreground-color]  placeholder:text-[var(--text-color)] placeholder:opacity-60 py-2 text-lg 

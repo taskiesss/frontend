@@ -52,12 +52,14 @@ function DeletePostButton({ postId, communityId }: Props) {
   return (
     <>
       {/* delete button */}
-      <button
-        onClick={() => setShowConfirm(true)}
-        className="absolute self-start right-4 opacity-70 hover:opacity-100 transition-opacity"
-      >
-        <FontAwesomeIcon icon={faTrash} className="text-lg" />
-      </button>
+      <div className="relative w-fit self-start">
+        <button
+          onClick={() => setShowConfirm(true)}
+          className="opacity-70 hover:opacity-100 hover:text-red-500 transition-all "
+        >
+          <FontAwesomeIcon icon={faTrash} className="text-xl" />
+        </button>
+      </div>
 
       {showConfirm && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">

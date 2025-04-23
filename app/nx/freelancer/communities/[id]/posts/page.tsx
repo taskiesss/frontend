@@ -8,10 +8,15 @@ import { cookies } from "next/headers";
 import PostList from "@/app/_components/communityProfile/posts/PostList";
 import PostsForm from "@/app/_components/communityProfile/posts/PostsForm";
 
-type Props = { params: { id: string } };
+type Props = {
+  params: { id: string };
+  searchParams: Promise<{ page?: string }>;
+};
 
-async function page({ params }: Props) {
+async function page({ params, searchParams }: Props) {
   const { id } = await Promise.resolve(params);
+  const searchParam = await searchParams;
+
   const token = (await cookies()).get("token")?.value;
   const communityId = id || "my_community";
   try {
@@ -27,7 +32,11 @@ async function page({ params }: Props) {
         editable={communityData.isAdmin}
       >
         <PostsForm communityId={communityId} />
-        <PostList communityId={communityId} canDelete={communityData.isAdmin} />
+        <PostList
+          searchParams={searchParam}
+          communityId={communityId}
+          canDelete={communityData.isAdmin}
+        />
       </Profile>
     );
   } catch (error: any) {

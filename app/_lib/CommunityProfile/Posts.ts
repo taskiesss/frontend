@@ -17,7 +17,7 @@ export async function PostingaPost(
     return { error: 'Unauthorized user' };
   }
   console.log(reqbody);
-  const res = await fetch(`${BASE_URL}/freelancers/communities/${id}/posts`, {
+  const res = await fetch(`${BASE_URL}/freelancers/communities/${id}/post`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -52,6 +52,7 @@ export async function getPosts(
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
+      next: { tags: ['posts'] },
     }
   );
   if (res.status === 403) return { error: 'Forbidden' };
@@ -126,7 +127,7 @@ export async function likePost(
     return { error: 'Unauthorized user' };
   }
   const res = await fetch(
-    `${BASE_URL}/freelancers/communities/${communityId}/post/${postId}/likes/{liked}`,
+    `${BASE_URL}/freelancers/communities/${communityId}/post/${postId}/likes/${liked}`,
     {
       method: 'POST',
       headers: {
@@ -138,7 +139,7 @@ export async function likePost(
   if (res.status === 403) return { error: 'Forbidden' };
   if (!res.ok) return { error: 'Error liking post' };
 
-  // revalidateTag(`posts`);
+  revalidateTag(`posts`);
   return true;
 }
 
@@ -205,7 +206,7 @@ export async function postComment(
     return { error: 'Unauthorized user' };
   }
   const res = await fetch(
-    `${BASE_URL}/freelancers/communities/${communityId}/post/${postId}/post-comments`,
+    `${BASE_URL}/freelancers/communities/${communityId}/post/${postId}/comment`,
     {
       method: 'POST',
       headers: {
