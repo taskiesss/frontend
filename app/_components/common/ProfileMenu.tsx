@@ -75,9 +75,12 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({
           {role === "FREELANCER" && (
             <li className=" text-md hover:bg-[var(--hover-color)]">
               <button onClick={onClose} className="text-start self-start">
-                <Link href={"#"} className="flex items-center gap-2 p-4 w-full">
+                <Link
+                  href={`/nx/${role.toLowerCase()}/mycommunities`}
+                  className="flex items-center gap-2 p-4 w-full"
+                >
                   <FontAwesomeIcon icon={faComments} className="w-6 text-lg" />
-                  <span>Community</span>
+                  <span>Your Communities</span>
                 </Link>
               </button>
             </li>
