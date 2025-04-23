@@ -92,6 +92,7 @@ export async function getComments(
 
 // DELETE COMMENT
 export async function deleteCommentAPI(
+  communityId: string,
   postId: string,
   token: string | undefined,
   commentId: string
@@ -100,7 +101,7 @@ export async function deleteCommentAPI(
     return { error: 'Unauthorized user' };
   }
   const res = await fetch(
-    `${BASE_URL}/freelancers/communities/post/${postId}/comment/${commentId}`,
+    `${BASE_URL}/freelancers/communities/${communityId}/post/${postId}/comment/${commentId}`,
     {
       method: 'DELETE',
       headers: {

@@ -23,7 +23,7 @@ function Comment({ p, i, handleDelete, canDelete }: Props) {
       {canDelete && (
         <button
           onClick={() => handleDelete(p.content.commentId)}
-          className="absolute self-start right-4 opacity-70 hover:opacity-100 transition-opacity"
+          className="absolute self-start right-4 opacity-70 hover:opacity-100 hover:text-red-500 transition-all"
         >
           <FontAwesomeIcon icon={faTrash} className="text-lg" />
         </button>

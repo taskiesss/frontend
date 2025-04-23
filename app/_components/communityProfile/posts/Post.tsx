@@ -47,10 +47,12 @@ function Post({ communityId, post, index, canDelete }: Props) {
             >
               <p>{post.postOwner.name}</p>
             </Link>
-            <p className="text-sm opacity-80">{timeAgo(post.date)}</p>
+            <p className="text-sm opacity-70">{timeAgo(post.date)}</p>
           </div>
           <div className="flex flex-col gap-2">
-            <h3 className="text-xl font-semibold ">{post.postTitle}</h3>
+            <h3 className="text-xl font-semibold font-serif ">
+              {post.postTitle}
+            </h3>
             <p className="text-lg whitespace-pre-wrap">{post.postContent}</p>
           </div>
           {/* Likes and Comments Section */}

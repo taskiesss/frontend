@@ -132,7 +132,12 @@ function CommentButton({
     const token = Cookies.get("token");
     setIsSubmitting(true);
 
-    const response = await deleteCommentAPI(postId, token, commentId);
+    const response = await deleteCommentAPI(
+      communityId,
+      postId,
+      token,
+      commentId
+    );
     if (response.error) {
       if (
         response.error === "Forbidden" ||
@@ -238,7 +243,7 @@ function CommentButton({
             </div>
             <div className="p-6 flex flex-col gap-4">
               <div className="flex flex-col gap-2">
-                <ul className="list-none flex flex-col px-4 pb-5 gap-6">
+                <ul className="list-none flex flex-col px-4 pb-5 gap-6 ">
                   {comments.map((c) =>
                     Array.isArray(c.comment.content)
                       ? c.comment.content.map((p, i) => (
