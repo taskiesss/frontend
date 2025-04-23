@@ -64,7 +64,12 @@ const StarRating: React.FC<StarRatingProps> = ({
       {/* Rating Text */}
       <p
         className="m-0 leading-none"
-        style={{ color, fontSize: `${size / 1.5}px` }}
+        style={{
+          color,
+          fontSize: `${size / 1.5}px`,
+          minWidth: `${size}px`, // Ensures consistent width
+          textAlign: "left", // Align text consistently
+        }}
       >
         {messages.length === maxRating * 2 && rating !== null
           ? messages[
