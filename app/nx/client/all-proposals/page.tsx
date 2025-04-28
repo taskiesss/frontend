@@ -12,9 +12,10 @@ async function page({ searchParams }: props) {
   const newpage = page ? Number(page) : 1;
   const newStatus = status ? status.split(",") : [];
   const newSearch = search ? search : "";
+
   const reqBody = {
     page: newpage - 1,
-    size: 2,
+    size: 10,
     status: newStatus,
     search: newSearch,
     jobId: undefined,
