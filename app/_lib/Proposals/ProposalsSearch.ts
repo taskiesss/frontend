@@ -1,7 +1,7 @@
 import { ProposalsPageDTO } from '@/app/_types/Proposals';
 
 // services/proposals.ts
-const BASE_URL = 'http://localhost:8080';
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 export async function getFreelancerProposals(
   token: string | undefined,

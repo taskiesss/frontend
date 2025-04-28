@@ -3,7 +3,7 @@ import { invariant } from '@/app/_helpers/invariant';
 import { revalidateTag } from 'next/cache';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-const BASE_URL = 'http://localhost:8080';
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 export async function getMyContracts(
   reqbody: any,
   token: string | undefined

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { invariant } from '@/app/_helpers/invariant';
 
-const BASE_URL = 'http://localhost:8080';
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const jobApplication = async (
   token: string | undefined,

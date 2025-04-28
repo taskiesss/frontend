@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { User } from '../../_types/User';
 
-const BASE_URL = 'http://localhost:8080';
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 export async function registerUser(user: User): Promise<any> {
   try {
     const res = await fetch(`${BASE_URL}/public/signup/create-account`, {

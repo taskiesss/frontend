@@ -43,7 +43,7 @@ const NavLoggedin: React.FC = () => {
   // Ref for detecting clicks outside the profile menu container
   const profileMenuRef = useRef<HTMLDivElement>(null);
 
-  const BASE_URL = "http://localhost:8080";
+  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
   const token = Cookies.get("token");
 

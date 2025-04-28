@@ -2,7 +2,7 @@
 'use server';
 
 import { revalidateTag } from 'next/cache';
-const BASE_URL = 'http://localhost:8080';
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 //POSTING A POST
 export async function PostingaPost(

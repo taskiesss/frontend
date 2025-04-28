@@ -1,7 +1,7 @@
-"use server";
+'use server';
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { invariant } from "@/app/_helpers/invariant";
-import { revalidateTag } from "next/cache";
+import { invariant } from '@/app/_helpers/invariant';
+import { revalidateTag } from 'next/cache';
 
 export type MyCommunitiesResponse = {
   adminOf: Array<{
@@ -18,23 +18,23 @@ export type MyCommunitiesResponse = {
   }>;
 };
 
-const BASE_URL = "http://localhost:8080";
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 export async function getMyCommunities(
   token: string | undefined
 ): Promise<MyCommunitiesResponse> {
-  invariant(!token, "Unauthorized user");
+  invariant(!token, 'Unauthorized user');
 
   const res = await fetch(`${BASE_URL}/freelancers/my-communities`, {
-    method: "GET",
+    method: 'GET',
     headers: {
       Authorization: `Bearer ${token}`,
     },
-    next: { tags: ["my-communities"] }, // Add cache tag for revalidation
+    next: { tags: ['my-communities'] }, // Add cache tag for revalidation
   });
 
-  if (res.status === 401) throw new Error("Unauthorized");
-  if (!res.ok) throw new Error("Failed to fetch communities");
+  if (res.status === 401) throw new Error('Unauthorized');
+  if (!res.ok) throw new Error('Failed to fetch communities');
 
   return res.json();
 }
@@ -66,14 +66,14 @@ export async function createCommunity(
   requestData: CreateCommunityRequest,
   token: string | undefined
 ): Promise<CreateCommunityResponse> {
-  invariant(!token, "Unauthorized user");
+  invariant(!token, 'Unauthorized user');
 
   const response = await fetch(
     `${BASE_URL}/freelancers/communities/create-community`,
     {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(requestData),
@@ -81,20 +81,20 @@ export async function createCommunity(
   );
 
   if (response.status === 400) {
-    throw new Error("Bad request - Invalid community data");
+    throw new Error('Bad request - Invalid community data');
   }
   if (response.status === 401) {
-    throw new Error("Unauthorized");
+    throw new Error('Unauthorized');
   }
   if (response.status === 403) {
-    throw new Error("Forbidden - Insufficient permissions");
+    throw new Error('Forbidden - Insufficient permissions');
   }
   if (!response.ok) {
-    throw new Error("Something went wrong");
+    throw new Error('Something went wrong');
   }
 
   // Revalidate community list cache
-  revalidateTag("my-communities");
+  revalidateTag('my-communities');
 
   return response.json();
 }

@@ -3,7 +3,7 @@
 import { invariant } from '@/app/_helpers/invariant';
 import { revalidatePath } from 'next/cache';
 
-const BASE_URL = 'http://localhost:8080';
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 export async function getCommunityProfile(
   communityId: string,

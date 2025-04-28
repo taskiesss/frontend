@@ -6,7 +6,7 @@ import { invariant } from '@/app/_helpers/invariant';
 import { FreelancerFormPayload } from '@/app/_types/FreelancerForm';
 import { mode } from 'crypto-js';
 import Cookies from 'js-cookie';
-const BASE_URL = 'http://localhost:8080';
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 /**
  * Submits the freelancer form data to the API endpoint.
  * @param data - The freelancer profile data.

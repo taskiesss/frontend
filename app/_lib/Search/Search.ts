@@ -11,7 +11,7 @@ import {
   PageFreelancerResponse,
 } from '@/app/_types/FreelancerSearch';
 
-const BASE_URL = 'http://localhost:8080';
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 /**
  * Retrieves the API key from the environment variable.
