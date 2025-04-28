@@ -53,7 +53,7 @@ export async function getContractDetails(
       Authorization: `Bearer ${token}`,
     },
   });
-  // console.log(res);
+  console.log(res);
   if (res.status === 403) {
     throw new Error('Forbidden');
   }
@@ -62,7 +62,7 @@ export async function getContractDetails(
     throw new Error('Something went wrong');
   }
   const out = await res.json();
-  // console.log(out);
+  console.log(out);
   return out;
 }
 
