@@ -126,7 +126,7 @@ const NavLoggedin: React.FC = () => {
             options: [
               { label: "Post a job", link: "/nx/client/job-post" },
               { label: "My posted job", link: "/nx/client/all-jobs" },
-              { label: "Proposals", link: "/nx/client/myProposals" },
+              { label: "All Proposals", link: "/nx/client/all-proposals" },
               { label: "All contracts", link: "/nx/client/mycontracts" },
             ],
           },
