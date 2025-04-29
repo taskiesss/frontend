@@ -62,7 +62,7 @@ function ProposalCard({ proposal, isLast }: Props) {
         <div className="flex gap-5 items-center">
           {proposal.status === "PENDING" && (
             <Link
-              href={`/nx/client/mycontracts/new/${proposal.freelancerId}`}
+              href={`/nx/client/mycontracts/new/${proposal.proposalId}`}
               className="bg-[var(--btn-color)] py-2 px-10 rounded-xl hover:bg-[var(--button-hover-background-color)] transition-all flex gap-1 items-center text-md"
             >
               <FontAwesomeIcon icon={faSuitcase} />

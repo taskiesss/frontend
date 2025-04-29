@@ -165,7 +165,7 @@ function ViewProposal({ proposal }: Props) {
         </section>
         {proposal.status === "PENDING" && (
           <Link
-            href={`/nx/client/mycontracts/new/${proposal.freelancerId}`}
+            href={`/nx/client/mycontracts/new/${proposal.proposalId}`}
             className="flex justify-end px-20 pb-10"
           >
             <Button type="button" className="text-lg">
