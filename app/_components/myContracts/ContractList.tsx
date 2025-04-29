@@ -35,7 +35,7 @@ export default function ContractList({ contracts }: Props) {
   const pathname = usePathname();
   const { id } = params || {};
   return (
-    <div className="w-4/5 bg-[var(--foreground-color)] rounded-lg shadow-sm p-4 flex flex-col">
+    <>
       {contracts.content.map((c, i) => (
         <ContractCard
           communityid={id || ""}
@@ -54,6 +54,6 @@ export default function ContractList({ contracts }: Props) {
           setPageParamter={false}
         />
       </div>
-    </div>
+    </>
   );
 }

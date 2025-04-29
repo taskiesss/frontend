@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ProtectedPage from "@/app/_components/common/ProtectedPage";
 import AllContracts from "@/app/_components/myContracts/AllContracts";
-import { getMyContracts } from "@/app/_lib/ContractsAPi/contractAPI";
+import { getMyClientContracts } from "@/app/_lib/ContractsAPi/contractAPI";
 import { Contracts } from "@/app/_types/AllContractsResponce";
 import { cookies } from "next/headers";
 
@@ -16,28 +16,8 @@ type Props = {
   }>;
 };
 
-let contracts: Contracts = {
-  content: [
-    {
-      contractID: "string",
-      jobID: "string",
-      jobTitle: "string",
-      clientName: "string",
-      clientID: "string",
-      contractStatus: "ACTIVE",
-      budget: 140.5,
-      activeMilestone: "string",
-      clientRateForFreelancer: 3,
-      startDate: "2025-02-24",
-      dueDate: "2025-02-24",
-      endDate: "present",
-    },
-  ],
-  totalElements: 9,
-  totalPages: 0,
-  size: 3,
-  number: 0,
-};
+let contracts: Contracts;
+
 async function page({ searchParams }: Props) {
   const params = await searchParams;
   const {
@@ -61,8 +41,8 @@ async function page({ searchParams }: Props) {
     };
     // console.log(reqbody);
     const token = (await cookies()).get("token")?.value;
-    contracts = await getMyContracts(reqbody, token);
-    return <AllContracts contracts={contracts} />;
+    contracts = await getMyClientContracts(reqbody, token);
+    return <AllContracts contracts={contracts} role={"client"} />;
   } catch (error: any) {
     if (
       error.message === "Forbidden" ||

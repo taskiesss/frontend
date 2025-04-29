@@ -377,7 +377,7 @@ ul,
   border-radius: 0.5rem !important;
 
   background-color: var(--background-color) !important;
-  padding: 0.5rem;
+  padding: 0.15rem;
   font-size: 1.125rem;
 }
 
@@ -408,4 +408,9 @@ ul,
   align-items: center;
   justify-content: center;
   transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  filter: invert(50%);
 }

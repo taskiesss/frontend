@@ -36,6 +36,38 @@ export async function getMyContracts(
   return out;
 }
 
+export async function getMyClientContracts(
+  reqbody: any,
+  token: string | undefined
+): Promise<any> {
+  // for (const key of request.keys()) {
+  //   console.log('Key:', key);
+  // }
+  invariant(!token, 'Unauthorized user');
+  //   console.log(reqbody);
+
+  const res = await fetch(`${BASE_URL}/clients/my-contracts`, {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(reqbody),
+    next: { tags: ['contracts'] },
+  });
+  // console.log(res);
+  if (res.status === 403) {
+    throw new Error('Forbidden');
+  }
+
+  if (!res.ok) {
+    throw new Error('Something went wrong');
+  }
+  const out = await res.json();
+  // console.log(out);
+  return out;
+}
+
 export async function getContractDetails(
   reqbody: { id: string },
   token: string | undefined
@@ -53,7 +85,7 @@ export async function getContractDetails(
       Authorization: `Bearer ${token}`,
     },
   });
-  // console.log(res);
+  console.log(res);
   if (res.status === 403) {
     throw new Error('Forbidden');
   }
@@ -62,7 +94,7 @@ export async function getContractDetails(
     throw new Error('Something went wrong');
   }
   const out = await res.json();
-  // console.log(out);
+  console.log(out);
   return out;
 }
 

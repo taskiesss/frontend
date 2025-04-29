@@ -44,7 +44,7 @@ export async function postAJob(
     return { error: 'Something went wrong' };
   }
 
-  // redirect('/nx/client/all-jobs');
+  redirect('/nx/client/all-jobs');
   console.log('Form Sent successfuly');
   return {};
 }
