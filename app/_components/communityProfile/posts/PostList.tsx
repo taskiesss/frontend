@@ -24,7 +24,7 @@ async function PostList({ communityId, canDelete, searchParams }: Props) {
       postsResponse.error === "Unauthorized user"
     ) {
       return (
-        <ProtectedPage message="You are not alloed to do this action. Please log in again" />
+        <ProtectedPage message="You are not allowed to do this action. Please log in again" />
       );
     }
     throw new Error("Error loading community profile:", postsResponse.error);

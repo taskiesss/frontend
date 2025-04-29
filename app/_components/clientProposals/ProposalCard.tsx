@@ -14,9 +14,9 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-type Props = { proposal: Proposal; isLast: boolean };
+type Props = { proposal: Proposal; isLast: boolean; role?: string };
 
-function ProposalCard({ proposal, isLast }: Props) {
+function ProposalCard({ proposal, isLast, role }: Props) {
   console.log(proposal);
   return (
     <main
@@ -28,7 +28,11 @@ function ProposalCard({ proposal, isLast }: Props) {
       <section className="flex justify-between items-center  ">
         <div className="flex gap-2 items-center">
           <Link
-            href={`/nx/client/job-details/${proposal.jobId}`}
+            href={
+              role === "client"
+                ? `/nx/client/job-details/${proposal.jobId}`
+                : `/nx/freelancer/find-work/${proposal.jobId}`
+            }
             className="hover:text-[var(--hover-color)] hover:underline transition-all"
           >
             <p className="text-xl font-semibold">{proposal.jobName}</p>
@@ -60,7 +64,7 @@ function ProposalCard({ proposal, isLast }: Props) {
           )}
         </div>
         <div className="flex gap-5 items-center">
-          {proposal.status === "PENDING" && (
+          {proposal.status === "PENDING" && role === "client" && (
             <Link
               href={`/nx/client/mycontracts/new/${proposal.proposalId}`}
               className="bg-[var(--btn-color)] py-2 px-10 rounded-xl hover:bg-[var(--button-hover-background-color)] transition-all flex gap-1 items-center text-md"
@@ -71,7 +75,11 @@ function ProposalCard({ proposal, isLast }: Props) {
           )}
           {(proposal.status === "ACCEPTED" || proposal.status === "HIRED") && (
             <Link
-              href={`/nx/client/mycontracts/${proposal.contractId}`}
+              href={
+                role === "client"
+                  ? `/nx/client/mycontracts/${proposal.contractId}`
+                  : `/nx/freelancer/mycontracts/${proposal.contractId}`
+              }
               className="border-2 border-solid border-[var(--btn-color)] py-2 px-3 rounded-xl hover:bg-[var(--button-hover-background-color)] transition-all flex gap-1 items-center text-sm"
             >
               <FontAwesomeIcon icon={faFileSignature} />
@@ -79,7 +87,11 @@ function ProposalCard({ proposal, isLast }: Props) {
             </Link>
           )}
           <Link
-            href={`/nx/client/all-proposals/${proposal.proposalId}`}
+            href={
+              role === "client"
+                ? `/nx/client/all-proposals/${proposal.proposalId}`
+                : `/nx/freelancer/proposals/myProposals/${proposal.proposalId}`
+            }
             className="border-2 border-solid border-[var(--btn-color)] py-2 px-3 rounded-xl hover:bg-[var(--button-hover-background-color)] transition-all flex gap-1 items-center text-sm"
           >
             <FontAwesomeIcon icon={faFileAlt} />
@@ -88,39 +100,41 @@ function ProposalCard({ proposal, isLast }: Props) {
         </div>
       </section>
       {/* freelancer name and image and job title */}
-      <section className="flex gap-4 items-center">
-        <Link
-          href={
-            proposal.community
-              ? `/nx/client/discover-communities/${proposal.freelancerId}`
-              : `/nx/client/discover-talents/${proposal.freelancerId}`
-          }
-          className="w-fit"
-        >
-          <div className="relative w-16 aspect-square rounded-full overflow-hidden">
-            <Image
-              src={proposal.profilePicture}
-              alt={`${proposal.freelancerName} img`}
-              fill
-              className="object-cover rounded-full overflow-hidden"
-              sizes="(max-width: 1024px) 100vw, 1024px"
-            />
-          </div>
-        </Link>
-        <div className="flex flex-col">
+      {role === "client" && (
+        <section className="flex gap-4 items-center">
           <Link
             href={
               proposal.community
                 ? `/nx/client/discover-communities/${proposal.freelancerId}`
                 : `/nx/client/discover-talents/${proposal.freelancerId}`
             }
-            className="hover:text-[var(--hover-color)] hover:underline transition-all"
+            className="w-fit"
           >
-            <p className="text-lg font-semibold">{proposal.freelancerName}</p>
+            <div className="relative w-16 aspect-square rounded-full overflow-hidden">
+              <Image
+                src={proposal.profilePicture}
+                alt={`${proposal.freelancerName} img`}
+                fill
+                className="object-cover rounded-full overflow-hidden"
+                sizes="(max-width: 1024px) 100vw, 1024px"
+              />
+            </div>
           </Link>
-          <p className="text-md opacity-70">{proposal.jobName}</p>
-        </div>
-      </section>
+          <div className="flex flex-col">
+            <Link
+              href={
+                proposal.community
+                  ? `/nx/client/discover-communities/${proposal.freelancerId}`
+                  : `/nx/client/discover-talents/${proposal.freelancerId}`
+              }
+              className="hover:text-[var(--hover-color)] hover:underline transition-all"
+            >
+              <p className="text-lg font-semibold">{proposal.freelancerName}</p>
+            </Link>
+            <p className="text-md opacity-70">{proposal.freelancerTitle}</p>
+          </div>
+        </section>
+      )}
     </main>
   );
 }

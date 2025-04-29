@@ -8,6 +8,7 @@ export interface Proposal {
   community: boolean;
   status: 'PENDING' | 'ACCEPTED' | 'DECLINED' | 'HIRED';
   contractId?: string; // Optional, only for accepted proposals
+  freelancerTitle: string;
 }
 
 export interface ProposalsListProps {
@@ -31,5 +32,5 @@ export interface ProposalDetails {
   attachment: string;
   date: string;
   status: 'PENDING' | 'ACCEPTED' | 'DECLINED' | 'HIRED';
-  TotalHours: number;
+  totalHours: number;
 }

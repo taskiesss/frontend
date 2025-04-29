@@ -25,11 +25,12 @@ type Props = {
     size: number;
     number: number;
   };
+  role?: string;
 };
 type RouteParams = {
   id?: string; // Make id optional if it might not always be present
 };
-export default function ContractList({ contracts }: Props) {
+export default function ContractList({ contracts, role }: Props) {
   const [currentPage, setCurrentPage] = useState(1);
   const params = useParams<RouteParams>();
   const pathname = usePathname();
@@ -42,6 +43,7 @@ export default function ContractList({ contracts }: Props) {
           pathname={pathname || ""}
           key={i}
           contract={c}
+          role={role}
         />
       ))}
       <div className="self-center">

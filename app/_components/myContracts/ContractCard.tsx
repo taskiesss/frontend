@@ -21,21 +21,27 @@ type Props = {
     dueDate?: string;
     endDate?: string;
   };
+  role?: string;
 };
 
 export default function ContractCard({
   communityid,
   contract,
   pathname,
+  role,
 }: Props) {
   return (
-    <div className="flex flex-col items-start justify-between gap-2 p-2 border-b-2 border-solid border-[var(--border-color)]">
+    <div className="flex flex-col items-start justify-between gap-2 p-2 border-b-2 border-solid border-[var(--border-color)] w-full">
       {/* upper div */}
 
       <div className="flex w-full  justify-between">
         <h2 className="text-2xl font-bold ">
           <Link
-            href={`/nx/freelancer/find-work/${contract.jobID}`}
+            href={
+              role === "client"
+                ? `/nx/client/job-details/${contract.jobID}`
+                : `/nx/freelancer/find-work/${contract.jobID}`
+            }
             className="hover:text-[var(--hover-color)] hover:underline"
           >
             {contract.jobTitle}
@@ -46,11 +52,13 @@ export default function ContractCard({
         <div className="flex items-center gap-2">
           <Link
             href={
-              pathname === "/nx/freelancer/mycontracts"
+              role === "client"
+                ? `/nx/client/mycontracts/${contract.contractID}`
+                : pathname === "/nx/freelancer/mycontracts"
                 ? `/nx/freelancer/mycontracts/${contract.contractID}`
                 : `/nx/freelancer/communities/${communityid}/contracts/${contract.contractID}`
             }
-            className="text-[var(--hover-color)] border-[var(--hover-color)] border-solid border p-2 rounded-2xl text-lg hover:border-[var(--btn-color)] hover:text-[var(--btn-color)]  "
+            className=" border-[var(--hover-color)] border-solid border p-2 rounded-2xl text-lg hover:border-[var(--btn-color)] hover:bg-[var(--button-hover-background-color)] transition-all  "
           >
             View details
           </Link>
@@ -62,9 +70,11 @@ export default function ContractCard({
       {/* Lower div */}
       <div className="flex gap-5 w-full">
         <div className="flex gap-4 w-1/3">
-          <div className="flex flex-col">
-            <div className="text-lg">{contract.clientName}</div>
-          </div>
+          {role !== "client" && (
+            <div className="flex flex-col">
+              <p className="text-lg">{contract.clientName}</p>
+            </div>
+          )}
         </div>
         <div className="flex flex-col items-center justify-center w-1/3">
           <div className="flex gap-3 items-center text-md">
@@ -89,7 +99,7 @@ export default function ContractCard({
             ${contract.budget.toFixed(2)} Budget
           </div>
           <div
-            className={`text-md font-medium py-1 gap-1 flex items-center ${
+            className={`opacity-80 text-md font-medium py-1 gap-1 flex items-center ${
               contract.contractStatus === "ENDED" ? "invisible" : ""
             }`}
           >
@@ -100,7 +110,7 @@ export default function ContractCard({
         </div>
         <div className="w-1/3"></div>
       </div>
-      <div className="text-md font-extralight py-2">
+      <div className="text-md font-extralight py-2 opacity-80">
         {formatDayMonthToString(contract.startDate)} -{" "}
         {contract.contractStatus === "ACTIVE"
           ? "Present"

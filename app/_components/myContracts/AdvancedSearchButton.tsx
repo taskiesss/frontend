@@ -82,7 +82,7 @@ function AdvancedSearchButton({ role }: { role?: string }) {
             actionMeta: ActionMeta<unknown>
           ) => void
         }
-        className="w-1/3"
+        className="w-1/2"
         placeholder="filter by status..."
         classNamePrefix="react-select"
         name="status"

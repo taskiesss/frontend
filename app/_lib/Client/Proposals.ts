@@ -41,7 +41,7 @@ export async function getProposalsDetails(
     return { error: 'Unauthorized user' };
   }
 
-  const res = await fetch(`${BASE_URL}/clients/proposals/${proposalId}`, {
+  const res = await fetch(`${BASE_URL}/api/proposals/${proposalId}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

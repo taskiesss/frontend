@@ -258,6 +258,7 @@ function ContractForm({ proposalId }: Props) {
                     <input
                       required
                       type="date"
+                      min={new Date().toISOString().split("T")[0]}
                       value={milestone.dueDate}
                       onChange={(e) =>
                         updateMilestone(index, "dueDate", e.target.value)

@@ -16,14 +16,14 @@ import Container from "../common/Container";
 import Button from "../common/button";
 import MilestoneList from "./MilestoneList";
 
-type Props = { proposal: ProposalDetails };
+type Props = { proposal: ProposalDetails; role?: string };
 
 const TASKAYA_SERVICE = 0.02;
 const paymentOptions = (s: string) =>
   s === "PerMilestones" ? "Per Milestone" : "Per Project";
-function ViewProposal({ proposal }: Props) {
+function ViewProposal({ proposal, role }: Props) {
   //  Calculations for client
-  const totalPrice = proposal.TotalHours * proposal.pricePerHour;
+  const totalPrice = proposal.totalHours * proposal.pricePerHour;
   const service = totalPrice * TASKAYA_SERVICE;
   const discountedTotalPrice = totalPrice - service;
 
@@ -39,7 +39,11 @@ function ViewProposal({ proposal }: Props) {
               <p className="font-semibold text-3xl">Application from</p>
               <Link
                 href={
-                  proposal.isCommunity
+                  role !== "client"
+                    ? proposal.isCommunity
+                      ? `/nx/freelancer/communities/${proposal.freelancerId}`
+                      : `/nx/freelancer/myprofile`
+                    : proposal.isCommunity
                     ? `/nx/client/discover-communities/${proposal.freelancerId}`
                     : `/nx/client/discover-talents/${proposal.freelancerId}`
                 }
@@ -120,7 +124,8 @@ function ViewProposal({ proposal }: Props) {
                 </span>
               </div>
               <span className="opacity-65">
-                This includes all milestones, and is the amount you will pay
+                This includes all milestones, and is the amount you will{" "}
+                {role === "client" ? "pay" : "recieve"}
               </span>
             </div>
             <div className="flex justify-between border-solid border border-[var(--border-color)] border-b-0 border-l-0 border-r-0 py-3 text-lg">
@@ -129,7 +134,11 @@ function ViewProposal({ proposal }: Props) {
             </div>
             <div>
               <div className="flex justify-between border-solid border border-[var(--border-color)] border-b-0 border-l-0 border-r-0 py-3 gap-3 text-lg">
-                <span>Your Freelancer will Receive</span>
+                <span>
+                  {role === "client"
+                    ? "Your Freelancer will Receive"
+                    : "You'll Receive"}
+                </span>
                 <span className="text-[var(--accent-color)]">
                   ${discountedTotalPrice.toFixed(2)}
                 </span>
@@ -169,7 +178,7 @@ function ViewProposal({ proposal }: Props) {
             </div>
           )}
         </section>
-        {proposal.status === "PENDING" && (
+        {proposal.status === "PENDING" && role === "client" && (
           <Link
             href={`/nx/client/mycontracts/new/${proposal.proposalId}`}
             className="flex justify-end px-20 pb-10"
