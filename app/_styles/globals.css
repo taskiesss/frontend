@@ -409,3 +409,8 @@ ul,
   justify-content: center;
   transition: background-color 0.2s ease, color 0.2s ease;
 }
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  filter: invert(50%);
+}

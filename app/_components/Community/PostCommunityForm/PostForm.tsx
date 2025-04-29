@@ -49,6 +49,40 @@ function CommunityPostForm({ token }: Props) {
   const [positions, setPositions] = useState<Position[]>([]);
   const [validationError, setValidationError] = useState<string | null>(null);
 
+  const [state, formAction] = useActionState(async () => {
+    if (!validatePercentages()) return;
+
+    const requestData = {
+      communityName,
+      description,
+      title,
+      pricePerHour: parseFloat(pricePerHour),
+      avrgHoursPerWeek: parseFloat(avrgHoursPerWeek),
+      skills: selectedSkills,
+      adminRole: {
+        positionName: adminRole.positionName,
+        percentage: parseFloat(adminRole.percentage),
+        description: adminRole.description,
+      },
+      communityPositions: positions.map((pos) => ({
+        positionName: pos.positionName,
+        percentage: parseFloat(pos.percentage),
+        description: pos.description,
+      })),
+    };
+
+    try {
+      if (!token) throw new Error("Unauthorized");
+      await createCommunity(requestData, token);
+
+      // Handle success navigation
+      router.push("/nx/freelancer/mycommunities");
+    } catch (error) {
+      // Handle error
+      console.error(error.message);
+    }
+  }, undefined);
+
   if (!token) {
     return <ProtectedPage message="Session expired. Please log in again." />;
   }
@@ -113,39 +147,6 @@ function CommunityPostForm({ token }: Props) {
     setValidationError(null);
     return true;
   };
-
-  const [state, formAction] = useActionState(async () => {
-    if (!validatePercentages()) return;
-
-    const requestData = {
-      communityName,
-      description,
-      title,
-      pricePerHour: parseFloat(pricePerHour),
-      avrgHoursPerWeek: parseFloat(avrgHoursPerWeek),
-      skills: selectedSkills,
-      adminRole: {
-        positionName: adminRole.positionName,
-        percentage: parseFloat(adminRole.percentage),
-        description: adminRole.description,
-      },
-      communityPositions: positions.map((pos) => ({
-        positionName: pos.positionName,
-        percentage: parseFloat(pos.percentage),
-        description: pos.description,
-      })),
-    };
-
-    try {
-      if (!token) throw new Error("Unauthorized");
-      await createCommunity(requestData, token);
-
-      // Handle success navigation
-      router.push("/nx/freelancer/mycommunities");
-    } catch (error) {
-      // Handle error
-    }
-  }, undefined);
 
   return (
     <Container className="flex flex-col items-center py-20">
