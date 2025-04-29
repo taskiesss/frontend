@@ -79,7 +79,7 @@ function ProposalCard({ proposal, isLast }: Props) {
             </Link>
           )}
           <Link
-            href={`/nx/client/all-proposals/${proposal.freelancerId}`}
+            href={`/nx/client/all-proposals/${proposal.proposalId}`}
             className="border-2 border-solid border-[var(--btn-color)] py-2 px-3 rounded-xl hover:bg-[var(--button-hover-background-color)] transition-all flex gap-1 items-center text-sm"
           >
             <FontAwesomeIcon icon={faFileAlt} />

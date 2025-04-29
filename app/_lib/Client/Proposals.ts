@@ -32,3 +32,58 @@ export async function getProposals(
   const data = await res.json();
   return data;
 }
+
+export async function getProposalsDetails(
+  proposalId: string,
+  token: string | undefined
+): Promise<any> {
+  if (!token) {
+    return { error: 'Unauthorized user' };
+  }
+
+  const res = await fetch(`${BASE_URL}/clients/proposals/${proposalId}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    next: { tags: ['proposal'] },
+  });
+
+  if (res.status === 403) return { error: 'Forbidden' };
+  if (!res.ok) return { error: 'Error fetching proposals' };
+
+  const data = await res.json();
+  console.log(data);
+  return data;
+}
+
+export async function getProposalMilestones(
+  proposalId: string,
+  page: number,
+  size: number,
+  token: string | undefined
+): Promise<any> {
+  if (!token) {
+    return { error: 'Unauthorized user' };
+  }
+  console.log(proposalId, page, size, token);
+  const res = await fetch(
+    `${BASE_URL}/api/proposals/${proposalId}/milestones?page=${page}&size=${size}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      next: { tags: ['proposalMilestones'] },
+    }
+  );
+
+  if (res.status === 403) return { error: 'Forbidden' };
+  if (!res.ok) return { error: 'Error fetching proposals' };
+
+  const data = await res.json();
+  console.log(data);
+  return data;
+}

@@ -13,11 +13,13 @@ function SearchBar({ initialValue = "" }: Props) {
   const [searchTerm, setSearchTerm] = useState(initialValue);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (typeof window === "undefined") return;
     const newSearchTerm = e.target.value;
     setSearchTerm(newSearchTerm);
   };
 
   const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    if (typeof window === "undefined") return;
     e.preventDefault();
     updateUrl(searchTerm); // Update URL on form submission
   };
@@ -39,7 +41,7 @@ function SearchBar({ initialValue = "" }: Props) {
       className="w-full flex"
       onSubmit={handleSearchSubmit}
     >
-      <div className="relative w-1/3">
+      <div className="w-1/2 flex">
         <input
           type="search"
           name="contractQuery"
@@ -49,12 +51,11 @@ function SearchBar({ initialValue = "" }: Props) {
           placeholder="Search for client name or job title"
           className="focus:outline-none bg-[var(--background-color)] text-[var(--accent-color)] p-4 border-solid border border-gray-600 rounded-xl w-full text-lg pr-10"
         />
-        <button type="submit">
-          <FontAwesomeIcon
-            icon={faSearch}
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5"
-          />
-        </button>
+        <div className="relative right-8 self-center opacity-90 text-lg">
+          <button type="submit">
+            <FontAwesomeIcon icon={faSearch} className=" " />
+          </button>
+        </div>
       </div>
     </form>
   );

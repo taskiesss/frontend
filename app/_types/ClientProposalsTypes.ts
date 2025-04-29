@@ -17,3 +17,18 @@ export interface ProposalsListProps {
   size: number;
   number: number;
 }
+
+export interface ProposalDetails {
+  proposalId: string;
+  jobName: string;
+  freelancerName: string;
+  freelancerId: string;
+  profilePicture: string;
+  isCommunity: boolean;
+  coverLetter: string;
+  pricePerHour: number;
+  paymentMethod: 'PerMilestones' | 'PerProject';
+  attachment: string;
+  date: string;
+  status: 'PENDING' | 'ACCEPTED' | 'DECLINED' | 'HIRED';
+}
