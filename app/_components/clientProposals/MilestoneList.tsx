@@ -37,7 +37,7 @@ function MilestoneList({ proposalId }: Props) {
       const response = await getProposalMilestones(
         proposalId,
         currentPage - 1, // Convert to 0-based indexing
-        10, // Size
+        5, // Size
         token
       );
       return response;

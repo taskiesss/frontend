@@ -31,4 +31,5 @@ export interface ProposalDetails {
   attachment: string;
   date: string;
   status: 'PENDING' | 'ACCEPTED' | 'DECLINED' | 'HIRED';
+  TotalHours: number;
 }
