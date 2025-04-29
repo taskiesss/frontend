@@ -5,9 +5,9 @@ import { ProposalsListProps } from "@/app/_types/ClientProposalsTypes";
 import FilterComponent from "./FilterComponent";
 import PostPagination from "../communityProfile/posts/PostPagination";
 
-type Props = { proposals: ProposalsListProps };
+type Props = { proposals: ProposalsListProps; role?: string };
 
-function ProposalsList({ proposals }: Props) {
+function ProposalsList({ proposals, role }: Props) {
   return (
     <Container className="pt-10 flex flex-col gap-8">
       <h1 className="text-4xl">All Proposals</h1>
@@ -19,6 +19,7 @@ function ProposalsList({ proposals }: Props) {
             <>
               {proposals.content.map((proposal, index) => (
                 <ProposalCard
+                  role={role}
                   key={proposal.proposalId}
                   proposal={proposal}
                   isLast={index === proposals.content.length - 1}

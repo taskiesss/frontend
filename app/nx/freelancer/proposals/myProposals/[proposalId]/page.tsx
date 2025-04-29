@@ -25,7 +25,7 @@ async function page({ params }: Props) {
     }
     throw new Error("Error loading Proposals page:", response.error);
   }
-  return <ViewProposal proposal={response} role={"client"} />;
+  return <ViewProposal proposal={response} />;
 }
 
 export default page;

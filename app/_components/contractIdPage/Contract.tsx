@@ -54,7 +54,7 @@ function Contract({ contract, contractId, role, isAdmin }: Props) {
             </div>
           )}
         {((contract.pendingClientToRate && role === "client") ||
-          contract.pendingFreelancerToRate) && (
+          (contract.pendingFreelancerToRate && role !== "client")) && (
           <div className="flex gap-4">
             <p className="text-[var(--bg-skill)] font-semibold text-lg">
               Give your feedback on your experience!
@@ -103,7 +103,9 @@ function Contract({ contract, contractId, role, isAdmin }: Props) {
           contract.contractStatus.toLowerCase() === "ended") && (
           <div className="flex gap-4 self-center ">
             <div className="flex flex-col justify-center gap-3 bg-[var(--foreground-color)] p-4 rounded-lg">
-              <span className="text-xl">Total Earnings</span>
+              <span className="text-xl">
+                {role === "client" ? "Total Spent" : "Total Earnings"}
+              </span>
               <span className="text-4xl font-bold">
                 $ {contract.totalCurrentEarnings.toFixed(2)}
               </span>
@@ -263,9 +265,10 @@ function Contract({ contract, contractId, role, isAdmin }: Props) {
         </Suspense>
       </div>
       {/* Accept or reject contract */}
-      {contract.contractStatus.toLowerCase() === "pending" && (
-        <ApproveContract contract={contract} contractId={contractId} />
-      )}
+      {contract.contractStatus.toLowerCase() === "pending" &&
+        role !== "client" && (
+          <ApproveContract contract={contract} contractId={contractId} />
+        )}
     </Container>
   );
 }

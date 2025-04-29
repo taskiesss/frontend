@@ -36,7 +36,7 @@ function AllContracts({ contracts, role }: Props) {
         </div>
         {contracts.content.length > 0 ? (
           <div className="flex flex-col gap-4 w-full">
-            <ContractList contracts={contracts} />
+            <ContractList contracts={contracts} role={role} />
           </div>
         ) : (
           <div className="flex flex-col">
