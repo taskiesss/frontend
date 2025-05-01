@@ -1,7 +1,9 @@
 import ViewProposal from "@/app/_components/clientProposals/ViewProposal";
 import ProtectedPage from "@/app/_components/common/ProtectedPage";
+import Spinner from "@/app/_components/common/Spinner";
 import { getProposalsDetails } from "@/app/_lib/Client/Proposals";
 import { cookies } from "next/headers";
+import { Suspense } from "react";
 
 type Props = {
   params: Promise<{ proposalId: string }>;
@@ -25,7 +27,11 @@ async function page({ params }: Props) {
     }
     throw new Error("Error loading Proposals page:", response.error);
   }
-  return <ViewProposal proposal={response} />;
+  return (
+    <Suspense fallback={<Spinner />}>
+      <ViewProposal proposal={response} />
+    </Suspense>
+  );
 }
 
 export default page;

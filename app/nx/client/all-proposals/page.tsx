@@ -1,8 +1,9 @@
 import ProposalsList from "@/app/_components/clientProposals/ProposalsList";
 import ProtectedPage from "@/app/_components/common/ProtectedPage";
+import Spinner from "@/app/_components/common/Spinner";
 import { getProposals } from "@/app/_lib/Client/Proposals";
 import { cookies } from "next/headers";
-import React from "react";
+import React, { Suspense } from "react";
 
 type props = {
   searchParams: Promise<{ search?: string; status?: string; page?: string }>;
@@ -34,7 +35,11 @@ async function page({ searchParams }: props) {
     }
     throw new Error("Error loading Proposals page:", response.error);
   }
-  return <ProposalsList proposals={response} role={"client"} />;
+  return (
+    <Suspense fallback={<Spinner />}>
+      <ProposalsList proposals={response} role={"client"} />;
+    </Suspense>
+  );
 }
 
 export default page;

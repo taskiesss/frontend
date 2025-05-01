@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ProtectedPage from "@/app/_components/common/ProtectedPage";
+import Spinner from "@/app/_components/common/Spinner";
 import Finance from "@/app/_components/financeTransactions/Finance";
 import { getProfileTransaction } from "@/app/_lib/FinanceAPI/transactionsAPI";
 import { cookies } from "next/headers";
-import React from "react";
+import React, { Suspense } from "react";
 
 const profile = {
   profilePicture: "https://example.com/images/isabel-austin.jpg",
@@ -16,7 +17,11 @@ async function page() {
   const token = (await cookies()).get("token")?.value;
   try {
     const profileResponse = await getProfileTransaction(token);
-    return <Finance profile={profileResponse} />;
+    return (
+      <Suspense fallback={<Spinner />}>
+        <Finance profile={profileResponse} />
+      </Suspense>
+    );
   } catch (error: any) {
     if (
       error.message === "Forbidden" ||

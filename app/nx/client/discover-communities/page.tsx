@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Container from "@/app/_components/common/Container";
+import Spinner from "@/app/_components/common/Spinner";
 import CommunityList from "@/app/_components/Community/CommunityList";
 import { searchCommunities } from "@/app/_lib/Search/Search";
 import { PageCommunityResponse } from "@/app/_types/CommunitySearch";
-import React from "react";
+import React, { Suspense } from "react";
 
 type Props = {
   searchParams: Promise<{
@@ -25,7 +26,11 @@ export default async function page({ searchParams }: Props) {
   return (
     <Container className="py-6">
       {paginations?.content && paginations?.content.length > 0 ? (
-        <CommunityList communities={paginations} />
+        <Container className="w-full px-3 sm:px-5 lg:px-7 xl:px-16">
+          <Suspense fallback={<Spinner />}>
+            <CommunityList communities={paginations} />
+          </Suspense>
+        </Container>
       ) : (
         <div className=" grid place-items-center min-h-screen">
           <span className="text-[var(--accent-color)] text-3xl">

@@ -1,3 +1,4 @@
+import ClientFooter from "@/app/_components/common/footerComponents/ClientFooter";
 import NavLoggedin from "@/app/_components/common/NavLoggedin";
 import React from "react";
 
@@ -10,6 +11,7 @@ export default function HomeLayout({
     <div className="grid">
       <NavLoggedin></NavLoggedin>
       <main>{children}</main>
+      <ClientFooter />
     </div>
   );
 }
