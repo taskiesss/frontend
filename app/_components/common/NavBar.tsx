@@ -60,13 +60,18 @@ const NavBar: React.FC<NavBarProps> = ({ onLogin, onSignup }) => {
         {/* Navigation Links */}
         <div className="flex flex-col  justify-center">
           <ul className="list-none flex gap-20 w-auto h-auto items-center">
-            {["Freelancers", "Jobs", "Communities", "About us"].map((item) => (
-              <li key={item}>
+            {[
+              { name: "Freelancers", href: "freelancers" },
+              { name: "Jobs", href: "jobs" },
+              { name: "Communities", href: "communities" },
+              { name: "About us", href: "about" },
+            ].map((item) => (
+              <li key={item.name}>
                 <Link
-                  href={`/guest/${item.toLowerCase()}`}
+                  href={`/guest/${item.href.toLowerCase()}`}
                   className="w-[8rem]  bg-inherit cursor-pointer"
                 >
-                  <span className="font-semibold text-xl">{item}</span>
+                  <span className="font-semibold text-xl">{item.name}</span>
                 </Link>
               </li>
             ))}

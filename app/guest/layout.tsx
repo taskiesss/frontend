@@ -1,5 +1,6 @@
 import React from "react";
 import NavBar from "../_components/common/NavBar";
+import GuestFooter from "../_components/common/footerComponents/GuestFooter";
 
 export default function HomeLayout({
   children,
@@ -10,6 +11,7 @@ export default function HomeLayout({
     <div>
       <NavBar />
       <main>{children}</main>
+      <GuestFooter />
     </div>
   );
 }
