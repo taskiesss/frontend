@@ -24,7 +24,9 @@ const Page: React.FC<PageProps> = async ({ searchParams }) => {
     );
   }
 
-  const response = await getMyJobs(token, newPage - 1, 10);
+  const response = await getMyJobs(token, newPage - 1, 10, "");
+
+  console.log(response);
 
   // Type guard to narrow response type
   if ("error" in response) {
@@ -36,8 +38,8 @@ const Page: React.FC<PageProps> = async ({ searchParams }) => {
   return (
     <Container className="pt-10 flex flex-col gap-8">
       <h1 className="text-4xl">All Jobs Posts</h1>
-      <div className="flex-col bg-[var(--foreground-color)] flex items-start rounded-xl p-4">
-        <div className="flex items-center gap-5 w-full border-b-2 border-solid border-[var(--border-color)] py-5"></div>
+      <div className="bg-[var(--foreground-color)] rounded-xl p-4">
+        {/* <div className="flex items-center gap-5 w-full border-b-2 border-solid border-[var(--border-color)] py-5"></div> */}
         <JobsAndPagination
           jobs={content}
           role="client"

@@ -36,11 +36,13 @@ export async function getMyJobs(
 
   if (page !== undefined) params.push(`page=${page}`);
   if (size !== undefined) params.push(`size=${size}`);
-  if (search) params.push(`search=${encodeURIComponent(search)}`);
+  params.push(`search=${encodeURIComponent(search || "")}`);
 
   if (params.length > 0) {
     url += "?" + params.join("&");
   }
+
+  console.log(url);
 
   try {
     const res = await fetch(url, {

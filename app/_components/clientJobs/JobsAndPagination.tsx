@@ -1,10 +1,11 @@
 "use client";
 
-import React from "react";
+import React, { Suspense } from "react";
 
 import { Pagination } from "@/app/_components/common/Pagination";
 import { useRouter } from "next/navigation";
 import JobsList from "./JobProposalsList";
+import Spinner from "../common/Spinner";
 
 interface JobsAndPaginationProps {
   jobs: {
@@ -39,15 +40,19 @@ const JobsAndPagination: React.FC<JobsAndPaginationProps> = ({
   return (
     <div>
       {jobs.length > 0 ? (
-        <div className="flex flex-col gap-4 w-full">
-          <JobsList jobs={jobs} />
-          <Pagination
-            currentPage={currentPage}
-            totalCount={totalElements}
-            pageSize={pageSize}
-            onPageChange={handlePageChange}
-            setPageParamter={true}
-          />
+        <div className="flex flex-col gap-9 w-full">
+          <Suspense fallback={<Spinner />}>
+            <JobsList jobs={jobs} />
+          </Suspense>
+          <div className="mx-auto">
+            <Pagination
+              currentPage={currentPage}
+              totalCount={totalElements}
+              pageSize={pageSize}
+              onPageChange={handlePageChange}
+              setPageParamter={true}
+            />
+          </div>
         </div>
       ) : (
         <div className="flex flex-col">
