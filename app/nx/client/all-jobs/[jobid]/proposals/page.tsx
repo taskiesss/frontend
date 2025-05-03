@@ -14,6 +14,7 @@ type Props = {
 
 async function Page({ params, searchParams }: Props) {
   const { jobId } = await params;
+  console.log(jobId);
   const { page } = await searchParams;
   const newPage = page ? Number(page) : 1;
 

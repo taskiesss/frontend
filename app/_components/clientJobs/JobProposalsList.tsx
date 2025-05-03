@@ -41,7 +41,10 @@ const JobsList: React.FC<JobsListProps> = ({ jobs }) => {
             <div className="flex flex-col">
               <Link
                 href={`/nx/client/job-details/${job.jobId}`}
-                className="text-lg font-semibold truncate hover:text-[var(--hover-color)] transition-colors duration-200 w-fit"
+                className="text-xl font-semibold truncate hover:text-[var(--hover-color)] transition-colors duration-200 w-fit"
+                onClick={() =>
+                  console.log(`/nx/client/job-details/${job.jobId}`)
+                }
               >
                 {job.jobName}
               </Link>
