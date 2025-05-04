@@ -7,6 +7,7 @@ import Button from "../common/button";
 import Cookies from "js-cookie";
 import { AcceptOrRejectContract } from "@/app/_lib/ContractsAPi/contractAPI";
 import ProtectedPage from "../common/ProtectedPage";
+import { useQueryClient } from "@tanstack/react-query";
 
 type Props = { contractId: string; contract: contractDetailsResponse };
 
@@ -14,6 +15,7 @@ const ApproveContract = ({ contractId, contract }: Props) => {
   const [showAccept, setShowAccept] = useState(false);
   const [showReject, setShowReject] = useState(false);
   const [isForbidden, setIsForbidden] = useState(false);
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (showAccept || showReject) {
@@ -31,6 +33,9 @@ const ApproveContract = ({ contractId, contract }: Props) => {
   const handleConfirmation = async (accepted: boolean) => {
     const token = Cookies.get("token");
     await AcceptOrRejectContract({ id: contractId, accepted: accepted }, token);
+    queryClient.invalidateQueries({
+      queryKey: ["ContractMilestones", contractId],
+    });
     try {
     } catch (error: any) {
       if (
