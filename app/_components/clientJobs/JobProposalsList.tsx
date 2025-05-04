@@ -1,6 +1,5 @@
-"use client";
 import React from "react";
-import { useRouter } from "next/navigation";
+
 import Link from "next/link";
 
 interface Job {
@@ -17,8 +16,6 @@ interface JobsListProps {
 }
 
 const JobsList: React.FC<JobsListProps> = ({ jobs }) => {
-  const router = useRouter();
-
   const formatDate = (dateString: string) => {
     const options: Intl.DateTimeFormatOptions = {
       month: "short",
@@ -41,14 +38,11 @@ const JobsList: React.FC<JobsListProps> = ({ jobs }) => {
             <div className="flex flex-col">
               <Link
                 href={`/nx/client/job-details/${job.jobId}`}
-                className="text-xl font-semibold truncate hover:text-[var(--hover-color)] transition-colors duration-200 w-fit"
-                onClick={() =>
-                  console.log(`/nx/client/job-details/${job.jobId}`)
-                }
+                className="text-xl font-semibold truncate hover:text-[var(--hover-color)] transition-colors duration-200 w-fit hover:underline"
               >
                 {job.jobName}
               </Link>
-              <span className="text-sm">
+              <span className="text-sm opacity-80">
                 Posted on {formatDate(job.postedAt)}
               </span>
             </div>
@@ -69,14 +63,12 @@ const JobsList: React.FC<JobsListProps> = ({ jobs }) => {
 
             {/* Column 3: Action Button */}
             <div className="flex items-center justify-end">
-              <button
+              <Link
+                href={`/nx/client/all-jobs/${job.jobId}/proposals`}
                 className="px-5 py-2 bg-[var(--btn-color)] rounded-md hover:bg-[var(--button-hover-background-color)] whitespace-nowrap"
-                onClick={() =>
-                  router.push(`/nx/client/all-jobs/${job.jobId}/proposals`)
-                }
               >
                 View proposals
-              </button>
+              </Link>
             </div>
           </div>
         ))}

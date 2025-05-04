@@ -10,7 +10,7 @@ export default function HomeLayout({
   return (
     <div className="grid">
       <NavLoggedin></NavLoggedin>
-      <main>{children}</main>
+      <main className="min-h-screen">{children}</main>
       <ClientFooter />
     </div>
   );

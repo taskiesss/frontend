@@ -12,7 +12,7 @@ export async function getJobDetails(
   }
   // console.log(token);
 
-  const response = await fetch(`${BASE_URL}/freelancers/jobs/${jobId}`, {
+  const response = await fetch(`${BASE_URL}/api/jobs/${jobId}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

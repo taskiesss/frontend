@@ -6,22 +6,22 @@ import { cookies } from "next/headers";
 import React, { Suspense } from "react";
 
 type Props = {
-  params: Promise<{ jobId: string }>;
+  params: Promise<{ jobid: string }>;
   searchParams: Promise<{
     page: string;
   }>;
 };
 
 async function Page({ params, searchParams }: Props) {
-  const { jobId } = await params;
-  console.log(jobId);
+  const { jobid } = await params;
+  console.log(jobid);
   const { page } = await searchParams;
   const newPage = page ? Number(page) : 1;
 
   const reqBody = {
     page: newPage - 1,
     size: 10,
-    jobId,
+    jobId: jobid,
   };
 
   const token = (await cookies()).get("token")?.value;

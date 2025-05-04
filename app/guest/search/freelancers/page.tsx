@@ -89,7 +89,7 @@ const Page = async ({ searchParams }: PageProps) => {
 
   return (
     <Container>
-      <div className="h-screen grid grid-cols-[0.65fr_3fr] grid-rows-[min-content_min-content_1fr]">
+      <div className="grid grid-cols-[0.65fr_3fr] grid-rows-[min-content_min-content_1fr]">
         {/* Top navigation */}
 
         {/* Sorting controls */}
