@@ -16,6 +16,8 @@ import Cookies from "js-cookie";
 import ProtectedPage from "./ProtectedPage";
 import { useDispatch } from "react-redux";
 import { updateAuthInfo } from "@/app/_store/_contexts/userSlice";
+import useWebSocket from "@/app/_lib/Notification/useWebSocket";
+import NotificationList from "./NotificationList";
 
 interface NavItem {
   label: string;
@@ -34,6 +36,11 @@ const NavLoggedin: React.FC = () => {
   const [image, setImage] = useState("");
   const [name, setName] = useState("");
   const [role, setRole] = useState("");
+  const [newNotifications, setNewNotifications] = useState(0);
+  const [userId, setUserId] = useState("");
+
+  // Notification states
+  const [notificationOpen, setNotificationOpen] = useState(false);
 
   // Control showing/hiding ProfileMenu
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
@@ -42,10 +49,14 @@ const NavLoggedin: React.FC = () => {
 
   // Ref for detecting clicks outside the profile menu container
   const profileMenuRef = useRef<HTMLDivElement>(null);
+  const notificationMenuRef = useRef<HTMLDivElement>(null);
 
   const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
   const token = Cookies.get("token");
+
+  // const { messages } = useWebSocket(userId, token);
+  // console.log(messages);
 
   useEffect(() => {
     const fetchUserNameAndImage = async () => {
@@ -62,16 +73,24 @@ const NavLoggedin: React.FC = () => {
         const data = await response.json();
         setImage(data.profilePicture);
         setName(data.name);
-        dispatch(updateAuthInfo({ profilePic: data.profilePicture }));
+        dispatch(
+          updateAuthInfo({
+            profilePic: data.profilePicture,
+            newNotifications: data.newNotifications,
+            userId: data.id,
+          })
+        );
         // console.log(data);
+        setUserId(data.id);
         setRole(data.role);
+        setNewNotifications(data.newNotifications);
       } catch (error) {
         console.error("Error fetching image:", error);
       }
     };
 
     fetchUserNameAndImage();
-  }, [token]);
+  }, [token, notificationOpen]);
 
   // Close profile menu when clicking outside its container
   useEffect(() => {
@@ -81,6 +100,21 @@ const NavLoggedin: React.FC = () => {
         !profileMenuRef.current.contains(event.target as Node)
       ) {
         setIsProfileMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // Close profile menu when clicking outside its container
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        notificationMenuRef.current &&
+        !notificationMenuRef.current.contains(event.target as Node)
+      ) {
+        setNotificationOpen(false);
       }
     };
 
@@ -183,8 +217,9 @@ const NavLoggedin: React.FC = () => {
   };
 
   // Toggle the standard nav dropdowns
-  const toggleDropdown = (index: number) => {
+  const toggleDropdown = (index: number | null) => {
     setOpenDropdownIndex((prevIndex) => (prevIndex === index ? null : index));
+    if (index === null) setIsProfileMenuOpen(false);
   };
 
   // Toggle the ProfileMenu dropdown
@@ -218,13 +253,20 @@ const NavLoggedin: React.FC = () => {
             {navItems.map((item, index) => (
               <li
                 key={item.label}
+                onMouseEnter={() => toggleDropdown(index)}
+                onMouseLeave={() => toggleDropdown(null)}
                 className="relative flex flex-col items-center"
               >
                 <div className="flex items-center gap-1">
-                  <button className="bg-inherit cursor-pointer">
+                  <button
+                    className={`bg-inherit cursor-pointer ${
+                      openDropdownIndex === index &&
+                      "text-[--button-hover-background-color]"
+                    }`}
+                  >
                     <span className="font-semibold text-xl">{item.label}</span>
                   </button>
-                  <button onClick={() => toggleDropdown(index)} className="p-1">
+                  <button className="p-1">
                     <FontAwesomeIcon
                       icon={faChevronDown}
                       className={`text-[var(--hover-color)] text-sm transition-transform duration-200 ${
@@ -235,7 +277,7 @@ const NavLoggedin: React.FC = () => {
                   </button>
                 </div>
                 {openDropdownIndex === index && (
-                  <div className="absolute top-full left-0 mt-2">
+                  <div className="absolute top-full left-0 shadow-md">
                     <DropLoggedin
                       onClose={() => toggleDropdown(index)}
                       options={item.options}
@@ -280,8 +322,35 @@ const NavLoggedin: React.FC = () => {
 
             {/* Notification & Profile */}
             <li>
-              <div className="flex gap-7 items-center">
-                <FontAwesomeIcon size="2xl" icon={faBell} />
+              <div className="flex gap-7 items-center ">
+                <div
+                  ref={notificationMenuRef}
+                  onClick={() => setNotificationOpen((prev) => !prev)}
+                  className="relative cursor-pointer"
+                >
+                  <div className="relative border-solid rounded-full border border-[--accent-color] border-opacity-80 aspect-square p-2 min-w-12 flex flex-col justify-center">
+                    {newNotifications !== 0 && (
+                      <div className="rounded-full bg-red-500 text-center absolute left-6 -top-2   aspect-square justify-center self-center flex flex-col z-20 text-sm min-w-6">
+                        {newNotifications}
+                      </div>
+                    )}
+                    <FontAwesomeIcon
+                      size="xl"
+                      icon={faBell}
+                      className="cursor-pointer"
+                      shake={newNotifications !== 0}
+                    />
+                  </div>
+                  {notificationOpen && (
+                    <div className="absolute top-full -right-4 mt-4 ">
+                      <NotificationList
+                        isOpen={notificationOpen}
+                        role={role}
+                        onClose={() => setIsProfileMenuOpen(false)}
+                      />
+                    </div>
+                  )}
+                </div>
                 {/* Wrap avatar and dropdown in a container with a ref */}
                 <div ref={profileMenuRef} className="relative">
                   <div
