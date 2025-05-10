@@ -12,6 +12,8 @@ const initialState: userState = {
     password: '',
     role: '',
     profilePic: '',
+    userId: '',
+    newNotifications: 0,
   },
 };
 export const userSlice = createSlice({

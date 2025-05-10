@@ -4,4 +4,6 @@ export interface User {
   password: string;
   role: string;
   profilePic: string;
+  userId: string;
+  newNotifications: number;
 }

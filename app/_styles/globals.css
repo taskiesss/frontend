@@ -439,3 +439,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   cursor: pointer;
   filter: invert(50%);
 }
+
+.animate-slide-in {
+  animation: slideIn 0.3s ease forwards;
+}
+.animate-slide-out {
+  animation: slideOut 0.3s ease forwards;
+}
