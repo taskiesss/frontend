@@ -43,3 +43,8 @@ export interface PaginatedNotificationResponse {
   first: boolean;
   empty: boolean;
 }
+
+export interface NotificationWebSocketDTO {
+  notification: NotificationResponseDTO;
+  newNotificationsCount: number;
+}

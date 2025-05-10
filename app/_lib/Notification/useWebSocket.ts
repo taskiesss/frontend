@@ -1,27 +1,12 @@
+import { NotificationWebSocketDTO } from '@/app/_types/NotificationResponse';
 import { Client } from '@stomp/stompjs';
 import { useEffect, useRef, useState } from 'react';
 import SockJS from 'sockjs-client';
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
-interface NotificationSocketResponse {
-  notificationId: string;
-  content: string;
-  isRead: boolean;
-  type:
-    | 'PROPOSAL'
-    | 'CONTRACT'
-    | 'COMMUNITY_PROFILE'
-    | 'COMMUNITY_JOBS_AND_TALENTS'
-    | 'COMMUNITY_POSTS'
-    | 'COMMUNITY_SETTINGS'
-    | '';
-  routeId: string;
-  newNotificationsCount: number;
-}
-
 const useWebSocket = (userId: string, token?: string) => {
-  const [messages, setMessages] = useState<NotificationSocketResponse[]>([]);
+  const [messages, setMessages] = useState<NotificationWebSocketDTO[]>([]);
   const clientRef = useRef<Client | null>(null);
 
   useEffect(() => {
