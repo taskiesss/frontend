@@ -1,45 +1,35 @@
 "use client";
-import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import React, { useEffect, useRef, useState } from "react";
-import logo_dark from "@/public/images/logo_dark.png";
-import Image from "next/image";
-import Container from "./Container";
-import { faBell } from "@fortawesome/free-regular-svg-icons";
-import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
-import DropLoggedin from "./DropLoggedin";
-import ProfileMenu from "./ProfileMenu";
-import userProfile from "@/public/images/userprofile.jpg";
-import Cookies from "js-cookie";
-import ProtectedPage from "./ProtectedPage";
-import { useDispatch } from "react-redux";
-import { updateAuthInfo } from "@/app/_store/_contexts/userSlice";
 import useWebSocket from "@/app/_lib/Notification/useWebSocket";
-import NotificationList from "./NotificationList";
-import NotificationCard from "./NotificationCard";
+import { updateAuthInfo } from "@/app/_store/_contexts/userSlice";
 import {
-  NotificationDest,
   NotificationResponseDTO,
   NotificationWebSocketDTO,
 } from "@/app/_types/NotificationResponse";
+import logo_dark from "@/public/images/logo_dark.png";
+import userProfile from "@/public/images/userprofile.jpg";
+import { faBell } from "@fortawesome/free-regular-svg-icons";
+import {
+  faChevronDown,
+  faMagnifyingGlass,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Cookies from "js-cookie";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useRef, useState } from "react";
+import { useDispatch } from "react-redux";
+import Container from "./Container";
+import DropLoggedin from "./DropLoggedin";
+import NotificationCard from "./NotificationCard";
+import NotificationList from "./NotificationList";
+import ProfileMenu from "./ProfileMenu";
+import ProtectedPage from "./ProtectedPage";
 
 interface NavItem {
   label: string;
   options: { label: string; link: string }[];
 }
-
-const testNotification = {
-  notification: {
-    type: "PROPOSAL",
-    content:
-      "You received a new proposal for your job posting 'Web Developer Needed'.",
-    routeId: "12345",
-    read: false,
-  },
-  newNotificationsCount: 3,
-};
 
 const NavLoggedin: React.FC = () => {
   const router = useRouter();
