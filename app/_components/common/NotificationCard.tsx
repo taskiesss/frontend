@@ -41,6 +41,15 @@ function NotificationCard({ role, notification }: Props) {
           ? `/nx/client/mycontracts/${notification.routeId}`
           : `/nx/freelancer/mycontracts/${notification.routeId}`;
       break;
+    case NotificationDest.CONTRACT_COMMUNITY:
+      icon = faFileSignature;
+      url =
+        role.toLowerCase() === "client"
+          ? `/nx/client/mycontracts/${notification.routeId}`
+          : `/nx/freelancer/communities/${"mycommunity"}/contracts/${
+              notification.routeId
+            }`;
+      break;
     case NotificationDest.PROPOSAL:
       icon = faFileAlt;
       url =
