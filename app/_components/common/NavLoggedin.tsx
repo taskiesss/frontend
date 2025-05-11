@@ -62,6 +62,7 @@ const NavLoggedin: React.FC = () => {
   // Ref for detecting clicks outside the profile menu container
   const profileMenuRef = useRef<HTMLDivElement>(null);
   const notificationMenuRef = useRef<HTMLDivElement>(null);
+  const timerRefs = useRef<{ [key: number]: NodeJS.Timeout }>({});
 
   const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -83,17 +84,43 @@ const NavLoggedin: React.FC = () => {
     }
   }, [messages]);
 
-  // Auto-remove alerts after 5 seconds
+  // Auto-remove alerts after 8 seconds and handle timer cleanup
   useEffect(() => {
     if (alerts.length > 0) {
-      const timers = alerts.map((alert) =>
-        setTimeout(() => {
-          setAlerts((prev) => prev.filter((a) => a.id !== alert.id));
-        }, 5000)
-      );
-      return () => timers.forEach((timer) => clearTimeout(timer));
+      alerts.forEach((alert) => {
+        // Only set a new timer if one doesn't exist
+        if (!timerRefs.current[alert.id]) {
+          timerRefs.current[alert.id] = setTimeout(() => {
+            setAlerts((prev) => prev.filter((a) => a.id !== alert.id));
+            delete timerRefs.current[alert.id]; // Clean up timer
+          }, 8000);
+        }
+      });
+
+      // Cleanup all timers on unmount or when alerts change
+      return () => {
+        Object.values(timerRefs.current).forEach((timer) =>
+          clearTimeout(timer)
+        );
+        timerRefs.current = {}; // Reset timers
+      };
     }
   }, [alerts]);
+
+  // Handle hover to restart timer for a specific alert
+  const handleMouseEnter = (alertId: number) => {
+    // Clear existing timer for this alert
+    console.log(timerRefs);
+    if (timerRefs.current[alertId]) {
+      clearTimeout(timerRefs.current[alertId]);
+      delete timerRefs.current[alertId];
+    }
+    // Start a new 8-second timer
+    timerRefs.current[alertId] = setTimeout(() => {
+      setAlerts((prev) => prev.filter((a) => a.id !== alertId));
+      delete timerRefs.current[alertId];
+    }, 8000);
+  };
 
   useEffect(() => {
     const fetchUserNameAndImage = async () => {
@@ -271,6 +298,7 @@ const NavLoggedin: React.FC = () => {
         {alerts.map((alert) => (
           <div
             key={alert.id}
+            onMouseEnter={() => handleMouseEnter(alert.id)}
             className="bg-[--foreground-color] rounded-lg shadow-lg w-[25rem]  animate-slide-in"
           >
             <NotificationCard role={role} notification={alert.notification} />

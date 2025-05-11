@@ -228,8 +228,11 @@ function NotificationList({ role, onClose, isOpen }: Props) {
           )}
           {!isLast && (
             <button
-              onClick={() => setCurrentPage((currentPage) => currentPage + 1)}
-              className="text-base text-[var(--button-hover-background-color)] hover:underline"
+              onClick={(e) => {
+                e.stopPropagation();
+                setCurrentPage((currentPage) => currentPage + 1);
+              }}
+              className=" text-base text-[var(--button-hover-background-color)] hover:underline pb-10 pt-5 "
             >
               Load more comments
             </button>
