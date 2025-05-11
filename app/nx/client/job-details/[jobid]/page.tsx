@@ -28,7 +28,7 @@ export default async function page({ params }: Props) {
 
   let job: jobResponse;
   const token = (await cookies()).get("token")?.value;
-  // API to get job details here
+
   try {
     const res = await getJobDetails(token, jobid);
     // console.log(res);
