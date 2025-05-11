@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import StarRating from "../common/StarRating";
 
 interface ProfileHeaderProps {
   freelancer: {
@@ -57,14 +58,13 @@ export default function ProfileHeader({ freelancer }: ProfileHeaderProps) {
       </div>
       <div className="ml-6">
         <h1 className="text-2xl font-bold">{freelancer.name}</h1>
-        <p>
-          {freelancer.country} - {currentTime} local time
-        </p>
-        <div className="flex items-center mt-2">
-          <span className="text-yellow-400">
-            {"★".repeat(Math.min(5, Math.floor(freelancer.rate / 20)))}
-            {"☆".repeat(5 - Math.min(5, Math.floor(freelancer.rate / 20)))}
-          </span>
+        <div className="pointer-events-none flex items-center mt-2">
+          <StarRating
+            maxRating={5}
+            defaultRating={freelancer.rate}
+            size={15}
+            allowHalf={true}
+          />
         </div>
         <p className="text-green-600 mt-2">✔ Payment method verified</p>
       </div>

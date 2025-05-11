@@ -63,7 +63,6 @@ export default function WorkHistory({ id }: WorkHistoryProps) {
         <h3 className="text-lg font-semibold mb-2">{job.jobName}</h3>
         <div className="flex justify-between items-start">
           <div className="text-right">
-            <span className="bg-gray-300 px-2 py-1 rounded">Ended</span>
             <p className="text-gray-800 font-semibold">${budget} Budget</p>
           </div>
         </div>

@@ -8,6 +8,7 @@ import ClientMetrics from "./ClientMetrics";
 import AboutSection from "./ClientAbout";
 import SkillsSection from "./Skills";
 import WorkHistory from "./WorkDone";
+import Container from "../common/Container";
 
 interface ClientProfileProps {
   id: string;
@@ -29,7 +30,7 @@ export default function ClientProfile({
   };
 
   return (
-    <div className="grid grid-cols-[1fr_2fr] gap-6 items-start">
+    <Container className="grid grid-cols-[1fr_2fr] gap-6 items-start">
       <div className="flex flex-col gap-6">
         <ProfileHeader
           freelancer={{
@@ -57,6 +58,6 @@ export default function ClientProfile({
           setPageParamter={true}
         /> */}
       </div>
-    </div>
+    </Container>
   );
 }

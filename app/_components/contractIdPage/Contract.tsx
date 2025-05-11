@@ -174,7 +174,7 @@ function Contract({ contract, contractId, role, isAdmin }: Props) {
               <Link
                 href={
                   role === "client"
-                    ? `/nx/client/myprofile`
+                    ? `/nx/client/my-profile`
                     : `/nx/freelancer/client-profile/${contract.clientId}`
                 }
                 className="flex items-center gap-5  p-4  cursor-default"
