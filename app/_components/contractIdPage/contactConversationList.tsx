@@ -1,84 +1,175 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { useSearchParams } from "next/navigation";
 import ContractConversationCard from "./ContractConversationCard";
 import { Pagination } from "../common/Pagination";
 import Cookies from "js-cookie";
+import { getContractConversations } from "@/app/_lib/ContractsAPi/contractConversationsApi";
+import { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
-
-interface ContractConversation {
-  convoId: string;
-  convoOwner: {
-    profilePicture: string;
-    name: string;
-    role: string;
-    id: string;
-  };
-  content: string;
-  date: string;
-}
-
-interface ContractConversationsResponse {
-  content: ContractConversation[];
-  pageable: {
-    pageNumber: number;
-    pageSize: number;
-  };
-  totalElements: number;
-  totalPages: number;
-  size: number;
-  number: number;
-  numberOfElements: number;
-  empty: boolean;
-}
-
-async function fetchContractConversations(
-  contractId: string,
-  token: string | undefined,
-  page: number = 0,
-  size: number = 10
-): Promise<ContractConversationsResponse> {
-  console.log("Token:", token);
-  console.log("contr", contractId);
-
-  const res = await fetch(
-    `${BASE_URL}/contracts/${contractId}/contract-conversations?page=${page}&size=${size}`,
+const fakeContractConversations = {
+  content: [
     {
-      headers: {
-        Authorization: `Bearer ${token}`,
+      convoId: "conv-001",
+      content: "Hey, are we still on for tomorrow?",
+      date: new Date().toISOString(),
+      convoOwner: {
+        profilePicture:
+          "https://res.cloudinary.com/dhfb7i5h1/image/upload/v1740614334/freelancers_profile_pictures/ii1qf658zpi5f2tiwhby.png",
+        name: "John Doe",
+        role: "CLIENT",
+        id: "user-001",
       },
-    }
-  );
-
-  if (!res.ok) {
-    throw new Error("Failed to fetch contract conversations");
-  }
-
-  return res.json();
-}
+    },
+    {
+      convoId: "conv-002",
+      content: "Yes, I'll send over the files shortly.",
+      date: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
+      convoOwner: {
+        profilePicture:
+          "https://res.cloudinary.com/dhfb7i5h1/image/upload/v1740614334/freelancers_profile_pictures/ii1qf658zpi5f2tiwhby.png",
+        name: "Jane Smith",
+        role: "FREELANCER",
+        id: "user-002",
+      },
+    },
+    {
+      convoId: "conv-003",
+      content: "Awesome, looking forward to it!",
+      date: new Date(Date.now() - 1000 * 60 * 60).toISOString(),
+      convoOwner: {
+        profilePicture:
+          "https://res.cloudinary.com/dhfb7i5h1/image/upload/v1740614334/freelancers_profile_pictures/ii1qf658zpi5f2tiwhby.png",
+        name: "John Doe",
+        role: "CLIENT",
+        id: "user-001",
+      },
+    },
+    {
+      convoId: "conv-004",
+      content: "Let me know if anything comes up.",
+      date: new Date(Date.now() - 1000 * 60 * 90).toISOString(),
+      convoOwner: {
+        profilePicture:
+          "https://res.cloudinary.com/dhfb7i5h1/image/upload/v1740614334/freelancers_profile_pictures/ii1qf658zpi5f2tiwhby.png",
+        name: "Jane Smith",
+        role: "FREELANCER",
+        id: "user-002",
+      },
+    },
+    {
+      convoId: "conv-005",
+      content: "All set on my end.",
+      date: new Date(Date.now() - 1000 * 60 * 120).toISOString(),
+      convoOwner: {
+        profilePicture:
+          "https://res.cloudinary.com/dhfb7i5h1/image/upload/v1740614334/freelancers_profile_pictures/ii1qf658zpi5f2tiwhby.png",
+        name: "John Doe",
+        role: "CLIENT",
+        id: "user-001",
+      },
+    },
+    {
+      convoId: "conv-006",
+      content: "All set on my end.",
+      date: new Date(Date.now() - 1000 * 60 * 120).toISOString(),
+      convoOwner: {
+        profilePicture:
+          "https://res.cloudinary.com/dhfb7i5h1/image/upload/v1740614334/freelancers_profile_pictures/ii1qf658zpi5f2tiwhby.png",
+        name: "John Doe",
+        role: "CLIENT",
+        id: "user-001",
+      },
+    },
+  ],
+  pageable: {
+    pageNumber: 0,
+    pageSize: 5,
+    sort: {
+      empty: true,
+      unsorted: true,
+      sorted: false,
+    },
+    offset: 0,
+    unpaged: false,
+    paged: true,
+  },
+  last: false,
+  totalElements: 6,
+  totalPages: 3,
+  size: 5,
+  number: 0,
+  numberOfElements: 5,
+  first: true,
+  empty: false,
+};
 
 export default function ContractConversationsList({
   contractId,
+  isVisible,
 }: {
   contractId: string;
+  isVisible: boolean;
 }) {
+  const router = useRouter();
   const searchParams = useSearchParams();
-  const token = Cookies.get("token");
 
-  const pageFromUrl = Number(searchParams.get("page")) || 1;
-  const PAGE_SIZE = 5; // Change this as needed
+  // Get current page from URL params, default to 1
+  const pageFromUrl = parseInt(searchParams.get("page") || "1", 10);
+  const [currentPage, setCurrentPage] = useState(pageFromUrl);
+
+  // Sync state with URL params
+  useEffect(() => {
+    setCurrentPage(pageFromUrl);
+  }, [pageFromUrl]);
+
+  const token = Cookies.get("token");
+  const PAGE_SIZE = 5;
+
+  // Simulate paginated responses
+  const startIndex = (currentPage - 1) * PAGE_SIZE;
+  const paginatedContent = {
+    ...fakeContractConversations,
+    content: fakeContractConversations.content.slice(
+      startIndex,
+      startIndex + PAGE_SIZE
+    ),
+    pageable: {
+      ...fakeContractConversations.pageable,
+      pageNumber: currentPage - 1,
+    },
+    number: currentPage - 1,
+    first: currentPage === 1,
+    last: currentPage === fakeContractConversations.totalPages,
+  };
 
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ["contractConversations", contractId, pageFromUrl],
+    queryKey: ["contractConversations", contractId, currentPage],
     queryFn: () =>
-      fetchContractConversations(contractId, token, pageFromUrl - 1, PAGE_SIZE), // API uses zero-based index
+      getContractConversations(contractId, token, currentPage - 1, PAGE_SIZE),
   });
 
-  const handlePageChange = (newPage: number) => {
-    // No need to refetch manually, react-query will do it via queryKey change
+  const handlePageChange = (page: number, event?: React.MouseEvent) => {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
+    setCurrentPage(page);
+
+    // Method 1: Using router.replace instead of router.push
+    const params = new URLSearchParams(window.location.search);
+    params.set("page", page.toString());
+    router.replace(`?${params.toString()}`, { scroll: false });
+
+    // Method 2: Alternative using window.history (uncomment if router.replace doesn't work)
+    // const url = new URL(window.location.href);
+    // url.searchParams.set("page", page.toString());
+    // window.history.replaceState({}, "", url.toString());
   };
+
+  if (!isVisible) return null;
 
   if (isLoading) {
     return <div className="text-center py-6">Loading conversations...</div>;
@@ -91,25 +182,21 @@ export default function ContractConversationsList({
       </div>
     );
   }
-
-  if (!data || data.empty) {
-    return <div className="text-center py-6 ">No conversations yet.</div>;
-  }
-
-  const totalCount = data.totalElements;
-  const currentPage = pageFromUrl;
+  //   if (!data || data.empty) {
+  //     return <div className="text-center py-6">No conversations yet</div>;
+  //   }
 
   return (
     <div className="space-y-4">
       {/* Conversations List */}
-      {data.content.map((convo) => (
+      {paginatedContent.content.map((convo) => (
         <ContractConversationCard key={convo.convoId} {...convo} />
       ))}
 
       {/* Pagination */}
       <Pagination
         currentPage={currentPage}
-        totalCount={totalCount}
+        totalCount={fakeContractConversations.totalElements}
         pageSize={PAGE_SIZE}
         onPageChange={handlePageChange}
         siblingCount={1}

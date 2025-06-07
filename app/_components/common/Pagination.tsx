@@ -86,7 +86,7 @@ export interface PaginationProps {
   currentPage: number;
   totalCount: number;
   pageSize: number;
-  onPageChange: (page: number) => void;
+  onPageChange: (page: number, event?: React.MouseEvent) => void;
   siblingCount?: number;
   setPageParamter?: boolean;
 }
@@ -126,26 +126,31 @@ export const Pagination: React.FC<PaginationProps> = ({
 
   // This function handles page changes by calling the passed-in onPageChange
   // callback and then pushing the new page number into the URL.
-  const handlePageChange = (page: number) => {
+  const handlePageChange = (page: number, event?: React.MouseEvent) => {
     if (page < 1 || page > totalPageCount) return;
-    onPageChange(page);
 
-    // Create a new URLSearchParams object based on the current search params.
-    if (setPageParamter) return;
-    const params = new URLSearchParams(searchParams?.toString());
-    params.set("page", page.toString());
-    router.push(`${window.location.pathname}?${params.toString()}`);
-  };
+    // Always call the parent's onPageChange first
+    onPageChange(page, event);
 
-  const onNext = () => {
-    if (currentPage < totalPageCount) {
-      handlePageChange(currentPage + 1);
+    // Only update URL if setPageParamter is true
+    if (setPageParamter) {
+      const params = new URLSearchParams(searchParams?.toString());
+      params.set("page", page.toString());
+      router.replace(`${window.location.pathname}?${params.toString()}`, {
+        scroll: false,
+      });
     }
   };
 
-  const onPrevious = () => {
+  const onNext = (event: React.MouseEvent) => {
+    if (currentPage < totalPageCount) {
+      handlePageChange(currentPage + 1, event);
+    }
+  };
+
+  const onPrevious = (event: React.MouseEvent) => {
     if (currentPage > 1) {
-      handlePageChange(currentPage - 1);
+      handlePageChange(currentPage - 1, event);
     }
   };
 
@@ -212,7 +217,7 @@ export const Pagination: React.FC<PaginationProps> = ({
             className={`pagination-item ${
               pageNumber === currentPage ? "selected" : ""
             }`}
-            onClick={() => handlePageChange(Number(pageNumber))}
+            onClick={(event) => handlePageChange(Number(pageNumber), event)}
             style={{
               ...styles.paginationItem,
               ...(pageNumber === currentPage ? styles.selected : {}),

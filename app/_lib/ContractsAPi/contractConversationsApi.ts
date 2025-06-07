@@ -20,12 +20,12 @@ export async function getContractConversations(
   page: number = 0,
   size: number = 10
 ): Promise<any> {
-  console.log(token);
+  console.log("-------------------Token server------------------------", token);
   console.log(1);
   invariant(!token, "Unauthorized user");
 
   const res = await fetch(
-    `${BASE_URL}/contracts/${contractId}/contract-conversations?page=${page}&size=${size}`,
+    `${BASE_URL}/api/contracts/${contractId}/contract-conversations?page=${page}&size=${size}`,
     {
       method: "GET",
       headers: {
