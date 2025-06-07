@@ -20,6 +20,7 @@ import StatusCard from "../myContracts/StatusCard";
 import ApproveContract from "./ApproveContract";
 import Milestones from "./Milestones";
 import RatingModal from "./RatingModal";
+import ContractConversationsList from "./contactConversationList";
 
 type Props = {
   contract: contractDetailsResponse;
@@ -264,6 +265,12 @@ function Contract({ contract, contractId, role, isAdmin }: Props) {
           />
         </Suspense>
       </div>
+
+      {/* Conversations */}
+      <Suspense fallback={<Spinner />}>
+        <ContractConversationsList contractId={contractId} />
+      </Suspense>
+
       {/* Accept or reject contract */}
       {contract.contractStatus.toLowerCase() === "pending" &&
         role !== "client" && (
