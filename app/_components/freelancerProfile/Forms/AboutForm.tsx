@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import Model from "../Model";
 import { AboutAction } from "@/app/_lib/FreelancerProfile/APi";
 import Cookies from "js-cookie";
 import ProtectedPage from "../../common/ProtectedPage";
+import { toast, ToastContainer } from "react-toastify";
 
 export default function AboutForm({
   closeEdit,
@@ -14,6 +15,17 @@ export default function AboutForm({
 }) {
   const [About, setAbout] = useState(description);
   const [isForbidden, setIsForbidden] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+
+  useEffect(() => {
+    if (errorMsg) {
+      toast.error(errorMsg, { autoClose: 5000 });
+      // Delay removal of the toast message from localStorage by 1 second
+      setTimeout(() => {
+        setErrorMsg("");
+      }, 1000);
+    }
+  }, [errorMsg]);
 
   const handleAction = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -31,7 +43,7 @@ export default function AboutForm({
         setIsForbidden(true);
         return;
       }
-      console.error(error.message);
+      setErrorMsg(error.message);
     }
   };
 
@@ -40,25 +52,30 @@ export default function AboutForm({
       <ProtectedPage message="You are not allowed to do this action. Please log in" />
     );
   return (
-    <Model isOpen={true} onClose={closeEdit}>
-      <h2 className="text-2xl font-bold mb-4">Edit Description</h2>
-      {/* Put your form for editing the section here */}
-      <form onSubmit={(e) => handleAction(e)} className="flex flex-col gap-8">
-        <textarea
-          onChange={(e) => setAbout(e.target.value)}
-          defaultValue={description}
-          name="description"
-          className="resize-none w-[40rem] h-[15rem] focus:outline-none p-6 bg-[var(--background-color)] rounded-xl border-[var(--border-color)] border-solid border-2 text-lg"
-        />
-        <div className="self-end">
-          <button
-            type="submit"
-            className="px-4 py-2 bg-[var(--btn-color)]  rounded-lg"
-          >
-            Submit
-          </button>
-        </div>
-      </form>
-    </Model>
+    <>
+      <div>
+        <ToastContainer />
+      </div>
+      <Model isOpen={true} onClose={closeEdit}>
+        <h2 className="text-2xl font-bold mb-4">Edit Description</h2>
+        {/* Put your form for editing the section here */}
+        <form onSubmit={(e) => handleAction(e)} className="flex flex-col gap-8">
+          <textarea
+            onChange={(e) => setAbout(e.target.value)}
+            defaultValue={description}
+            name="description"
+            className="resize-none w-[40rem] h-[15rem] focus:outline-none p-6 bg-[var(--background-color)] rounded-xl border-[var(--border-color)] border-solid border-2 text-lg"
+          />
+          <div className="self-end">
+            <button
+              type="submit"
+              className="px-4 py-2 bg-[var(--btn-color)]  rounded-lg"
+            >
+              Submit
+            </button>
+          </div>
+        </form>
+      </Model>
+    </>
   );
 }

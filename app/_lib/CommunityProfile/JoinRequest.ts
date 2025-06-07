@@ -19,7 +19,11 @@ export async function getAvailablePositions(
     }
   );
 
-  if (res.status === 403) throw new Error('Forbidden');
+  if (res.status === 403 || res.status === 401) throw new Error('Forbidden');
+  if (res.status === 400) {
+    const error = await res.json();
+    throw new Error(error.message);
+  }
   if (!res.ok) throw new Error('Something went wrong');
   const out = await res.json();
   return out;
@@ -40,7 +44,11 @@ export async function sendJoinRequest(
     }
   );
 
-  if (res.status === 403) throw new Error('Forbidden');
+  if (res.status === 403 || res.status === 401) throw new Error('Forbidden');
+  if (res.status === 400) {
+    const error = await res.json();
+    throw new Error(error.message);
+  }
   if (!res.ok) throw new Error('Something went wrong');
 
   return true;

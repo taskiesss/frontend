@@ -1,5 +1,5 @@
 'use server';
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { invariant } from '@/app/_helpers/invariant';
 import { Contracts } from '@/app/_types/AllContractsResponce';
 import { revalidatePath } from 'next/cache';
@@ -74,7 +74,11 @@ export async function getCommunityJoinRequests(
     }
   );
 
-  if (res.status === 403) throw new Error('Forbidden');
+  if (res.status === 403 || res.status === 401) throw new Error('Forbidden');
+  if (res.status === 400) {
+    const error = await res.json();
+    throw new Error(error.message);
+  }
   if (!res.ok) throw new Error('Something went wrong');
 
   return res.json();
@@ -97,7 +101,11 @@ export async function getCommunityOffers(
     }
   );
 
-  if (res.status === 403) throw new Error('Forbidden');
+  if (res.status === 403 || res.status === 401) throw new Error('Forbidden');
+  if (res.status === 400) {
+    const error = await res.json();
+    throw new Error(error.message);
+  }
   if (!res.ok) throw new Error('Something went wrong');
 
   return res.json();
@@ -120,7 +128,11 @@ export async function getCommunityActiveContracts(
     }
   );
 
-  if (res.status === 403) throw new Error('Forbidden');
+  if (res.status === 403 || res.status === 401) throw new Error('Forbidden');
+  if (res.status === 400) {
+    const error = await res.json();
+    throw new Error(error.message);
+  }
   if (!res.ok) throw new Error('Something went wrong');
 
   return res.json();
@@ -150,8 +162,11 @@ export async function acceptOrRejectJoinRequest(
     }
   );
 
-  if (res.status === 403) throw new Error('Forbidden');
-  if (res.status === 400) throw new Error('Invalid request data');
+  if (res.status === 403 || res.status === 401) throw new Error('Forbidden');
+  if (res.status === 400) {
+    const error = await res.json();
+    throw new Error(error.message);
+  }
   if (!res.ok) throw new Error('Something went wrong');
 
   revalidatePath(`nx/freelancer/communities/${communityId}/board`);
@@ -179,8 +194,11 @@ export async function voteOnCommunityContract(
     }
   );
 
-  if (res.status === 403) throw new Error('Forbidden');
-  if (res.status === 400) throw new Error('Invalid request data');
+  if (res.status === 403 || res.status === 401) throw new Error('Forbidden');
+  if (res.status === 400) {
+    const error = await res.json();
+    throw new Error(error.message);
+  }
   if (!res.ok) throw new Error('Something went wrong');
 
   revalidatePath(`/communities/${communityId}`);
@@ -204,11 +222,12 @@ export async function getCommunityContractVotes(
     }
   );
 
-  if (res.status === 403) {
+  if (res.status === 403 || res.status === 401) {
     throw new Error('Forbidden: User is not authorized to view vote details');
   }
   if (res.status === 400) {
-    throw new Error('Invalid request data');
+    const error = await res.json();
+    throw new Error(error.message);
   }
   if (!res.ok) {
     throw new Error('Something went wrong fetching contract vote details');

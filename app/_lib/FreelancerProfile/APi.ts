@@ -21,8 +21,12 @@ export const ProfileSkillApi = async (
     body: JSON.stringify(reqbody),
   });
   console.log(res);
-  if (res.status === 403) {
+  if (res.status === 403 || res.status === 401) {
     throw new Error('Forbidden');
+  }
+  if (res.status === 400) {
+    const error = await res.json();
+    throw new Error(error.message);
   }
   if (!res.ok) {
     // console.log('iam here');
@@ -48,8 +52,12 @@ export async function AboutAction(
     body: JSON.stringify(reqbody),
   });
   console.log(res);
-  if (res.status === 403) {
+  if (res.status === 403 || res.status === 401) {
     throw new Error('Forbidden');
+  }
+  if (res.status === 400) {
+    const error = await res.json();
+    throw new Error(error.message);
   }
   if (!res.ok) {
     // console.log('iam here');
@@ -75,8 +83,12 @@ export async function EducationAction(
     body: JSON.stringify(reqbody),
   });
   console.log(res);
-  if (res.status === 403) {
+  if (res.status === 403 || res.status === 401) {
     throw new Error('Forbidden');
+  }
+  if (res.status === 400) {
+    const error = await res.json();
+    throw new Error(error.message);
   }
   if (!res.ok) {
     // console.log('iam here');
@@ -102,8 +114,12 @@ export async function EmpHistoryAction(
     body: JSON.stringify(reqbody),
   });
   console.log(res);
-  if (res.status === 403) {
+  if (res.status === 403 || res.status === 401) {
     throw new Error('Forbidden');
+  }
+  if (res.status === 400) {
+    const error = await res.json();
+    throw new Error(error.message);
   }
   if (!res.ok) {
     // console.log('iam here');
@@ -129,8 +145,12 @@ export async function LanguagesAction(
     body: JSON.stringify(reqbody),
   });
   console.log(res);
-  if (res.status === 403) {
+  if (res.status === 403 || res.status === 401) {
     throw new Error('Forbidden');
+  }
+  if (res.status === 400) {
+    const error = await res.json();
+    throw new Error(error.message);
   }
   if (!res.ok) {
     // console.log('iam here');
@@ -156,8 +176,12 @@ export async function LinksAction(
     body: JSON.stringify(reqbody),
   });
   console.log(res);
-  if (res.status === 403) {
+  if (res.status === 403 || res.status === 401) {
     throw new Error('Forbidden');
+  }
+  if (res.status === 400) {
+    const error = await res.json();
+    throw new Error(error.message);
   }
   if (!res.ok) {
     // console.log('iam here');
@@ -183,8 +207,12 @@ export async function HPWAction(
     body: JSON.stringify(reqbody),
   });
   console.log(res);
-  if (res.status === 403) {
+  if (res.status === 403 || res.status === 401) {
     throw new Error('Forbidden');
+  }
+  if (res.status === 400) {
+    const error = await res.json();
+    throw new Error(error.message);
   }
   if (!res.ok) {
     // console.log('iam here');
@@ -209,8 +237,12 @@ export async function AddPortFolio(
   });
 
   console.log(res);
-  if (res.status === 403) {
+  if (res.status === 403 || res.status === 401) {
     throw new Error('Forbidden');
+  }
+  if (res.status === 400) {
+    const error = await res.json();
+    throw new Error(error.message);
   }
   if (!res.ok) {
     // console.log('iam here');
@@ -244,10 +276,13 @@ export async function HeaderSectionAction(
 
   console.log(res);
 
-  if (res.status === 403) {
+  if (res.status === 403 || res.status === 401) {
     throw new Error('Forbidden');
   }
-
+  if (res.status === 400) {
+    const error = await res.json();
+    throw new Error(error.message);
+  }
   if (!res.ok) {
     throw new Error('Something went Wrong');
   }
@@ -272,10 +307,13 @@ export async function ProfilePictureAction(
 
   console.log(res);
 
-  if (res.status === 403) {
+  if (res.status === 403 || res.status === 401) {
     throw new Error('Forbidden');
   }
-
+  if (res.status === 400) {
+    const error = await res.json();
+    throw new Error(error.message);
+  }
   if (!res.ok) {
     throw new Error('Something went wrong');
   }
@@ -301,10 +339,13 @@ export async function CoverPictureAction(
     body: request,
   });
 
-  if (res.status === 403) {
+  if (res.status === 403 || res.status === 401) {
     throw new Error('Forbidden');
   }
-
+  if (res.status === 400) {
+    const error = await res.json();
+    throw new Error(error.message);
+  }
   if (!res.ok) {
     throw new Error('Something went wrong');
   }
@@ -330,10 +371,13 @@ export async function getFreelancerbyID(
     },
   });
 
-  if (res.status === 403) {
+  if (res.status === 403 || res.status === 401) {
     throw new Error('Forbidden');
   }
-
+  if (res.status === 400) {
+    const error = await res.json();
+    throw new Error(error.message);
+  }
   if (!res.ok) {
     throw new Error('Something went wrong');
   }
@@ -363,10 +407,13 @@ export async function getWorkDonebyID(
     }
   );
 
-  if (res.status === 403) {
+  if (res.status === 403 || res.status === 401) {
     throw new Error('Forbidden');
   }
-
+  if (res.status === 400) {
+    const error = await res.json();
+    throw new Error(error.message);
+  }
   if (!res.ok) {
     throw new Error('Something went wrong');
   }
@@ -396,10 +443,13 @@ export async function getPortfoliosbyID(
     }
   );
 
-  if (res.status === 403) {
+  if (res.status === 403 || res.status === 401) {
     throw new Error('Forbidden');
   }
-
+  if (res.status === 400) {
+    const error = await res.json();
+    throw new Error(error.message);
+  }
   if (!res.ok) {
     throw new Error('Something went wrong');
   }
@@ -430,10 +480,13 @@ export async function DeletePortfolioAction(
 
   console.log(res);
 
-  if (res.status === 403) {
+  if (res.status === 403 || res.status === 401) {
     throw new Error('Forbidden');
   }
-
+  if (res.status === 400) {
+    const error = await res.json();
+    throw new Error(error.message);
+  }
   if (!res.ok) {
     throw new Error('Something went wrong');
   }

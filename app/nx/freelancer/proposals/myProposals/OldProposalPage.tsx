@@ -109,7 +109,7 @@ export default function MyProposalsPage() {
       });
   }, [token, currentPage]);
 
-  // If there's an error (e.g., 401, 403), show a protected page message
+  // If there's an error (e.g., 401, 403 || res.status === 401), show a protected page message
   if (error) {
     return <ProtectedPage message="You are not allowed to do this action." />;
   }

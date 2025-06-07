@@ -22,10 +22,13 @@ export async function getJobDetails(
 
   // console.log(response);
 
-  if (response.status === 403) {
+  if (response.status === 403 || response.status === 401) {
     throw new Error('Forbidden');
   }
-
+  if (response.status === 400) {
+    const error = await response.json();
+    throw new Error(error.message);
+  }
   if (!response.ok) {
     let errorMessage = 'Job not found.';
     try {
@@ -61,10 +64,13 @@ export async function getOwnedCommunities(
   });
   // console.log(response);
 
-  if (response.status === 403) {
+  if (response.status === 403 || response.status === 401) {
     throw new Error('Forbidden');
   }
-
+  if (response.status === 400) {
+    const error = await response.json();
+    throw new Error(error.message);
+  }
   if (!response.ok) {
     let errorMessage = 'Error retrieving communities.';
     try {

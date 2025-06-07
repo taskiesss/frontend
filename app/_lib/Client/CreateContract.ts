@@ -53,10 +53,13 @@ export async function CreateContract(
   });
 
   // Handle API response
-  if (res.status === 403) {
+  if (res.status === 403 || res.status === 401) {
     return { error: 'Forbidden' };
   }
-
+  if (res.status === 400) {
+    const error = await res.json();
+    return { error: error.message };
+  }
   if (!res.ok) {
     return { error: 'Something went wrong' };
   }

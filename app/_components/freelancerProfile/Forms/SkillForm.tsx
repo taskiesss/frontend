@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import Model from "../Model";
 import SkillsSearchInput from "../../common/SkillsSearchInput";
 import Cookies from "js-cookie";
 import ProtectedPage from "../../common/ProtectedPage";
 import { ProfileSkillApi } from "@/app/_lib/FreelancerProfile/APi";
+import { toast, ToastContainer } from "react-toastify";
 
 export default function SkillForm({
   skills,
@@ -15,6 +16,17 @@ export default function SkillForm({
 }) {
   const [selectedSkills, setSelectedSkills] = useState(skills);
   const [isForbidden, setIsForbidden] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+
+  useEffect(() => {
+    if (errorMsg) {
+      toast.error(errorMsg, { autoClose: 5000 });
+      // Delay removal of the toast message from localStorage by 1 second
+      setTimeout(() => {
+        setErrorMsg("");
+      }, 1000);
+    }
+  }, [errorMsg]);
 
   const handleSelectSkill = (skill: string) => {
     // Avoid duplicate skills
@@ -43,7 +55,7 @@ export default function SkillForm({
         setIsForbidden(true);
         return;
       }
-      console.error(error.message);
+      setErrorMsg(error.message);
     }
   };
 
@@ -52,30 +64,35 @@ export default function SkillForm({
       <ProtectedPage message="You are not allowed to do this action. Please log in" />
     );
   return (
-    <Model className="" isOpen={true} onClose={closeEdit}>
-      <h2 className="text-2xl font-bold">Edit Skills</h2>
-      {/* Put your form for editing the section here */}
-      <form
-        onSubmit={(e) => handleSubmit(e)}
-        className="flex flex-col gap-6 pt-5 flex-wrap"
-      >
-        <div className="w-[30rem]">
-          <SkillsSearchInput
-            className="py-4 border border-solid border-gray-600 rounded-lg"
-            selectedSkills={selectedSkills}
-            onSelectSkill={handleSelectSkill}
-            onRemoveSkill={handleRemoveSkill}
-          />
-        </div>
-        <div className="self-end">
-          <button
-            type="submit"
-            className="px-4 py-2 bg-[var(--btn-color)]  rounded-lg"
-          >
-            Submit
-          </button>
-        </div>
-      </form>
-    </Model>
+    <>
+      <div>
+        <ToastContainer />
+      </div>
+      <Model className="" isOpen={true} onClose={closeEdit}>
+        <h2 className="text-2xl font-bold">Edit Skills</h2>
+        {/* Put your form for editing the section here */}
+        <form
+          onSubmit={(e) => handleSubmit(e)}
+          className="flex flex-col gap-6 pt-5 flex-wrap"
+        >
+          <div className="w-[30rem]">
+            <SkillsSearchInput
+              className="py-4 border border-solid border-gray-600 rounded-lg"
+              selectedSkills={selectedSkills}
+              onSelectSkill={handleSelectSkill}
+              onRemoveSkill={handleRemoveSkill}
+            />
+          </div>
+          <div className="self-end">
+            <button
+              type="submit"
+              className="px-4 py-2 bg-[var(--btn-color)]  rounded-lg"
+            >
+              Submit
+            </button>
+          </div>
+        </form>
+      </Model>
+    </>
   );
 }

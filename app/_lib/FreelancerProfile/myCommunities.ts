@@ -1,5 +1,5 @@
 'use server';
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { invariant } from '@/app/_helpers/invariant';
 import { revalidateTag } from 'next/cache';
 
@@ -81,12 +81,13 @@ export async function createCommunity(
   );
 
   if (response.status === 400) {
-    throw new Error('Bad request - Invalid community data');
+    const error = await response.json();
+    throw new Error(error.message);
   }
   if (response.status === 401) {
     throw new Error('Unauthorized');
   }
-  if (response.status === 403) {
+  if (response.status === 403 || response.status === 401) {
     throw new Error('Forbidden - Insufficient permissions');
   }
   if (!response.ok) {

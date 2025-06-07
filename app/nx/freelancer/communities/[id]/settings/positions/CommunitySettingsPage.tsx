@@ -26,6 +26,7 @@ import { useRouter } from "next/navigation";
 
 import AddPositionForm from "@/app/_components/communityProfile/Forms/AddPositionForm";
 import Spinner from "@/app/_components/common/Spinner";
+import { toast, ToastContainer } from "react-toastify";
 
 type Props = {
   rolesAndPositions: CommunityRolesResponse;
@@ -56,6 +57,16 @@ export default function CommunitySettingsPage({
   const [inputValues, setInputValues] = useState<string[]>([]);
 
   const [showAddPosition, setShowAddPosition] = useState(false);
+
+  useEffect(() => {
+    if (errorMessage) {
+      toast.error(errorMessage, { autoClose: 5000 });
+      // Delay removal of the toast message from localStorage by 1 second
+      setTimeout(() => {
+        setErrorMessage("");
+      }, 1000);
+    }
+  }, [errorMessage]);
 
   const handleEditClick = () => {
     // Create deep copies for editing
@@ -185,233 +196,240 @@ export default function CommunitySettingsPage({
   }, [communityMembers]);
 
   return (
-    <Container>
-      <div className="flex flex-col my-16 gap-6 p-6 bg-[var(--background-color)] text-[var(--accent-color)]">
-        <h2 className="text-2xl font-bold text-[var(--accent-color)]">
-          Community Settings
-        </h2>
+    <>
+      <div>
+        <ToastContainer />
+      </div>
+      <Container>
+        <div className="flex flex-col my-16 gap-6 p-6 bg-[var(--background-color)] text-[var(--accent-color)]">
+          <h2 className="text-2xl font-bold text-[var(--accent-color)]">
+            Community Settings
+          </h2>
 
-        <SettingsSmallNav
-          communityId={id}
-          pathname={`/communities/${id}/settings/positions`}
-        />
+          <SettingsSmallNav
+            communityId={id}
+            pathname={`/communities/${id}/settings/positions`}
+          />
 
-        <div className="flex flex-col gap-6">
-          {/* Action Buttons */}
-          <div className="flex justify-end items-center">
-            <div className="flex gap-4">
-              {!isEditing && isUserAdmin && (
-                <button
-                  onClick={handleEditClick}
-                  className="text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100"
-                >
-                  <FontAwesomeIcon icon={faEdit} size="lg" />
-                </button>
-              )}
-              {isEditing && (
-                <>
+          <div className="flex flex-col gap-6">
+            {/* Action Buttons */}
+            <div className="flex justify-end items-center">
+              <div className="flex gap-4">
+                {!isEditing && isUserAdmin && (
                   <button
-                    onClick={handleSaveClick}
-                    disabled={errorMessage !== null}
-                    className="bg-green-500 text-white rounded-full w-10 aspect-square flex items-center justify-center hover:bg-green-600 disabled:bg-gray-300 disabled:cursor-not-allowed"
+                    onClick={handleEditClick}
+                    className="text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100"
                   >
-                    <FontAwesomeIcon icon={faCheck} size="lg" />
+                    <FontAwesomeIcon icon={faEdit} size="lg" />
                   </button>
+                )}
+                {isEditing && (
+                  <>
+                    <button
+                      onClick={handleSaveClick}
+                      disabled={errorMessage !== null}
+                      className="bg-green-500 text-white rounded-full w-10 aspect-square flex items-center justify-center hover:bg-green-600 disabled:bg-gray-300 disabled:cursor-not-allowed"
+                    >
+                      <FontAwesomeIcon icon={faCheck} size="lg" />
+                    </button>
 
-                  <button
-                    onClick={handleUndoClick}
-                    className="bg-orange-500 text-white rounded-full w-10 aspect-square flex items-center justify-center hover:bg-orange-600 ml-2"
-                  >
-                    <FontAwesomeIcon icon={faUndo} size="lg" />
-                  </button>
-                </>
-              )}
+                    <button
+                      onClick={handleUndoClick}
+                      className="bg-orange-500 text-white rounded-full w-10 aspect-square flex items-center justify-center hover:bg-orange-600 ml-2"
+                    >
+                      <FontAwesomeIcon icon={faUndo} size="lg" />
+                    </button>
+                  </>
+                )}
+              </div>
             </div>
-          </div>
 
-          {/* Error Message */}
-          {errorMessage && (
-            <div className="text-red-500 text-base font-semibold">
-              {errorMessage}
-            </div>
-          )}
+            {/* Error Message */}
+            {errorMessage && (
+              <div className="text-red-500 text-base font-semibold">
+                {errorMessage}
+              </div>
+            )}
 
-          {/* Table */}
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200 bg-white dark:bg-gray-800 shadow-md rounded-md">
-              <thead className="bg-gray-50 dark:bg-gray-700">
-                <tr className="bg-[var(--button-hover-background-color)] text-white">
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider "
-                  >
-                    Freelancer
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider "
-                  >
-                    Position
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider "
-                  >
-                    Financial %
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider "
-                  >
-                    Description
-                  </th>
-                </tr>
-              </thead>
-              <Suspense fallback={<Spinner />}>
-                <tbody>
-                  {(isEditing ? editingPositions : futurePositions).map(
-                    (item: RoleAndPosition, index) => (
-                      <tr
-                        key={index}
-                        className="border-b border-[var(--border-color)]"
-                      >
-                        <td className="px-6 py-4 whitespace-nowrap align-top">
-                          <div className="flex items-center">
-                            {item.nameAndPicture?.freelancerId && (
-                              <div className="flex-shrink-0 h-10 w-10 relative">
-                                <Image
-                                  src={
-                                    item.nameAndPicture
-                                      ?.freelancerProfilePicture ||
-                                    "/images/userprofile.jpg"
-                                  }
-                                  alt={item.nameAndPicture?.name || "image"}
-                                  className="rounded-full object-cover"
-                                  fill
-                                  sizes="2.5rem"
-                                />
-                              </div>
-                            )}
-                            <div className="ml-4">
-                              {item.nameAndPicture?.freelancerId ? (
-                                <Link
-                                  href={`/nx/freelancer/profile/${item.nameAndPicture.freelancerId}`}
-                                  className="text-base font-medium  hover:underline"
-                                >
-                                  {item.nameAndPicture.name}
-                                </Link>
-                              ) : (
-                                <div className="text-base font-medium ">
-                                  {item.nameAndPicture?.name}
+            {/* Table */}
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200 bg-white dark:bg-gray-800 shadow-md rounded-md">
+                <thead className="bg-gray-50 dark:bg-gray-700">
+                  <tr className="bg-[var(--button-hover-background-color)] text-white">
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider "
+                    >
+                      Freelancer
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider "
+                    >
+                      Position
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider "
+                    >
+                      Financial %
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider "
+                    >
+                      Description
+                    </th>
+                  </tr>
+                </thead>
+                <Suspense fallback={<Spinner />}>
+                  <tbody>
+                    {(isEditing ? editingPositions : futurePositions).map(
+                      (item: RoleAndPosition, index) => (
+                        <tr
+                          key={index}
+                          className="border-b border-[var(--border-color)]"
+                        >
+                          <td className="px-6 py-4 whitespace-nowrap align-top">
+                            <div className="flex items-center">
+                              {item.nameAndPicture?.freelancerId && (
+                                <div className="flex-shrink-0 h-10 w-10 relative">
+                                  <Image
+                                    src={
+                                      item.nameAndPicture
+                                        ?.freelancerProfilePicture ||
+                                      "/images/userprofile.jpg"
+                                    }
+                                    alt={item.nameAndPicture?.name || "image"}
+                                    className="rounded-full object-cover"
+                                    fill
+                                    sizes="2.5rem"
+                                  />
                                 </div>
                               )}
+                              <div className="ml-4">
+                                {item.nameAndPicture?.freelancerId ? (
+                                  <Link
+                                    href={`/nx/freelancer/profile/${item.nameAndPicture.freelancerId}`}
+                                    className="text-base font-medium  hover:underline"
+                                  >
+                                    {item.nameAndPicture.name}
+                                  </Link>
+                                ) : (
+                                  <div className="text-base font-medium ">
+                                    {item.nameAndPicture?.name}
+                                  </div>
+                                )}
+                              </div>
                             </div>
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-base text-gray-900 dark:text-gray-100">
-                            {item.nameAndPicture?.position}
-                          </div>
-                          {item.nameAndPicture?.admin && (
-                            <div className="text-sm text-gray-500 dark:text-gray-300">
-                              Admin
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="text-base text-gray-900 dark:text-gray-100">
+                              {item.nameAndPicture?.position}
                             </div>
-                          )}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          {isEditing ? (
-                            <input
-                              min={0}
-                              max={100}
-                              type="number"
-                              value={inputValues[index]}
-                              onChange={(e) =>
-                                handlePercentChange(index, e.target.value)
-                              }
-                              className="w-20 px-2 py-1 rounded bg-[var(--hover-color)]"
-                            />
-                          ) : (
-                            <div className="text-base ">
-                              {item.futurePercentage}%
-                              {!isEditing &&
-                                item.futurePercentage !==
-                                  item.currentPercentage && (
-                                  <span className="relative inline-block ml-2 group">
-                                    <FontAwesomeIcon
-                                      icon={faCircleInfo}
-                                      className="text-gray-500 group-hover:text-gray-600"
-                                    />
-                                    <div
-                                      className="
+                            {item.nameAndPicture?.admin && (
+                              <div className="text-sm text-gray-500 dark:text-gray-300">
+                                Admin
+                              </div>
+                            )}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            {isEditing ? (
+                              <input
+                                min={0}
+                                max={100}
+                                type="number"
+                                value={inputValues[index]}
+                                onChange={(e) =>
+                                  handlePercentChange(index, e.target.value)
+                                }
+                                className="w-20 px-2 py-1 rounded bg-[var(--hover-color)]"
+                              />
+                            ) : (
+                              <div className="text-base ">
+                                {item.futurePercentage}%
+                                {!isEditing &&
+                                  item.futurePercentage !==
+                                    item.currentPercentage && (
+                                    <span className="relative inline-block ml-2 group">
+                                      <FontAwesomeIcon
+                                        icon={faCircleInfo}
+                                        className="text-gray-500 group-hover:text-gray-600"
+                                      />
+                                      <div
+                                        className="
                                       absolute left-full top-1/2 transform -translate-y-1/2
                                       bg-gray-800 text-white text-sm rounded px-2 py-1
                                       whitespace-nowrap opacity-0 group-hover:opacity-100
                                       transition-opacity duration-200 ml-2
                                       pointer-events-none                          
-                                    "
-                                    >
-                                      Current allocation:{" "}
-                                      {item.currentPercentage}%
-                                    </div>
-                                  </span>
-                                )}
-                            </div>
-                          )}
-                        </td>
-                        <td className="px-6 py-4 text-base flex justify-between items-center gap-2">
-                          <span>{item.description}</span>
-                          {isEditing && !item.nameAndPicture.admin && (
-                            <FontAwesomeIcon
-                              icon={faTrash}
-                              className="text-gray-400 hover:text-gray-600 cursor-pointer"
-                              onClick={() => handleDeleteClick(item.positionId)}
-                            />
-                          )}
-                        </td>
-                      </tr>
-                    )
-                  )}
-                </tbody>
-              </Suspense>
-            </table>
+                                      "
+                                      >
+                                        Current allocation:{" "}
+                                        {item.currentPercentage}%
+                                      </div>
+                                    </span>
+                                  )}
+                              </div>
+                            )}
+                          </td>
+                          <td className="px-6 py-4 text-base flex justify-between items-center gap-2">
+                            <span>{item.description}</span>
+                            {isEditing && !item.nameAndPicture.admin && (
+                              <FontAwesomeIcon
+                                icon={faTrash}
+                                className="text-gray-400 hover:text-gray-600 cursor-pointer"
+                                onClick={() =>
+                                  handleDeleteClick(item.positionId)
+                                }
+                              />
+                            )}
+                          </td>
+                        </tr>
+                      )
+                    )}
+                  </tbody>
+                </Suspense>
+              </table>
+            </div>
+
+            {isEditing && (
+              <button
+                onClick={() => setShowAddPosition(true)}
+                className="w-fit bg-[var(--btn-color)] px-4 py-2 rounded-lg"
+              >
+                + Add Position
+              </button>
+            )}
           </div>
-
-          {isEditing && (
-            <button
-              onClick={() => setShowAddPosition(true)}
-              className="w-fit bg-[var(--btn-color)] px-4 py-2 rounded-lg"
-            >
-              + Add Position
-            </button>
-          )}
         </div>
-      </div>
 
-      {showAddPosition && (
-        <AddPositionForm
-          onClose={() => setShowAddPosition(false)}
-          onPositionAdded={(newPosition: UpdatePositionRequest) => {
-            // Create RoleAndPosition object
-            const newRolePosition: RoleAndPosition = {
-              positionId: 0,
-              nameAndPicture: {
-                position: newPosition.positionName,
-                name: "New Member", // Default name (adjust as needed)
-                freelancerProfilePicture: "/images/userprofile.jpg", // Default image
-              },
-              futurePercentage: newPosition.financialPercent,
-              currentPercentage: 0, // New positions start with 0 current %
-              description: newPosition.description,
-            };
+        {showAddPosition && (
+          <AddPositionForm
+            onClose={() => setShowAddPosition(false)}
+            onPositionAdded={(newPosition: UpdatePositionRequest) => {
+              // Create RoleAndPosition object
+              const newRolePosition: RoleAndPosition = {
+                positionId: 0,
+                nameAndPicture: {
+                  position: newPosition.positionName,
+                  name: "New Member", // Default name (adjust as needed)
+                  freelancerProfilePicture: "/images/userprofile.jpg", // Default image
+                },
+                futurePercentage: newPosition.financialPercent,
+                currentPercentage: 0, // New positions start with 0 current %
+                description: newPosition.description,
+              };
 
-            setEditingPositions((prev) => [...prev, newRolePosition]);
-            setInputValues((prev) => [
-              ...prev,
-              newPosition.financialPercent.toString(),
-            ]);
-          }}
-        />
-      )}
-    </Container>
+              setEditingPositions((prev) => [...prev, newRolePosition]);
+              setInputValues((prev) => [
+                ...prev,
+                newPosition.financialPercent.toString(),
+              ]);
+            }}
+          />
+        )}
+      </Container>
+    </>
   );
 }

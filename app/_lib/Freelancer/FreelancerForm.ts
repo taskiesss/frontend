@@ -35,7 +35,11 @@ export async function submitFreelancerForm(data: FreelancerFormPayload) {
       if (res.ok) {
         return true;
       }
-      if (res.status === 403) {
+      if (res.status === 400) {
+        const error = await res.json();
+        throw new Error(error.message);
+      }
+      if (res.status === 403 || res.status === 401) {
         throw new Error('Forbidden');
       }
       const output = await res.json();

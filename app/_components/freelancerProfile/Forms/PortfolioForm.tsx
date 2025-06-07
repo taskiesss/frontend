@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import {
   useMutation,
   useQueryClient,
@@ -10,6 +10,7 @@ import Model from "../Model";
 import Cookies from "js-cookie";
 import { AddPortFolio } from "@/app/_lib/FreelancerProfile/APi";
 import ProtectedPage from "../../common/ProtectedPage";
+import { toast, ToastContainer } from "react-toastify";
 
 interface PortfolioFormProps {
   closeEdit: () => void;
@@ -19,8 +20,19 @@ export default function PortfolioForm({ closeEdit }: PortfolioFormProps) {
   const [name, setName] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [isForbidden, setIsForbidden] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
   const queryClient = useQueryClient();
   const token = Cookies.get("token");
+
+  useEffect(() => {
+    if (errorMsg) {
+      toast.error(errorMsg, { autoClose: 5000 });
+      // Delay removal of the toast message from localStorage by 1 second
+      setTimeout(() => {
+        setErrorMsg("");
+      }, 1000);
+    }
+  }, [errorMsg]);
 
   // Mutation for adding a portfolio
   const addPortfolioMutation: UseMutationResult<any, Error, FormData, unknown> =
@@ -43,7 +55,7 @@ export default function PortfolioForm({ closeEdit }: PortfolioFormProps) {
           setIsForbidden(true);
           return;
         }
-        console.error(error.message);
+        setErrorMsg(error.message);
       },
     });
 
@@ -72,36 +84,41 @@ export default function PortfolioForm({ closeEdit }: PortfolioFormProps) {
   }
 
   return (
-    <Model isOpen={true} onClose={closeEdit}>
-      <h2 className="text-2xl font-bold mb-4">Upload Portfolio</h2>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-6 w-[30rem]">
-        <input
-          type="text"
-          name="name"
-          placeholder="Enter portfolio name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          className="p-3 bg-[var(--background-color)] border border-solid border-gray-600 focus:outline-none"
-          required
-        />
-        <input
-          type="file"
-          name="file"
-          onChange={handleFileChange}
-          className="p-3 bg-[var(--background-color)] border border-solid border-gray-600 focus:outline-none"
-          accept="application/pdf"
-          required
-        />
-        <div className="self-end">
-          <button
-            type="submit"
-            disabled={addPortfolioMutation.isPending}
-            className="px-4 py-2 bg-[var(--btn-color)] rounded-lg"
-          >
-            {addPortfolioMutation.isPending ? "Submitting..." : "Submit"}
-          </button>
-        </div>
-      </form>
-    </Model>
+    <>
+      <div>
+        <ToastContainer />
+      </div>
+      <Model isOpen={true} onClose={closeEdit}>
+        <h2 className="text-2xl font-bold mb-4">Upload Portfolio</h2>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-6 w-[30rem]">
+          <input
+            type="text"
+            name="name"
+            placeholder="Enter portfolio name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="p-3 bg-[var(--background-color)] border border-solid border-gray-600 focus:outline-none"
+            required
+          />
+          <input
+            type="file"
+            name="file"
+            onChange={handleFileChange}
+            className="p-3 bg-[var(--background-color)] border border-solid border-gray-600 focus:outline-none"
+            accept="application/pdf"
+            required
+          />
+          <div className="self-end">
+            <button
+              type="submit"
+              disabled={addPortfolioMutation.isPending}
+              className="px-4 py-2 bg-[var(--btn-color)] rounded-lg"
+            >
+              {addPortfolioMutation.isPending ? "Submitting..." : "Submit"}
+            </button>
+          </div>
+        </form>
+      </Model>
+    </>
   );
 }

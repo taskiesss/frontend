@@ -19,7 +19,11 @@ export async function getProfileTransaction(
     },
   });
   // console.log(res);
-  if (res.status === 403) {
+  if (res.status === 400) {
+    const error = await res.json();
+    throw new Error(error.message);
+  }
+  if (res.status === 403 || res.status === 401) {
     throw new Error('Forbidden');
   }
 
@@ -50,7 +54,11 @@ export async function getTransactions(
     body: JSON.stringify(reqbody),
   });
   // console.log(res);
-  if (res.status === 403) {
+  if (res.status === 400) {
+    const error = await res.json();
+    throw new Error(error.message);
+  }
+  if (res.status === 403 || res.status === 401) {
     throw new Error('Forbidden');
   }
 

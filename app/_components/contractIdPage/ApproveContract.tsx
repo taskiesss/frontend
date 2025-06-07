@@ -8,6 +8,7 @@ import Cookies from "js-cookie";
 import { AcceptOrRejectContract } from "@/app/_lib/ContractsAPi/contractAPI";
 import ProtectedPage from "../common/ProtectedPage";
 import { useQueryClient } from "@tanstack/react-query";
+import { toast, ToastContainer } from "react-toastify";
 
 type Props = { contractId: string; contract: contractDetailsResponse };
 
@@ -15,8 +16,8 @@ const ApproveContract = ({ contractId, contract }: Props) => {
   const [showAccept, setShowAccept] = useState(false);
   const [showReject, setShowReject] = useState(false);
   const [isForbidden, setIsForbidden] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
   const queryClient = useQueryClient();
-
   useEffect(() => {
     if (showAccept || showReject) {
       document.body.style.overflow = "hidden"; // Hide page scrollbar
@@ -30,19 +31,34 @@ const ApproveContract = ({ contractId, contract }: Props) => {
     };
   }, [showAccept, showReject]);
 
+  useEffect(() => {
+    if (errorMsg) {
+      toast.error(errorMsg, { autoClose: 5000 });
+      // Delay removal of the toast message from localStorage by 1 second
+      setTimeout(() => {
+        setErrorMsg("");
+      }, 1000);
+    }
+  }, [errorMsg]);
+
   const handleConfirmation = async (accepted: boolean) => {
     const token = Cookies.get("token");
-    await AcceptOrRejectContract({ id: contractId, accepted: accepted }, token);
-    queryClient.invalidateQueries({
-      queryKey: ["ContractMilestones", contractId],
-    });
     try {
+      await AcceptOrRejectContract(
+        { id: contractId, accepted: accepted },
+        token
+      );
+      queryClient.invalidateQueries({
+        queryKey: ["ContractMilestones", contractId],
+      });
     } catch (error: any) {
       if (
         error.message === "Forbidden" ||
         error.message === "Unauthorized user"
       ) {
         setIsForbidden(true);
+      } else {
+        setErrorMsg(error.message);
       }
     } finally {
       setShowAccept(false);
@@ -57,6 +73,9 @@ const ApproveContract = ({ contractId, contract }: Props) => {
   // console.log(contract.voteIsDone);
   return (
     <>
+      <div>
+        <ToastContainer />
+      </div>
       {contract.isCommunity ? (
         contract.isCommunityAdmin && (
           <div className="flex justify-between pb-20">

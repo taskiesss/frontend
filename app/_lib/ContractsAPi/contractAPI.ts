@@ -24,7 +24,7 @@ export async function getMyContracts(
     next: { tags: ['contracts'] },
   });
   // console.log(res);
-  if (res.status === 403) {
+  if (res.status === 403 || res.status === 401) {
     throw new Error('Forbidden');
   }
 
@@ -56,10 +56,13 @@ export async function getMyClientContracts(
     next: { tags: ['contracts'] },
   });
   // console.log(res);
-  if (res.status === 403) {
+  if (res.status === 403 || res.status === 401) {
     throw new Error('Forbidden');
   }
-
+  if (res.status === 400) {
+    const error = await res.json();
+    throw new Error(error.message);
+  }
   if (!res.ok) {
     throw new Error('Something went wrong');
   }
@@ -75,7 +78,7 @@ export async function getContractDetails(
   // for (const key of request.keys()) {
   //   console.log('Key:', key);
   // }
-  invariant(!token, 'Unauthorized user');
+  // invariant(!token, 'Unauthorized user');
   //   console.log(reqbody);
 
   const res = await fetch(`${BASE_URL}/api/contracts/${reqbody.id}`, {
@@ -86,8 +89,17 @@ export async function getContractDetails(
     },
   });
   console.log(res);
-  if (res.status === 403) {
+  if (res.status === 401) {
+    console.log('iam here 401');
+    const error = await res.json();
+    throw new Error(error.message);
+  }
+  if (res.status === 403 || res.status === 401) {
     throw new Error('Forbidden');
+  }
+  if (res.status === 400) {
+    const error = await res.json();
+    throw new Error(error.message);
   }
 
   if (!res.ok) {
@@ -119,10 +131,13 @@ export async function getMilestones(
     }
   );
   // console.log(res);
-  if (res.status === 403) {
+  if (res.status === 403 || res.status === 401) {
     throw new Error('Forbidden');
   }
-
+  if (res.status === 400) {
+    const error = await res.json();
+    throw new Error(error.message);
+  }
   if (!res.ok) {
     throw new Error('Something went wrong');
   }
@@ -152,10 +167,13 @@ export async function getSubmission(
     }
   );
   // console.log(res);
-  if (res.status === 403) {
+  if (res.status === 403 || res.status === 401) {
     throw new Error('Forbidden');
   }
-
+  if (res.status === 400) {
+    const error = await res.json();
+    throw new Error(error.message);
+  }
   if (!res.ok) {
     throw new Error('Something went wrong');
   }
@@ -185,10 +203,13 @@ export async function postSubmission(
     }
   );
   console.log(res);
-  if (res.status === 403) {
+  if (res.status === 403 || res.status === 401) {
     throw new Error('Forbidden');
   }
-
+  if (res.status === 400) {
+    const error = await res.json();
+    throw new Error(error.message);
+  }
   if (!res.ok) {
     throw new Error('Something went wrong');
   }
@@ -223,10 +244,13 @@ export async function deleteFileOrLinkAPI(
     }
   );
   // console.log(res);
-  if (res.status === 403) {
+  if (res.status === 403 || res.status === 401) {
     throw new Error('Forbidden');
   }
-
+  if (res.status === 400) {
+    const error = await res.json();
+    throw new Error(error.message);
+  }
   if (!res.ok) {
     throw new Error('Something went wrong');
   }
@@ -255,10 +279,13 @@ export async function postRateReview(
     }
   );
   // console.log(res);
-  if (res.status === 403) {
+  if (res.status === 403 || res.status === 401) {
     throw new Error('Forbidden');
   }
-
+  if (res.status === 400) {
+    const error = await res.json();
+    throw new Error(error.message);
+  }
   if (!res.ok) {
     throw new Error('Something went wrong');
   }
@@ -289,10 +316,13 @@ export async function AcceptOrRejectContract(
     }
   );
   // console.log(res);
-  if (res.status === 403) {
+  if (res.status === 403 || res.status === 401) {
     throw new Error('Forbidden');
   }
-
+  if (res.status === 400) {
+    const error = await res.json();
+    throw new Error(error.message);
+  }
   if (!res.ok) {
     throw new Error('Something went wrong');
   }

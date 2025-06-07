@@ -131,8 +131,12 @@ const NavLoggedin: React.FC = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-        if (response.status === 403) {
+        if (response.status === 403 || response.status === 401) {
           setIsError(true);
+        }
+        if (response.status === 400) {
+          const error = await response.json();
+          throw new Error(error.message);
         }
         const data = await response.json();
         setImage(data.profilePicture);

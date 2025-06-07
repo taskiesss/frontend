@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // components/HeaderForm.tsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Model from "../Model";
 import { HeaderSectionAction } from "@/app/_lib/FreelancerProfile/APi";
 import Cookies from "js-cookie";
 import ProtectedPage from "../../common/ProtectedPage";
+import { toast, ToastContainer } from "react-toastify";
 
 interface HeaderFormProps {
   closeEdit: () => void;
@@ -30,6 +31,17 @@ export default function HeaderForm({ closeEdit, freelancer }: HeaderFormProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isForbidden, setIsForbidden] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+
+  useEffect(() => {
+    if (errorMsg) {
+      toast.error(errorMsg, { autoClose: 5000 });
+      // Delay removal of the toast message from localStorage by 1 second
+      setTimeout(() => {
+        setErrorMsg("");
+      }, 1000);
+    }
+  }, [errorMsg]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -66,7 +78,7 @@ export default function HeaderForm({ closeEdit, freelancer }: HeaderFormProps) {
         setIsForbidden(true);
         return;
       }
-      console.error(error.message);
+      setErrorMsg(error.message);
     } finally {
       setLoading(false);
     }
@@ -89,97 +101,106 @@ export default function HeaderForm({ closeEdit, freelancer }: HeaderFormProps) {
   };
 
   return (
-    <Model isOpen={true} onClose={closeEdit}>
-      <h2 className="text-2xl font-bold mb-4">Edit Profile Header</h2>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-6 w-[30rem]">
-        <div className="flex flex-col gap-1">
-          <div className="flex flex-wrap gap-4">
-            <div className="flex flex-col gap-1 flex-1">
-              <span className="text-md font-medium">
-                {formatLabel("firstName")}
-              </span>
-              <input
-                type="text"
-                name="firstName"
-                value={formData.firstName}
-                onChange={handleChange}
-                placeholder="First Name"
-                className={inputClassName}
-                required
-              />
-            </div>
-            <div className="flex flex-col gap-1 flex-1">
-              <span className="text-md font-medium">
-                {formatLabel("lastName")}
-              </span>
-              <input
-                type="text"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleChange}
-                placeholder="Last Name"
-                className={inputClassName}
-                required
-              />
+    <>
+      <div>
+        <ToastContainer />
+      </div>
+      <Model isOpen={true} onClose={closeEdit}>
+        <h2 className="text-2xl font-bold mb-4">Edit Profile Header</h2>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-6 w-[30rem]">
+          <div className="flex flex-col gap-1">
+            <div className="flex flex-wrap gap-4">
+              <div className="flex flex-col gap-1 flex-1">
+                <span className="text-md font-medium">
+                  {formatLabel("firstName")}
+                </span>
+                <input
+                  type="text"
+                  name="firstName"
+                  value={formData.firstName}
+                  onChange={handleChange}
+                  placeholder="First Name"
+                  className={inputClassName}
+                  required
+                />
+              </div>
+              <div className="flex flex-col gap-1 flex-1">
+                <span className="text-md font-medium">
+                  {formatLabel("lastName")}
+                </span>
+                <input
+                  type="text"
+                  name="lastName"
+                  value={formData.lastName}
+                  onChange={handleChange}
+                  placeholder="Last Name"
+                  className={inputClassName}
+                  required
+                />
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="flex flex-col gap-1">
-          <span className="text-md font-medium">{formatLabel("jobTitle")}</span>
-          <input
-            type="text"
-            name="jobTitle"
-            value={formData.jobTitle}
-            onChange={handleChange}
-            placeholder="Job Title"
-            className={inputClassName}
-            required
-          />
-        </div>
+          <div className="flex flex-col gap-1">
+            <span className="text-md font-medium">
+              {formatLabel("jobTitle")}
+            </span>
+            <input
+              type="text"
+              name="jobTitle"
+              value={formData.jobTitle}
+              onChange={handleChange}
+              placeholder="Job Title"
+              className={inputClassName}
+              required
+            />
+          </div>
 
-        <div className="flex flex-col gap-1">
-          <span className="text-md font-medium">
-            {formatLabel("pricePerHour")}
-          </span>
-          <input
-            type="number"
-            name="pricePerHour"
-            value={formData.pricePerHour}
-            onChange={handleChange}
-            placeholder="Price per Hour"
-            className={inputClassName}
-            min="0"
-            step="1"
-            required
-          />
-        </div>
+          <div className="flex flex-col gap-1">
+            <span className="text-md font-medium">
+              {formatLabel("pricePerHour")}
+            </span>
+            <input
+              type="number"
+              name="pricePerHour"
+              value={formData.pricePerHour}
+              onChange={handleChange}
+              placeholder="Price per Hour"
+              className={inputClassName}
+              min="0"
+              step="1"
+              required
+            />
+          </div>
 
-        <div className="flex flex-col gap-1">
-          <span className="text-md font-medium">{formatLabel("country")}</span>
-          <input
-            type="text"
-            name="country"
-            value={formData.country}
-            onChange={handleChange}
-            placeholder="Country"
-            className={inputClassName}
-            required
-          />
-        </div>
+          <div className="flex flex-col gap-1">
+            <span className="text-md font-medium">
+              {formatLabel("country")}
+            </span>
+            <input
+              type="text"
+              name="country"
+              value={formData.country}
+              onChange={handleChange}
+              placeholder="Country"
+              className={inputClassName}
+              required
+            />
+          </div>
 
-        {error && <p className="text-red-500">{error}</p>}
+          {error && <p className="text-red-500">{error}</p>}
 
-        <div className="self-end flex gap-4">
-          <button
-            type="submit"
-            disabled={loading}
-            className="px-4 py-2 bg-[var(--btn-color)] rounded-lg disabled:opacity-50"
-          >
-            {loading ? "Saving..." : "Submit"}
-          </button>
-        </div>
-      </form>
-    </Model>
+          <div className="self-end flex gap-4">
+            <button
+              type="submit"
+              disabled={loading}
+              className="px-4 py-2 bg-[var(--btn-color)] rounded-lg disabled:opacity-50"
+            >
+              {loading ? "Saving..." : "Submit"}
+            </button>
+          </div>
+        </form>
+      </Model>
+    </>
   );
 }

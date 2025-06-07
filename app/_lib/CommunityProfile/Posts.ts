@@ -27,7 +27,11 @@ export async function PostingaPost(
   });
   console.log(res);
 
-  if (res.status === 403) return { error: 'Forbidden' };
+  if (res.status === 403 || res.status === 401) return { error: 'Forbidden' };
+  if (res.status === 400) {
+    const error = await res.json();
+    return { error: error.message };
+  }
   if (!res.ok) return { error: 'Error posting' };
 
   revalidateTag(`posts`);
@@ -55,7 +59,11 @@ export async function getPosts(
       next: { tags: ['posts'] },
     }
   );
-  if (res.status === 403) return { error: 'Forbidden' };
+  if (res.status === 403 || res.status === 401) return { error: 'Forbidden' };
+  if (res.status === 400) {
+    const error = await res.json();
+    return { error: error.message };
+  }
   if (!res.ok) return { error: 'Error fetching posts' };
 
   const data = await res.json();
@@ -83,7 +91,11 @@ export async function getComments(
       },
     }
   );
-  if (res.status === 403) return { error: 'Forbidden' };
+  if (res.status === 403 || res.status === 401) return { error: 'Forbidden' };
+  if (res.status === 400) {
+    const error = await res.json();
+    return { error: error.message };
+  }
   if (!res.ok) return { error: 'Error fetching comments' };
 
   const data = await res.json();
@@ -110,7 +122,11 @@ export async function deleteCommentAPI(
       },
     }
   );
-  if (res.status === 403) return { error: 'Forbidden' };
+  if (res.status === 403 || res.status === 401) return { error: 'Forbidden' };
+  if (res.status === 400) {
+    const error = await res.json();
+    return { error: error.message };
+  }
   if (!res.ok) return { error: 'Error deleting comment' };
 
   revalidateTag(`posts`);
@@ -137,7 +153,11 @@ export async function likePost(
       },
     }
   );
-  if (res.status === 403) return { error: 'Forbidden' };
+  if (res.status === 403 || res.status === 401) return { error: 'Forbidden' };
+  if (res.status === 400) {
+    const error = await res.json();
+    return { error: error.message };
+  }
   if (!res.ok) return { error: 'Error liking post' };
 
   revalidateTag(`posts`);
@@ -163,7 +183,11 @@ export async function getLikes(
       },
     }
   );
-  if (res.status === 403) return { error: 'Forbidden' };
+  if (res.status === 403 || res.status === 401) return { error: 'Forbidden' };
+  if (res.status === 400) {
+    const error = await res.json();
+    return { error: error.message };
+  }
   if (!res.ok) return { error: 'Error fetching likes' };
 
   const data = await res.json();
@@ -189,7 +213,11 @@ export async function deletePost(
       },
     }
   );
-  if (res.status === 403) return { error: 'Forbidden' };
+  if (res.status === 403 || res.status === 401) return { error: 'Forbidden' };
+  if (res.status === 400) {
+    const error = await res.json();
+    return { error: error.message };
+  }
   if (!res.ok) return { error: 'Error deleting post' };
 
   revalidateTag(`posts`);
@@ -217,7 +245,11 @@ export async function postComment(
       body: JSON.stringify(reqbody),
     }
   );
-  if (res.status === 403) return { error: 'Forbidden' };
+  if (res.status === 403 || res.status === 401) return { error: 'Forbidden' };
+  if (res.status === 400) {
+    const error = await res.json();
+    return { error: error.message };
+  }
   if (!res.ok) return { error: 'Error posting comment' };
 
   revalidateTag(`posts`);

@@ -1,4 +1,4 @@
-"use server";
+'use server';
 
 interface Job {
   jobName: string;
@@ -28,7 +28,7 @@ export async function getMyJobs(
   search?: string
 ): Promise<GetMyJobsResponse> {
   if (!token) {
-    return { error: "Unauthorized user" };
+    return { error: 'Unauthorized user' };
   }
 
   let url = `${BASE_URL}/clients/my-jobs`;
@@ -36,36 +36,39 @@ export async function getMyJobs(
 
   if (page !== undefined) params.push(`page=${page}`);
   if (size !== undefined) params.push(`size=${size}`);
-  params.push(`search=${encodeURIComponent(search || "")}`);
+  params.push(`search=${encodeURIComponent(search || '')}`);
 
   if (params.length > 0) {
-    url += "?" + params.join("&");
+    url += '?' + params.join('&');
   }
 
   console.log(url);
 
   try {
     const res = await fetch(url, {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
-      next: { tags: ["myJobs"] },
+      next: { tags: ['myJobs'] },
     });
 
-    if (res.status === 403) {
-      return { error: "Forbidden" };
+    if (res.status === 403 || res.status === 401) {
+      return { error: 'Forbidden' };
     }
-
+    if (res.status === 400) {
+      const error = await res.json();
+      return { error: error.message };
+    }
     if (!res.ok) {
-      return { error: "Error fetching my jobs" };
+      return { error: 'Error fetching my jobs' };
     }
 
     const data: PaginatedJobs = await res.json();
     return data;
   } catch (error) {
-    console.error("Error fetching jobs:", error);
-    return { error: "Failed to fetch jobs" };
+    console.error('Error fetching jobs:', error);
+    return { error: 'Failed to fetch jobs' };
   }
 }

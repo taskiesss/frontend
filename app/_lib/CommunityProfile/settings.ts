@@ -1,5 +1,5 @@
 'use server';
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { invariant } from '@/app/_helpers/invariant';
 import {
   CommunityRolesResponse,
@@ -28,7 +28,11 @@ export async function getCommunityRolesAndPositions(
   );
 
   if (res.status === 401) throw new Error('Unauthorized');
-  if (res.status === 403) throw new Error('Forbidden');
+  if (res.status === 403 || res.status === 401) throw new Error('Forbidden');
+  if (res.status === 400) {
+    const error = await res.json();
+    throw new Error(error.message);
+  }
   if (!res.ok) throw new Error('Something went wrong');
 
   return res.json();
@@ -61,9 +65,12 @@ export async function updateCommunityPositions(
     }
   );
 
-  if (res.status === 400) throw new Error('Bad Request - Invalid data');
+  if (res.status === 400) {
+    const error = await res.json();
+    throw new Error(error.message);
+  }
   if (res.status === 401) throw new Error('Unauthorized');
-  if (res.status === 403) throw new Error('Forbidden');
+  if (res.status === 403 || res.status === 401) throw new Error('Forbidden');
   if (res.status === 404) throw new Error('Community not found');
   if (!res.ok) throw new Error('Something went wrong');
 

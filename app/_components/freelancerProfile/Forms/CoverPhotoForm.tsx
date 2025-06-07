@@ -2,9 +2,10 @@
 "use client";
 import { CoverPictureAction } from "@/app/_lib/FreelancerProfile/APi";
 import Cookies from "js-cookie";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ProtectedPage from "../../common/ProtectedPage";
 import Model from "../Model";
+import { toast, ToastContainer } from "react-toastify";
 
 export default function CoverPhotoForm({
   closeEdit,
@@ -15,6 +16,17 @@ export default function CoverPhotoForm({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isForbidden, setIsForbidden] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+
+  useEffect(() => {
+    if (errorMsg) {
+      toast.error(errorMsg, { autoClose: 5000 });
+      // Delay removal of the toast message from localStorage by 1 second
+      setTimeout(() => {
+        setErrorMsg("");
+      }, 1000);
+    }
+  }, [errorMsg]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setError(null);
@@ -58,7 +70,7 @@ export default function CoverPhotoForm({
         setIsForbidden(true);
         return;
       }
-      console.error(error.message);
+      setErrorMsg(error.message);
     } finally {
       setLoading(false);
     }
@@ -69,28 +81,33 @@ export default function CoverPhotoForm({
       <ProtectedPage message="You are not allowed to do this action. Please log in" />
     );
   return (
-    <Model isOpen={true} onClose={closeEdit}>
-      <h2 className="text-2xl font-bold mb-4">Change Cover Photo</h2>
-      <form onSubmit={handleCoverSubmit} className="flex flex-col gap-4">
-        <input
-          type="file"
-          name="coverPhoto"
-          onChange={handleFileChange}
-          className="p-3 bg-[var(--background-color)] border border-solid border-gray-600 focus:outline-none"
-          accept="image/*"
-          required
-        />
-        {error && <p className="text-red-500">{error}</p>}
-        <div className="self-end flex gap-4">
-          <button
-            type="submit"
-            disabled={loading}
-            className="px-4 py-2 bg-[var(--btn-color)] rounded-lg disabled:opacity-50"
-          >
-            {loading ? "Uploading..." : "Upload"}
-          </button>
-        </div>
-      </form>
-    </Model>
+    <>
+      <div>
+        <ToastContainer />
+      </div>
+      <Model isOpen={true} onClose={closeEdit}>
+        <h2 className="text-2xl font-bold mb-4">Change Cover Photo</h2>
+        <form onSubmit={handleCoverSubmit} className="flex flex-col gap-4">
+          <input
+            type="file"
+            name="coverPhoto"
+            onChange={handleFileChange}
+            className="p-3 bg-[var(--background-color)] border border-solid border-gray-600 focus:outline-none"
+            accept="image/*"
+            required
+          />
+          {error && <p className="text-red-500">{error}</p>}
+          <div className="self-end flex gap-4">
+            <button
+              type="submit"
+              disabled={loading}
+              className="px-4 py-2 bg-[var(--btn-color)] rounded-lg disabled:opacity-50"
+            >
+              {loading ? "Uploading..." : "Upload"}
+            </button>
+          </div>
+        </form>
+      </Model>
+    </>
   );
 }

@@ -20,7 +20,11 @@ export async function getNotifications(
       next: { tags: ['notifications'] },
     }
   );
-  if (res.status === 403) return { error: 'Forbidden' };
+  if (res.status === 403 || res.status === 401) return { error: 'Forbidden' };
+  if (res.status === 400) {
+    const error = await res.json();
+    return { error: error.message };
+  }
   if (!res.ok) return { error: 'Error fetching notifications' };
 
   const data = await res.json();
@@ -41,7 +45,11 @@ export async function markAsRead(
       Authorization: `Bearer ${token}`,
     },
   });
-  if (res.status === 403) return { error: 'Forbidden' };
+  if (res.status === 403 || res.status === 401) return { error: 'Forbidden' };
+  if (res.status === 400) {
+    const error = await res.json();
+    return { error: error.message };
+  }
   if (!res.ok) return { error: 'Error fetching mark as read notification' };
 
   const data = await res.json();

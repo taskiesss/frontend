@@ -2,10 +2,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { faFile, faLink, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import ProtectedPage from "../common/ProtectedPage";
 import { postSubmission } from "@/app/_lib/ContractsAPi/contractAPI";
+import { toast, ToastContainer } from "react-toastify";
 interface CreateSubmissionFormProps {
   milestoneIndex: string;
   contractId: string;
@@ -29,6 +30,18 @@ export default function CreateSubmissionForm({
   const [isForbidden, setIsForbidden] = useState(false);
   const [error, setError] = useState("");
   const [isCreating, setIsCreating] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+
+  useEffect(() => {
+    if (errorMsg) {
+      toast.error(errorMsg, { autoClose: 5000 });
+      // Delay removal of the toast message from localStorage by 1 second
+      setTimeout(() => {
+        setErrorMsg("");
+      }, 1000);
+    }
+  }, [errorMsg]);
+
   // Handle file input change
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = e.target.files;
@@ -108,6 +121,7 @@ export default function CreateSubmissionForm({
         setIsForbidden(true);
         return;
       }
+      setErrorMsg(error.message);
     } finally {
       setIsCreating(false);
     }
@@ -118,13 +132,17 @@ export default function CreateSubmissionForm({
     );
   }
   return (
-    <div className="flex flex-col gap-4">
-      <h3 className="text-xl font-bold text-[var(--accent-color)]">
-        Create New Submission
-      </h3>
-      <div className="flex flex-col gap-4 bg-[var(--background-color)] rounded-xl border-[var(--border-color)] border-solid border-2 p-4">
-        {/* Description */}
-        {/* <div className="flex flex-col gap-2">
+    <>
+      <div>
+        <ToastContainer />
+      </div>
+      <div className="flex flex-col gap-4">
+        <h3 className="text-xl font-bold text-[var(--accent-color)]">
+          Create New Submission
+        </h3>
+        <div className="flex flex-col gap-4 bg-[var(--background-color)] rounded-xl border-[var(--border-color)] border-solid border-2 p-4">
+          {/* Description */}
+          {/* <div className="flex flex-col gap-2">
           <h3 className="text-lg font-medium">Description</h3>
           <textarea
             required
@@ -132,170 +150,177 @@ export default function CreateSubmissionForm({
             onChange={(e) => setDescription(e.target.value)}
             className="bg-[var(--background-color)] text-lg border border-solid border-[var(--border-color)] p-3 rounded-lg text-[var(--accent-color)] whitespace-pre-wrap focus:outline-none"
             placeholder="Enter a description for your submission"
-          />
-        </div> */}
-
-        {/* Files & Links Section */}
-        <h3 className="text-lg font-medium">Files & Links</h3>
-        <div className="flex flex-col gap-3">
-          {/* Upload Files */}
-          <div className="flex gap-4">
-            <label
-              htmlFor="fileInput"
-              className="cursor-pointer inline-flex items-center px-4 py-2 bg-[var(--btn-color)] rounded-lg hover:bg-[var(--hover-color)] transition-colors border-[var(--border-color)] border-solid border w-fit"
-            >
-              <FontAwesomeIcon icon={faFile} className="mr-2" />
-              Upload Files
-            </label>
-            <input
-              required
-              type="file"
-              id="fileInput"
-              multiple
-              onChange={handleFileChange}
-              className="hidden"
             />
+            </div> */}
+
+          {/* Files & Links Section */}
+          <h3 className="text-lg font-medium">Files & Links</h3>
+          <div className="flex flex-col gap-3">
+            {/* Upload Files */}
+            <div className="flex gap-4">
+              <label
+                htmlFor="fileInput"
+                className="cursor-pointer inline-flex items-center px-4 py-2 bg-[var(--btn-color)] rounded-lg hover:bg-[var(--hover-color)] transition-colors border-[var(--border-color)] border-solid border w-fit"
+              >
+                <FontAwesomeIcon icon={faFile} className="mr-2" />
+                Upload Files
+              </label>
+              <input
+                required
+                type="file"
+                id="fileInput"
+                multiple
+                onChange={handleFileChange}
+                className="hidden"
+              />
+              <button
+                type="button"
+                onClick={() => setShowLinkInputs(true)}
+                className="cursor-pointer inline-flex items-center px-4 py-2 bg-[var(--btn-color)] rounded-lg hover:bg-[var(--hover-color)] transition-colors border-[var(--border-color)] border-solid border w-fit"
+              >
+                <FontAwesomeIcon icon={faLink} className="mr-2" />
+                Add Link
+              </button>
+            </div>
+
+            {/* Link Input Fields */}
+            <div
+              className={`flex items-center gap-4 ${
+                showLinkInputs ? "" : "invisible"
+              }`}
+            >
+              <div className="flex-1">
+                <input
+                  required
+                  type="text"
+                  value={newLinkName}
+                  onChange={(e) => setNewLinkName(e.target.value)}
+                  placeholder="e.g., Project Documentation"
+                  className="w-full p-2 bg-[var(--background-color)] rounded-lg border-[var(--border-color)] border-solid border-2 focus:outline-none placeholder-gray-400"
+                />
+              </div>
+              <div className="flex flex-col gap-1 flex-1">
+                <input
+                  required
+                  type="url"
+                  value={newLinkUrl}
+                  onChange={(e) => setNewLinkUrl(e.target.value)}
+                  placeholder="https://example.com"
+                  className="w-full p-2 bg-[var(--background-color)] rounded-lg border-[var(--border-color)] border-solid border-2 focus:outline-none placeholder-gray-400"
+                />
+                {urlError && (
+                  <span className="text-red-500 text-sm">{urlError}</span>
+                )}
+              </div>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={handleAddLink}
+                  className="px-3 py-2 bg-[var(--btn-color)] rounded-lg hover:bg-[var(--hover-color)] transition-colors"
+                >
+                  + Add
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setNewLinkName("");
+                    setNewLinkUrl("");
+                    setUrlError("");
+                    setShowLinkInputs(false);
+                  }}
+                  className="px-3 py-2 text-black bg-gray-300 rounded-lg hover:bg-gray-400 transition-colors"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+
+            {/* List of Selected Files */}
+            {files.length > 0 && (
+              <div className="flex flex-col gap-2">
+                <h4 className="text-md font-medium">Selected Files:</h4>
+                <div className="flex flex-wrap gap-2">
+                  {files.map((file, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center gap-2 px-3 py-1 bg-[var(--background-color)] rounded-lg border-[var(--border-color)] border-solid border-2"
+                    >
+                      <FontAwesomeIcon
+                        icon={faFile}
+                        className="text-gray-500"
+                      />
+                      <span className="text-[var(--accent-color)]">
+                        {file.name}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveFile(index)}
+                        className="text-red-500 hover:text-red-700"
+                      >
+                        <FontAwesomeIcon icon={faTrash} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* List of Selected Links */}
+            {links.length > 0 && (
+              <div className="flex flex-col gap-2">
+                <h4 className="text-md font-medium">Selected Links:</h4>
+                <div className="flex flex-wrap gap-2">
+                  {links.map((link, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center gap-2 px-3 py-1 bg-[var(--background-color)] rounded-lg border-[var(--border-color)] border-solid border-2"
+                    >
+                      <FontAwesomeIcon
+                        icon={faLink}
+                        className="text-gray-500"
+                      />
+                      <a
+                        href={link.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[var(--accent-color)] hover:underline"
+                      >
+                        {link.name}
+                      </a>
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveLink(index)}
+                        className="text-red-500 hover:text-red-700"
+                      >
+                        <FontAwesomeIcon icon={faTrash} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+          {error && <span className="text-red-500 text-lg">{error}</span>}
+          {/* Submit and Cancel Buttons */}
+          <div className="flex justify-end gap-4">
             <button
               type="button"
-              onClick={() => setShowLinkInputs(true)}
-              className="cursor-pointer inline-flex items-center px-4 py-2 bg-[var(--btn-color)] rounded-lg hover:bg-[var(--hover-color)] transition-colors border-[var(--border-color)] border-solid border w-fit"
+              onClick={onCancel}
+              className="px-4 py-2 bg-gray-300 rounded-lg text-black hover:bg-gray-400 transition-colors"
             >
-              <FontAwesomeIcon icon={faLink} className="mr-2" />
-              Add Link
+              Cancel
+            </button>
+            <button
+              type="button"
+              disabled={isCreating}
+              onClick={handleCreateSubmission}
+              className="px-4 py-2 bg-[var(--btn-color)] rounded-lg text-white hover:bg-[var(--hover-color)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Create Submission
             </button>
           </div>
-
-          {/* Link Input Fields */}
-          <div
-            className={`flex items-center gap-4 ${
-              showLinkInputs ? "" : "invisible"
-            }`}
-          >
-            <div className="flex-1">
-              <input
-                required
-                type="text"
-                value={newLinkName}
-                onChange={(e) => setNewLinkName(e.target.value)}
-                placeholder="e.g., Project Documentation"
-                className="w-full p-2 bg-[var(--background-color)] rounded-lg border-[var(--border-color)] border-solid border-2 focus:outline-none placeholder-gray-400"
-              />
-            </div>
-            <div className="flex flex-col gap-1 flex-1">
-              <input
-                required
-                type="url"
-                value={newLinkUrl}
-                onChange={(e) => setNewLinkUrl(e.target.value)}
-                placeholder="https://example.com"
-                className="w-full p-2 bg-[var(--background-color)] rounded-lg border-[var(--border-color)] border-solid border-2 focus:outline-none placeholder-gray-400"
-              />
-              {urlError && (
-                <span className="text-red-500 text-sm">{urlError}</span>
-              )}
-            </div>
-            <div className="flex gap-2">
-              <button
-                type="button"
-                onClick={handleAddLink}
-                className="px-3 py-2 bg-[var(--btn-color)] rounded-lg hover:bg-[var(--hover-color)] transition-colors"
-              >
-                + Add
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setNewLinkName("");
-                  setNewLinkUrl("");
-                  setUrlError("");
-                  setShowLinkInputs(false);
-                }}
-                className="px-3 py-2 text-black bg-gray-300 rounded-lg hover:bg-gray-400 transition-colors"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-
-          {/* List of Selected Files */}
-          {files.length > 0 && (
-            <div className="flex flex-col gap-2">
-              <h4 className="text-md font-medium">Selected Files:</h4>
-              <div className="flex flex-wrap gap-2">
-                {files.map((file, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center gap-2 px-3 py-1 bg-[var(--background-color)] rounded-lg border-[var(--border-color)] border-solid border-2"
-                  >
-                    <FontAwesomeIcon icon={faFile} className="text-gray-500" />
-                    <span className="text-[var(--accent-color)]">
-                      {file.name}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveFile(index)}
-                      className="text-red-500 hover:text-red-700"
-                    >
-                      <FontAwesomeIcon icon={faTrash} />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* List of Selected Links */}
-          {links.length > 0 && (
-            <div className="flex flex-col gap-2">
-              <h4 className="text-md font-medium">Selected Links:</h4>
-              <div className="flex flex-wrap gap-2">
-                {links.map((link, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center gap-2 px-3 py-1 bg-[var(--background-color)] rounded-lg border-[var(--border-color)] border-solid border-2"
-                  >
-                    <FontAwesomeIcon icon={faLink} className="text-gray-500" />
-                    <a
-                      href={link.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-[var(--accent-color)] hover:underline"
-                    >
-                      {link.name}
-                    </a>
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveLink(index)}
-                      className="text-red-500 hover:text-red-700"
-                    >
-                      <FontAwesomeIcon icon={faTrash} />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-        {error && <span className="text-red-500 text-lg">{error}</span>}
-        {/* Submit and Cancel Buttons */}
-        <div className="flex justify-end gap-4">
-          <button
-            type="button"
-            onClick={onCancel}
-            className="px-4 py-2 bg-gray-300 rounded-lg text-black hover:bg-gray-400 transition-colors"
-          >
-            Cancel
-          </button>
-          <button
-            type="button"
-            disabled={isCreating}
-            onClick={handleCreateSubmission}
-            className="px-4 py-2 bg-[var(--btn-color)] rounded-lg text-white hover:bg-[var(--hover-color)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            Create Submission
-          </button>
         </div>
       </div>
-    </div>
+    </>
   );
 }

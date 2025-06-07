@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { FormEvent, useState, useMemo } from "react";
+import React, { FormEvent, useState, useMemo, useEffect } from "react";
 import Model from "../Model";
 import Select, { MultiValue, ActionMeta } from "react-select";
 import LanguagesData from "@/app/_data/languages.json";
 import ProtectedPage from "../../common/ProtectedPage";
 import Cookies from "js-cookie";
 import { LanguagesAction } from "@/app/_lib/FreelancerProfile/APi";
+import { toast, ToastContainer } from "react-toastify";
 
 interface Option {
   value: string;
@@ -34,6 +35,7 @@ export default function LanguageForm({
     string[]
   >(normalizedCurrentLanguages);
   const [isForbidden, setIsForbidden] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
 
   // Memoize options
   const options: Option[] = useMemo(
@@ -56,6 +58,16 @@ export default function LanguageForm({
     [options, normalizedCurrentLanguages]
   );
 
+  useEffect(() => {
+    if (errorMsg) {
+      toast.error(errorMsg, { autoClose: 5000 });
+      // Delay removal of the toast message from localStorage by 1 second
+      setTimeout(() => {
+        setErrorMsg("");
+      }, 1000);
+    }
+  }, [errorMsg]);
+
   const handleChange = (newValue: MultiValue<Option>) => {
     setSelectedLanguageLabels(newValue.map((option) => option.label));
   };
@@ -76,7 +88,7 @@ export default function LanguageForm({
         setIsForbidden(true);
         return;
       }
-      console.error(error.message);
+      setErrorMsg(error.message);
     }
   };
 
@@ -87,37 +99,42 @@ export default function LanguageForm({
   }
 
   return (
-    <Model isOpen={true} onClose={closeEdit}>
-      <h2 className="text-2xl font-bold mb-4">Edit Language</h2>
-      <form
-        onSubmit={handleSubmit}
-        className="flex flex-col gap-5 w-[35rem] flex-wrap"
-      >
-        <div className="w-full">
-          <Select
-            isMulti
-            value={options.filter((opt) =>
-              selectedLanguageLabels.some(
-                (lang) => lang.toLowerCase() === opt.label.toLowerCase()
-              )
-            )}
-            defaultValue={defaultValue}
-            options={options}
-            onChange={handleChange}
-            placeholder="Select languages..."
-            className="w-full"
-            classNamePrefix="react-select"
-          />
-        </div>
-        <div className="self-end">
-          <button
-            type="submit"
-            className="px-4 py-2 bg-[var(--btn-color)] rounded-lg"
-          >
-            Submit
-          </button>
-        </div>
-      </form>
-    </Model>
+    <>
+      <div>
+        <ToastContainer />
+      </div>
+      <Model isOpen={true} onClose={closeEdit}>
+        <h2 className="text-2xl font-bold mb-4">Edit Language</h2>
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col gap-5 w-[35rem] flex-wrap"
+        >
+          <div className="w-full">
+            <Select
+              isMulti
+              value={options.filter((opt) =>
+                selectedLanguageLabels.some(
+                  (lang) => lang.toLowerCase() === opt.label.toLowerCase()
+                )
+              )}
+              defaultValue={defaultValue}
+              options={options}
+              onChange={handleChange}
+              placeholder="Select languages..."
+              className="w-full"
+              classNamePrefix="react-select"
+            />
+          </div>
+          <div className="self-end">
+            <button
+              type="submit"
+              className="px-4 py-2 bg-[var(--btn-color)] rounded-lg"
+            >
+              Submit
+            </button>
+          </div>
+        </form>
+      </Model>
+    </>
   );
 }

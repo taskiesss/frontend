@@ -1,5 +1,5 @@
-"use server";
-import { invariant } from "@/app/_helpers/invariant";
+'use server';
+import { invariant } from '@/app/_helpers/invariant';
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -39,21 +39,24 @@ export async function getClientById(
   id: string,
   token: string | undefined
 ): Promise<ClientProfile> {
-  invariant(!token, "Unauthorized user");
+  invariant(!token, 'Unauthorized user');
 
   const res = await fetch(`${BASE_URL}/api/clients/${id}`, {
-    method: "GET",
+    method: 'GET',
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
 
-  if (res.status === 403) {
-    throw new Error("Forbidden");
+  if (res.status === 403 || res.status === 401) {
+    throw new Error('Forbidden');
   }
-
+  if (res.status === 400) {
+    const error = await res.json();
+    throw new Error(error.message);
+  }
   if (!res.ok) {
-    throw new Error("Something went wrong");
+    throw new Error('Something went wrong');
   }
 
   return await res.json();
@@ -65,24 +68,27 @@ export async function getClientWorkDone(
   size: number = 10,
   token: string | undefined
 ): Promise<WorkDoneResponse> {
-  invariant(!token, "Unauthorized user");
+  invariant(!token, 'Unauthorized user');
 
   const res = await fetch(
     `${BASE_URL}/api/clients/${id}/workdone?page=${page}&size=${size}`,
     {
-      method: "GET",
+      method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
       },
     }
   );
 
-  if (res.status === 403) {
-    throw new Error("Forbidden");
+  if (res.status === 403 || res.status === 401) {
+    throw new Error('Forbidden');
   }
-
+  if (res.status === 400) {
+    const error = await res.json();
+    throw new Error(error.message);
+  }
   if (!res.ok) {
-    throw new Error("Something went wrong");
+    throw new Error('Something went wrong');
   }
 
   return await res.json();

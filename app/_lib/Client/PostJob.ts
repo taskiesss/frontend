@@ -36,10 +36,13 @@ export async function postAJob(
     body: JSON.stringify(reqbody),
   });
 
-  if (res.status === 403) {
+  if (res.status === 403 || res.status === 401) {
     return { error: 'Forbidden' };
   }
-
+  if (res.status === 400) {
+    const error = await res.json();
+    throw new Error(error.message);
+  }
   if (!res.ok) {
     return { error: 'Something went wrong' };
   }
