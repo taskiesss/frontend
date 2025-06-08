@@ -81,24 +81,24 @@ const FreelancerCard: React.FC<FreelancerCardProps> = ({ freelancer }) => {
   };
 
   return (
-    <div className="group relative overflow-hidden bg-[var(--background-color)] border-solid border-t-[0.1rem] border-[var(--border-secondary)] w-11/12 transform transition-all duration-300">
+    <div className="group relative overflow-hidden bg-[var(--background-color)] border-solid border-t-[0.1rem] border-[var(--border-secondary)] w-full sm:w-11/12 mx-auto transform transition-all duration-300">
       {/* Pseudo-element for hover animation */}
       <div className="absolute inset-0 bg-[var(--foreground-color)] scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300"></div>
 
       {/* Content container ensuring content appears above the pseudo-element */}
       <div className="relative z-10">
         {/* Container for profile image and freelancer details */}
-        <div className="flex flex-row items-start py-5 gap-5">
+        <div className="flex flex-col sm:flex-row items-center sm:items-start py-3 sm:py-5 gap-3 sm:gap-5 px-2 sm:px-4">
           {/* Profile Image */}
-          <div className="w-36 rounded-xl">
+          <div className="relative w-24 sm:w-28 md:w-32 aspect-square rounded-xl">
             {profilePicture ? (
               <Image
                 src={profilePicture}
                 alt={`${name} Profile`}
-                width={100}
-                height={100}
+                fill
                 quality={70}
-                className="object-cover w-full rounded-xl"
+                className="rounded-full object-cover"
+                sizes="(max-width: 640px) 96px, (max-width: 768px) 112px, 128px"
               />
             ) : (
               <Image
@@ -113,35 +113,39 @@ const FreelancerCard: React.FC<FreelancerCardProps> = ({ freelancer }) => {
           </div>
 
           {/* Freelancer Details */}
-          <div className="flex-1">
+          <div className="flex-1 w-full text-center sm:text-left">
             <Link
               href={detailUrl}
-              className="block text-4xl text-[var(--accent-color)] no-underline hover:text-[var(--btn-color)] hover:underline"
+              className="block text-2xl sm:text-3xl md:text-4xl text-[var(--accent-color)] no-underline hover:text-[var(--btn-color)] hover:underline"
             >
               {name}
             </Link>
-            <span className="text-xl block text-slate-500">{title}</span>
-            <div className="pointer-events-none py-[0.2rem]">
+            <span className="text-lg sm:text-xl block text-slate-500">
+              {title}
+            </span>
+            <div className="pointer-events-none py-[0.2rem] flex justify-center sm:justify-start">
               <StarRating
                 maxRating={5}
                 defaultRating={rate}
                 color="var(--star)"
-                size={18}
+                size={16}
                 allowHalf={true}
               />
             </div>
-            <span className="text-slate-500 block">
+            <span className="text-sm sm:text-base text-slate-500 block">
               Hourly: ${pricePerHour} - {getExperienceLevel(experienceLevel)} -{" "}
               {avrgHoursPerWeek} hr/week
             </span>
-            <p className="text-xl py-1 whitespace-pre-wrap">{description}</p>
+            <p className="text-base sm:text-lg md:text-xl py-1 whitespace-pre-wrap">
+              {description}
+            </p>
 
             {/* Scrollable Skills Section */}
-            <div className="relative flex items-center py-2 px-4">
+            <div className="relative flex items-center py-2 px-2 sm:px-4">
               {showLeftArrow && (
                 <button
                   onClick={scrollLeft}
-                  className="absolute left-0 z-10 bg-[var(--background-color)] text-[var(--accent-color)] px-2 py-1 hover:bg-[var(--background-color)] text-xl cursor-pointer"
+                  className="absolute left-0 z-10 bg-[var(--background-color)] text-[var(--accent-color)] px-1 sm:px-2 py-1 hover:bg-[var(--background-color)] text-lg sm:text-xl cursor-pointer"
                 >
                   ◀
                 </button>
@@ -149,7 +153,7 @@ const FreelancerCard: React.FC<FreelancerCardProps> = ({ freelancer }) => {
 
               <div
                 ref={scrollRef}
-                className="flex gap-4 overflow-hidden scroll-smooth whitespace-nowrap w-full"
+                className="flex gap-2 sm:gap-4 overflow-x-auto scrollbar-hide scroll-smooth whitespace-nowrap w-full px-4 sm:px-0"
               >
                 {skills.map((skill, index) => (
                   <Skill key={index} skill={skill} index={index} />
@@ -159,7 +163,7 @@ const FreelancerCard: React.FC<FreelancerCardProps> = ({ freelancer }) => {
               {showRightArrow && (
                 <button
                   onClick={scrollRight}
-                  className="absolute right-0 z-10 bg-[var(--background-color)] text-[var(--accent-color)] text-xl px-2 py-1 hover:bg-[var(--background-color)] cursor-pointer"
+                  className="absolute right-0 z-10 bg-[var(--background-color)] text-[var(--accent-color)] text-lg sm:text-xl px-1 sm:px-2 py-1 hover:bg-[var(--background-color)] cursor-pointer"
                 >
                   ▶
                 </button>
