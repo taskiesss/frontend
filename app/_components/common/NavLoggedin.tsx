@@ -11,6 +11,8 @@ import { faBell } from "@fortawesome/free-regular-svg-icons";
 import {
   faChevronDown,
   faMagnifyingGlass,
+  faBars,
+  faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Cookies from "js-cookie";
@@ -58,6 +60,8 @@ const NavLoggedin: React.FC = () => {
   const [alerts, setAlerts] = useState<
     { id: number; notification: NotificationResponseDTO }[]
   >([]);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSearchVisible, setIsSearchVisible] = useState(false);
 
   // Ref for detecting clicks outside the profile menu container
   const profileMenuRef = useRef<HTMLDivElement>(null);
@@ -303,167 +307,323 @@ const NavLoggedin: React.FC = () => {
           <div
             key={alert.id}
             onMouseEnter={() => handleMouseEnter(alert.id)}
-            className="bg-[--foreground-color] rounded-lg shadow-lg w-[25rem]  animate-slide-in"
+            className="bg-[--foreground-color] rounded-lg shadow-lg w-[25rem] animate-slide-in"
           >
             <NotificationCard role={role} notification={alert.notification} />
           </div>
         ))}
       </div>
 
-      <Container className="z-20 mx-0 bg-transparent">
-        <nav className="bg-[var(--background-color)] py-10 grid grid-rows-1 grid-cols-[min-content,1fr,1fr] place-items-center ">
-          {/* Logo Section */}
-          <div className="flex w-[10rem] h-auto justify-center flex-col">
-            <Link
-              href={
-                role === "CLIENT"
-                  ? `/nx/client/discover-talents`
-                  : "/nx/freelancer/find-work"
-              }
-            >
-              <Image
-                src={logo_dark}
-                alt="Taskaya Logo"
-                className="h-auto w-auto"
-              />
-            </Link>
-          </div>
+      <Container className="z-20 mx-0 bg-transparent w-full">
+        <nav className="bg-[var(--background-color)] py-3 sm:py-4 md:py-6 lg:py-8 xl:py-10 relative">
+          {/* Top Bar - Logo and Actions */}
+          <div className="flex items-center justify-between w-full">
+            {/* Logo Section */}
+            <div className="flex-shrink-0 w-[7rem] sm:w-[8rem] md:w-[9rem] lg:w-[10rem]">
+              <Link
+                href={
+                  role === "CLIENT"
+                    ? `/nx/client/discover-talents`
+                    : "/nx/freelancer/find-work"
+                }
+                className="block w-full"
+              >
+                <Image
+                  src={logo_dark}
+                  alt="Taskaya Logo"
+                  className="w-full h-auto"
+                  priority
+                />
+              </Link>
+            </div>
 
-          {/* Navigation Links */}
-          <div className="w-full">
-            <ul className="list-none flex justify-around items-center">
-              {navItems.map((item, index) => (
-                <li
-                  key={item.label}
-                  onMouseEnter={() => toggleDropdown(index)}
-                  onMouseLeave={() => toggleDropdown(null)}
-                  className="relative flex flex-col items-center"
-                >
-                  <div className="flex items-center gap-1">
-                    <button
-                      className={`bg-inherit cursor-pointer ${
-                        openDropdownIndex === index &&
-                        "text-[--button-hover-background-color]"
-                      }`}
-                    >
-                      <span className="font-semibold text-xl">
-                        {item.label}
-                      </span>
-                    </button>
-                    <button className="p-1">
-                      <FontAwesomeIcon
-                        icon={faChevronDown}
-                        className={`text-[var(--hover-color)] text-sm transition-transform duration-200 ${
-                          openDropdownIndex === index ? "rotate-180" : ""
-                        }`}
-                        size="sm"
-                      />
-                    </button>
-                  </div>
-                  {openDropdownIndex === index && (
-                    <div className="absolute top-full left-0 shadow-md">
-                      <DropLoggedin
-                        onClose={() => toggleDropdown(index)}
-                        options={item.options}
-                      />
-                    </div>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Search & Profile Section */}
-          <div className="flex flex-col justify-center w-full">
-            <ul className="list-none flex items-center justify-between gap-7">
-              {/* Search Form */}
-              <li>
-                <form onSubmit={handleSearch}>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 flex items-center pl-3">
+            {/* Desktop Navigation */}
+            <div className="hidden lg:flex flex-1 justify-center">
+              <ul className="list-none flex justify-around items-center w-full max-w-3xl">
+                {navItems.map((item, index) => (
+                  <li
+                    key={item.label}
+                    onMouseEnter={() => toggleDropdown(index)}
+                    onMouseLeave={() => toggleDropdown(null)}
+                    className="relative flex flex-col items-center"
+                  >
+                    <div className="flex items-center gap-1">
                       <button
-                        aria-label="Search"
-                        className="bg-inherit p-0 cursor-pointer flex"
-                        type="submit"
+                        className={`bg-inherit cursor-pointer ${
+                          openDropdownIndex === index &&
+                          "text-[--button-hover-background-color]"
+                        }`}
                       >
+                        <span className="font-semibold text-xl hover:text-[var(--btn-color)] transition-colors">
+                          {item.label}
+                        </span>
+                      </button>
+                      <button className="p-1">
                         <FontAwesomeIcon
-                          icon={faMagnifyingGlass}
-                          className="text-gray-400 text-xl"
+                          icon={faChevronDown}
+                          className={`text-[var(--hover-color)] text-sm transition-transform duration-200 ${
+                            openDropdownIndex === index ? "rotate-180" : ""
+                          }`}
+                          size="sm"
                         />
                       </button>
                     </div>
-                    <input
-                      type="text"
-                      name="search"
-                      value={query}
-                      onChange={(e) => setQuery(e.target.value)}
-                      placeholder="What are you looking for?"
-                      className="bg-[var(--background-color)] placeholder:text-gray-400 pl-[3rem] p-2 w-[28rem] rounded-2xl border-solid border border-[var(--border-color)] focus:outline-none focus:ring-2"
-                    />
+                    {openDropdownIndex === index && (
+                      <div className="absolute top-full left-0 shadow-md z-50">
+                        <DropLoggedin
+                          onClose={() => toggleDropdown(index)}
+                          options={item.options}
+                        />
+                      </div>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Desktop Search & Profile Section */}
+            <div className="hidden lg:flex items-center gap-4 lg:gap-7 flex-shrink-0">
+              <form onSubmit={handleSearch} className="relative">
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 flex items-center pl-3">
+                    <button
+                      aria-label="Search"
+                      className="bg-inherit p-0 cursor-pointer flex"
+                      type="submit"
+                    >
+                      <FontAwesomeIcon
+                        icon={faMagnifyingGlass}
+                        className="text-gray-400 text-lg lg:text-xl"
+                      />
+                    </button>
                   </div>
-                </form>
-              </li>
+                  <input
+                    type="text"
+                    name="search"
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    placeholder="What are you looking for?"
+                    className="bg-[var(--background-color)] placeholder:text-gray-400 pl-[2.5rem] lg:pl-[3rem] p-2 w-[16rem] sm:w-[20rem] md:w-[24rem] lg:w-[28rem] rounded-2xl border-solid border border-[var(--border-color)] focus:outline-none focus:ring-2 text-sm lg:text-base"
+                  />
+                </div>
+              </form>
 
               {/* Notification & Profile */}
-              <li>
-                <div className="flex gap-7 items-center ">
-                  <div
-                    ref={notificationMenuRef}
-                    onClick={() => setNotificationOpen((prev) => !prev)}
-                    className="relative cursor-pointer"
-                  >
-                    <div className="relative border-solid rounded-full border border-[--accent-color] border-opacity-80 aspect-square p-2 min-w-12 flex flex-col justify-center">
-                      {newNotifications !== 0 && (
-                        <div className="rounded-full bg-red-500 text-center absolute left-6 -top-2   aspect-square justify-center self-center flex flex-col z-20 text-sm min-w-6">
-                          {newNotifications}
-                        </div>
-                      )}
-                      <FontAwesomeIcon
-                        size="xl"
-                        icon={faBell}
-                        className="cursor-pointer"
-                        shake={newNotifications !== 0}
-                      />
-                    </div>
-                    {notificationOpen && (
-                      <div className="absolute top-full -right-4 mt-4 ">
-                        <NotificationList
-                          isOpen={notificationOpen}
-                          role={role}
-                          onClose={() => setIsProfileMenuOpen(false)}
-                        />
+              <div className="flex gap-4 lg:gap-7 items-center">
+                <div
+                  ref={notificationMenuRef}
+                  onClick={() => setNotificationOpen((prev) => !prev)}
+                  className="relative cursor-pointer"
+                >
+                  <div className="relative border-solid rounded-full border border-[--accent-color] border-opacity-80 aspect-square p-2 min-w-12 flex flex-col justify-center">
+                    {newNotifications !== 0 && (
+                      <div className="rounded-full bg-red-500 text-center absolute left-6 -top-2 aspect-square justify-center self-center flex flex-col z-20 text-sm min-w-6">
+                        {newNotifications}
                       </div>
                     )}
+                    <FontAwesomeIcon
+                      size="xl"
+                      icon={faBell}
+                      className="cursor-pointer"
+                      shake={newNotifications !== 0}
+                    />
                   </div>
-                  {/* Wrap avatar and dropdown in a container with a ref */}
-                  <div ref={profileMenuRef} className="relative">
-                    <div
-                      className="relative w-12 aspect-square rounded-full overflow-hidden cursor-pointer"
-                      onClick={toggleProfileMenu}
-                    >
-                      <Image
-                        src={image || userProfile}
-                        fill
-                        alt="userProfile"
-                        className="object-cover"
-                        sizes="(max-width: 768px) 48px, 64px" // 48px on mobile, 64px on desktop
+                  {notificationOpen && (
+                    <div className="absolute top-full -right-4 mt-4 z-50">
+                      <NotificationList
+                        isOpen={notificationOpen}
+                        role={role}
+                        onClose={() => setNotificationOpen(false)}
                       />
                     </div>
-                    {isProfileMenuOpen && (
-                      <div className="absolute top-full right-0 mt-2 ">
-                        <ProfileMenu
-                          role={role}
-                          onClose={() => setIsProfileMenuOpen(false)}
-                          name={name || "Ahmed"}
-                          avatarUrl={image || userProfile}
-                        />
-                      </div>
-                    )}
-                  </div>
+                  )}
                 </div>
-              </li>
-            </ul>
+                <div ref={profileMenuRef} className="relative">
+                  <div
+                    className="relative w-12 aspect-square rounded-full overflow-hidden cursor-pointer"
+                    onClick={toggleProfileMenu}
+                  >
+                    <Image
+                      src={image || userProfile}
+                      fill
+                      alt="userProfile"
+                      className="object-cover"
+                      sizes="(max-width: 768px) 48px, 64px"
+                    />
+                  </div>
+                  {isProfileMenuOpen && (
+                    <div className="absolute top-full right-0 mt-2 z-50">
+                      <ProfileMenu
+                        role={role}
+                        onClose={() => setIsProfileMenuOpen(false)}
+                        name={name || "Ahmed"}
+                        avatarUrl={image || userProfile}
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Mobile & Tablet Menu Buttons */}
+            <div className="flex lg:hidden items-center gap-3 sm:gap-4 flex-shrink-0">
+              {/* Search Toggle */}
+              <button
+                id="search-toggle-button"
+                onClick={() => {
+                  setIsSearchVisible(!isSearchVisible);
+                  if (isMenuOpen) setIsMenuOpen(false);
+                }}
+                className="p-2 hover:text-[var(--btn-color)] transition-colors"
+                aria-label="Toggle search"
+              >
+                <FontAwesomeIcon
+                  icon={faMagnifyingGlass}
+                  className="text-lg sm:text-xl md:text-2xl"
+                />
+              </button>
+
+              {/* Menu Toggle */}
+              <button
+                id="menu-toggle-button"
+                onClick={() => {
+                  setIsMenuOpen(!isMenuOpen);
+                  if (isSearchVisible) setIsSearchVisible(false);
+                }}
+                className="p-2 hover:text-[var(--btn-color)] transition-colors"
+                aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+              >
+                <FontAwesomeIcon
+                  icon={isMenuOpen ? faXmark : faBars}
+                  className="text-xl sm:text-2xl md:text-3xl"
+                />
+              </button>
+
+              {/* Notification Icon */}
+              <div
+                ref={notificationMenuRef}
+                onClick={() => setNotificationOpen((prev) => !prev)}
+                className="relative cursor-pointer"
+              >
+                <div className="relative border-solid rounded-full border border-[--accent-color] border-opacity-80 aspect-square p-2 min-w-10 sm:min-w-12 flex flex-col justify-center">
+                  {newNotifications !== 0 && (
+                    <div className="rounded-full bg-red-500 text-center absolute left-5 sm:left-6 -top-2 aspect-square justify-center self-center flex flex-col z-20 text-sm min-w-5 sm:min-w-6">
+                      {newNotifications}
+                    </div>
+                  )}
+                  <FontAwesomeIcon
+                    size="lg"
+                    icon={faBell}
+                    className="cursor-pointer text-lg sm:text-xl md:text-2xl"
+                    shake={newNotifications !== 0}
+                  />
+                </div>
+                {notificationOpen && (
+                  <div className="absolute top-full right-0 mt-2 z-50">
+                    <NotificationList
+                      isOpen={notificationOpen}
+                      role={role}
+                      onClose={() => setNotificationOpen(false)}
+                    />
+                  </div>
+                )}
+              </div>
+
+              {/* Profile Image - Now at the rightmost position */}
+              <div ref={profileMenuRef} className="relative ml-2">
+                <div
+                  className="relative w-10 sm:w-12 aspect-square rounded-full overflow-hidden cursor-pointer"
+                  onClick={toggleProfileMenu}
+                >
+                  <Image
+                    src={image || userProfile}
+                    fill
+                    alt="userProfile"
+                    className="object-cover"
+                    sizes="40px"
+                  />
+                </div>
+                {isProfileMenuOpen && (
+                  <div className="absolute top-full right-0 mt-2 z-50">
+                    <ProfileMenu
+                      role={role}
+                      onClose={() => setIsProfileMenuOpen(false)}
+                      name={name || "Ahmed"}
+                      avatarUrl={image || userProfile}
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
+
+          {/* Mobile & Tablet Search Bar - Now under the top bar */}
+          {isSearchVisible && (
+            <div className="lg:hidden w-full mt-3 sm:mt-4 px-4 sm:px-6">
+              <form
+                onSubmit={handleSearch}
+                className="relative w-full max-w-2xl mx-auto"
+              >
+                <input
+                  type="text"
+                  name="search"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="What are you looking for?"
+                  className="w-full bg-[var(--background-color)] placeholder:text-gray-400 pl-10 sm:pl-12 md:pl-14 p-2 md:p-3 rounded-2xl border-solid border border-[var(--border-color)] focus:outline-none focus:ring-2 text-sm sm:text-base md:text-lg"
+                />
+                <button
+                  type="submit"
+                  className="absolute left-3 top-1/2 -translate-y-1/2"
+                  aria-label="Search"
+                >
+                  <FontAwesomeIcon
+                    icon={faMagnifyingGlass}
+                    className="text-gray-400 text-lg sm:text-xl md:text-2xl"
+                  />
+                </button>
+              </form>
+            </div>
+          )}
+
+          {/* Mobile & Tablet Menu */}
+          {isMenuOpen && (
+            <div
+              id="mobile-menu"
+              className="lg:hidden w-full bg-[var(--background-color)] border-t border-[var(--border-color)] shadow-lg z-50"
+            >
+              <div className="px-4 py-4 md:px-6 md:py-6 space-y-4 md:space-y-6">
+                {/* Navigation Links */}
+                <ul className="space-y-3 sm:space-y-4 md:space-y-5">
+                  {navItems.map((item) => (
+                    <li
+                      key={item.label}
+                      className="border-b border-[var(--border-color)] pb-2"
+                    >
+                      <div className="flex flex-col">
+                        <span className="font-semibold text-base sm:text-lg md:text-xl mb-2">
+                          {item.label}
+                        </span>
+                        <ul className="pl-4 space-y-2">
+                          {item.options.map((option) => (
+                            <li key={option.label}>
+                              <Link
+                                href={option.link}
+                                className="block py-1 text-sm sm:text-base md:text-lg text-[var(--accent-color)] hover:text-[var(--btn-color)] transition-colors"
+                                onClick={() => setIsMenuOpen(false)}
+                              >
+                                {option.label}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          )}
         </nav>
       </Container>
     </>
