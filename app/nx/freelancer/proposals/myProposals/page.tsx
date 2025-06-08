@@ -23,7 +23,7 @@ async function page({ searchParams }: props) {
   };
   const token = (await cookies()).get("token")?.value;
   const response = await getProposals(reqBody, token);
-  console.log(response);
+
   if (response.error) {
     if (
       response.error === "Forbidden" ||

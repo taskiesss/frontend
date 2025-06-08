@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ProtectedPage from "@/app/_components/common/ProtectedPage";
 import { getCommunityProfile } from "@/app/_lib/CommunityProfile/APi";
@@ -41,7 +40,6 @@ export default async function BoardPage({ params }: Props) {
         <ProtectedPage message="You must be a member to view this community profile" />
       );
     }
-    console.error("Error loading community profile:", error);
-    return <div>Error loading community profile</div>;
+    throw new Error("Error loading community profile:", error.message);
   }
 }

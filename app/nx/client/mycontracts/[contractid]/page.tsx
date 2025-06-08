@@ -22,20 +22,19 @@ async function page({ params }: Props) {
       },
       token
     );
-    console.log(contract);
+    return (
+      <Contract
+        isAdmin={true}
+        contract={contract}
+        contractId={contractid}
+        role="client"
+      />
+    );
   } catch (error: any) {
     if (error.message === "Forbidden" || error.message === "Unauthorized user")
       return <ProtectedPage message="You're not allowed to view this page" />;
-    console.error(error.message);
+    throw new Error(error.message);
   }
-  return (
-    <Contract
-      isAdmin={true}
-      contract={contract}
-      contractId={contractid}
-      role="client"
-    />
-  );
 }
 
 export default page;

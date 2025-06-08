@@ -14,7 +14,11 @@ export default async function page() {
 
   try {
     freelancer = await getFreelancerbyID("my_profile", token);
-    return <Profile id="my_profile" freelancer={freelancer} editable={true} />;
+    return (
+      <Suspense fallback={<Spinner />}>
+        <Profile id="my_profile" freelancer={freelancer} editable={true} />
+      </Suspense>
+    );
   } catch (error: any) {
     if (
       error.message === "Forbidden" ||
@@ -26,5 +30,6 @@ export default async function page() {
         </Suspense>
       );
     }
+    throw new Error(error.message);
   }
 }

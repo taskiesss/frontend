@@ -7,12 +7,6 @@ import { getProfileTransaction } from "@/app/_lib/FinanceAPI/transactionsAPI";
 import { cookies } from "next/headers";
 import React, { Suspense } from "react";
 
-const profile = {
-  profilePicture: "https://example.com/images/isabel-austin.jpg",
-  name: "Isabel Austin",
-  totalBalance: 1000,
-};
-
 async function page() {
   const token = (await cookies()).get("token")?.value;
   try {

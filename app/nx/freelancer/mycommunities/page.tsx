@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { cookies } from "next/headers";
 import ProtectedPage from "@/app/_components/common/ProtectedPage";
 import { getMyCommunities } from "@/app/_lib/FreelancerProfile/myCommunities";
@@ -40,7 +41,7 @@ export default async function MyCommunitiesPage() {
         </div>
       </Container>
     );
-  } catch (error: unknown) {
+  } catch (error: any) {
     if (isErrorWithMessage(error)) {
       if (error.message === "Unauthorized" || error.message === "Forbidden") {
         return (
@@ -49,15 +50,6 @@ export default async function MyCommunitiesPage() {
       }
     }
 
-    return (
-      <div className="container mx-auto p-4">
-        <h1 className="text-3xl font-bold mb-4 text-red-600">
-          Error Loading Communities
-        </h1>
-        <p className="text-gray-700">
-          There was an error loading your communities. Please try again later.
-        </p>
-      </div>
-    );
+    throw new Error(error.message);
   }
 }

@@ -15,7 +15,7 @@ async function page({ params }: Props) {
   console.log("proposalId", proposalId);
   const token = (await cookies()).get("token")?.value;
   const response = await getProposalsDetails(proposalId, token);
-  console.log(response);
+
   if (response.error) {
     if (
       response.error === "Forbidden" ||

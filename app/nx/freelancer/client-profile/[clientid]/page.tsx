@@ -18,7 +18,6 @@ export default async function ClientProfilePage({ params }: Props) {
 
   try {
     clientProfile = await getClientById(clientid, token);
-    console.log(clientProfile);
     return (
       <ClientProfile id={clientid} client={clientProfile} editable={false} />
     );
@@ -34,6 +33,6 @@ export default async function ClientProfilePage({ params }: Props) {
       );
     }
 
-    throw error;
+    throw new Error(error.message);
   }
 }

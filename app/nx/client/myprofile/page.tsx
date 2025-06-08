@@ -15,7 +15,7 @@ export default async function ClientProfilePage() {
 
   try {
     clientProfile = await getClientById("my-profile", token);
-    console.log(clientProfile);
+
     return (
       <ClientProfile id="my_profile" client={clientProfile} editable={true} />
     );
@@ -31,6 +31,6 @@ export default async function ClientProfilePage() {
       );
     }
 
-    throw error;
+    throw new Error(error.message);
   }
 }

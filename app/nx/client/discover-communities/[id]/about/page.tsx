@@ -45,10 +45,9 @@ export default async function AboutPage({ params }: Props) {
       error.message === "Unauthorized user"
     ) {
       return (
-        <ProtectedPage message="You must be a member to view this community profile" />
+        <ProtectedPage message="You are not allowed to view this community profile" />
       );
     }
-    console.error("Error loading community profile:", error);
-    return <div>Error loading community profile</div>;
+    throw new Error("Error loading community profile:", error.message);
   }
 }
