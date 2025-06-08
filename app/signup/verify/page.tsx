@@ -59,7 +59,7 @@ const StyledImage = styled.img<StyledImageProps>`
 
 const RightChild = styled.div`
   grid-column: 2/-1;
-  background-color: white;
+  background-color: var(--border-color);
   color: var(--foreground-color);
   display: flex;
   flex-direction: column;
@@ -93,6 +93,7 @@ const RightChild = styled.div`
 
     strong {
       color: #333333;
+
       font-weight: 500;
     }
   }
@@ -280,10 +281,14 @@ const VerificationOTP: React.FC = () => {
           />
         </LeftChild>
         <RightChild>
-          <h1>Verify with OTP</h1>
-          <p>
+          <h1 className="dark:text-white">Verify with OTP</h1>
+          <p className="dark:text-white">
             To ensure your security, please enter the One-Time Password (OTP)
-            sent to your <strong>registered email</strong> below
+            sent to your{" "}
+            <strong className="dark:text-white font-bold">
+              registered email
+            </strong>{" "}
+            below
           </p>
           <form action="">
             <div className="otp-input">
@@ -309,7 +314,7 @@ const VerificationOTP: React.FC = () => {
               <div className="text-red-400 py-5 text-lg">{errors.message}</div>
             )}
             <Button
-              className="text-xl text-[var(--btn-clr-primary)]"
+              className="text-xl text-[--accent-color]"
               onClick={onClick}
               disabled={isSubmitting}
             >

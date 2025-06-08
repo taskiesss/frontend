@@ -14,7 +14,7 @@ import SignUp from "../../_components/auth/Signup";
 
 const RightChild = styled.div`
   grid-column: 2/-1;
-  background-color: white;
+  background-color: var(--border-color);
   color: var(--foreground-color);
 
   display: flex;
@@ -176,7 +176,7 @@ export default function ClientRole() {
   return (
     <SignUp>
       <RightChild>
-        <h2>Choose your role!</h2>
+        <h2 className="dark:text-white">Choose your role!</h2>
         <form onSubmit={handleSubmit} action="">
           <div className="checkbox-group">
             <div className="checkbox">
@@ -196,7 +196,7 @@ export default function ClientRole() {
                       className="checkbox-img"
                     />
                   </span>
-                  <span className="checkbox-label">Freelancer</span>
+                  <span className="checkbox-label ">Freelancer</span>
                 </span>
               </label>
             </div>
@@ -219,7 +219,7 @@ export default function ClientRole() {
             </div>
           </div>
           <Button
-            className="text-xl text-[var(--btn-clr-primary)]"
+            className="text-xl text-[--accent-color]"
             type="submit"
             disabled={!(isChecked[0] || isChecked[1])}
           >

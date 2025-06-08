@@ -20,11 +20,16 @@ import "react-toastify/dist/ReactToastify.css";
 
 const LoginContainer = styled.div`
   display: flex;
-  flex-direction: column; /* Align items vertically */
-  align-items: center; /* Center items horizontally */
-  justify-content: center; /* Center items vertically */
-  margin: 6rem auto 0 auto; /* Center the container on the page with auto margins */
-  width: clamp(10rem, 94rem, 85vw); /* Limit the width of the container */
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 6rem auto 0 auto;
+  width: clamp(10rem, 94rem, 95vw);
+  padding: 0 1rem;
+
+  @media (max-width: 768px) {
+    margin: 2rem auto 0 auto;
+  }
 `;
 
 const Container = styled.div`
@@ -32,8 +37,13 @@ const Container = styled.div`
   width: 100%;
   grid-template-columns: 1fr 1fr;
   border-radius: 2rem;
-  box-shadow: 0rem 0.4rem 0.6rem rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+  box-shadow: 0rem 0.4rem 0.6rem rgba(0, 0, 0, 0.1);
   overflow: hidden;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+  }
 `;
 
 const LeftChild = styled.div`
@@ -41,18 +51,24 @@ const LeftChild = styled.div`
   background-color: white;
   color: var(--foreground-color);
   background-color: var(--border-color);
-
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 3rem 3.5rem;
 
+  @media (max-width: 768px) {
+    grid-column: 1;
+    grid-row: 2;
+    padding: 2rem 1.5rem;
+  }
+
   h1 {
     position: relative;
     margin-top: 5rem;
-    font-size: 3rem;
+    font-size: clamp(2rem, 5vw, 3rem);
     font-weight: bold;
     color: var(--accent-color);
+    text-align: center;
     &::after {
       content: "";
       position: absolute;
@@ -62,16 +78,22 @@ const LeftChild = styled.div`
       height: 0.1rem;
       background-color: currentColor;
     }
+
+    @media (max-width: 768px) {
+      margin-top: 2rem;
+    }
   }
 
   form {
-    width: min(29rem, 35vw);
+    width: min(29rem, 90%);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    gap: 1.5rem;
   }
 `;
+
 const RightChild = styled.div`
   grid-column: 2/-1;
   display: flex;
@@ -80,14 +102,27 @@ const RightChild = styled.div`
   padding: 7rem 3.5rem;
   background-color: var(--foreground-color);
 
-  img {
-    max-width: 15rem;
+  @media (max-width: 768px) {
+    grid-column: 1;
+    grid-row: 1;
+    padding: 3rem 1.5rem;
   }
+
+  img {
+    max-width: clamp(10rem, 20vw, 15rem);
+    height: auto;
+  }
+
   h1 {
     position: relative;
     margin-top: 5rem;
-    font-size: 3rem;
+    font-size: clamp(2rem, 5vw, 3rem);
     font-weight: bold;
+    text-align: center;
+
+    @media (max-width: 768px) {
+      margin-top: 2rem;
+    }
 
     &::after {
       content: "";
@@ -99,12 +134,14 @@ const RightChild = styled.div`
       background-color: currentColor;
     }
   }
+
   p {
-    font-size: 1.5rem;
+    font-size: clamp(1.2rem, 3vw, 1.5rem);
     margin-top: 1.6rem;
     text-align: center;
     font-weight: bold;
     margin-bottom: 2.5rem;
+    padding: 0 1rem;
   }
 `;
 

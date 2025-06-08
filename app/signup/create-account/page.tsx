@@ -21,7 +21,7 @@ const secretKey = "S3cr3tK3y@2023!ThisIsMySecureKey#";
 
 const RightChild = styled.div`
   grid-column: 2/-1;
-  background-color: white;
+  background-color: var(--border-color);
   color: var(--foreground-color);
 
   display: flex;
@@ -100,6 +100,9 @@ const CreateAccount: React.FC = () => {
         email,
         password,
         role: user.role,
+        profilePic: "",
+        userId: "",
+        newNotifications: 0,
       });
 
       // Error handling from api
@@ -159,7 +162,7 @@ const CreateAccount: React.FC = () => {
   return (
     <SignUp>
       <RightChild>
-        <h2 className="mb-6">Create Account</h2>
+        <h2 className="mb-6 dark:text-white">Create Account</h2>
 
         <form onSubmit={handleSubmit}>
           <Input
@@ -201,7 +204,7 @@ const CreateAccount: React.FC = () => {
           />
 
           <Button
-            className="text-xl text-[var(--btn-clr-primary)]"
+            className="text-xl text-[--accent-color]"
             type={"submit"}
             disabled={isSubmitting}
           >
