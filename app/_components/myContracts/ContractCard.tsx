@@ -13,13 +13,16 @@ type Props = {
     jobTitle: string;
     clientName: string;
     clientID: string;
-    contractStatus: "ACTIVE" | "ENDED";
+    contractStatus: "ACTIVE" | "ENDED" | "PENDING" | "CANCELLED";
     budget: number;
     activeMilestone: string;
     clientRateForFreelancer?: number;
     startDate: string;
     dueDate?: string;
     endDate?: string;
+    freelancerName?: string;
+    freelancerID?: string;
+    isCommunity?: boolean;
   };
   role?: string;
 };
@@ -30,12 +33,13 @@ export default function ContractCard({
   pathname,
   role,
 }: Props) {
+  console.log(contract);
   return (
-    <div className="flex flex-col items-start justify-between gap-2 p-2 border-b-2 border-solid border-[var(--border-color)] w-full">
+    <div className="flex flex-col items-start justify-between gap-2 p-4 border-b-2 border-solid border-[var(--border-color)] w-full bg-[var(--background-color)] rounded-xl">
       {/* upper div */}
 
       <div className="flex w-full  justify-between">
-        <h2 className="text-2xl font-bold ">
+        <h2 className=" md:text-xl text-lg font-bold ">
           <Link
             href={
               role === "client"
@@ -58,7 +62,7 @@ export default function ContractCard({
                 ? `/nx/freelancer/mycontracts/${contract.contractID}`
                 : `/nx/freelancer/communities/${communityid}/contracts/${contract.contractID}`
             }
-            className=" border-[var(--hover-color)] border-solid border p-2 rounded-2xl text-lg hover:border-[var(--btn-color)] hover:bg-[var(--button-hover-background-color)] transition-all  "
+            className=" border-[var(--hover-color)] border-solid border px-3 py-2 rounded-2xl text-md  hover:border-[var(--btn-color)] hover:bg-[var(--button-hover-background-color)] transition-all  "
           >
             View details
           </Link>
@@ -70,18 +74,29 @@ export default function ContractCard({
       {/* Lower div */}
       <div className="flex gap-5 w-full">
         <div className="flex gap-4 w-1/3">
-          {role !== "client" && (
-            <div className="flex flex-col">
-              <p className="text-lg">{contract.clientName}</p>
-            </div>
-          )}
+          <Link
+            href={
+              role === "client"
+                ? contract.isCommunity
+                  ? `/nx/client/discover-communities/${contract.freelancerID}`
+                  : `/nx/client/discover-talents/${contract.freelancerID}`
+                : `/nx/freelancer/client-profile/${contract.clientID}`
+            }
+            className="flex flex-col hover:text-[var(--hover-color)] hover:underline"
+          >
+            <p className="text-lg">
+              {role === "client"
+                ? contract.freelancerName
+                : contract.clientName}
+            </p>
+          </Link>
         </div>
         <div className="flex flex-col items-center justify-center w-1/3">
-          <div className="flex gap-3 items-center text-md">
+          <div className="flex flex-col gap-3 items-center  text-md ">
             {/* Status here */}
             <StatusCard status={contract.contractStatus} />
-            {contract.contractStatus === "ENDED" ? (
-              <div className="pointer-events-none">
+            {contract.contractStatus === "ENDED" && (
+              <div className="pointer-events-none self-center">
                 <StarRating
                   defaultRating={contract.clientRateForFreelancer}
                   size={14}
@@ -89,17 +104,21 @@ export default function ContractCard({
                   allowHalf={true}
                 />
               </div>
-            ) : (
-              <span className="items-center py-1">
+            )}
+            {contract.contractStatus === "ACTIVE" && (
+              <span className="items-center py-1 sm:text-sm text-center">
                 {contract.activeMilestone}
               </span>
             )}
           </div>
           <div className="text-md font-medium py-1">
-            ${contract.budget.toFixed(2)} Budget
+            <span className="dark:text-green-500 text-green-600">
+              ${contract.budget.toFixed(2)}
+            </span>{" "}
+            Budget
           </div>
           <div
-            className={`opacity-80 text-md font-medium py-1 gap-1 flex items-center ${
+            className={`opacity-80 lg:text-md text-sm font-medium py-1 gap-1 flex items-center ${
               contract.contractStatus === "ENDED" ? "invisible" : ""
             }`}
           >
@@ -110,10 +129,12 @@ export default function ContractCard({
         </div>
         <div className="w-1/3"></div>
       </div>
-      <div className="text-md font-extralight py-2 opacity-80">
+      <div className="lg:text-md text-sm font-extralight py-2 opacity-80">
         {formatDayMonthToString(contract.startDate)} -{" "}
         {contract.contractStatus === "ACTIVE"
           ? "Present"
+          : contract.contractStatus === "PENDING"
+          ? "Pending"
           : contract.endDate
           ? formatDayMonthToString(contract?.endDate)
           : ""}

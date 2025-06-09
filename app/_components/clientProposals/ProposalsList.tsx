@@ -13,7 +13,7 @@ function ProposalsList({ proposals, role }: Props) {
       <h1 className="text-4xl">All Proposals</h1>
 
       <>
-        <div className="flex flex-col gap-4 bg-[var(--foreground-color)] py-6 px-5 rounded-lg shadow-md">
+        <div className="flex flex-col gap-2 bg-[var(--foreground-color)] py-3 px-3 rounded-lg shadow-md">
           <FilterComponent />
           {proposals.content.length > 0 ? (
             <>

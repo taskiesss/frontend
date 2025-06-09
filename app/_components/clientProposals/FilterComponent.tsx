@@ -95,7 +95,7 @@ function FilterComponent({}) {
   };
 
   return (
-    <section className="flex justify-between border-b-2 border-b-[var(--border-color)] pb-5 w-full">
+    <section className="flex justify-between border-b-2 border-b-[var(--border-color)] py-3 w-full">
       <form
         onSubmit={handleSearchChange}
         className="flex items-center gap-2 w-1/3"
@@ -103,7 +103,7 @@ function FilterComponent({}) {
         <input
           name="search"
           type="text"
-          className="bg-[var(--background-color)] w-full rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--hover-color)]"
+          className="bg-[var(--background-color)] w-full rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[var(--hover-color)]"
           placeholder="Search proposals by job name..."
         />
         <button
@@ -122,7 +122,7 @@ function FilterComponent({}) {
             Clear Filter
           </button>
         )}
-        <div className="flex self-center gap-2">
+        <div className="flex self-center gap-2 md:min-h-min">
           <Select
             isMulti
             value={selectedOption}
@@ -133,7 +133,7 @@ function FilterComponent({}) {
                 actionMeta: ActionMeta<unknown>
               ) => void
             }
-            className="flex-wrap whitespace-pre-wrap"
+            className="flex-wrap whitespace-pre-wrap "
             placeholder="filter by status..."
             classNamePrefix="react-select"
             name="status"

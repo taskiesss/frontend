@@ -30,12 +30,12 @@ function AllContracts({ contracts, role }: Props) {
   return (
     <Container className="pt-10 flex flex-col gap-8">
       <h1 className="text-4xl">All Contracts</h1>
-      <div className="flex-col bg-[var(--foreground-color)] flex items-start rounded-xl p-4 ">
-        <div className="flex items-center gap-5 w-full border-b-2 border-solid border-[var(--border-color)] py-5">
+      <div className="flex-col bg-[var(--foreground-color)] flex items-start rounded-xl p-2">
+        <div className="flex items-center gap-5 w-full border-b-2 border-solid border-[var(--border-color)] py-5 relative">
           <AdvancedSearchButton role={role} />
         </div>
         {contracts.content.length > 0 ? (
-          <div className="flex flex-col gap-4 w-full">
+          <div className="flex flex-col gap-2 w-full pt-5">
             <ContractList contracts={contracts} role={role} />
           </div>
         ) : (

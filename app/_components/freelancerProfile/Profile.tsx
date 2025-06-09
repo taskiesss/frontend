@@ -58,7 +58,7 @@ export default function Profile({ freelancer, editable, id, role }: Props) {
         editable={editable}
         onEditHeader={() => setEditHeaderSection(true)}
       />
-      <div className="flex gap-5 w-9/12">
+      <div className="flex flex-col lg:flex-row gap-5 w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <LeftPanel
           freelancer={{
             skills: freelancer.skills,

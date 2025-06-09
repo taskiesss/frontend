@@ -6,12 +6,14 @@ import { DropdownMenu } from "./DropDownMenu";
 
 interface Option {
   label: string;
-  value: string;
+  value?: string;
 }
 type Props = { options: Option[]; children?: React.ReactNode };
 export default function CustomeSelection({ options, children }: Props) {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState<string>("");
+  const [selectedOption, setSelectedOption] = useState<string | undefined>(
+    undefined
+  );
 
   return (
     <div className="relative">

@@ -38,10 +38,10 @@ function SearchBar({ initialValue = "" }: Props) {
     <form
       action=""
       method="GET"
-      className="w-full flex"
+      className="w-1/2 flex"
       onSubmit={handleSearchSubmit}
     >
-      <div className="w-1/2 flex">
+      <div className="w-2/3 flex">
         <input
           type="search"
           name="contractQuery"
@@ -49,7 +49,7 @@ function SearchBar({ initialValue = "" }: Props) {
           value={searchTerm}
           onChange={handleSearchChange}
           placeholder="Search for client name or job title"
-          className="focus:outline-none bg-[var(--background-color)] text-[var(--accent-color)] p-4 border-solid border border-gray-600 rounded-xl w-full text-lg pr-10"
+          className="focus:outline-none bg-[var(--background-color)] text-[var(--accent-color)] p-3 border-solid border border-gray-600 rounded-xl w-full text-md pr-10"
         />
         <div className="relative right-8 self-center opacity-90 text-lg">
           <button type="submit">
