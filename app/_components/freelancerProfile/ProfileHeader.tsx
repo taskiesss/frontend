@@ -26,7 +26,7 @@ export default function ProfileHeader({
   const [isEditingPicture, setIsEditingPicture] = useState(false);
 
   return (
-    <div className="relative z-20 w-9/12 -mt-10 bg-[var(--foreground-color)] px-6 py-8 rounded-2xl flex items-center space-x-4 justify-between">
+    <div className="relative z-10 w-9/12 -mt-10 bg-[var(--foreground-color)] px-6 py-8 rounded-2xl flex items-center space-x-4 justify-between">
       <div className="flex items-center gap-5">
         {/* Profile Picture */}
 

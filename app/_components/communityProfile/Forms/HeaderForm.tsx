@@ -91,8 +91,8 @@ export default function HeaderForm({ closeEdit, community }: HeaderFormProps) {
 
   return (
     <Model isOpen={true} onClose={closeEdit}>
-      <h2 className="text-2xl font-bold mb-4">Edit Profile Header</h2>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-6 w-[30rem]">
+      <h2 className="text-2xl font-bold mb-4 ">Edit Profile Header</h2>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-6 w-[30rem] ">
         <div className="flex flex-col gap-1">
           <span className="text-md font-medium">{formatLabel("name")}</span>
           <input

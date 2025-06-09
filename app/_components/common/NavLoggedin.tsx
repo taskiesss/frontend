@@ -167,6 +167,13 @@ const NavLoggedin: React.FC = () => {
   // Close profile menu when clicking outside its container
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+
+      // Don't close if clicking on a link element
+      if (target.tagName === "A" || target.closest("a")) {
+        return;
+      }
+
       if (
         profileMenuRef.current &&
         !profileMenuRef.current.contains(event.target as Node)
@@ -182,6 +189,13 @@ const NavLoggedin: React.FC = () => {
   // Close profile menu when clicking outside its container
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+
+      // Don't close if clicking on a link element
+      if (target.tagName === "A" || target.closest("a")) {
+        return;
+      }
+
       if (
         notificationMenuRef.current &&
         !notificationMenuRef.current.contains(event.target as Node)
@@ -456,7 +470,7 @@ const NavLoggedin: React.FC = () => {
                       <ProfileMenu
                         role={role}
                         onClose={() => setIsProfileMenuOpen(false)}
-                        name={name || "Ahmed"}
+                        name={name || ""}
                         avatarUrl={image || userProfile}
                       />
                     </div>
@@ -548,7 +562,7 @@ const NavLoggedin: React.FC = () => {
                     <ProfileMenu
                       role={role}
                       onClose={() => setIsProfileMenuOpen(false)}
-                      name={name || "Ahmed"}
+                      name={name || ""}
                       avatarUrl={image || userProfile}
                     />
                   </div>

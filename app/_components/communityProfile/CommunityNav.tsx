@@ -55,7 +55,7 @@ export default function CommunityNav({ isMember }: CommunityNavProps) {
   }
 
   return (
-    <nav className="flex gap-4">
+    <nav className="flex gap-4  ">
       {buttons
         .filter((btn) => !btn.membersOnly || isMember === btn.membersOnly)
         .map((btn, i) => (

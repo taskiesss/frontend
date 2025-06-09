@@ -39,83 +39,84 @@ export default function CommunityHeader({
   // console.log(community);
 
   return (
-    <div className="relative z-20 w-9/12 -mt-10 bg-[var(--foreground-color)] px-6 py-8 rounded-2xl flex items-center space-x-4 justify-between">
-      <div className="flex items-center gap-5">
-        {/* Profile Picture */}
+    <>
+      <div className="relative z-10 w-9/12 -mt-10 bg-[var(--foreground-color)] px-6 py-8 rounded-2xl flex items-center space-x-4 justify-between">
+        <div className="flex items-center gap-5">
+          {/* Profile Picture */}
 
-        <div className="relative w-20 md:w-32 lg:w-40 aspect-square rounded-full flex-shrink-0">
-          <Image
-            src={community.profilePicture}
-            alt="User Profile"
-            fill
-            className="object-cover rounded-full"
-            sizes="(max-width: 1024px) 100vw, 1024px"
-          />
-          {community.isAdmin && (
-            <div className="absolute bottom-1 right-0 rounded-full z-50">
-              <EditButton
-                className="rounded-full p-1 w-10 aspect-square text-white bg-[var(--hover-color)] text-md"
-                onClick={() => setIsEditingPicture(true)}
+          <div className="relative w-20 md:w-32 lg:w-40 aspect-square rounded-full flex-shrink-0">
+            <Image
+              src={community.profilePicture}
+              alt="User Profile"
+              fill
+              className="object-cover rounded-full"
+              sizes="(max-width: 1024px) 100vw, 1024px"
+            />
+            {community.isAdmin && (
+              <div className="absolute bottom-1 right-0 rounded-full z-50">
+                <EditButton
+                  className="rounded-full p-1 w-10 aspect-square text-white bg-[var(--hover-color)] text-md"
+                  onClick={() => setIsEditingPicture(true)}
+                />
+              </div>
+            )}
+          </div>
+          {/* Profile Details */}
+          <div className="flex flex-col gap-1">
+            <div className="flex gap-3 items-center">
+              <h2 className="text-4xl font-extrabold">{community.name}</h2>
+            </div>
+            <h5 className="text-2xl font-bold">{community.title}</h5>
+            <p className="text-md">
+              {getExperienceLevel(community.experienceLevel)}
+            </p>
+
+            <p className="text-lg ">
+              ${community.pricePerHour}/hr - {community.avgHoursPerWeek} hr/week
+            </p>
+            <div className="pointer-events-none">
+              <StarRating
+                size={20}
+                defaultRating={community.rate}
+                allowHalf={true}
               />
             </div>
-          )}
-        </div>
-        {/* Profile Details */}
-        <div className="flex flex-col gap-1">
-          <div className="flex gap-3 items-center">
-            <h2 className="text-4xl font-extrabold">{community.name}</h2>
+            {community.isFull && (
+              <p className="border-2 border-red-600 text-red-600 py-2 px-4 rounded-full max-w-fit">
+                Community is Full
+              </p>
+            )}
           </div>
-          <h5 className="text-2xl font-bold">{community.title}</h5>
-          <p className="text-md">
-            {getExperienceLevel(community.experienceLevel)}
-          </p>
-
-          <p className="text-lg ">
-            ${community.pricePerHour}/hr - {community.avgHoursPerWeek} hr/week
-          </p>
-          <div className="pointer-events-none">
-            <StarRating
-              size={20}
-              defaultRating={community.rate}
-              allowHalf={true}
+        </div>
+        <div className="flex gap-9 self-start items-center">
+          {!community.isFull && !community.isMember && role !== "client" && (
+            <SendRequestComponent
+              communityId={community.id}
+              communityName={community.name}
             />
-          </div>
-          {community.isFull && (
-            <p className="border-2 border-red-600 text-red-600 py-2 px-4 rounded-full max-w-fit">
-              Community is Full
-            </p>
-          )}
-        </div>
-      </div>
-      <div className="flex gap-9 self-start items-center">
-        {!community.isFull && !community.isMember && role !== "client" && (
-          <SendRequestComponent
-            communityId={community.id}
-            communityName={community.name}
-          />
-        )}
-
-        <div className="flex space-x-2 gap-3">
-          {/* Conditionally show EditButton for admins */}
-          {community.isAdmin && (
-            <EditButton onClick={() => setIsEditingHeader(true)} />
           )}
 
-          {/* Settings gear always visible */}
-          <Link
-            href={`/nx/freelancer/communities/${community.id}/settings/positions`}
-            passHref
-          >
-            <button
-              className="rounded-full p-1 w-10 aspect-square text-white bg-[var(--hover-color)] text-md flex items-center justify-center"
-              aria-label="Settings"
+          <div className="flex space-x-2 gap-3">
+            {/* Conditionally show EditButton for admins */}
+            {community.isAdmin && (
+              <EditButton onClick={() => setIsEditingHeader(true)} />
+            )}
+
+            {/* Settings gear always visible */}
+            <Link
+              href={`/nx/freelancer/communities/${community.id}/settings/positions`}
+              passHref
             >
-              <FontAwesomeIcon icon={faGear} />
-            </button>
-          </Link>
+              <button
+                className="rounded-full p-1 w-10 aspect-square text-white bg-[var(--hover-color)] text-md flex items-center justify-center"
+                aria-label="Settings"
+              >
+                <FontAwesomeIcon icon={faGear} />
+              </button>
+            </Link>
+          </div>
         </div>
       </div>
-
       {/* Profile Picture Edit Modal */}
       {isEditingPicture && (
         <CommunityProfilePhotoForm
@@ -136,6 +137,6 @@ export default function CommunityHeader({
           closeEdit={() => setIsEditingHeader(false)}
         />
       )}
-    </div>
+    </>
   );
 }

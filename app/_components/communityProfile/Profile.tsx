@@ -29,7 +29,7 @@ export default function Profile({
     "flex w-9/12 justify-between bg-[var(--foreground-color)] rounded-2xl py-8 px-6";
 
   return (
-    <div className="flex flex-col items-center gap-6">
+    <div className="flex flex-col items-center gap-6 ">
       <CommunityCoverPhoto
         community={{
           coverPhoto: community.coverPhoto,
@@ -58,7 +58,7 @@ export default function Profile({
       {/* Navigation Section */}
 
       {role !== "client" && community.isMember && (
-        <div className="w-9/12">
+        <div className="w-9/12 z-10">
           <CommunityNav isMember={community.isMember} />
         </div>
       )}

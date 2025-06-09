@@ -30,117 +30,109 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({
       <Link
         href={`/nx/${role.toLowerCase()}/myprofile`}
         className="flex flex-col items-center py-2 hover:bg-[var(--hover-color)] transition-colors"
+        onClick={onClose}
       >
-        <button onClick={onClose} className="text-start w-full">
-          <div className="flex w-full items-center gap-2 sm:gap-3 px-3 sm:px-4">
-            <div className="relative w-12 sm:w-14 aspect-square flex-shrink-0">
-              <Image
-                src={avatarUrl}
-                alt="Profile photo"
-                fill
-                quality={100}
-                className="rounded-full object-cover"
-                sizes="(max-width: 640px) 48px, (max-width: 768px) 56px, 64px"
-              />
-            </div>
-            <div className="min-w-0 flex-1">
-              <h2 className="text-base sm:text-lg md:text-xl font-semibold truncate">
-                {name}
-              </h2>
-              <p className="text-xs sm:text-sm text-[var(--accent-color)] opacity-80 capitalize">
-                {role.toLowerCase()}
-              </p>
-            </div>
+        <div className="flex w-full items-center gap-2 sm:gap-3 px-3 sm:px-4">
+          <div className="relative w-12 sm:w-14 aspect-square flex-shrink-0">
+            <Image
+              src={avatarUrl}
+              alt="Profile photo"
+              fill
+              quality={100}
+              className="rounded-full object-cover"
+              sizes="(max-width: 640px) 48px, (max-width: 768px) 56px, 64px"
+            />
           </div>
-        </button>
+          <div className="min-w-0 flex-1">
+            <h2 className="text-base sm:text-lg md:text-xl font-semibold truncate">
+              {name}
+            </h2>
+            <p className="text-xs sm:text-sm text-[var(--accent-color)] opacity-80 capitalize">
+              {role.toLowerCase()}
+            </p>
+          </div>
+        </div>
       </Link>
 
       {/* Menu items with regular icons */}
       <nav className="mt-1 sm:mt-2">
         <ul className="flex flex-col gap-1 sm:gap-2">
           <li className="hover:bg-[var(--hover-color)] transition-colors">
-            <button onClick={onClose} className="w-full text-start">
-              <Link
-                href={`/nx/${role.toLowerCase()}/myprofile`}
-                className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 w-full"
-              >
-                <FontAwesomeIcon
-                  icon={faUser}
-                  className="w-5 sm:w-6 text-base sm:text-lg flex-shrink-0"
-                />
-                <span className="text-sm sm:text-base md:text-lg">
-                  Your profile
-                </span>
-              </Link>
-            </button>
+            <Link
+              href={`/nx/${role.toLowerCase()}/myprofile`}
+              className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 w-full"
+              onClick={onClose}
+            >
+              <FontAwesomeIcon
+                icon={faUser}
+                className="w-5 sm:w-6 text-base sm:text-lg flex-shrink-0"
+              />
+              <span className="text-sm sm:text-base md:text-lg">
+                Your profile
+              </span>
+            </Link>
           </li>
 
           <li className="hover:bg-[var(--hover-color)] transition-colors">
-            <button onClick={onClose} className="w-full text-start">
-              <Link
-                href={"#"}
-                className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 w-full"
-              >
-                <FontAwesomeIcon
-                  icon={faEnvelope}
-                  className="w-5 sm:w-6 text-base sm:text-lg flex-shrink-0"
-                />
-                <span className="text-sm sm:text-base md:text-lg">
-                  Messages
-                </span>
-              </Link>
-            </button>
+            <Link
+              href={"#"}
+              className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 w-full"
+              onClick={onClose}
+            >
+              <FontAwesomeIcon
+                icon={faEnvelope}
+                className="w-5 sm:w-6 text-base sm:text-lg flex-shrink-0"
+              />
+              <span className="text-sm sm:text-base md:text-lg">Messages</span>
+            </Link>
           </li>
 
           {role === "FREELANCER" && (
             <li className="hover:bg-[var(--hover-color)] transition-colors">
-              <button onClick={onClose} className="w-full text-start">
-                <Link
-                  href={`/nx/${role.toLowerCase()}/mycommunities`}
-                  className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 w-full"
-                >
-                  <FontAwesomeIcon
-                    icon={faComments}
-                    className="w-5 sm:w-6 text-base sm:text-lg flex-shrink-0"
-                  />
-                  <span className="text-sm sm:text-base md:text-lg">
-                    Your Communities
-                  </span>
-                </Link>
-              </button>
+              <Link
+                href={`/nx/${role.toLowerCase()}/mycommunities`}
+                className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 w-full"
+                onClick={onClose}
+              >
+                <FontAwesomeIcon
+                  icon={faComments}
+                  className="w-5 sm:w-6 text-base sm:text-lg flex-shrink-0"
+                />
+                <span className="text-sm sm:text-base md:text-lg">
+                  Your Communities
+                </span>
+              </Link>
             </li>
           )}
 
           <li className="hover:bg-[var(--hover-color)] transition-colors">
-            <button onClick={onClose} className="w-full text-start">
-              <Link
-                href={"#"}
-                className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 w-full"
-              >
-                <FontAwesomeIcon
-                  icon={faAddressCard}
-                  className="w-5 sm:w-6 text-base sm:text-lg flex-shrink-0"
-                />
-                <span className="text-sm sm:text-base md:text-lg">
-                  Account settings
-                </span>
-              </Link>
-            </button>
+            <Link
+              href={"#"}
+              className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 w-full"
+              onClick={onClose}
+            >
+              <FontAwesomeIcon
+                icon={faAddressCard}
+                className="w-5 sm:w-6 text-base sm:text-lg flex-shrink-0"
+              />
+              <span className="text-sm sm:text-base md:text-lg">
+                Account settings
+              </span>
+            </Link>
           </li>
 
           <li className="hover:bg-[var(--hover-color)] transition-colors">
-            <button onClick={onClose} className="w-full text-start">
-              <Link
-                href={"/login"}
-                className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 w-full"
-              >
-                <FontAwesomeIcon
-                  icon={faArrowAltCircleLeft}
-                  className="w-5 sm:w-6 text-base sm:text-lg flex-shrink-0"
-                />
-                <span className="text-sm sm:text-base md:text-lg">Log out</span>
-              </Link>
-            </button>
+            <Link
+              href={"/login"}
+              className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 w-full"
+              onClick={onClose}
+            >
+              <FontAwesomeIcon
+                icon={faArrowAltCircleLeft}
+                className="w-5 sm:w-6 text-base sm:text-lg flex-shrink-0"
+              />
+              <span className="text-sm sm:text-base md:text-lg">Log out</span>
+            </Link>
           </li>
         </ul>
       </nav>
