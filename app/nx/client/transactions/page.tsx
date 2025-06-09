@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ProtectedPage from "@/app/_components/common/ProtectedPage";
 import Spinner from "@/app/_components/common/Spinner";
@@ -13,7 +12,7 @@ async function page() {
     const profileResponse = await getProfileTransaction(token);
     return (
       <Suspense fallback={<Spinner />}>
-        <Finance profile={profileResponse} />
+        <Finance profile={profileResponse} role="client" />
       </Suspense>
     );
   } catch (error: any) {
