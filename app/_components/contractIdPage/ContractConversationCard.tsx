@@ -23,7 +23,7 @@ export default function ContractConversationCard({
   const formattedDate = format(new Date(date), "PPP p"); // e.g., "May 10, 2025 2:28 PM"
 
   return (
-    <div className="border rounded-lg p-4 shadow-sm bg-[var(--foreground-color)]">
+    <div className="p-4 shadow-sm border-b ">
       <div className="grid grid-cols-[auto_1fr] gap-4 items-center">
         {/* Profile Picture Column */}
         <div className="flex justify-center">

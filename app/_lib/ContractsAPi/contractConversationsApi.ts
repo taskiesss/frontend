@@ -1,7 +1,7 @@
-'use server';
+"use server";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { invariant } from '@/app/_helpers/invariant';
+import { invariant } from "@/app/_helpers/invariant";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -20,26 +20,24 @@ export async function getContractConversations(
   page: number = 0,
   size: number = 10
 ): Promise<any> {
-  console.log('-------------------Token server------------------------', token);
-  console.log(1);
-  invariant(!token, 'Unauthorized user');
+  invariant(!token, "Unauthorized user");
 
   const res = await fetch(
     `${BASE_URL}/api/contracts/${contractId}/contract-conversations?page=${page}&size=${size}`,
     {
-      method: 'GET',
+      method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
       },
     }
   );
 
-  if (res.status === 403 || res.status === 401) throw new Error('Forbidden');
+  if (res.status === 403 || res.status === 401) throw new Error("Forbidden");
   if (res.status === 400) {
     const error = await res.json();
     throw new Error(error.message);
   }
-  if (!res.ok) throw new Error('Something went wrong');
+  if (!res.ok) throw new Error("Something went wrong");
 
   return await res.json();
 }
@@ -57,26 +55,26 @@ export async function createContractConversation(
   content: string,
   token: string | undefined
 ): Promise<any> {
-  invariant(!token, 'Unauthorized user');
+  invariant(!token, "Unauthorized user");
 
   const res = await fetch(
-    `${BASE_URL}/contracts/${contractId}/contract-conversations`,
+    `${BASE_URL}/api/contracts/${contractId}/contract-conversations`,
     {
-      method: 'POST',
+      method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({ content }),
     }
   );
 
-  if (res.status === 403 || res.status === 401) throw new Error('Forbidden');
+  if (res.status === 403 || res.status === 401) throw new Error("Forbidden");
   if (res.status === 400) {
     const error = await res.json();
     throw new Error(error.message);
   }
-  if (!res.ok) throw new Error('Something went wrong');
+  if (!res.ok) throw new Error("Something went wrong");
 
   return await res.json();
 }
