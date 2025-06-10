@@ -32,9 +32,9 @@ export default function AboutCommunity({
     <>
       {/* Skills Section */}
       <div className={style}>
-        <div className="flex flex-col gap-5">
+        <div className="flex flex-col gap-5 w-full">
           <h2 className="text-3xl font-bold">Skills</h2>
-          <div className="flex gap-2 flex-wrap">
+          <div className="flex gap-2 flex-wrap w-full">
             {community.skills.map((skill, index) => (
               <Skill index={index} skill={skill} key={index} />
             ))}
@@ -58,9 +58,16 @@ export default function AboutCommunity({
 
       {/* About Section */}
       <div className={style}>
-        <div className="flex flex-col gap-5 w-11/12">
-          <h2 className="text-3xl font-bold">About</h2>
-          <div className="flex gap-2 flex-wrap w-full">
+        <div className="flex flex-col  gap-5 w-full">
+          <div className="flex justify-between ">
+            <h2 className="text-3xl font-bold">About</h2>
+            {editable && (
+              <div className="self-start">
+                <EditButton onClick={() => setEditAboutSection(true)} />
+              </div>
+            )}
+          </div>
+          <div className="flex gap-2 flex-wrap w-full bg-[--background-color] rounded-lg p-4">
             <p className="text-lg py-2 w-full whitespace-pre-wrap">
               {community.description}
             </p>
@@ -73,11 +80,6 @@ export default function AboutCommunity({
             closeEdit={() => setEditAboutSection(false)}
             id={id}
           />
-        )}
-        {editable && (
-          <div className="self-start">
-            <EditButton onClick={() => setEditAboutSection(true)} />
-          </div>
         )}
       </div>
 

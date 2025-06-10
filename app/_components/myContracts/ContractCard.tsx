@@ -33,7 +33,6 @@ export default function ContractCard({
   pathname,
   role,
 }: Props) {
-  console.log(contract);
   return (
     <div className="flex flex-col items-start justify-between gap-2 p-4 border-b-2 border-solid border-[var(--border-color)] w-full bg-[var(--background-color)] rounded-xl">
       {/* upper div */}

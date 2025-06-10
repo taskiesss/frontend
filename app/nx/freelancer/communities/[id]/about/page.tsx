@@ -20,7 +20,7 @@ export default async function AboutPage({ params }: Props) {
     );
 
     const style =
-      "flex w-9/12 justify-between bg-[var(--foreground-color)] rounded-2xl py-8 px-6";
+      "flex w-9/12 justify-between bg-[var(--foreground-color)] rounded-2xl py-6 px-4";
 
     return (
       <Profile

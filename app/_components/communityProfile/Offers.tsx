@@ -207,9 +207,9 @@ export default function CommunityOffers({
   };
 
   return (
-    <div className="flex flex-col gap-7 p-4 md:p-6">
-      <h2 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6">Offers</h2>
-      <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6  w-full">
+      <h2 className="text-2xl md:text-3xl font-bold pt-2">Offers</h2>
+      <div className="flex flex-col gap-6 pb-4">
         {data.content.map((offer: Offer) => {
           const { acceptedPercent, rejectedPercent } = computePercentages(
             offer.accepted,
@@ -229,7 +229,7 @@ export default function CommunityOffers({
           return (
             <div
               key={offer.contractID}
-              className="rounded-lg shadow-md p-4 md:p-5"
+              className="rounded-lg shadow-md p-4 md:p-5 bg-[--background-color]"
             >
               {/* Offer Header */}
               <Link

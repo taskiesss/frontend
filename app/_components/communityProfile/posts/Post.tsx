@@ -18,7 +18,7 @@ function Post({ communityId, post, index, canDelete }: Props) {
   return (
     <main
       key={index}
-      className="flex flex-col w-9/12 justify-between bg-[var(--foreground-color)] rounded-2xl py-8 px-6"
+      className="flex flex-col w-9/12 justify-between bg-[var(--background-color)] rounded-2xl py-8 px-6 border-4 border-solid border-[--foreground-color]"
     >
       {/* Post Component Content */}
       <div className="flex gap-4 w-full">
