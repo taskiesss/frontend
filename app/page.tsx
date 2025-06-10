@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 
 export default function Page() {
-  redirect("/guest/jobs");
+  redirect("/guest/about");
   // return <MyUploadWidget />;
 }
