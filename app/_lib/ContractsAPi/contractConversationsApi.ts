@@ -2,6 +2,7 @@
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { invariant } from "@/app/_helpers/invariant";
+import { revalidateTag } from "next/cache";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -29,6 +30,7 @@ export async function getContractConversations(
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      next: { tags: [`contract-conversations-${contractId}`] },
     }
   );
 
@@ -66,6 +68,7 @@ export async function createContractConversation(
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ content }),
+      cache: "no-store", // prevent caching for POST requests
     }
   );
 
@@ -75,6 +78,8 @@ export async function createContractConversation(
     throw new Error(error.message);
   }
   if (!res.ok) throw new Error("Something went wrong");
+
+  revalidateTag(`contract-conversations-${contractId}`);
 
   return await res.json();
 }

@@ -2,7 +2,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 import { createContractConversation } from "@/app/_lib/ContractsAPi/contractConversationsApi";
 import Cookies from "js-cookie";
 
@@ -14,7 +14,8 @@ export default function CreateConversationForm({
   contractId,
 }: CreateConversationFormProps) {
   const [content, setContent] = useState("");
-  const router = useRouter();
+  const queryClient = useQueryClient();
+
   const token = Cookies.get("token");
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -25,8 +26,10 @@ export default function CreateConversationForm({
     try {
       console.log(content);
       await createContractConversation(contractId, content, token);
+      queryClient.invalidateQueries({
+        queryKey: ["contractConversations", contractId],
+      });
       setContent("");
-      router.refresh(); // Optional: refresh to show updated list
     } catch (error) {
       console.error("Failed to send message:", error);
       alert("Failed to send message. Please try again.");
