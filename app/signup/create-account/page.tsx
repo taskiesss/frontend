@@ -16,6 +16,7 @@ import { ErrorResponse } from "@/app/_types/Error";
 import { registerUser } from "@/app/_lib/Auth/Auth";
 import SignUp from "@/app/_components/auth/Signup";
 import { invariant } from "@/app/_helpers/invariant";
+import { toast, ToastContainer } from "react-toastify";
 
 const secretKey = "S3cr3tK3y@2023!ThisIsMySecureKey#";
 
@@ -61,11 +62,22 @@ const CreateAccount: React.FC = () => {
   const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<ErrorResponse[]>([]);
+  const [errorMsg, setErrorMsg] = useState("");
   const router = useRouter();
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user.currentUser);
 
   const searchParams = useSearchParams();
+
+  useEffect(() => {
+    if (errorMsg) {
+      toast.error(errorMsg, { autoClose: 5000 });
+      // Delay removal of the toast message from localStorage by 1 second
+      setTimeout(() => {
+        setErrorMsg("");
+      }, 1000);
+    }
+  }, [errorMsg]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -144,7 +156,10 @@ const CreateAccount: React.FC = () => {
         router.push(`/signup/verify?user=${encodedUser}`);
       }
     } catch (err: any) {
-      console.error(err.message);
+      // console.log("error", err);
+      if (err.status === "BAD_REQUEST") {
+        setErrorMsg(err.message);
+      } else throw err;
     } finally {
       setIsSubmitting(false);
     }
@@ -160,59 +175,64 @@ const CreateAccount: React.FC = () => {
   }, [searchParams, dispatch, router]);
 
   return (
-    <SignUp>
-      <RightChild>
-        <h2 className="mb-6 dark:text-white">Create Account</h2>
+    <>
+      <div>
+        <ToastContainer />
+      </div>
+      <SignUp>
+        <RightChild>
+          <h2 className="mb-6 dark:text-white">Create Account</h2>
 
-        <form onSubmit={handleSubmit}>
-          <Input
-            isRequired={true}
-            type="text"
-            id="username"
-            name="username"
-            message={errors
-              .filter((err) => err.type === "username")
-              .map((err, idx) => err.message)}
-            inputValue={username}
-            className=""
-            onChange={(e) => setUsername(e.target.value)}
-          />
+          <form onSubmit={handleSubmit}>
+            <Input
+              isRequired={true}
+              type="text"
+              id="username"
+              name="username"
+              message={errors
+                .filter((err) => err.type === "username")
+                .map((err, idx) => err.message)}
+              inputValue={username}
+              className=""
+              onChange={(e) => setUsername(e.target.value)}
+            />
 
-          <Input
-            isRequired={true}
-            type="email"
-            id="email"
-            name="email"
-            message={errors
-              .filter((err) => err.type === "email")
-              .map((err, idx) => err.message)}
-            inputValue={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+            <Input
+              isRequired={true}
+              type="email"
+              id="email"
+              name="email"
+              message={errors
+                .filter((err) => err.type === "email")
+                .map((err, idx) => err.message)}
+              inputValue={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
 
-          <Input
-            isRequired={true}
-            type="password"
-            id="password"
-            message={errors
-              .filter((err) => err.type === "password")
-              .map((err, idx) => err.message)}
-            name="password"
-            useStrength={true}
-            inputValue={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+            <Input
+              isRequired={true}
+              type="password"
+              id="password"
+              message={errors
+                .filter((err) => err.type === "password")
+                .map((err, idx) => err.message)}
+              name="password"
+              useStrength={true}
+              inputValue={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
 
-          <Button
-            className="text-xl text-[--accent-color]"
-            type={"submit"}
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? "Registering..." : "Register"}
-          </Button>
-        </form>
-      </RightChild>
-    </SignUp>
+            <Button
+              className="text-xl text-[--accent-color]"
+              type={"submit"}
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Registering..." : "Register"}
+            </Button>
+          </form>
+        </RightChild>
+      </SignUp>
+    </>
   );
 };
 

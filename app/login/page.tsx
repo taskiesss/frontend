@@ -149,8 +149,19 @@ const LoginPage: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
   const [errors, setErrors] = useState<ErrorResponse[]>([]);
   const router = useRouter();
+
+  useEffect(() => {
+    if (errorMsg) {
+      toast.error(errorMsg, { autoClose: 5000 });
+      // Delay removal of the toast message from localStorage by 1 second
+      setTimeout(() => {
+        setErrorMsg("");
+      }, 1000);
+    }
+  }, [errorMsg]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -195,7 +206,11 @@ const LoginPage: React.FC = () => {
         }
       }
     } catch (err: any) {
-      console.error(err.message);
+      if (err.status === "BAD_REQUEST") {
+        setErrorMsg(err.message);
+      } else {
+        throw err.message;
+      }
     } finally {
       setIsSubmitting(false);
     }
