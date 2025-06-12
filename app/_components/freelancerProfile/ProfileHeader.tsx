@@ -24,7 +24,7 @@ export default function ProfileHeader({
   };
 }) {
   const [isEditingPicture, setIsEditingPicture] = useState(false);
-
+  console.log(freelancer);
   return (
     <div className="relative z-10 w-full md:max-w-7xl max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 sm:-mt-10 bg-[var(--foreground-color)] py-6 sm:py-8 rounded-2xl shadow-lg">
       <div className="flex items-center gap-4 sm:gap-6 lg:gap-8">
@@ -66,12 +66,14 @@ export default function ProfileHeader({
 
           {/* Location and Rate */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-3 lg:gap-4 text-xs sm:text-sm md:text-base lg:text-lg">
-            <div className="flex items-center gap-1 sm:gap-2">
-              <span className="text-[var(--border-secondary)]">📍</span>
-              <span className="text-[var(--accent-color)] font-medium">
-                {freelancer.Country}
-              </span>
-            </div>
+            {freelancer.Country && (
+              <div className="flex items-center gap-1 sm:gap-2">
+                <span className="text-[var(--border-secondary)]">📍</span>
+                <span className="text-[var(--accent-color)] font-medium">
+                  {freelancer.Country}
+                </span>
+              </div>
+            )}
             <div className="flex items-center gap-1 sm:gap-2">
               <span className="text-[var(--border-secondary)]">💰</span>
               <span className="text-[var(--status-active)] dark:text-green-500 font-bold">

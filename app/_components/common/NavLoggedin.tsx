@@ -226,7 +226,10 @@ const NavLoggedin: React.FC = () => {
             label: "Explore Jobs",
             options: [
               { label: "Find work", link: "/nx/freelancer/find-work" },
-              { label: "Saved Jobs", link: "/nx/freelancer/saved-jobs" },
+              {
+                label: "Find community",
+                link: "/nx/freelancer/find-communities",
+              },
               {
                 label: "Proposals",
                 link: "/nx/freelancer/proposals/myProposals",

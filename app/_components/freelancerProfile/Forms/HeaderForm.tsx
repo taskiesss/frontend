@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // components/HeaderForm.tsx
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Model from "../Model";
 import { HeaderSectionAction } from "@/app/_lib/FreelancerProfile/APi";
 import Cookies from "js-cookie";
@@ -13,19 +13,22 @@ interface HeaderFormProps {
     name: string;
     jobTitle: string;
     pricePerHour: number;
-    country: string;
+    country?: string;
   };
 }
 
 export default function HeaderForm({ closeEdit, freelancer }: HeaderFormProps) {
-  const [firstName, lastName] = freelancer.name.split(" ");
+  const [firstName, lastName] = useMemo(
+    () => freelancer.name.split(" "),
+    [freelancer.name]
+  );
 
   const [formData, setFormData] = useState({
     firstName: firstName || "",
     lastName: lastName || "",
     jobTitle: freelancer.jobTitle,
     pricePerHour: freelancer.pricePerHour,
-    country: freelancer.country,
+    country: freelancer.country || "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -63,7 +66,7 @@ export default function HeaderForm({ closeEdit, freelancer }: HeaderFormProps) {
       lastName: `${formData.lastName}`.trim(),
       jobTitle: formData.jobTitle,
       pricePerHour: formData.pricePerHour,
-      country: formData.country,
+      country: formData.country || "",
     };
     console.log(submitData);
     try {

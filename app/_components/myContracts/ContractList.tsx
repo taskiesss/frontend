@@ -35,6 +35,7 @@ export default function ContractList({ contracts, role }: Props) {
   const params = useParams<RouteParams>();
   const pathname = usePathname();
   const { id } = params || {};
+  console.log(contracts);
   return (
     <>
       {contracts.content.map((c, i) => (

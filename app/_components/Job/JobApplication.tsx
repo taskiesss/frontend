@@ -362,9 +362,11 @@ export default function JobApplication({ jobid }: Props) {
             <textarea
               name="coverLetter"
               id="coverLetter"
+              rows={5}
               value={coverLetter}
               onChange={handleCoverLetterChange}
-              className="border border-solid border-[var(--border-color)] focus:outline-none bg-[var(--background-color)] text-lg box-content resize-none py-2 px-2 rounded-lg"
+              placeholder="Write a cover letter to the client"
+              className="border border-solid border-[var(--border-color)] focus:outline-none bg-[var(--background-color)] text-lg box-content resize-none py-2 px-2 rounded-lg h-auto"
               required
             />
           </div>

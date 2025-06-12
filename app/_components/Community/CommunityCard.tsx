@@ -78,7 +78,8 @@ const CommunityCard: React.FC<JobCardProps> = ({ community }) => {
   const currentPath = usePathname();
 
   const detailUrl =
-    currentPath === "/nx/freelancer/search/communities"
+    currentPath === "/nx/freelancer/search/communities" ||
+    currentPath === "/nx/freelancer/find-communities"
       ? `/nx/freelancer/communities/${id}`
       : currentPath === "/nx/client/discover-communities" ||
         currentPath === "/nx/client/search/communities"

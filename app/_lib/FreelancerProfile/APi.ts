@@ -258,7 +258,7 @@ export async function HeaderSectionAction(
     lastName: string;
     jobTitle: string;
     pricePerHour: number;
-    country: string;
+    country?: string;
   },
   token: string | undefined
 ): Promise<any> {
