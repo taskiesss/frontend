@@ -1,16 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useEffect, useState } from "react";
-import Button from "../common/button";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
-import Cookies from "js-cookie";
 import {
   getAvailablePositions,
   sendJoinRequest,
 } from "@/app/_lib/CommunityProfile/JoinRequest";
+import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Cookies from "js-cookie";
+import { useEffect, useState } from "react";
 import ProtectedPage from "../common/ProtectedPage";
 
-type Props = { communityId: string; communityName: string };
+type Props = {
+  communityId: string;
+  communityName: string;
+  isClicked: boolean;
+  setIsClicked: (isClicked: boolean) => void;
+};
 interface OpenPositions {
   content: {
     id: string;
@@ -20,8 +24,12 @@ interface OpenPositions {
   }[];
 }
 
-function SendRequestComponent({ communityId, communityName }: Props) {
-  const [isClicked, setIsClicked] = useState(false);
+function SendRequestComponent({
+  communityId,
+  communityName,
+  isClicked,
+  setIsClicked,
+}: Props) {
   const [isFocused, setIsFocused] = useState<string>("");
   const [isForbidden, setIsForbidden] = useState(false);
   const [positions, setPositions] = useState<OpenPositions>();
@@ -82,13 +90,9 @@ function SendRequestComponent({ communityId, communityName }: Props) {
     );
   return (
     <>
-      <Button type="button" onClick={() => setIsClicked(true)}>
-        Send Request
-      </Button>
-
       {isClicked && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 ">
-          <div className="max-h-[50rem] bg-[var(--background-color)] p-7 rounded-lg border-[var(--border-color)] border-solid border-2 max-w-4xl w-full overflow-y-auto bg-scroll">
+          <div className="max-h-[50rem] bg-[var(--background-color)] p-7 rounded-lg border-[var(--border-color)] border-solid border-2 max-w-4xl w-full overflow-y-auto bg-scroll  ">
             <div className="flex flex-col gap-2 pb-6">
               <h3 className="text-3xl font-bold ">{communityName}</h3>
               <p className="text-lg font-extralight text-gray-500 ">

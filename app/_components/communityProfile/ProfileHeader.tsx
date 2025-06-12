@@ -12,6 +12,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGear } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 import { getExperienceLevel } from "@/app/_helpers/helper";
+import Button from "../common/button";
 
 export default function CommunityHeader({
   community,
@@ -35,6 +36,7 @@ export default function CommunityHeader({
 }) {
   const [isEditingPicture, setIsEditingPicture] = useState(false);
   const [isEditingHeader, setIsEditingHeader] = useState(false);
+  const [isClicked, setIsClicked] = useState(false);
 
   // console.log(community);
 
@@ -88,32 +90,33 @@ export default function CommunityHeader({
             )}
           </div>
         </div>
-        <div className="flex gap-9 self-start items-center">
+        <div className="flex gap-9 self-start items-center ">
           {!community.isFull && !community.isMember && role !== "client" && (
-            <SendRequestComponent
-              communityId={community.id}
-              communityName={community.name}
-            />
+            <Button type="button" onClick={() => setIsClicked(true)}>
+              Send Request
+            </Button>
           )}
 
           <div className="flex space-x-2 gap-3">
             {/* Conditionally show EditButton for admins */}
+
             {community.isAdmin && (
               <EditButton onClick={() => setIsEditingHeader(true)} />
             )}
-
             {/* Settings gear always visible */}
-            <Link
-              href={`/nx/freelancer/communities/${community.id}/settings/positions`}
-              passHref
-            >
-              <button
-                className="rounded-full p-1 w-10 aspect-square text-white bg-[var(--hover-color)] text-md flex items-center justify-center"
-                aria-label="Settings"
+            {community.isMember && (
+              <Link
+                href={`/nx/freelancer/communities/${community.id}/settings/positions`}
+                passHref
               >
-                <FontAwesomeIcon icon={faGear} />
-              </button>
-            </Link>
+                <button
+                  className="rounded-full p-1 w-10 aspect-square text-white bg-[var(--hover-color)] text-md flex items-center justify-center"
+                  aria-label="Settings"
+                >
+                  <FontAwesomeIcon icon={faGear} />
+                </button>
+              </Link>
+            )}
           </div>
         </div>
       </div>
@@ -135,6 +138,14 @@ export default function CommunityHeader({
             id: community.id,
           }}
           closeEdit={() => setIsEditingHeader(false)}
+        />
+      )}
+      {!community.isFull && !community.isMember && role !== "client" && (
+        <SendRequestComponent
+          communityId={community.id}
+          communityName={community.name}
+          isClicked={isClicked}
+          setIsClicked={setIsClicked}
         />
       )}
     </>

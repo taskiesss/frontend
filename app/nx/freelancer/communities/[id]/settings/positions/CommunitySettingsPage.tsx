@@ -27,6 +27,7 @@ import { useRouter } from "next/navigation";
 import AddPositionForm from "@/app/_components/communityProfile/Forms/AddPositionForm";
 import Spinner from "@/app/_components/common/Spinner";
 import { toast, ToastContainer } from "react-toastify";
+import ProtectedPage from "@/app/_components/common/ProtectedPage";
 
 type Props = {
   rolesAndPositions: CommunityRolesResponse;
@@ -57,6 +58,8 @@ export default function CommunitySettingsPage({
   const [inputValues, setInputValues] = useState<string[]>([]);
 
   const [showAddPosition, setShowAddPosition] = useState(false);
+
+  const [isForbidden, setIsForbidden] = useState(false);
 
   useEffect(() => {
     if (errorMessage) {
@@ -151,7 +154,6 @@ export default function CommunitySettingsPage({
       console.log(id);
       console.log(requestData);
       console.log(token);
-
       await updateCommunityPositions(id, requestData, token);
 
       // Only update the current positions after successful API call
@@ -166,7 +168,13 @@ export default function CommunitySettingsPage({
       // setFuturePositions(newCommunityMembers);
       setIsEditing(false);
     } catch (error: any) {
-      setErrorMessage(error.message || "Failed to update positions");
+      if (error.message === "Forbidden" || error.message === "Unauthorized") {
+        setIsForbidden(true);
+      } else if (error.status === "BAD_REQUEST") {
+        setErrorMessage(error.message || "Failed to update positions");
+      } else {
+        throw error;
+      }
     }
   };
 
@@ -194,6 +202,12 @@ export default function CommunitySettingsPage({
   useEffect(() => {
     setFuturePositions(communityMembers);
   }, [communityMembers]);
+
+  if (isForbidden) {
+    return (
+      <ProtectedPage message="You are not allowed to do this action. Please log in" />
+    );
+  }
 
   return (
     <>

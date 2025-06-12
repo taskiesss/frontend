@@ -67,7 +67,7 @@ export async function updateCommunityPositions(
 
   if (res.status === 400) {
     const error = await res.json();
-    throw new Error(error.message);
+    throw new Error(error);
   }
   if (res.status === 401) throw new Error('Unauthorized');
   if (res.status === 403 || res.status === 401) throw new Error('Forbidden');
