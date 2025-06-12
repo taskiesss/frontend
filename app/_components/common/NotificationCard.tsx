@@ -32,7 +32,7 @@ function NotificationCard({ role, notification }: Props) {
       break;
     case NotificationDest.COMMUNITY_SETTINGS:
       icon = faUsers;
-      url = `/nx/freelancer/communities/${notification.routeId}/settings`;
+      url = `/nx/freelancer/communities/${notification.routeId}/settings/positions`;
       break;
     case NotificationDest.CONTRACT:
       icon = faFileSignature;
