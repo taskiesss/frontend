@@ -21,6 +21,7 @@ import ApproveContract from "./ApproveContract";
 import Milestones from "./Milestones";
 import RatingModal from "./RatingModal";
 import ContractConversationsList from "./contactConversationList";
+import CreateConversationForm from "./CreateConversationForm";
 
 type Props = {
   contract: contractDetailsResponse;
@@ -254,7 +255,7 @@ function Contract({ contract, contractId, role, isAdmin }: Props) {
       </div>
       {/* MILESTONES */}
       <div
-        className={`flex flex-col gap-4 ${
+        className={`flex flex-col gap-4 border-b-[var(--border-color)] border-solid border-b-2 ${
           contract.contractStatus.toLowerCase() === "pending" ? "" : "pb-20"
         }`}
       >
@@ -279,6 +280,11 @@ function Contract({ contract, contractId, role, isAdmin }: Props) {
           isVisible={contract.contractStatus.toLowerCase() === "active"}
         />
       </Suspense>
+
+      <div className="border-b-[var(--border-color)] flex flex-col gap-7">
+        <h2 className="text-2xl font-semibold">Create new post</h2>
+        <CreateConversationForm contractId={contractId} />
+      </div>
 
       {/* Accept or reject contract */}
       {contract.contractStatus.toLowerCase() === "pending" &&

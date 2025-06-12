@@ -187,21 +187,25 @@ export default function ContractConversationsList({
   //   }
 
   return (
-    <div className="space-y-4">
-      {/* Conversations List */}
-      {paginatedContent.content.map((convo) => (
-        <ContractConversationCard key={convo.convoId} {...convo} />
-      ))}
+    <div className="flex flex-col gap-7">
+      <h2 className="text-2xl font-semibold">Posts</h2>
+      <div className="space-y-4 bg-[var(--foreground-color)] p-4 rounded-xl">
+        {/* Conversations List */}
 
-      {/* Pagination */}
-      <Pagination
-        currentPage={currentPage}
-        totalCount={fakeContractConversations.totalElements}
-        pageSize={PAGE_SIZE}
-        onPageChange={handlePageChange}
-        siblingCount={1}
-        setPageParamter={false}
-      />
+        {paginatedContent.content.map((convo) => (
+          <ContractConversationCard key={convo.convoId} {...convo} />
+        ))}
+
+        {/* Pagination */}
+        <Pagination
+          currentPage={currentPage}
+          totalCount={fakeContractConversations.totalElements}
+          pageSize={PAGE_SIZE}
+          onPageChange={handlePageChange}
+          siblingCount={1}
+          setPageParamter={false}
+        />
+      </div>
     </div>
   );
 }
