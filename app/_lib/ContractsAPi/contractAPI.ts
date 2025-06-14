@@ -27,7 +27,11 @@ export async function getMyContracts(
   if (res.status === 403 || res.status === 401) {
     throw new Error('Forbidden');
   }
-
+  if (res.status === 400) {
+    const error = await res.json();
+    console.log(error);
+    throw error;
+  }
   if (!res.ok) {
     throw new Error('Something went wrong');
   }

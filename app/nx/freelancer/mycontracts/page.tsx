@@ -58,8 +58,11 @@ async function page({ searchParams }: Props) {
       return (
         <ProtectedPage message="You are not allowed to do this action. Please log in" />
       );
+    } else if (error.status === "BAD_REQUEST") {
+      throw new Error(error.message);
+    } else {
+      throw new Error(error.message);
     }
-    throw new Error(error.message);
   }
 }
 
