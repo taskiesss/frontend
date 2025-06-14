@@ -23,7 +23,7 @@ export async function getMyContracts(
     body: JSON.stringify(reqbody),
     next: { tags: ['contracts'] },
   });
-  // console.log(res);
+  console.log(res);
   if (res.status === 403 || res.status === 401) {
     throw new Error('Forbidden');
   }

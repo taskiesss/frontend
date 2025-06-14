@@ -4,6 +4,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import StarRating from "../common/StarRating";
 import StatusCard from "./StatusCard";
+import Image from "next/image";
+import defaultProfile from "@/public/images/userprofile.jpg";
 type Props = {
   pathname: string;
   communityid: string;
@@ -23,6 +25,7 @@ type Props = {
     freelancerName?: string;
     freelancerID?: string;
     isCommunity?: boolean;
+    profilePicture?: string;
   };
   role?: string;
 };
@@ -81,13 +84,29 @@ export default function ContractCard({
                   : `/nx/client/discover-talents/${contract.freelancerID}`
                 : `/nx/freelancer/client-profile/${contract.clientID}`
             }
-            className="flex flex-col hover:text-[var(--hover-color)] hover:underline"
+            className="flex gap-4 hover:text-[var(--hover-color)] hover:underline w-full items-center"
           >
-            <p className="text-lg">
-              {role === "client"
-                ? contract.freelancerName
-                : contract.clientName}
-            </p>
+            <div className="relative w-12 sm:w-16 aspect-square rounded-full">
+              <Image
+                src={contract.profilePicture || defaultProfile}
+                alt={`${
+                  role === "client"
+                    ? contract.freelancerName
+                    : contract.clientName
+                } img`}
+                fill
+                priority
+                className="object-cover rounded-full"
+                sizes="(max-width: 1024px) 100vw, 1024px"
+              />
+            </div>
+            <div className="self-center">
+              <p className="text-md sm:text-lg">
+                {role === "client"
+                  ? contract.freelancerName
+                  : contract.clientName}
+              </p>
+            </div>
           </Link>
         </div>
         <div className="flex flex-col items-center justify-center w-1/3">
