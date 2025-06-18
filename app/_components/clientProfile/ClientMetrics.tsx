@@ -10,13 +10,17 @@ interface Props {
 export default function ClientMetrics({ metrics }: Props) {
   return (
     <div className="bg-[var(--foreground-color)] rounded-lg shadow-md p-4 text-center">
-      <h2 className="text-lg font-semibold mb-2">Metrics</h2>
-      <ul className="list-none space-y-2 text-center w-full">
-        <li>
-          <strong>Total Spend:</strong> ${metrics.totalSpent.toFixed(2)}
+      <h2 className="text-lg font-semibold mb-2"> Metrics </h2>
+      <ul className="list-none flex flex-col space-y-2 text-center w-full">
+        <li className="flex gap-4 self-center">
+          <p>Total Spend:</p>{" "}
+          <p className="text-green-600 font-bold">
+            ${metrics.totalSpent.toFixed(2)}
+          </p>
         </li>
-        <li>
-          <strong>Jobs Posted:</strong> {metrics.completedJobs}
+        <li className="flex gap-4 self-center">
+          <p>Completed Jobs:</p>{" "}
+          <p className="text-blue-500 font-bold">{metrics.completedJobs}</p>
         </li>
       </ul>
     </div>

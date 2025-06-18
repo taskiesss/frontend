@@ -3,6 +3,8 @@ import React, { useState, useEffect } from "react";
 import { Pagination } from "../common/Pagination";
 import { getClientWorkDone, WorkDoneResponse } from "@/app/_lib/Client/Profile";
 import Cookies from "js-cookie";
+import StarRating from "../common/StarRating";
+import Link from "next/link";
 
 interface WorkHistoryProps {
   id: string;
@@ -56,25 +58,27 @@ export default function WorkHistory({ id }: WorkHistoryProps) {
       "★".repeat(job.rate ?? 5) + "☆".repeat(5 - (job.rate ?? 5));
 
     return (
-      <div
-        key={job.jobId}
-        className="p-4 bg-[var(--foreground-color)] rounded-lg mb-4"
-      >
-        <h3 className="text-lg font-semibold mb-2">{job.jobName}</h3>
-        <div className="flex justify-between items-start">
-          <div className="text-right">
-            <p className="text-gray-800 font-semibold">${budget} Budget</p>
+      <div className="flex flex-col mb-5" key={job.jobId}>
+        <div className="flex flex-col gap-2">
+          <Link href={`/nx/client/job-details/${job.jobId}`}>
+            <h2 className="text-xl text-[var(--accent-color)] font-extrabold hover:underline hover:text-[var(--hover-color)]">
+              {job.jobName}
+            </h2>
+          </Link>
+          <div className="pointer-events-none">
+            <StarRating
+              size={18}
+              defaultRating={job.rate}
+              color="#FFC107"
+              className="text-lg"
+              allowHalf={true}
+            />
+          </div>
+          <div className="flex gap-4 text-md font-extralight">
+            <span>${job.pricePerHour}/hour</span>
+            <span>{job.totalHours} hours</span>
           </div>
         </div>
-        <div className="mt-2">
-          <p>Freelancer response: {ratingStars}</p>
-          <p>
-            Great to work with John provided clear instructions and was
-            responsive throughout the project.
-          </p>
-        </div>
-
-        <hr className="my-4 border-[var(--border-color)]" />
       </div>
     );
   });
