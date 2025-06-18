@@ -21,6 +21,7 @@
     "@tanstack/react-query-devtools": "^5.66.9",
     "crypto-js": "^4.2.0",
     "date-fns": "^4.1.0",
+    "framer-motion": "^12.18.1",
     "js-cookie": "^3.0.5",
     "next": "15.1.6",
     "react": "^19.0.0",
