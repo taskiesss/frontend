@@ -1,20 +1,41 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
+import EditButton from "../common/EditButton";
+import AboutForm from "./Forms/AboutForm";
 
 interface AboutSectionProps {
   description: string;
+  editable: boolean;
 }
 
-export default function AboutSection({ description }: AboutSectionProps) {
-  const fakeDescription =
-    "I am a highly skilled and dedicated professional with extensive experience in web development, design, and project management. My expertise spans a wide range of technologies, including JavaScript, React, Node.js, and MongoDB, allowing me to build robust and scalable applications. I have a strong passion for creating user-friendly interfaces and optimizing backend systems to ensure seamless performance. Over the years, I have worked on numerous projects, from small startups to large enterprises, delivering high-quality solutions tailored to clients' needs. I thrive in collaborative environments and enjoy solving complex problems with innovative approaches. My goal is to continue growing as a developer while helping businesses achieve their digital goals through cutting-edge technology and creative design. Whether you need a dynamic website, a powerful API, or a complete full-stack solution, I am here to bring your vision to life.";
+export default function AboutSection({
+  description,
+  editable,
+}: AboutSectionProps) {
+  const [isEditingDescription, setIsEditingDescription] = useState(false);
 
   return (
-    <div className="p-6 bg-[var(--foreground-color)] rounded-lg shadow-md ">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold">About</h2>
+    <>
+      <div className="p-6 bg-[var(--foreground-color)] rounded-lg shadow-md ">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl font-semibold">About</h2>
+          {editable && (
+            <div className="  rounded-full z-50">
+              <EditButton
+                className="rounded-full p-1 sm:p-2 w-8 sm:w-10 aspect-square text-white bg-[var(--hover-color)] hover:bg-opacity-80 transition-all"
+                onClick={() => setIsEditingDescription(true)}
+              />
+            </div>
+          )}
+        </div>
+        <p>{description}</p>
       </div>
-      <p>{description || fakeDescription}</p>
-    </div>
+      {isEditingDescription && (
+        <AboutForm
+          closeEdit={() => setIsEditingDescription(false)}
+          description={description}
+        />
+      )}
+    </>
   );
 }

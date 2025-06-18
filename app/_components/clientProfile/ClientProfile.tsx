@@ -46,8 +46,11 @@ export default function ClientProfile({
         <ClientMetrics metrics={metrics} />
       </div>
       <div className="flex flex-col gap-6 ">
-        <AboutSection description={client.description}></AboutSection>
-        <SkillsSection skills={client.skills} />
+        <AboutSection
+          description={client.description}
+          editable={editable}
+        ></AboutSection>
+        <SkillsSection skills={client.skills} editable={editable} />
         <WorkHistory id={client.uuid}></WorkHistory>
 
         {/* <Pagination
