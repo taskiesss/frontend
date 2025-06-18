@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import StarRating from "../common/StarRating";
+import EditButton from "../common/EditButton";
+import ProfilePhotoForm from "./Forms/ProfilePhotoForm";
 
 interface ProfileHeaderProps {
   freelancer: {
@@ -15,10 +17,14 @@ interface ProfileHeaderProps {
   editable: boolean;
 }
 
-export default function ProfileHeader({ freelancer }: ProfileHeaderProps) {
+export default function ProfileHeader({
+  freelancer,
+  editable,
+}: ProfileHeaderProps) {
   // Get the user's device time zone
   const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   // State to hold the current time
+  const [isEditingPicture, setIsEditingPicture] = useState(false);
   const [currentTime, setCurrentTime] = useState(
     new Date().toLocaleTimeString("en-US", {
       timeZone: userTimeZone,
@@ -47,14 +53,22 @@ export default function ProfileHeader({ freelancer }: ProfileHeaderProps) {
 
   return (
     <div className="relative bg-[var(--foreground-color)] rounded-lg shadow p-6 flex items-center">
-      <div className="w-24 h-24 rounded-full overflow-hidden">
+      <div className="relative w-24 aspect-square rounded-full ">
         <Image
           src={freelancer.profilePicture}
           alt={`${freelancer.name}'s profile`}
-          width={96} // Matches w-24 (24 * 4 = 96px due to Tailwind's default rem-to-px conversion)
-          height={96} // Matches h-24, ensuring a square container for the circle
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           className="rounded-full object-cover"
         />
+        {editable && (
+          <div className="absolute bottom-1 right-1 sm:bottom-1 sm:right-1 rounded-full ">
+            <EditButton
+              className="rounded-full p-1 sm:p-2 w-8 sm:w-10 aspect-square text-white bg-[var(--hover-color)] hover:bg-opacity-80 transition-all"
+              onClick={() => setIsEditingPicture(true)}
+            />
+          </div>
+        )}
       </div>
       <div className="ml-6">
         <h1 className="text-2xl font-bold">{freelancer.name}</h1>
@@ -63,6 +77,7 @@ export default function ProfileHeader({ freelancer }: ProfileHeaderProps) {
             maxRating={5}
             defaultRating={freelancer.rate}
             size={15}
+            color="#fbd500e0"
             allowHalf={true}
           />
         </div>
@@ -85,6 +100,10 @@ export default function ProfileHeader({ freelancer }: ProfileHeaderProps) {
           </svg>
         </button>
       )} */}
+      {/* Profile Picture Edit Modal */}
+      {isEditingPicture && (
+        <ProfilePhotoForm closeEdit={() => setIsEditingPicture(false)} />
+      )}
     </div>
   );
 }
