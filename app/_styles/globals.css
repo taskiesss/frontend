@@ -446,3 +446,17 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .animate-slide-out {
   animation: slideOut 0.3s ease forwards;
 }
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.testimonial-card * {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

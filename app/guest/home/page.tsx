@@ -2,6 +2,7 @@ import React from "react";
 import Button from "@/app/_components/common/button";
 import AnimatedWords from "./AnimatedWords";
 import Image from "next/image";
+import TestimonialSlider from "./TestimonialSlider";
 
 export default function HomePage() {
   return (
@@ -130,13 +131,9 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Section 3 */}
-        <section className="flex-1 p-6 rounded-lg shadow-md bg-[var(--foreground-color)]">
-          <h2 className="text-xl font-bold mb-4">Section Three</h2>
-          <p>
-            The final section contains additional information or call-to-action.
-          </p>
-        </section>
+        {/* Section 3 - Testimonials */}
+
+        <TestimonialSlider />
       </div>
     </main>
   );
