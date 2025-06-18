@@ -3,6 +3,7 @@ import Button from "@/app/_components/common/button";
 import AnimatedWords from "./AnimatedWords";
 import Image from "next/image";
 import TestimonialSlider from "./TestimonialSlider";
+import Link from "next/link";
 
 export default function HomePage() {
   return (
@@ -22,13 +23,11 @@ export default function HomePage() {
             }}
             aria-hidden="true"
           ></div>
-
           {/* Overlay (optional) */}
           <div
             className="absolute inset-0 backdrop-contrast-[0.7]"
             aria-hidden="true"
           ></div>
-
           {/* Content */}
           <div className="relative z-10 flex flex-col md:flex-row items-center justify-between">
             <div className="md:w-1/2 flex flex-col gap-10">
@@ -41,9 +40,10 @@ export default function HomePage() {
             <div className="md:w-1/2"></div>
           </div>
 
-          {/* Button */}
           <div className="relative z-10 flex justify-center w-full mt-4">
-            <Button className="px-8 py-4 text-xl">Get Started</Button>
+            <Link href="/login">
+              <Button className="px-8 py-4 text-xl">Get Started</Button>
+            </Link>
           </div>
         </section>
 
