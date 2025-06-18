@@ -112,7 +112,7 @@ export default function HomePage() {
               </div>
 
               {/* Card 4 */}
-              <div className="flex flex-col items-center text-center p-5 rounded-lg bg-[var(--background-color)] shadow-lg hover:shadow-xl transition-shadow duration-300 rounded-xl">
+              <div className="flex flex-col items-center text-center p-5 bg-[var(--background-color)] shadow-lg hover:shadow-xl transition-shadow duration-300 rounded-xl">
                 <Image
                   src="/images/secure.png"
                   alt="Pay Safely Icon"
