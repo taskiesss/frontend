@@ -62,7 +62,7 @@ export default function ProfileHeader({
           className="rounded-full object-cover"
         />
         {editable && (
-          <div className="absolute bottom-1 right-1 sm:bottom-1 sm:right-1 rounded-full z-50">
+          <div className="absolute bottom-1 right-1 sm:bottom-1 sm:right-1 rounded-full ">
             <EditButton
               className="rounded-full p-1 sm:p-2 w-8 sm:w-10 aspect-square text-white bg-[var(--hover-color)] hover:bg-opacity-80 transition-all"
               onClick={() => setIsEditingPicture(true)}

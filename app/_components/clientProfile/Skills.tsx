@@ -20,7 +20,7 @@ export default function SkillsSection({
         <div className="flex justify-between items-center">
           <h2 className="text-xl font-semibold mb-4">Preferred Skills</h2>
           {editable && (
-            <div className="  rounded-full z-50">
+            <div className="  rounded-full ">
               <EditButton
                 className="rounded-full p-1 sm:p-2 w-8 sm:w-10 aspect-square text-white bg-[var(--hover-color)] hover:bg-opacity-80 transition-all"
                 onClick={() => setIsEditingSkills(true)}
