@@ -1,16 +1,12 @@
-// Assuming this is in a file like app/_components/Job/AdvancedSearchButton.tsx
-"use client"; // Mark as client component
+"use client";
 
-import { useState } from "react";
 import CommunitiyAside from "./CommunityAside";
 
 function AdvancedSearchButton({}) {
-  const [showAdvanced, setShowAdvanced] = useState(false); // Local state for toggling
-
   return (
     <>
       <div className="relative">
-        <CommunitiyAside onClose={() => setShowAdvanced(false)} />
+        <CommunitiyAside />
       </div>
     </>
   );
