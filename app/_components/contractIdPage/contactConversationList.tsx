@@ -8,115 +8,117 @@ import { getContractConversations } from "@/app/_lib/ContractsAPi/contractConver
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-const fakeContractConversations = {
-  content: [
-    {
-      convoId: "conv-001",
-      content: "Hey, are we still on for tomorrow?",
-      date: new Date().toISOString(),
-      convoOwner: {
-        profilePicture:
-          "https://res.cloudinary.com/dhfb7i5h1/image/upload/v1740614334/freelancers_profile_pictures/ii1qf658zpi5f2tiwhby.png",
-        name: "John Doe",
-        role: "CLIENT",
-        id: "user-001",
-      },
-    },
-    {
-      convoId: "conv-002",
-      content: "Yes, I'll send over the files shortly.",
-      date: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
-      convoOwner: {
-        profilePicture:
-          "https://res.cloudinary.com/dhfb7i5h1/image/upload/v1740614334/freelancers_profile_pictures/ii1qf658zpi5f2tiwhby.png",
-        name: "Jane Smith",
-        role: "FREELANCER",
-        id: "user-002",
-      },
-    },
-    {
-      convoId: "conv-003",
-      content: "Awesome, looking forward to it!",
-      date: new Date(Date.now() - 1000 * 60 * 60).toISOString(),
-      convoOwner: {
-        profilePicture:
-          "https://res.cloudinary.com/dhfb7i5h1/image/upload/v1740614334/freelancers_profile_pictures/ii1qf658zpi5f2tiwhby.png",
-        name: "John Doe",
-        role: "CLIENT",
-        id: "user-001",
-      },
-    },
-    {
-      convoId: "conv-004",
-      content: "Let me know if anything comes up.",
-      date: new Date(Date.now() - 1000 * 60 * 90).toISOString(),
-      convoOwner: {
-        profilePicture:
-          "https://res.cloudinary.com/dhfb7i5h1/image/upload/v1740614334/freelancers_profile_pictures/ii1qf658zpi5f2tiwhby.png",
-        name: "Jane Smith",
-        role: "FREELANCER",
-        id: "user-002",
-      },
-    },
-    {
-      convoId: "conv-005",
-      content: "All set on my end.",
-      date: new Date(Date.now() - 1000 * 60 * 120).toISOString(),
-      convoOwner: {
-        profilePicture:
-          "https://res.cloudinary.com/dhfb7i5h1/image/upload/v1740614334/freelancers_profile_pictures/ii1qf658zpi5f2tiwhby.png",
-        name: "John Doe",
-        role: "CLIENT",
-        id: "user-001",
-      },
-    },
-    {
-      convoId: "conv-006",
-      content: "All set on my end.",
-      date: new Date(Date.now() - 1000 * 60 * 120).toISOString(),
-      convoOwner: {
-        profilePicture:
-          "https://res.cloudinary.com/dhfb7i5h1/image/upload/v1740614334/freelancers_profile_pictures/ii1qf658zpi5f2tiwhby.png",
-        name: "John Doe",
-        role: "CLIENT",
-        id: "user-001",
-      },
-    },
-  ],
-  pageable: {
-    pageNumber: 0,
-    pageSize: 5,
-    sort: {
-      empty: true,
-      unsorted: true,
-      sorted: false,
-    },
-    offset: 0,
-    unpaged: false,
-    paged: true,
-  },
-  last: false,
-  totalElements: 6,
-  totalPages: 3,
-  size: 5,
-  number: 0,
-  numberOfElements: 5,
-  first: true,
-  empty: false,
-};
+// const fakeContractConversations = {
+//   content: [
+//     {
+//       convoId: "conv-001",
+//       content: "Hey, are we still on for tomorrow?",
+//       date: new Date().toISOString(),
+//       convoOwner: {
+//         profilePicture:
+//           "https://res.cloudinary.com/dhfb7i5h1/image/upload/v1740614334/freelancers_profile_pictures/ii1qf658zpi5f2tiwhby.png",
+//         name: "John Doe",
+//         role: "CLIENT",
+//         id: "user-001",
+//       },
+//     },
+//     {
+//       convoId: "conv-002",
+//       content: "Yes, I'll send over the files shortly.",
+//       date: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
+//       convoOwner: {
+//         profilePicture:
+//           "https://res.cloudinary.com/dhfb7i5h1/image/upload/v1740614334/freelancers_profile_pictures/ii1qf658zpi5f2tiwhby.png",
+//         name: "Jane Smith",
+//         role: "FREELANCER",
+//         id: "user-002",
+//       },
+//     },
+//     {
+//       convoId: "conv-003",
+//       content: "Awesome, looking forward to it!",
+//       date: new Date(Date.now() - 1000 * 60 * 60).toISOString(),
+//       convoOwner: {
+//         profilePicture:
+//           "https://res.cloudinary.com/dhfb7i5h1/image/upload/v1740614334/freelancers_profile_pictures/ii1qf658zpi5f2tiwhby.png",
+//         name: "John Doe",
+//         role: "CLIENT",
+//         id: "user-001",
+//       },
+//     },
+//     {
+//       convoId: "conv-004",
+//       content: "Let me know if anything comes up.",
+//       date: new Date(Date.now() - 1000 * 60 * 90).toISOString(),
+//       convoOwner: {
+//         profilePicture:
+//           "https://res.cloudinary.com/dhfb7i5h1/image/upload/v1740614334/freelancers_profile_pictures/ii1qf658zpi5f2tiwhby.png",
+//         name: "Jane Smith",
+//         role: "FREELANCER",
+//         id: "user-002",
+//       },
+//     },
+//     {
+//       convoId: "conv-005",
+//       content: "All set on my end.",
+//       date: new Date(Date.now() - 1000 * 60 * 120).toISOString(),
+//       convoOwner: {
+//         profilePicture:
+//           "https://res.cloudinary.com/dhfb7i5h1/image/upload/v1740614334/freelancers_profile_pictures/ii1qf658zpi5f2tiwhby.png",
+//         name: "John Doe",
+//         role: "CLIENT",
+//         id: "user-001",
+//       },
+//     },
+//     {
+//       convoId: "conv-006",
+//       content: "All set on my end.",
+//       date: new Date(Date.now() - 1000 * 60 * 120).toISOString(),
+//       convoOwner: {
+//         profilePicture:
+//           "https://res.cloudinary.com/dhfb7i5h1/image/upload/v1740614334/freelancers_profile_pictures/ii1qf658zpi5f2tiwhby.png",
+//         name: "John Doe",
+//         role: "CLIENT",
+//         id: "user-001",
+//       },
+//     },
+//   ],
+//   pageable: {
+//     pageNumber: 0,
+//     pageSize: 5,
+//     sort: {
+//       empty: true,
+//       unsorted: true,
+//       sorted: false,
+//     },
+//     offset: 0,
+//     unpaged: false,
+//     paged: true,
+//   },
+//   last: false,
+//   totalElements: 6,
+//   totalPages: 3,
+//   size: 5,
+//   number: 0,
+//   numberOfElements: 5,
+//   first: true,
+//   empty: false,
+// };
 
 export default function ContractConversationsList({
   contractId,
   isVisible,
+  role,
 }: {
   contractId: string;
   isVisible: boolean;
+  role?: string;
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
   // Get current page from URL params, default to 1
-  const pageFromUrl = parseInt(searchParams.get("page") || "1", 10);
+  const pageFromUrl = parseInt(searchParams?.get("page") || "1", 10);
   const [currentPage, setCurrentPage] = useState(pageFromUrl);
 
   // Sync state with URL params
@@ -126,23 +128,6 @@ export default function ContractConversationsList({
 
   const token = Cookies.get("token");
   const PAGE_SIZE = 5;
-
-  // Simulate paginated responses
-  const startIndex = (currentPage - 1) * PAGE_SIZE;
-  const paginatedContent = {
-    ...fakeContractConversations,
-    content: fakeContractConversations.content.slice(
-      startIndex,
-      startIndex + PAGE_SIZE
-    ),
-    pageable: {
-      ...fakeContractConversations.pageable,
-      pageNumber: currentPage - 1,
-    },
-    number: currentPage - 1,
-    first: currentPage === 1,
-    last: currentPage === fakeContractConversations.totalPages,
-  };
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["contractConversations", contractId, currentPage],
@@ -192,14 +177,25 @@ export default function ContractConversationsList({
       <div className="space-y-4 bg-[var(--foreground-color)] p-4 rounded-xl">
         {/* Conversations List */}
 
-        {paginatedContent.content.map((convo) => (
-          <ContractConversationCard key={convo.convoId} {...convo} />
-        ))}
+        {data?.content.length > 0 ? (
+          data.content.map((convo) => (
+            <ContractConversationCard
+              key={convo.convoId}
+              convo={convo}
+              role={role}
+            />
+          ))
+        ) : (
+          <div className="text-center py-6">
+            No conversations yet. Start a conversation with your{" "}
+            {role === "client" ? "freelancer" : "client"}.
+          </div>
+        )}
 
         {/* Pagination */}
         <Pagination
           currentPage={currentPage}
-          totalCount={fakeContractConversations.totalElements}
+          totalCount={data.totalElements}
           pageSize={PAGE_SIZE}
           onPageChange={handlePageChange}
           siblingCount={1}

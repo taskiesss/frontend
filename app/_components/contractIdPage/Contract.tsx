@@ -31,11 +31,11 @@ type Props = {
 };
 
 function Contract({ contract, contractId, role, isAdmin }: Props) {
-  console.log("--------------------------------------------");
-  console.log(contract);
-  console.log(contractId);
-  console.log(role);
-  console.log(isAdmin);
+  // console.log("--------------------------------------------");
+  // console.log(contract);
+  // console.log(contractId);
+  // console.log(role);
+  // console.log(isAdmin);
   return (
     <Container className="flex flex-col gap-8">
       {/* title section */}
@@ -278,6 +278,7 @@ function Contract({ contract, contractId, role, isAdmin }: Props) {
         <ContractConversationsList
           contractId={contractId}
           isVisible={contract.contractStatus.toLowerCase() === "active"}
+          role={role}
         />
       </Suspense>
 

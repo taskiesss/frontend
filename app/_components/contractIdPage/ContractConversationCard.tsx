@@ -2,52 +2,78 @@
 
 import Image from "next/image";
 import { format } from "date-fns";
+import Link from "next/link";
 
 interface ContractConversationProps {
-  convoId: string;
-  convoOwner: {
-    profilePicture: string;
-    name: string;
-    role: string;
-    id: string;
+  convo: {
+    content: string;
+    convoId: string;
+    convoOwner: {
+      profilePicture: string;
+      name: string;
+      role: string;
+      id: string;
+    };
+    date: string;
   };
-  content: string;
-  date: string; // ISO date string like "2025-05-10T14:28:41.719+00:00"
+  role?: string;
 }
 
 export default function ContractConversationCard({
-  convoOwner,
-  content,
-  date,
+  convo,
+  role,
 }: ContractConversationProps) {
-  const formattedDate = format(new Date(date), "PPP p"); // e.g., "May 10, 2025 2:28 PM"
-
+  const formattedDate = format(new Date(convo.date), "PPP p"); // e.g., "May 10, 2025 2:28 PM"
+  console.log(convo.convoOwner, convo.content, convo.date);
   return (
     <div className="p-4 shadow-sm border-b ">
       <div className="grid grid-cols-[auto_1fr] gap-4 items-center">
         {/* Profile Picture Column */}
-        <div className="flex justify-center">
+        <Link
+          href={
+            convo.convoOwner.role === "CLIENT"
+              ? role === "client"
+                ? `/nx/client/myprofile`
+                : `/nx/freelancer/client-profile/${convo.convoOwner.id}`
+              : role === "client"
+              ? `/nx/client/discover-talents/${convo.convoOwner.id}`
+              : `/nx/freelancer/myprofile`
+          }
+          className="flex justify-center"
+        >
           <div className="relative w-12 h-12 rounded-full overflow-hidden">
             <Image
-              src={convoOwner.profilePicture}
-              alt={`${convoOwner.name}'s profile`}
+              src={convo.convoOwner.profilePicture}
+              alt={`${convo.convoOwner.name}'s profile`}
               fill
               className="object-cover"
             />
           </div>
-        </div>
-
+        </Link>
         {/* Text Content Column */}
         <div>
           {/* Name and Date Row */}
           <div className="flex justify-between text-sm">
-            <span className="font-medium">{convoOwner.name}</span>
+            <Link
+              href={
+                convo.convoOwner.role === "CLIENT"
+                  ? role === "client"
+                    ? `/nx/client/myprofile`
+                    : `/nx/freelancer/client-profile/${convo.convoOwner.id}`
+                  : role === "client"
+                  ? `/nx/client/discover-talents/${convo.convoOwner.id}`
+                  : `/nx/freelancer/myprofile`
+              }
+              className="font-medium text-base hover:underline"
+            >
+              {convo.convoOwner.name}
+            </Link>
             <span>{formattedDate}</span>
           </div>
 
           {/* Content Row */}
           <div className="mt-1">
-            <p>{content}</p>
+            <p className="text-base">{JSON.parse(convo.content).content}</p>
           </div>
         </div>
       </div>
