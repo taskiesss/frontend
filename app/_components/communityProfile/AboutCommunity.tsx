@@ -67,7 +67,7 @@ export default function AboutCommunity({
               </div>
             )}
           </div>
-          <div className="flex gap-2 flex-wrap w-full bg-[--background-color] rounded-lg p-4">
+          <div className="flex gap-2 flex-wrap w-full bg-[--foreground-color] rounded-lg p-4">
             <p className="text-lg py-2 w-full whitespace-pre-wrap">
               {community.description}
             </p>

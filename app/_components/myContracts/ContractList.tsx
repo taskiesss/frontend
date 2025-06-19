@@ -26,11 +26,16 @@ type Props = {
     number: number;
   };
   role?: string;
+  communityBackground?: boolean;
 };
 type RouteParams = {
   id?: string; // Make id optional if it might not always be present
 };
-export default function ContractList({ contracts, role }: Props) {
+export default function ContractList({
+  contracts,
+  role,
+  communityBackground,
+}: Props) {
   const [currentPage, setCurrentPage] = useState(1);
   const params = useParams<RouteParams>();
   const pathname = usePathname();
@@ -45,6 +50,7 @@ export default function ContractList({ contracts, role }: Props) {
           key={i}
           contract={c}
           role={role}
+          communityBackground={communityBackground}
         />
       ))}
       <div className="self-center">

@@ -28,6 +28,7 @@ type Props = {
     profilePicture?: string;
   };
   role?: string;
+  communityBackground?: boolean;
 };
 
 export default function ContractCard({
@@ -35,9 +36,16 @@ export default function ContractCard({
   contract,
   pathname,
   role,
+  communityBackground,
 }: Props) {
   return (
-    <div className="flex flex-col items-start justify-between gap-2 p-4 border-b-2 border-solid border-[var(--border-color)] w-full bg-[var(--background-color)] rounded-xl">
+    <div
+      className={`flex flex-col items-start justify-between gap-2 p-4 border-b-2 border-solid border-[var(--border-color)] w-full ${
+        communityBackground
+          ? "bg-[var(--foreground-color)]"
+          : "bg-[var(--background-color)]"
+      } rounded-xl`}
+    >
       {/* upper div */}
 
       <div className="flex w-full  justify-between">

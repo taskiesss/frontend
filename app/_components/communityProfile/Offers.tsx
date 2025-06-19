@@ -229,7 +229,7 @@ export default function CommunityOffers({
           return (
             <div
               key={offer.contractID}
-              className="rounded-lg shadow-md p-4 md:p-5 bg-[--background-color]"
+              className="rounded-lg shadow-md p-4 md:p-5 bg-[--foreground-color]"
             >
               {/* Offer Header */}
               <Link

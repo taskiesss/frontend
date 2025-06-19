@@ -96,7 +96,7 @@ export default function TalentRequests({
   return (
     <div className="flex flex-col gap-6 w-full pb-4">
       <h2 className="text-3xl font-bold pt-2">Talent Requests</h2>
-      <div className=" w-full flex flex-col gap-6 bg-[--background-color] rounded-lg py-6 px-4">
+      <div className=" w-full flex flex-col gap-6 bg-[--foreground-color] rounded-lg py-6 px-4">
         {data.content.map((request: any) => (
           <div key={request.freelancerID} className="flex items-center gap-5">
             <Link href={`/nx/freelancer/profile/${request.freelancerID}`}>

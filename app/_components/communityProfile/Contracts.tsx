@@ -58,7 +58,7 @@ export default function Contracts({ communityId }: Props) {
       <h2 className="text-3xl font-bold pt-2">Current Job Contracts</h2>
       <div className="w-full flex items-start pb-4">
         {data.content.length > 0 ? (
-          <ContractList contracts={data} />
+          <ContractList contracts={data} communityBackground={true} />
         ) : (
           <div className="flex flex-col">
             <span className="self-center text-2xl">

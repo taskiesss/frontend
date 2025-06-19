@@ -65,7 +65,7 @@ export default function CompletedJobslist({
   if (!data) return;
   return (
     <>
-      <div className="grid grid-cols-2 grid-flow-row gap-5 flex-wrap justify-between bg-[--background-color] rounded-lg p-4">
+      <div className="grid grid-cols-2 grid-flow-row gap-5 flex-wrap justify-between bg-[--foreground-color] rounded-lg p-4">
         {data.content.map((j: any, i: number) => (
           <CompletedJobsCard key={i} job={j} role={role} />
         ))}
