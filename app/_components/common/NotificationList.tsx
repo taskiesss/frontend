@@ -31,78 +31,6 @@ const defaultEmptyResponse: PaginatedNotificationResponse = {
   empty: true,
 };
 
-// const notificationsList: PaginatedNotificationResponse = {
-//   content: [
-//     {
-//       notificationId: "notif001",
-//       content: "New proposal received for project X ",
-//       isRead: false,
-//       type: NotificationDest.PROPOSAL,
-//       routeId: "route001",
-//     },
-//     {
-//       notificationId: "notif002",
-//       content: "Contract signed for project Y",
-//       isRead: true,
-//       type: NotificationDest.CONTRACT,
-//       routeId: "route002",
-//     },
-//     {
-//       notificationId: "notif003",
-//       content: "New community post in Jobs & Talents",
-//       isRead: false,
-//       type: NotificationDest.COMMUNITY_JOBS_AND_TALENTS,
-//       routeId: "route003",
-//     },
-//     {
-//       notificationId: "notif003",
-//       content: "New community post in Jobs & Talents",
-//       isRead: false,
-//       type: NotificationDest.COMMUNITY_JOBS_AND_TALENTS,
-//       routeId: "route003",
-//     },
-//     {
-//       notificationId: "notif003",
-//       content: "New community post in Jobs & Talents",
-//       isRead: false,
-//       type: NotificationDest.COMMUNITY_JOBS_AND_TALENTS,
-//       routeId: "route003",
-//     },
-//     {
-//       notificationId: "notif003",
-//       content: "New community post in Jobs & Talents",
-//       isRead: false,
-//       type: NotificationDest.COMMUNITY_JOBS_AND_TALENTS,
-//       routeId: "route003",
-//     },
-//   ],
-//   pageable: {
-//     pageNumber: 0,
-//     pageSize: 10,
-//     sort: {
-//       empty: false,
-//       unsorted: false,
-//       sorted: true,
-//     },
-//     offset: 0,
-//     unpaged: false,
-//     paged: true,
-//   },
-//   last: false,
-//   totalPages: 3,
-//   totalElements: 25,
-//   size: 10,
-//   number: 0,
-//   sort: {
-//     empty: false,
-//     unsorted: false,
-//     sorted: true,
-//   },
-//   numberOfElements: 3,
-//   first: true,
-//   empty: false,
-// };
-
 function NotificationList({ role, onClose, isOpen }: Props) {
   const [notificationsResponse, setNotificationsResponse] = useState<
     {
@@ -197,7 +125,7 @@ function NotificationList({ role, onClose, isOpen }: Props) {
   }
 
   return (
-    <div className="min-w-[25rem] max-h-[20rem] bg-[var(--background-color)] border-2 border-[var(--border-color)] border-solid rounded-md overflow-y-auto shadow-lg ">
+    <div className="min-w-[33rem] max-h-[25rem] bg-[var(--background-color)] border-2 border-[var(--border-color)] border-solid rounded-md overflow-y-auto shadow-lg ">
       <nav>
         <ul className="flex flex-col  w-full">
           {notificationsResponse.map((notificationsList, index) => (
@@ -234,7 +162,7 @@ function NotificationList({ role, onClose, isOpen }: Props) {
               }}
               className=" text-base text-[var(--button-hover-background-color)] hover:underline pb-10 pt-5 "
             >
-              Load more comments
+              Load more notifications
             </button>
           )}
         </ul>

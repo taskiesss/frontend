@@ -170,7 +170,11 @@ const NavLoggedin: React.FC = () => {
       const target = event.target as HTMLElement;
 
       // Don't close if clicking on a link element
-      if (target.tagName === "A" || target.closest("a")) {
+      if (
+        target.tagName === "A" ||
+        target.closest("a") ||
+        target.closest("button")
+      ) {
         return;
       }
 
@@ -192,7 +196,11 @@ const NavLoggedin: React.FC = () => {
       const target = event.target as HTMLElement;
 
       // Don't close if clicking on a link element
-      if (target.tagName === "A" || target.closest("a")) {
+      if (
+        target.tagName === "A" ||
+        target.closest("a") ||
+        target.closest("button")
+      ) {
         return;
       }
 
