@@ -13,7 +13,7 @@ type ProjectLengthKey =
   | "3 to 6 months"
   | "More than 6 months";
 
-export default function JobAside({ onClose }: { onClose: () => void }) {
+export default function JobAside() {
   const router = useRouter();
 
   const [userRating, setUserRating] = useState<number>(0);
@@ -54,8 +54,8 @@ export default function JobAside({ onClose }: { onClose: () => void }) {
     "More than 6 months": false,
   });
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = (e?: React.FormEvent<HTMLFormElement>) => {
+    e?.preventDefault();
     const params = new URLSearchParams(window.location.search);
 
     if (selectedSkills.length > 0) {
@@ -116,7 +116,12 @@ export default function JobAside({ onClose }: { onClose: () => void }) {
       <aside className="bg-[var(--background-color)] rounded-lg shadow-s  p-4">
         <div className="pb-2">
           <h2 className="py-3 text-xl font-bold">Rating</h2>
-          <StarRating maxRating={5} size={24} onSetRating={setUserRating} />
+          <StarRating
+            maxRating={5}
+            size={24}
+            onSetRating={setUserRating}
+            value={userRating}
+          />
         </div>
 
         <form onSubmit={handleSubmit} className="pb-2">
@@ -220,13 +225,54 @@ export default function JobAside({ onClose }: { onClose: () => void }) {
               ))}
             </div>
           </div>
+          {/* clear filters */}
+          <div className="flex justify-between gap-4">
+            <button
+              type="submit"
+              className="px-3 py-1 bg-[var(--btn-color)] rounded-lg text-[var(--accent-color)] hover:bg-[var(--hover-color)]"
+            >
+              Apply Filters
+            </button>
+            <button
+              className="px-3 py-1 text-[var(--btn-color)] rounded-lg hover:text-[var(--hover-color)] ml-2"
+              onClick={() => {
+                setResetKey((prev) => prev + 1);
 
-          <button
-            type="submit"
-            className="px-4 py-2 bg-[var(--btn-color)] rounded-lg text-[var(--accent-color)]"
-          >
-            Apply Filters
-          </button>
+                setUserRating(0);
+                setSelectedSkills([]);
+                setExperienceLevels({
+                  entry_level: false,
+                  intermediate: false,
+                  expert: false,
+                });
+                setHourlyRateMin("");
+                setHourlyRateMax("");
+                setProjectLengths({
+                  "Less than one month": false,
+                  "1 to 3 months": false,
+                  "3 to 6 months": false,
+                  "More than 6 months": false,
+                });
+                const params = new URLSearchParams(window.location.search);
+                params.set("page", "1");
+                params.delete("skills");
+                params.delete("experience");
+                params.delete("minRate");
+                params.delete("maxRate");
+                params.delete("projectLength");
+                params.delete("rate");
+                const currentQuery = new URLSearchParams(
+                  window.location.search
+                ).toString();
+                const newQuery = params.toString();
+                if (currentQuery !== newQuery) {
+                  router.push(`${window.location.pathname}?${newQuery}`);
+                }
+              }}
+            >
+              Clear Filters
+            </button>
+          </div>
         </form>
       </aside>
     </div>

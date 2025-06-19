@@ -34,6 +34,7 @@ export default function CommunityList({ communities }: Props) {
             pageSize={communities.size}
             onPageChange={setCurrentPage}
             siblingCount={0}
+            setPageParamter={true}
           />
         </div>
       </div>

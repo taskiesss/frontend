@@ -25,7 +25,7 @@ export default function SmallNav({ pathname, role, queryString = "" }: Props) {
   return (
     <nav className="col-span-2 bg-[var(--background-color)] pt-20 pb-3 flex items-center border-solid border-gray-600 border-b-[0.03rem] mx-20">
       <ul className="flex gap-44">
-        {role === "freelancer" && (
+        {role !== "client" && (
           <li>
             <Link
               href={jobsPath}

@@ -7,7 +7,7 @@ import StarRating from "../common/StarRating";
 type ExperienceLevelKey = "entry_level" | "intermediate" | "expert";
 type ExperienceLevelLabel = "Entry Level" | "Intermediate" | "Expert";
 
-export default function FreelancerAside({ onClose }: { onClose: () => void }) {
+export default function FreelancerAside() {
   const router = useRouter();
 
   // Local state for filter values
@@ -94,7 +94,12 @@ export default function FreelancerAside({ onClose }: { onClose: () => void }) {
         {/* Rating Filter */}
         <div className="pb-2">
           <h2 className="py-3 text-xl font-bold">Rating</h2>
-          <StarRating maxRating={5} size={24} onSetRating={setUserRating} />
+          <StarRating
+            maxRating={5}
+            size={24}
+            onSetRating={setUserRating}
+            value={userRating}
+          />
         </div>
 
         <form onSubmit={handleSubmit}>
@@ -167,14 +172,48 @@ export default function FreelancerAside({ onClose }: { onClose: () => void }) {
               />
             </div>
           </div>
+          <div className="flex justify-between gap-4">
+            {/* Submit Button */}
+            <button
+              type="submit"
+              className="px-3 py-1 bg-[var(--btn-color)] rounded-lg text-[var(--accent-color)] hover:bg-[var(--hover-color)]"
+            >
+              Apply Filters
+            </button>
+            <button
+              type="button"
+              className="px-4 py-2 text-[var(--btn-color)] rounded-lg hover:text-[var(--hover-color)] ml-2"
+              onClick={() => {
+                setUserRating(0);
+                setSelectedSkills([]);
 
-          {/* Submit Button */}
-          <button
-            type="submit"
-            className="px-4 py-2 bg-[var(--btn-color)] text-[var(--accent-color)] rounded-lg"
-          >
-            Apply Filters
-          </button>
+                setExperienceLevels({
+                  entry_level: false,
+                  intermediate: false,
+                  expert: false,
+                });
+                setHourlyRateMin("");
+                setHourlyRateMax("");
+                setResetKey((prev) => prev + 1);
+                const params = new URLSearchParams(window.location.search);
+                params.set("page", "1");
+                params.delete("skills");
+                params.delete("experience");
+                params.delete("minRate");
+                params.delete("maxRate");
+                params.delete("rate");
+                const currentQuery = new URLSearchParams(
+                  window.location.search
+                ).toString();
+                const newQuery = params.toString();
+                if (currentQuery !== newQuery) {
+                  router.push(`${window.location.pathname}?${newQuery}`);
+                }
+              }}
+            >
+              Clear Filters
+            </button>
+          </div>
         </form>
       </aside>
     </div>

@@ -1,8 +1,7 @@
 "use client";
-import React, { useState } from "react";
-import JobCard from "./JobCard";
+import { useState } from "react";
 import { Pagination } from "../common/Pagination";
-import Container from "../common/Container";
+import JobCard from "./JobCard";
 
 interface Job {
   id: string;
@@ -30,7 +29,7 @@ interface Props {
 
 export default function JobList({ jobs }: Props) {
   const [currentPage, setCurrentPage] = useState(jobs.number + 1);
-  console.log(jobs);
+
   return (
     <div className=" w-full flex flex-col gap-8 justify-start ">
       <h1 className="text-3xl font-bold mb-6">Job Listings</h1>
@@ -42,11 +41,12 @@ export default function JobList({ jobs }: Props) {
         </section>
         <div className="self-center ">
           <Pagination
-            currentPage={jobs.number + 1}
+            currentPage={currentPage}
             totalCount={jobs.totalElements}
             pageSize={jobs.size}
             onPageChange={setCurrentPage}
             siblingCount={0}
+            setPageParamter={true}
           />
         </div>
       </div>

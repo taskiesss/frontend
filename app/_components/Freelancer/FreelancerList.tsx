@@ -32,6 +32,7 @@ export default function FreelancerList({ freelancers }: Props) {
             pageSize={freelancers.size}
             onPageChange={setCurrentPage}
             siblingCount={0}
+            setPageParamter={true}
           />
         </div>
       </div>

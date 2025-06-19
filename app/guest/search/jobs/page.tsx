@@ -170,7 +170,7 @@ const Page = async ({ searchParams }: PageProps) => {
       rate: rating,
     };
 
-    // console.log(request);
+    // console.log("request", request);
     const res = await searchJobs(request);
     paginations = res;
   } catch (error: any) {

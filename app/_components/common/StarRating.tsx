@@ -10,6 +10,7 @@ interface StarRatingProps {
   className?: string;
   onSetRating?: (rating: number) => void;
   allowHalf?: boolean;
+  value?: number;
 }
 
 const StarRating: React.FC<StarRatingProps> = ({
@@ -21,11 +22,18 @@ const StarRating: React.FC<StarRatingProps> = ({
   className = "",
   onSetRating = () => {},
   allowHalf = false,
+  value,
 }) => {
   const [rating, setRating] = useState<number>(
     allowHalf ? defaultRating : Math.round(defaultRating)
   );
   const [tempRating, setTempRating] = useState<number>(0);
+
+  React.useEffect(() => {
+    if (typeof value === "number") {
+      setRating(allowHalf ? value : Math.round(value));
+    }
+  }, [value, allowHalf]);
 
   function handleRating(newRating: number) {
     const adjustedRating = allowHalf ? newRating : Math.round(newRating);
