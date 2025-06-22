@@ -1,15 +1,13 @@
 // ProfileMenu.tsx
-import React from "react";
-import Image, { StaticImageData } from "next/image";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faUser,
-  faEnvelope,
-  faComments,
-  faAddressCard,
   faArrowAltCircleLeft,
+  faComments,
+  faUser,
 } from "@fortawesome/free-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
+import React from "react";
 
 interface ProfileMenuProps {
   role: string;
@@ -73,20 +71,6 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({
             </Link>
           </li>
 
-          <li className="hover:bg-[var(--hover-color)] transition-colors">
-            <Link
-              href={"#"}
-              className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 w-full"
-              onClick={onClose}
-            >
-              <FontAwesomeIcon
-                icon={faEnvelope}
-                className="w-5 sm:w-6 text-base sm:text-lg flex-shrink-0"
-              />
-              <span className="text-sm sm:text-base md:text-lg">Messages</span>
-            </Link>
-          </li>
-
           {role === "FREELANCER" && (
             <li className="hover:bg-[var(--hover-color)] transition-colors">
               <Link
@@ -104,22 +88,6 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({
               </Link>
             </li>
           )}
-
-          <li className="hover:bg-[var(--hover-color)] transition-colors">
-            <Link
-              href={"#"}
-              className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 w-full"
-              onClick={onClose}
-            >
-              <FontAwesomeIcon
-                icon={faAddressCard}
-                className="w-5 sm:w-6 text-base sm:text-lg flex-shrink-0"
-              />
-              <span className="text-sm sm:text-base md:text-lg">
-                Account settings
-              </span>
-            </Link>
-          </li>
 
           <li className="hover:bg-[var(--hover-color)] transition-colors">
             <Link

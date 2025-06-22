@@ -12,15 +12,16 @@ export async function registerUser(user: User): Promise<any> {
     },
   });
   console.log(res);
-  // Only throw an error if the response status is 500
-  if (res.status === 500 || res.status === 404 || !res.ok) {
-    throw new Error('Internal Error :(');
-  }
 
   if (res.status === 400) {
     const data = await res.json();
     // console.log(data);
     throw data;
+  }
+
+  // Only throw an error if the response status is 500
+  if (res.status === 500 || res.status === 404 || !res.ok) {
+    throw new Error('Internal Error :(');
   }
 
   const data = await res.json();
@@ -85,16 +86,17 @@ export async function Login(email: string, password: string) {
     },
   });
 
+  if (res.status === 400) {
+    const data = await res.json();
+
+    throw data;
+  }
+  const data = await res.json();
+
   // Only throw an error if the response status is 500
   if (res.status === 500 || res.status === 404 || !res.ok) {
     throw new Error('Internal Error :(');
   }
-  if (res.status === 400) {
-    const data = await res.json();
-    // console.log(data);
-    throw data;
-  }
-  const data = await res.json();
 
   return data; //token and role and isFirst
 }
