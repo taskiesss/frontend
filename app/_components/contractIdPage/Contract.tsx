@@ -274,18 +274,22 @@ function Contract({ contract, contractId, role, isAdmin }: Props) {
 
       {/* Conversations */}
 
-      <Suspense fallback={<Spinner />}>
-        <ContractConversationsList
-          contractId={contractId}
-          isVisible={contract.contractStatus.toLowerCase() === "active"}
-          role={role}
-        />
-      </Suspense>
+      {contract.contractStatus.toLowerCase() === "active" && (
+        <>
+          <Suspense fallback={<Spinner />}>
+            <ContractConversationsList
+              contractId={contractId}
+              isVisible={contract.contractStatus.toLowerCase() === "active"}
+              role={role}
+            />
+          </Suspense>
 
-      <div className="border-b-[var(--border-color)] flex flex-col gap-7">
-        <h2 className="text-2xl font-semibold">Create new post</h2>
-        <CreateConversationForm contractId={contractId} />
-      </div>
+          <div className="border-b-[var(--border-color)] flex flex-col gap-7">
+            <h2 className="text-2xl font-semibold">Create new post</h2>
+            <CreateConversationForm contractId={contractId} />
+          </div>
+        </>
+      )}
 
       {/* Accept or reject contract */}
       {contract.contractStatus.toLowerCase() === "pending" &&
