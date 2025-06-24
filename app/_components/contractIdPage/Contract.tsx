@@ -70,7 +70,11 @@ function Contract({ contract, contractId, role, isAdmin }: Props) {
               contractId={contractId}
               canRate={
                 (contract.pendingClientToRate && role === "client") ||
-                contract.pendingFreelancerToRate
+                (contract.isCommunity
+                  ? contract.isCommunityAdmin
+                    ? contract.pendingFreelancerToRate
+                    : false
+                  : contract.pendingFreelancerToRate)
               }
             />
           </div>

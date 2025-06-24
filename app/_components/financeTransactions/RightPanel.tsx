@@ -5,7 +5,7 @@ import FilterDropdown from "./FilterDropDown";
 import TransactionTable from "./TransactionTable";
 import Spinner from "../common/Spinner";
 
-function RightPanel() {
+function RightPanel({ role }: { role?: string }) {
   const [dates, setDates] = useState<{
     startDate?: Date | null;
     endDate?: Date | null;
@@ -69,7 +69,7 @@ function RightPanel() {
       </div>
 
       <Suspense fallback={<Spinner />}>
-        <TransactionTable filter={{ type: filter, dates: dates }} />
+        <TransactionTable filter={{ type: filter, dates: dates }} role={role} />
       </Suspense>
     </div>
   );

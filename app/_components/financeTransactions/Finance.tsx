@@ -69,7 +69,7 @@ function Finance({ profile, role }: Props) {
         </div>
       </div>
       {/* Right Panel */}
-      <RightPanel />
+      <RightPanel role={role} />
     </Container>
   );
 }

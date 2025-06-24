@@ -15,6 +15,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 
 type Props = {
+  role?: string;
   filter: {
     type: string;
     dates: {
@@ -24,7 +25,7 @@ type Props = {
   };
 };
 
-function TransactionTable({ filter }: Props) {
+function TransactionTable({ filter, role }: Props) {
   const [currentPage, setCurrentPage] = useState(1);
   const size = 10;
 
@@ -130,7 +131,11 @@ function TransactionTable({ filter }: Props) {
                       {"   "}
                       {m?.contractId && (
                         <Link
-                          href={`/nx/freelancer/mycontracts/${m.contractId}`}
+                          href={
+                            role === "client"
+                              ? `/nx/client/mycontracts/${m.contractId}`
+                              : `/nx/freelancer/mycontracts/${m.contractId}`
+                          }
                           className="inline-flex items-center transition-opacity hover:opacity-50"
                         >
                           <FontAwesomeIcon
