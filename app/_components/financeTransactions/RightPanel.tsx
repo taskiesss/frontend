@@ -71,6 +71,12 @@ function RightPanel({ role }: { role?: string }) {
       <Suspense fallback={<Spinner />}>
         <TransactionTable filter={{ type: filter, dates: dates }} role={role} />
       </Suspense>
+      {role !== "client" && (
+        <p className="text-base opacity-90 w-full px-8 text-center">
+          Note: Taskaya charges a 2% fee, which is deducted from the total
+          price, resulting in the final transaction amount.
+        </p>
+      )}
     </div>
   );
 }
